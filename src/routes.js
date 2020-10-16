@@ -11,16 +11,31 @@ import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 
+/* Coordinator imports */
+import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+import ListStudentsView from 'src/views/teamc/coordinator/ListStudents';
+import StudentView from 'src/views/teamc/coordinator/Student';
+/* End Coordinator imports*/
+/* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
-import ListStudentsView from 'src/views/teamc/ListStudentsView';
-import ListEvaluationsView from 'src/views/teamc/ListEvaluationsView';
+import ListEvaluationsView from 'src/views/teamc/director';
+/* End Director imports */
 const routes = [
   {
     path: 'director',
     element: <DirectorDashboardLayout />,
     children: [
-      { path: 'list-students', element: <ListStudentsView /> },
       { path: 'list-evaluations', element: <ListEvaluationsView /> },
+      { path: '*', element: <Navigate to="/404" /> }
+    ]
+  },
+  /* Coordinator routes */
+  {
+    path: 'coordinator',
+    element: <CoordinatorDashboardLayout />,
+    children: [
+      { path: 'list-students', element: <ListStudentsView /> },
+      { path: 'student', element: <StudentView/>},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
