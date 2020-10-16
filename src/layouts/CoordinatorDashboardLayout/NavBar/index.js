@@ -28,21 +28,21 @@ import NavItem from './NavItem';
 
 const user = {
   avatar: '/static/images/avatars/avatar_7.png',
-  jobTitle: 'Director',
+  jobTitle: 'Coordinador',
   name: 'John Doe'
 };
 
 const items = [
   {
-    href: '/director/list-students',
+    href: '/coordinator/list-students',
     icon: BarChartIcon,
     title: 'Visualizar Estudiantes'
-  },
-  {
+  }
+  /*   {
     href: '/director/list-evaluations',
     icon: UsersIcon,
     title: 'Visualizar Evaluaciones'
-  }
+  } */
 ];
 
 const useStyles = makeStyles(() => ({

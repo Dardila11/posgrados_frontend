@@ -14,7 +14,7 @@ import SettingsView from 'src/views/settings/SettingsView';
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
 import ListStudentsView from 'src/views/teamc/coordinator/ListStudents';
-import StudentView from 'src/views/teamc/coordinator/Student';
+import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 /* End Coordinator imports*/
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
@@ -35,7 +35,7 @@ const routes = [
     element: <CoordinatorDashboardLayout />,
     children: [
       { path: 'list-students', element: <ListStudentsView /> },
-      { path: 'student', element: <StudentView/>},
+      { path: 'list-students/student', element: <StudentView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
