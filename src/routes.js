@@ -13,7 +13,7 @@ import SettingsView from 'src/views/settings/SettingsView';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
-import ListStudentsView from 'src/views/teamc/coordinator/ListStudents';
+import ListStudentsView from 'src/views/teamc/coordinator/ListStudentsView';
 import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 /* End Coordinator imports*/
 /* Director imports */
