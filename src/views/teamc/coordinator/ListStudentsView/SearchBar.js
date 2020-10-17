@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
 
 const SearchBar = () => {
     const classes = useStyles();
-
+    
     return (
         <Container className = {classes.Container}>
             
@@ -49,7 +49,7 @@ const SearchBar = () => {
                                 <Grid item lg={2} md={5} xs={12}>
                                     <Box classname= {classes.Select}>
                                         <InputLabel htmlFor='Select-cohorte'>Seleccionar Cohorte</InputLabel>
-                                        <Select name='Cohorte' id='Select-cohorte'>
+                                        <Select id='Select-cohorte'>
                                             <MenuItem value = {2020} >2020</MenuItem>
                                             <MenuItem value = {2019} >2019</MenuItem>
                                             <MenuItem value = {2018} >2018</MenuItem>
@@ -58,11 +58,22 @@ const SearchBar = () => {
                                 </Grid>
                                 <Grid item lg={2} md={5} xs={12}>
                                     <Box classname= {classes.Select}>
+                                        <InputLabel htmlFor='Select-status'>Seleccionar estado</InputLabel>
+                                        <Select name='Estado' id='Select-status'>
+                                            <MenuItem value = 'activo' >ACTIVO</MenuItem>
+                                            <MenuItem value = 'inactivo' >INACTIVO</MenuItem>
+                                            <MenuItem value = 'graduado' >GRADUADO</MenuItem>
+                                            <MenuItem value = 'retirado' >RETIRADO</MenuItem>
+                                        </Select>
+                                    </Box>
+                                </Grid>
+                                <Grid item lg={2} md={5} xs={12}>
+                                    <Box classname= {classes.Select}>
                                         <InputLabel htmlFor='Select-program'>Seleccionar programa</InputLabel>
                                         <Select name='Programa' id='Select-program'>
-                                            <MenuItem value = {2020} >Maestria en Computacion</MenuItem>
-                                            <MenuItem value = {2019} >Maestria en Electronica</MenuItem>
-                                            <MenuItem value = {2018} >Maestria en Automatica</MenuItem>
+                                            <MenuItem value = {1} >Maestria en Computacion</MenuItem>
+                                            <MenuItem value = {2} >Maestria en Electronica</MenuItem>
+                                            <MenuItem value = {3} >Maestria en Automatica</MenuItem>
                                         </Select>
                                     </Box>
                                 </Grid>

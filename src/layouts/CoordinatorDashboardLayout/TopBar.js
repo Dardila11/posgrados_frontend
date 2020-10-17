@@ -6,8 +6,7 @@ import {
   Toolbar,
   Box,
   Hidden,
-  IconButton,
-  makeStyles
+  IconButton
 } from '@material-ui/core';
 
 import MenuIcon from '@material-ui/icons/Menu';
