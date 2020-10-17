@@ -5,7 +5,9 @@ import { Card, Typography, CardContent, makeStyles } from '@material-ui/core';
 const useStyles = makeStyles({
   root: {
     maxWidth: 320,
-    margin: '10px'
+    margin: '10px',
+    width: 350,
+    height: 150
   },
   media: {
     height: 140
@@ -17,19 +19,19 @@ const useStyles = makeStyles({
  * @param {activity}
  * @description las información de la actividad previamente obtenida desde backend
  */
-const ActivityCard = ({ activity }) => {
+const ActivityCard = ({ activityInfo }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
-          Titulo de la Actividad
+          {activityInfo.title}
         </Typography>
         <Typography variant="body2" component="h3">
-          Descripción
+          {activityInfo.description}
         </Typography>
         <Typography variant="body2" component="h3">
-          Modalidad
+          {activityInfo.modality}
         </Typography>
       </CardContent>
     </Card>
