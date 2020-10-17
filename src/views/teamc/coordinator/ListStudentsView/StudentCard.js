@@ -6,18 +6,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import {
   Avatar,
   Box,
-  Grid,
   Card,
   CardActionArea,
-  CardActions,
-  CardContent,
-  Divider,
   Typography,
   makeStyles
 } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   root: {  
+    
   },
   CardAction: {
     paddingTop : 10,
@@ -26,7 +23,10 @@ const useStyles = makeStyles(() => ({
   avatar: {
     height: 100,
     width: 100
-  }
+  },
+  Typography:{
+    textAlign: 'center'
+  },
 }));
 
 const StudentCard = ({ className,student, ...rest }) => {
@@ -38,18 +38,18 @@ const StudentCard = ({ className,student, ...rest }) => {
         <Card className={clsx(classes.root, className)} {...rest}>
           <CardActionArea className = {classes.CardAction}>
             <Box alignItems="center" display="flex" flexDirection="column">
-              <Avatar className={classes.avatar} src={student.avatar}/>
+              <Avatar className={classes.avatar} src={student.image}/>
               <Typography color="textPrimary" gutterBottom variant="h3">
-                {student.name}
+                {student.first_name} {student.last_name}
               </Typography>
-              <Typography color="textSecondary" variant="body1">
-                {student.Program}
+              <Typography className={classes.Typography} fontWeight="fontWeightMedium" variant="body1">
+                {student.program}
               </Typography>                
-              <Typography color="textSecondary" variant="body1">
-                {student.Status}
+              <Typography fontWeight="fontWeightBold" variant="body1">
+                {student.status}
               </Typography>
               <Typography color="textSecondary" variant="body1">
-                {student.Cohorte}
+                {student.cohorte}
               </Typography>
             </Box>
           </CardActionArea>

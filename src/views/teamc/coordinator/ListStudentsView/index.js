@@ -1,8 +1,5 @@
-import React from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import {
-    Container,
-    Grid,
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
@@ -10,6 +7,7 @@ import BreadCrumbs from './BreadCrumbs';
 import ListStudents from './ListStudents';
 import SearchBar from './SearchBar';
 import data from './Data.json';
+import api from 'src/views/teamc/services/Api';
 
 const list = data;
 
@@ -25,12 +23,22 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ListStudentsView = () => {
+    const [studentsList, setStudentList] = useState([]);
+
+    useEffect(() => {
+      const fetchData = async () => {
+        const res = await api.getStudentsInfo();
+        setStudentList(res.data);
+      };
+      fetchData();
+    }, []);
+
     const classes = useStyles();
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
             <SearchBar />
-            <ListStudents studentsList = {list}/>
+            <ListStudents studentsList = {studentsList}/>
         </Page>  
       ); 
 };
