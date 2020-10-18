@@ -1,60 +1,81 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+import TrackStudent from './TrackStudent';
+
 import {
   Card,
   CardActions,
   CardContent,
   Button,
   Typography,
-  makeStyles
+  makeStyles,
+  Dialog,
+  DialogActions,
+  DialogTitle
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    width: '50%',
-    height: '300px'
+    width: '70%',
+    height: '300px',
+    margin: '20px'
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)'
-  },
-  title: {
-    fontSize: 14
-  },
-  pos: {
-    marginBottom: 12
+  status: {
+    color: 'green'
   }
 });
 
 const StudentInfo = () => {
   const classes = useStyles();
-  const bull = <span className={classes.bullet}>•</span>;
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Card className={classes.root}>
       <CardContent>
-        <Typography
-          className={classes.title}
-          color="textSecondary"
-          gutterBottom
-        >
-          Word of the Day
+        <Typography variant="h3" component="h2" gutterBottom>
+          Información del estudiante
         </Typography>
-        <Typography variant="h5" component="h2">
-          be{bull}nev{bull}o{bull}lent
+        <Typography variant="body1" component="p" gutterBottom>
+          Nombre: Juan David Gutiérrez Fuentes
         </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-          adjective
+        <Typography variant="body1" component="p" gutterBottom>
+          Programa: Maestría en Computación
         </Typography>
-        <Typography variant="body2" component="p">
-          well meaning and kindly.
-          <br />
-          {'"a benevolent smile"'}
+        <Typography variant="body1" component="p" gutterBottom>
+          Cohorte: 2019
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          Estado: <span className={classes.status}>ACTIVO</span>
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small">Learn More</Button>
+        <Button variant="contained" color="primary" onClick={handleClickOpen}>
+          Realizar seguimiento
+        </Button>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle variant="h2" onClose={handleClose}>
+            Seguimiento de estudiante
+          </DialogTitle>
+          <TrackStudent />
+          <DialogActions>
+            <Button variant="contained" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button variant="contained" color="primary" onClick={handleClose}>
+              Guardar
+            </Button>
+          </DialogActions>
+        </Dialog>
       </CardActions>
     </Card>
   );

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Container, makeStyles } from '@material-ui/core';
 
 import api from 'src/views/teamc/services/Api';
 
@@ -9,11 +8,19 @@ import StudentInfo from './StudentInfo';
 
 const StudentView = () => {
   const [activityList, setActivityList] = useState([]);
+  const [result, setResult] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getStudentActivities();
-      setActivityList(res.data);
+      const res = await api.getStudentActivitiesLocal();
+      /*if (res.status === 200) {
+        setResult('ok');
+        setActivityList(res.data);
+      } else if (res.status === 500) {
+        setResult('error');
+      }*/
+      setResult('ok');
+      setActivityList(res);
     };
     fetchData();
   }, []);
@@ -27,7 +34,11 @@ const StudentView = () => {
       <StudentInfo />
       {/* Button Track Student */}
       {/* Activity Card List */}
-      <ActivityList activityList={activityList} />
+      {result === 'ok' ? (
+        <ActivityList activityList={activityList} />
+      ) : (
+        <h1> Free accounts are limited to 200 requests per day. </h1>
+      )}
     </>
   );
 };

@@ -2,24 +2,21 @@ import React from 'react';
 
 import ActivityCard from './ActivityCard';
 
-import { makeStyles, GridList } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1
-  }
-}));
+//const useStyles = makeStyles(theme => ({}));
 
 const ActivityList = ({ activityList }) => {
-  const classes = useStyles();
   return (
-    <div className={classes.root}>
-      <GridList cellHeight cols={3}>
-        {activityList.map((activity, index) => (
-          <ActivityCard key={index} activityInfo={activity} />
+    <Container maxWidth="lg">
+      <Grid container spacing={3}>
+        {activityList.map(activity => (
+          <Grid item lg={3} sm={6} xl={3} xs={12}>
+            <ActivityCard key={activity.id} activity={activity} />
+          </Grid>
         ))}
-      </GridList>
-    </div>
+      </Grid>
+    </Container>
   );
 };
 

@@ -1,13 +1,27 @@
 import http from './ApiConfig';
 import http2 from './ApiConfigStudents';
+import studentData from './local_data/students-info.json';
+import activitiesData from './local_data/student_activities.json';
 
 const getStudentActivities = () => {
   return http.get('/student_activities');
 };
 
-const getStudentsInfo = () => {
-  return http2.get('/students-info.json');
+const getStudentActivitiesLocal = () => {
+  return activitiesData;
 };
 
+const getStudentsInfo = () => {
+  return http.get('/students-info.json');
+};
 
-export default { getStudentActivities, getStudentsInfo };
+const getStudentsInfoLocal = () => {
+  return studentData;
+};
+
+export default {
+  getStudentActivitiesLocal,
+  getStudentActivities,
+  getStudentsInfoLocal,
+  getStudentsInfo
+};
