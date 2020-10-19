@@ -6,10 +6,7 @@ import Page from 'src/components/Page';
 import BreadCrumbs from './BreadCrumbs';
 import ListStudents from './ListStudents';
 import SearchBar from './SearchBar';
-import data from './Data.json';
 import api from 'src/views/teamc/services/Api';
-
-const list = data;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -27,8 +24,8 @@ const ListStudentsView = () => {
 
     useEffect(() => {
       const fetchData = async () => {
-        const res = await api.getStudentsInfo();
-        setStudentList(res.data);
+        const res = await api.getStudentsInfoLocal();
+        setStudentList(res);
       };
       fetchData();
     }, []);

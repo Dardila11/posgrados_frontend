@@ -1,5 +1,4 @@
 import http from './ApiConfig';
-import http2 from './ApiConfigStudents';
 import studentData from './local_data/students-info.json';
 import activitiesData from './local_data/student_activities.json';
 

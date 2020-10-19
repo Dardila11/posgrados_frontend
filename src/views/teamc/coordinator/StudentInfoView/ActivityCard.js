@@ -1,12 +1,26 @@
 import React from 'react';
 //import PropTypes from 'prop-types';
-import { Card, Typography, CardContent, makeStyles } from '@material-ui/core';
+import { Card, Typography, CardContent, makeStyles, createMuiTheme, colors } from '@material-ui/core';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#757ce8',
+      main: '#3f50b5',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
+    secondary: colors.blue,  
+  },
+});
 
 const useStyles = makeStyles({
   root: {
     minWidth: 150,
     minHeight: 150,
-    maxHeight: 150
+    maxHeight: 150,
+    backgroundColor: theme.palette.secondary,
+    color: colors.black
   },
   media: {
     height: 140

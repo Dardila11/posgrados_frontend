@@ -58,7 +58,7 @@ const TrackStudent = props => {
           {/* Si es Graduado, muestra los siguientes campos */}
           {/* Fecha de Grado* */} {/* Folio* */} {/* Numero de acta* */}
           {/* Resolución* */} {/* Premios* */}
-          {studentStatus == 2 ? (
+          {studentStatus === 2 ? (
             <>
               <TextField
                 id="date"

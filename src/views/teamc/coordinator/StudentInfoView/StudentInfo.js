@@ -11,7 +11,8 @@ import {
   makeStyles,
   Dialog,
   DialogActions,
-  DialogTitle
+  DialogTitle,
+  Container
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -19,7 +20,7 @@ const useStyles = makeStyles({
     minWidth: 275,
     width: '70%',
     height: '300px',
-    margin: '20px'
+    marginTop: '15px',
   },
   status: {
     color: 'green'
@@ -40,44 +41,46 @@ const StudentInfo = () => {
   };
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h3" component="h2" gutterBottom>
-          Información del estudiante
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Nombre: Juan David Gutiérrez Fuentes
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Programa: Maestría en Computación
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Cohorte: 2019
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Estado: <span className={classes.status}>ACTIVO</span>
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
-          Realizar seguimiento
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle variant="h2" onClose={handleClose}>
-            Seguimiento de estudiante
-          </DialogTitle>
-          <TrackStudent />
-          <DialogActions>
-            <Button variant="contained" onClick={handleClose}>
-              Cancelar
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleClose}>
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </CardActions>
-    </Card>
+    <Container>
+      <Card className={classes.root}>
+        <CardContent>
+          <Typography variant="h3" component="h2" gutterBottom>
+            Información del estudiante
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom>
+            Nombre: Juan David Gutiérrez Fuentes
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom>
+            Programa: Maestría en Computación
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom>
+            Cohorte: 2019
+          </Typography>
+          <Typography variant="body1" component="p" gutterBottom>
+            Estado: <span className={classes.status}>ACTIVO</span>
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button variant="contained" color="primary" onClick={handleClickOpen}>
+            Realizar seguimiento
+          </Button>
+          <Dialog open={open} onClose={handleClose}>
+            <DialogTitle variant="h2" onClose={handleClose}>
+              Seguimiento de estudiante
+            </DialogTitle>
+            <TrackStudent />
+            <DialogActions>
+              <Button variant="contained" onClick={handleClose}>
+                Cancelar
+              </Button>
+              <Button variant="contained" color="primary" onClick={handleClose}>
+                Guardar
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </CardActions>
+      </Card>
+    </Container>
   );
 };
 
