@@ -30,9 +30,10 @@ const useStyles = makeStyles(() => ({
 
 const StudentCard = ({ className,student, ...rest }) => {
   const classes = useStyles();
+  const link = 'student/'+student.id;
 
   return (    
-    <RouterLink to="student">    
+    <RouterLink to= {link}>    
       <Box boxShadow={3}>
         <Card className={clsx(classes.root, className)} {...rest}>
           <CardActionArea className = {classes.CardAction}>

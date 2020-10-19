@@ -35,7 +35,7 @@ const routes = [
     element: <CoordinatorDashboardLayout />,
     children: [
       { path: 'list-students', element: <ListStudentsView /> },
-      { path: 'list-students/student', element: <StudentView /> },
+      { path: 'list-students/student/:id', element: <StudentView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

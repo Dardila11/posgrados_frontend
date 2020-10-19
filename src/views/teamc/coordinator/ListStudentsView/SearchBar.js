@@ -47,28 +47,28 @@ const SearchBar = () => {
                                     </Box>
                                 </Grid>
                                 <Grid item lg={2} md={5} xs={12}>
-                                    <Box classname= {classes.Select}>
+                                    <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-cohorte'>Seleccionar Cohorte</InputLabel>
                                         <Select id='Select-cohorte'>
-                                            <MenuItem value = {2020} >2020</MenuItem>
-                                            <MenuItem value = {2019} >2019</MenuItem>
-                                            <MenuItem value = {2018} >2018</MenuItem>
+                                            <MenuItem value = {"2020"} >2020</MenuItem>
+                                            <MenuItem value = {"2019"} >2019</MenuItem>
+                                            <MenuItem value = {"2018"} >2018</MenuItem>
                                         </Select>
                                     </Box>
                                 </Grid>
                                 <Grid item lg={2} md={5} xs={12}>
-                                    <Box classname= {classes.Select}>
+                                    <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-status'>Seleccionar estado</InputLabel>
                                         <Select name='Estado' id='Select-status'>
-                                            <MenuItem value = 'activo' >ACTIVO</MenuItem>
-                                            <MenuItem value = 'inactivo' >INACTIVO</MenuItem>
-                                            <MenuItem value = 'graduado' >GRADUADO</MenuItem>
-                                            <MenuItem value = 'retirado' >RETIRADO</MenuItem>
+                                            <MenuItem value = 'ACTIVO' >ACTIVO</MenuItem>
+                                            <MenuItem value = 'INACTIVO' >INACTIVO</MenuItem>
+                                            <MenuItem value = 'GRADUADO' >GRADUADO</MenuItem>
+                                            <MenuItem value = 'RETIRADO' >RETIRADO</MenuItem>
                                         </Select>
                                     </Box>
                                 </Grid>
                                 <Grid item lg={2} md={5} xs={12}>
-                                    <Box classname= {classes.Select}>
+                                    <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-program'>Seleccionar programa</InputLabel>
                                         <Select name='Programa' id='Select-program'>
                                             <MenuItem value = {1} >Maestria en Computacion</MenuItem>
