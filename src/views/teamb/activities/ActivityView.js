@@ -130,7 +130,9 @@ const ActivityView = ({ className, ...rest }) => {
   }*/
   const handleClickOpen = () => {
     ObtPeriodo.ObtPeriodoService({ "periodo": refPeriodo }).then((result) => {
-      alert("pais creado");
+      var periodoActual = result.data[0].periodo_matricula;
+      alert("El periodo actual es " + periodoActual);
+      document.getElementById("periodoAct").textContent = "Periodo " + periodoActual;
     }).catch(() => {
       alert("Error");
     });
@@ -156,7 +158,7 @@ const ActivityView = ({ className, ...rest }) => {
         <br></br>
         <h1 style={{ display: 'flex', justifyContent: 'center' }}>Crear actividad</h1>
         <br></br>
-        <label ref={refPeriodo} style={{ display: 'flex', justifyContent: 'center' }} id="periodoAct" title="periodo"> Periodo 2019-2020</label>
+        <label ref={refPeriodo} style={{ display: 'flex', justifyContent: 'center' }} id="periodoAct" title="periodo">  </label>
         <br></br>
         <DialogContent dividers>
 
