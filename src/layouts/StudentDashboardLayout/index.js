@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const EstudentDashboardLayout = () => {
+const StudentDashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -55,4 +55,4 @@ const EstudentDashboardLayout = () => {
   );
 };
 
-export default EstudentDashboardLayout;
+export default StudentDashboardLayout;

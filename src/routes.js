@@ -17,12 +17,12 @@ import ActivityThreeView from 'src/views/teamb/activities/ActivityThreeView';
 import ActivityFourView from 'src/views/teamb/activities/ActivityFourView';
 import ActivityFiveView from 'src/views/teamb/activities/ActivityFiveView';
 import ActivitySixView from 'src/views/teamb/activities/ActivitySixView';
-import EstudentDashboardLayout from 'src/layouts/EstudentDashboardLayout';
+import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 const routes = [
   {
-    path: 'user',
-    element: <EstudentDashboardLayout />,
+    path: 'student',
+    element: <StudentDashboardLayout />,
     children: [
       { path: 'activity/activityone', element: <ActivityOneView />},
       { path: 'activity/activitytwo', element: <ActivityTwoView />},
