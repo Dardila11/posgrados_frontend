@@ -10,6 +10,14 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import ActivityView from 'src/views/teamb/activities/ActivityView';
+import ActivityOneView from 'src/views/teamb/activities/ActivityOneView';
+import ActivityTwoView from 'src/views/teamb/activities/ActivityTwoView';
+import ActivityThreeView from 'src/views/teamb/activities/ActivityThreeView';
+import ActivityFourView from 'src/views/teamb/activities/ActivityFourView';
+import ActivityFiveView from 'src/views/teamb/activities/ActivityFiveView';
+import ActivitySixView from 'src/views/teamb/activities/ActivitySixView';
+import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
@@ -36,6 +44,21 @@ const routes = [
     children: [
       { path: 'list-students', element: <ListStudentsView /> },
       { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: '*', element: <Navigate to="/404" /> }
+      ]
+  },
+  {
+    path: 'student',
+    element: <StudentDashboardLayout />,
+    children: [
+      { path: 'activity/activityone', element: <ActivityOneView />},
+      { path: 'activity/activitytwo', element: <ActivityTwoView />},
+      { path: 'activity/activitythree', element: <ActivityThreeView />},
+      { path: 'activity/activityfour', element: <ActivityFourView />},
+      { path: 'activity/activityfive', element: <ActivityFiveView />},
+      { path: 'activity/activitysix', element: <ActivitySixView />},
+      { path: 'activity', element: <ActivityView />},
+      { path: 'activities', element: <ActivityView />},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
