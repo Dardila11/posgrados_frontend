@@ -19,7 +19,34 @@ import ActivityFiveView from 'src/views/teamb/activities/ActivityFiveView';
 import ActivitySixView from 'src/views/teamb/activities/ActivitySixView';
 import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
+/* Coordinator imports */
+import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+import ListStudentsView from 'src/views/teamc/coordinator/ListStudentsView';
+import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
+/* End Coordinator imports*/
+/* Director imports */
+import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
+import ListEvaluationsView from 'src/views/teamc/director';
+/* End Director imports */
 const routes = [
+  {
+    path: 'director',
+    element: <DirectorDashboardLayout />,
+    children: [
+      { path: 'list-evaluations', element: <ListEvaluationsView /> },
+      { path: '*', element: <Navigate to="/404" /> }
+    ]
+  },
+  /* Coordinator routes */
+  {
+    path: 'coordinator',
+    element: <CoordinatorDashboardLayout />,
+    children: [
+      { path: 'list-students', element: <ListStudentsView /> },
+      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: '*', element: <Navigate to="/404" /> }
+      ]
+  },
   {
     path: 'student',
     element: <StudentDashboardLayout />,
