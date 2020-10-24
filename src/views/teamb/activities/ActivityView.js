@@ -49,7 +49,9 @@ const ActivityView = ({ className, ...rest }) => {
   });
   const handleClickOpen = () => {
     ObtPeriodo.ObtPeriodoService({ "periodo": refPeriodo }).then((result) => {
-      alert("pais creado");
+      var periodoActual = result.data[0].periodo_matricula;
+      alert("El periodo actual es " + periodoActual);
+      document.getElementById("periodoAct").textContent = "Periodo " + periodoActual;
     }).catch(() => {
       alert("Error");
     });
