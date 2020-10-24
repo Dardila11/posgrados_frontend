@@ -31,7 +31,6 @@ const routes = [
       { path: 'activity/activityfive', element: <ActivityFiveView />},
       { path: 'activity/activitysix', element: <ActivitySixView />},
       { path: 'activity', element: <ActivityView />},
-      { path: 'activities', element: <ActivityView />},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
