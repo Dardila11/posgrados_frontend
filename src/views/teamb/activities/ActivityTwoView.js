@@ -3,6 +3,10 @@ import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import { Box, Button, Card, CardContent, Grid, TextField, makeStyles } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const pais = [
   { value: 'advert', label: 'Colombia' },
@@ -33,6 +37,13 @@ const ActivityTwoView = ({ className, ...rest }) => {
       ...values,
       [event.target.name]: event.target.value
     });
+  };
+  const [emergente, setEmergente] = React.useState(false);
+  const handleClose = () => {
+    setEmergente(true);
+  };
+  const handleNo = () => {
+    setEmergente(false);
   };
 
   return (
@@ -109,9 +120,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
           </CardContent>
 
           <Box display="flex" justifyContent="flex-end" p={2}>
-            <RouterLink to="../">
-              <Button color="primary" variant="outlined"> Cancelar </Button>
-            </RouterLink>
+            <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
 
             <Button color="primary" variant="contained"> Guardar </Button>
 
@@ -119,6 +128,24 @@ const ActivityTwoView = ({ className, ...rest }) => {
           </Box>
         </Card>
       </form>
+      <Dialog
+        open={emergente}
+        onClose={handleNo}
+      >
+        <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+        <DialogContent>
+        </DialogContent>
+        <DialogActions>
+        <RouterLink to = "../"> 
+            <Button color="primary">
+              Si
+            </Button>
+        </RouterLink>
+          <Button onClick={handleNo} color="primary" autoFocus>
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>  
     </div>
   );
 };

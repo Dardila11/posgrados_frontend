@@ -42,6 +42,8 @@ const ActivityView = ({ className, ...rest }) => {
   const refPeriodo = React.createRef();
   const [open, setOpen] = React.useState(false);
   const [activity, setActivity] = React.useState("");
+  // Costante para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar
+  const [emergente, setEmergente] = React.useState(false);
   const changeActivityType = (e) => { 
     setActivity(e) 
   }
@@ -57,8 +59,19 @@ const ActivityView = ({ className, ...rest }) => {
     });
     setOpen(true);
   };
+  // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
+    setEmergente(true);
+  };
+
+  // "handleSi" controla cuando se da click en el botón "SI" de la ventana emergente
+  const handleSi = () => {
     setOpen(false);
+    setEmergente(false);
+  };
+  // "handleNo" controla cuando se da click en el botón "NO" de la ventana emergente
+  const handleNo = () => {
+    setEmergente(false);
   };
   const handleChange = (event) => {
     setValues({
@@ -100,7 +113,25 @@ const ActivityView = ({ className, ...rest }) => {
             <Button variant="contained" color="primary"> Datos de detalle </Button>
           </RouterLink>
         </DialogActions>
-      </Dialog>
+        </Dialog>
+        {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar 
+        en "Crear Actividad" */}
+        <Dialog
+          open={emergente}
+          onClose={handleNo}
+        >
+          <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+          <DialogContent>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleSi} color="primary">
+              Si
+            </Button>
+            <Button onClick={handleNo} color="primary" autoFocus>
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
     </div>
   );
 };
