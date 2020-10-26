@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -75,43 +75,49 @@ const ActivityTwoView = ({ className, ...rest }) => {
                 variant="outlined"
               />
               <br></br>
-              <br></br>
-              <label>Lugar de celebracion:</label>
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Pais" name="pais" onChange={handleChange} required select SelectProps={{ native: true }}
-                variant="outlined"
-              >
-                {pais.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+              <br></br>              
+              <InputLabel>Lugar de celebracion:</InputLabel>
               <br></br>
               <br></br>
-              <TextField fullWidth label="Ciudad" name="ciudad" onChange={handleChange} required select SelectProps={{ native: true }}
-                variant="outlined"
-              >
-                {ciudad.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+              <Grid container spacing = {2} container justify="space-around">
+                <TextField label="Pais" name="pais" onChange={handleChange} required select SelectProps={{ native: true }}
+                  variant="outlined"
+                >
+                  {pais.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+                <br></br>
+                <br></br>
+                <TextField label="Ciudad" name="ciudad" onChange={handleChange} required select SelectProps={{ native: true }}
+                  variant="outlined"
+                >
+                  {ciudad.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Grid>
               <br></br>
               <br></br>
-              <label>Fecha de realización:</label>
+              <InputLabel>Fecha de realización:</InputLabel>
               <br></br>
               <br></br>
-              <TextField id="FechaInicio" label="Fecha Inicio" type="FechaInicio" defaultValue="2020-02-02" className={classes.textField}
-                InputLabelProps={{ shrink: true, }}
-              />
-              <br></br>
-              <br></br>
-              <TextField id="FechaFin" label="Fecha Fin" type="FechaFin" defaultValue="2020-10-18" className={classes.textField}
-                InputLabelProps={{ shrink: true, }}
-              />
+              <Grid container spacing = {2} container justify="space-around">
+                <Grid>
+                  <TextField id="date" label="Fecha inicio" type="date" defaultValue="2017-05-24"
+                    className={classes.textField} InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField id="date" label="Fecha fin" type="date" defaultValue="2017-05-24" 
+                    className={classes.textField} InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+            </Grid>
               <br></br>
               <br></br>
               <Button color="primary" variant="outlined"> Justificante </Button>

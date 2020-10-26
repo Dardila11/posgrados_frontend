@@ -102,6 +102,7 @@ const ActivityView = ({ className, ...rest }) => {
               <MenuItem value={'activitysix'}>participación en proyectos de investigación</MenuItem>
             </Select>
           </Grid>
+          <br></br>
           <Grid item xs={12}>
             <TextField fullWidth label="Descripción" name="descripcion" onChange={handleChange} required value={values.Descripcion}
               variant="outlined" />

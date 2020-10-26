@@ -76,16 +76,22 @@ const ActivitySixView = ({ className, ...rest }) => {
               />
               <br></br>
               <br></br>
-              <TextField id="FechaInicio" label="Fecha Inicio proyecto" type="FechaInicio" defaultValue="2020-02-02" className={classes.textField}
-                InputLabelProps={{ shrink: true, }}
-              />
               <br></br>
-              <br></br>
-              <TextField id="FechaFin" label="Fecha Fin proyecto" type="FechaFin" defaultValue="2020-10-18" className={classes.textField}
-                InputLabelProps={{ shrink: true, }}
-              />
-              <br></br>
-              <br></br>
+              <Grid container spacing = {3} container justify="space-around">
+                <Grid>
+                  <TextField id="date" label="Fecha Inicio proyecto" type="date" defaultValue="2017-05-24"
+                    className={classes.textField} InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+                <Grid>
+                  <TextField id="date" label="Fecha Fin proyecto" type="date" defaultValue="2017-05-24" 
+                    className={classes.textField} InputLabelProps={{ shrink: true }}
+                  />
+                </Grid>
+              </Grid>
+            <br></br>
+            <br></br>
+            <br></br>
               <Button color="primary" variant="outlined"> Justificante </Button>
             </Grid>
             <br></br>

@@ -98,14 +98,18 @@ const ActivityThreeView = ({ className, ...rest }) => {
               </TextField>
               <br></br>
               <br></br>
-              <TextField id="FechaInicio" label="Fecha de envío editorial" type="FechaInicio" defaultValue="2020-02-02"
-                className={classes.textField} InputLabelProps={{ shrink: true}}
-              />
               <br></br>
+              <Grid container spacing = {3} container justify="space-around">
+                <TextField id="date" label="Envío publicación" type="date" defaultValue="2017-05-24"
+                  className={classes.textField} InputLabelProps={{ shrink: true }}
+                />
+                <br></br>
+                <br></br>
+                <TextField id="date" label="Fecha de publicación" type="date" defaultValue="2017-05-24" 
+                  className={classes.textField} InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
               <br></br>
-              <TextField id="FechaFin" label="Fecha de publicación" type="FechaFin" defaultValue="2020-10-18"
-                className={classes.textField} InputLabelProps={{ shrink: true }}
-              />
               <br></br>
               <br></br>
               <Button color="primary" variant="outlined"> Justificante </Button>

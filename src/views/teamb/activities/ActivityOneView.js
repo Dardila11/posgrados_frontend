@@ -77,15 +77,21 @@ const ActivityOneView = ({ className, ...rest }) => {
                 ))}
               </TextField>
               <br></br>
-              <br></br>
-              <TextField id="FechaInicio" label="Fecha Inicio" type="FechaInicio" defaultValue="2020-02-02" className={classes.textField}
-                InputLabelProps={{ shrink: true, }}
-              />
-              <br></br>
-              <br></br>
-              <TextField id="FechaFin" label="Fecha Fin" type="FechaFin" defaultValue="2020-10-18" className={classes.textField}
-                InputLabelProps={{ shrink: true, }}
-              />
+              <br></br>  
+              <br></br>      
+            <Grid container spacing = {3} container justify="space-around">
+              <Grid>
+                <TextField id="date" label="Fecha inicio" type="date" defaultValue="2017-05-24"
+                  className={classes.textField} InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <Grid>
+                <TextField id="date" label="Fecha fin" type="date" defaultValue="2017-05-24" 
+                  className={classes.textField} InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+            </Grid>
+              <br></br> 
               <br></br>
               <br></br>
               <TextField fullWidth label="Numero de horas asignadas" name="numero de horas asignadas" onChange={handleChange} required select

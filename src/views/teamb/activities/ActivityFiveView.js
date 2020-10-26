@@ -98,6 +98,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
               />
               <br></br>
               <br></br>
+              <br></br>
             <Grid container spacing = {3} container justify="space-around">
               <Grid>
                 <TextField id="date" label="Fecha inicio estancia" type="date" defaultValue="2017-05-24"
@@ -110,6 +111,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
                 />
               </Grid>
             </Grid>
+              <br></br> 
               <br></br>
               <br></br>
               <TextField fullWidth label="Nombre responsable" name="titulo" onChange={handleChange} required
@@ -121,11 +123,13 @@ const ActivityFiveView = ({ className, ...rest }) => {
             </Grid>
             <br></br>
           </CardContent>
-          <Box display="flex" justifyContent="flex-end" p={2}>
+          
+          <Box spacing = {3} display="flex" justifyContent="flex-end" p={2}>
             <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
             <Button color="primary" variant="contained"> Guardar </Button>
             <Button color="primary" variant="contained"> Guardar y Enviar </Button>
           </Box>
+          
         </Card>
       </form>
       <Dialog

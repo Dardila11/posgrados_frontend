@@ -61,34 +61,37 @@ const ActivityFourView = ({ className, ...rest }) => {
               />
               <br></br>
               <br></br>
-              <TextField id="FechaInicio" label="Fecha de exposición" type="FechaInicio" defaultValue="2020-02-02"
-                className={classes.textField} InputLabelProps={{ shrink: true }}
-              />
+              <Grid>
+                <TextField id="date" label="Fecha de exposición" type="date" defaultValue="2017-05-24"
+                  className={classes.textField} InputLabelProps={{ shrink: true }}
+                />
+              </Grid>
+              <br></br>
               
+              <InputLabel >Lugar de exposición</InputLabel>
               <br></br>
-              <br></br>
-              <InputLabel>Lugar de exposición</InputLabel>
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Pais" name="programa" onChange={handleChange} required select 
-                SelectProps={{ native: true }} variant="outlined">
-                {pais.map((option) => (
-                  <option key={option.value} value={option.value}> 
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Ciudad" name="programa" onChange={handleChange} required select
-                SelectProps={{ native: true }} variant="outlined">
-                {ciudad.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-              <br></br>
+              <Grid container spacing = {3} container justify="flex-start">
+                <Grid item lg={2} md={2} xs={12}>
+                  <TextField  label="Pais" name="programa" onChange={handleChange} required select 
+                    SelectProps={{ native: true }} variant="outlined">
+                    {pais.map((option) => (
+                      <option key={option.value} value={option.value}> 
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                </Grid>
+                <Grid item lg={2} md={2} xs={12}>
+                  <TextField label="Ciudad" name="programa" onChange={handleChange} required select
+                    SelectProps={{ native: true }} variant="outlined">
+                    {ciudad.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                </Grid>
+              </Grid>
               <br></br>
               <TextField fullWidth label="Nombre del evento" name="descripcion" onChange={handleChange} required
                 value={values.Descripcion} variant="outlined"/>
