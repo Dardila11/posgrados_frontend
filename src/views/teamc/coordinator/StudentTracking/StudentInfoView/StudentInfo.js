@@ -18,8 +18,7 @@ import {
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    width: '70%',
-    height: '300px',
+    height: '250px',
     marginTop: '15px'
   },
   status: {

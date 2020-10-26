@@ -18,6 +18,11 @@ const getStudentsInfoLocal = () => {
   return studentData;
 };
 
+const getStudentsInfoDirectorLocal = (directorID) => {
+  //TODO: GET STUDENTS OF A DIRECTOR
+  return studentData;
+};
+
 const getStudent = (id) =>{
   studentData.forEach(student => {
     if(student.id===id){
@@ -30,6 +35,7 @@ export default {
   getStudentActivitiesLocal,
   getStudentActivities,
   getStudentsInfoLocal,
+  getStudentsInfoDirectorLocal,
   getStudentsInfo,
   getStudent
 };

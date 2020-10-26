@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
     
   },
   CardAction: {
-    paddingTop : 10,
-    paddingBottom : 10,
+    paddingTop : 5,
+    paddingBottom : 5,
   },
   avatar: {
     height: 100,

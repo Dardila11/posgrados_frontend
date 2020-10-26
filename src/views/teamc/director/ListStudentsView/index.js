@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Divider,
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
 import BreadCrumbs from './BreadCrumbs';
-import SearchBar from './SearchBar';
+import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 
@@ -26,12 +27,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const ListStudentsView = () => {
+const DirectorListStudentsView = () => {
     const [studentsList, setStudentList] = useState([]);
 
     useEffect(() => {
       const fetchData = async () => {
-        const res = await api.getStudentsInfoLocal();
+        const res = await api.getStudentsInfoDirectorLocal(1);
         setStudentList(res);
       };
       fetchData();
@@ -41,10 +42,10 @@ const ListStudentsView = () => {
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
-            <SearchBar handleSearch={handleSearch}/>
-            <List list = {studentsList}/>
+            <SearchBar handleSearch={handleSearch} context='students'/>
+            <List list = {studentsList} option= 'Student'/>
         </Page>  
       ); 
 };
 
-export default ListStudentsView;
+export default DirectorListStudentsView;

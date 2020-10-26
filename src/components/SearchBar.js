@@ -23,7 +23,7 @@ const useStyles = makeStyles(() => ({
 
 const SearchBar = (props) => {
     const classes = useStyles();
-    
+    const context = props.context;
     const { handleSearch } = props.handleSearch;
     return (
         <Container className = {classes.Container}>
@@ -43,7 +43,13 @@ const SearchBar = (props) => {
                                             </InputAdornment>
                                         )
                                         }}
-                                        placeholder='Buscar Estudiante...'
+                                        placeholder = {
+                                            context === 'activities' ? (
+                                                'Buscar actividad ...'
+                                            ):(
+                                                'Buscar estudiante ...'
+                                            )
+                                        }                                  
                                         variant="outlined"
                                     />
                                     </Box>
