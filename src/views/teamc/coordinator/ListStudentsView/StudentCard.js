@@ -28,8 +28,9 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const StudentCard = ({ className,student, ...rest }) => {
+const StudentCard = ({ className,element, ...rest }) => {
   const classes = useStyles();
+  const student = element;
   const link = 'student/'+student.id;
 
   return (    

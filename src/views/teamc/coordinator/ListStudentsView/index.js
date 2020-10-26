@@ -4,9 +4,16 @@ import {
   } from '@material-ui/core';
 import Page from 'src/components/Page';
 import BreadCrumbs from './BreadCrumbs';
-import ListStudents from './ListStudents';
 import SearchBar from './SearchBar';
+import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
+
+const handleSearch = (event) => {
+  console.log("Cadena de busqueda: ", event.target.value);
+  this.setState({
+    inputValue: event.target.value
+  })
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,8 +41,8 @@ const ListStudentsView = () => {
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
-            <SearchBar />
-            <ListStudents studentsList = {studentsList}/>
+            <SearchBar handleSearch={handleSearch}/>
+            <List list = {studentsList}/>
         </Page>  
       ); 
 };
