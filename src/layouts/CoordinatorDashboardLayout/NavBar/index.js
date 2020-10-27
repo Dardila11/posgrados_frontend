@@ -29,7 +29,25 @@ const items = [
     href: '/coordinator/list-students',
     icon: BarChartIcon,
     title: 'Visualizar Estudiantes'
+  },
+  // Options Team D
+  {
+    href: '/coordinator/administer-Gi',
+    icon: BarChartIcon,
+    title: 'Administar Grupo Investigacion'
+  },
+  {
+    href: '/coordinator/administer-Places',
+    icon: BarChartIcon,
+    title: 'Administar Lugares'
+  },
+  {
+    href: '/coordinator/administer-Professors',
+    icon: BarChartIcon,
+    title: 'Administar Profesores'
   }
+
+  // End Options Team D
   /*   {
     href: '/director/list-evaluations',
     icon: UsersIcon,
