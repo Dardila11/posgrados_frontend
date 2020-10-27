@@ -52,8 +52,29 @@ const ActivityView = ({ className, ...rest }) => {
   const handleClickOpen = () => {
     ObtPeriodo.ObtPeriodoService({ "periodo": refPeriodo }).then((result) => {
       var periodoActual = result.data[0].periodo_matricula;
-      alert("El periodo actual es " + periodoActual);
-      document.getElementById("periodoAct").textContent = "Periodo " + periodoActual;
+      var cadena = periodoActual.split(".");
+      var añoAct = cadena[0];
+      var semestre = cadena[1];
+      
+      var año1 = "";
+      var año2 = "";
+      var añoAcadActual = "";
+
+      if( parseInt(semestre) > 1 ) {
+        año1 = añoAct;
+        año2 = añoAct.slice(2);
+        parseInt(año2);
+        año2++;
+      }
+      else {
+        año2 = añoAct.slice(2);
+        año1 = parseInt(añoAct);
+        parseInt(año1);
+        año1--;
+      }
+      añoAcadActual = año1 + "-" + año2
+      document.getElementById("añoAcadActual").textContent = "Año academico actual " + añoAcadActual;
+      
     }).catch(() => {
       alert("Error");
     });
@@ -87,7 +108,7 @@ const ActivityView = ({ className, ...rest }) => {
         <br></br>
         <h1 style={{ display: 'flex', justifyContent: 'center' }}>Crear actividad</h1>
         <br></br>
-        <InputLabel ref={refPeriodo} style={{ display: 'flex', justifyContent: 'center' }} id="periodoAct" title="periodo"> Periodo 2019-2020</InputLabel>
+        <InputLabel style={{ display: 'flex', justifyContent: 'center' }} id="añoAcadActual" title="añoAcadActual"> </InputLabel>
         <br></br>
         <DialogContent dividers>
           <Grid item xs={12} >
