@@ -8,6 +8,7 @@ import BreadCrumbs from './BreadCrumbs';
 import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
+import ListPagination from 'src/components/ListPagination';
 
 const handleSearch = (event) => {
   console.log("Cadena de busqueda: ", event.target.value);
@@ -44,6 +45,7 @@ const DirectorListStudentsView = () => {
             <BreadCrumbs />
             <SearchBar handleSearch={handleSearch} context='students'/>
             <List list = {studentsList} option= 'Student'/>
+            <ListPagination/>
         </Page>  
       ); 
 };

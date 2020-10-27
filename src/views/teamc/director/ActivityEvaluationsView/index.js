@@ -3,6 +3,7 @@ import {
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
+import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
 import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
@@ -43,6 +44,7 @@ const ListActivitiesView = () => {
             <BreadCrumbs />
             <SearchBar handleSearch={handleSearch} context='activities'/>
             <List list = {activityList} option='Activity'/>
+            <ListPagination/>
         </Page>  
       ); 
 };
