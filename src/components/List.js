@@ -1,7 +1,7 @@
-import { Container, Divider, Grid } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import React from 'react';
 import StudentCard from 'src/components/StudentCard';
-import ActivityCard from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView/ActivityCard';
+import ActivityCard from 'src/components/ActivityCard';
 
 
 class List extends React.Component{
@@ -12,10 +12,8 @@ class List extends React.Component{
         return(
             <Container maxWidth="lg">                
                 <Grid container spacing={3}>
-                {console.log("Into List")}
-                {console.log(list)}
                 {list.map(element => (
-                <Grid item lg={3} md={5} xs={12} key = {element.id}>
+                <Grid item lg={3} md={6} xs={12} key = {element.id}>
                     {option === 'Student'? (
                         <StudentCard element = {element}/>
                     ) : (

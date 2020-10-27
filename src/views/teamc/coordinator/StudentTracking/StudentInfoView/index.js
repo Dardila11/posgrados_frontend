@@ -42,7 +42,6 @@ const StudentView = () => {
       
     };
     fetchData();
-    console.log(activityList);
   }, []);
   return (
     <>
@@ -59,8 +58,6 @@ const StudentView = () => {
           <Typography className={classes.title} variant='h1'>
             Actividades de investigación del estudiante
           </Typography>
-          {console.log("Into student info view")}
-          {console.log(activityList)}
           <List list = {activityList} option='Activity'/>
         </>
       ) : (
