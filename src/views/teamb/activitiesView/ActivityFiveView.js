@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles} from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider} from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 
 const pais = [
   { value: 'advert', label: 'Colombia' },
@@ -22,19 +23,23 @@ const ciudad = [
 ];
 
 const useStyles = makeStyles(() => ({
-  root: {},
-  Container: {
-    height: 100
-},
-SearchBar: {
-    paddingTop: 0,
-    paddingBottom: 2,
-    height: 90,
-    
-},
-Select:{
-    alignItems: 'center' 
-}
+  root: {
+    minWidth: 275,
+    width: '70%',
+    height: '800px',
+    marginTop: '15px'
+  }, 
+  status: {
+    color: 'green'
+  },
+  SearchBar: {
+      paddingTop: 0,
+      paddingBottom: 2,
+      height: 90,     
+  },
+  Select:{
+      alignItems: 'center' 
+  }
 }));
 
 const ActivityFiveView = ({ className, ...rest }) => {
@@ -56,10 +61,15 @@ const ActivityFiveView = ({ className, ...rest }) => {
   };
 
   return (
+    <div>
+      <BreadCrumbs />
+    <Container>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
-        <Card style={{ width: '40rem' }}>
-          <h1 style={{ display: 'flex', justifyContent: 'center' }} name="crearactividad" >Datos de detalle estancias de investigación en otras instituciones</h1>
+        <Card className={classes.root}>
+          <h1 style={{ display: 'flex', justifyContent: 'center' }} align="center" name="crearactividad" >Datos de detalle estancias de investigación en otras instituciones</h1>
+          <br></br>
+          <Divider/>
           <CardContent >
             <br></br>
             <Grid item md={12} xs={12}>
@@ -150,6 +160,8 @@ const ActivityFiveView = ({ className, ...rest }) => {
           </Button>
         </DialogActions>
       </Dialog> 
+    </div>
+    </Container>
     </div>
   );
 };

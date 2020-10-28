@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+
 
 const programa = [
   { value: 'advert', label: 'Seleccione una opción' },
@@ -23,7 +25,15 @@ const horas = [
 ];
 
 const useStyles = makeStyles(() => ({
-  root: {}
+  root: {
+    minWidth: 275,
+    width: '70%',
+    height: '650px',
+    marginTop: '15px'
+  },
+  status: {
+    color: 'green'
+  }
 }));
 
 const ActivityOneView = ({ className, ...rest }) => {
@@ -50,12 +60,17 @@ const ActivityOneView = ({ className, ...rest }) => {
   };
 
   return (
+    <div>
+      <BreadCrumbs />
+    <Container>
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
-        <Card style={{ width: '40rem' }}>
-          <h1 style={{ display: 'flex', justifyContent: 'center' }} name="crearactividad">
+        <Card className={classes.root}>
+          <h1 style={{ display: 'flex', align:'center', justifyContent: 'center' } } align="center" name="crearactividad">
             Datos de detalle Curso, dirección/revisión de proyectos
           </h1>
+          <br></br>
+          <Divider/>
           <CardContent >
             <br></br>
             <Grid item md={12} xs={12}>
@@ -141,6 +156,8 @@ const ActivityOneView = ({ className, ...rest }) => {
           </Button>
         </DialogActions>
       </Dialog>  
+    </div>
+    </Container>
     </div>
   );
 };

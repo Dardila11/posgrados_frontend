@@ -11,5 +11,5 @@ export default class service{
         const url= `${API_URL}/api/1.0/crear_pais/`;
         return axios.post(url,actividad);
     }
-
+    
 }
