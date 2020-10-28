@@ -19,20 +19,24 @@ const getStudentsInfoLocal = () => {
   return studentData;
 };
 
-const getStudentsInfoDirectorLocal = (directorID) => {
+const getStudentsInfoDirectorLocal = directorID => {
   //TODO: GET STUDENTS OF A DIRECTOR
   return studentData;
 };
 
-const getStudent = (id) =>{
+const getStudent = id => {
+  return studentData.find(student => student.id == id);
+};
+
+/*const getStudent = id => {
   let student = null;
   studentData.forEach(element => {
-    if(element.id==id){
+    if (element.id == id) {
       student = element;
     }
   });
   return student;
-}
+};*/
 
 export default {
   getStudentActivitiesLocal,
