@@ -20,7 +20,7 @@ const CreateCountryView = () =>{
 
     const handleCreate = () =>{
         CreateCountryService({
-            "nombre": name
+            "name": name
     
         }).then((result)=>{
 
@@ -37,7 +37,7 @@ const CreateCountryView = () =>{
         handleCreate();
     }
     const handleOnchangeName = (e) => {
-        setname(e.target.value)
+        //setname(e.target.value)
     }
     return(
             <Container maxWidth="sm">
@@ -77,7 +77,7 @@ const CreateCountryView = () =>{
                         label="Nombre"
                         margin="normal"
                         name="name"
-                        onChange = {handleOnchangeName}
+                        onChange = {(e) => {handleOnchangeName(e); handleChange(e)}}
                         onBlur={handleBlur}
                         type="text"
                         value={values.name}

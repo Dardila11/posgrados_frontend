@@ -9,16 +9,25 @@ export const SearchCountry = ({callback}) => {
 
     
     const [listCountries, setlistCountries] = useState([])
-    const [idCountry, setidCountry] = useState("")
+    const [idCountry, setidCountry] = useState([])
 
 
     const getIdContry = (name) =>{
-            setidCountry(listCountries.find( country => country.nombre === name ));
+
+
+            let find = listCountries.find( country => country.name === name )
+            if (find === undefined){
+                setidCountry("null")
+            }else{
+                setidCountry(find.id);
+            }
+            
     }
 
     useEffect(() => {
         listCountriesService().then(
-            result  => setlistCountries(result.data)).
+            
+            result  => setlistCountries(result.data.Countrys)).
             catch( setlistCountries ([]))
     },[])
 

@@ -27,17 +27,14 @@ const CreateDepartmentView = () =>{
         setname(e.target.value);
     }
     const handleCreate= () =>{
-        let select = document.getElementById('opcionesD').value;
         CreateDeparmentService({
-            "nombre": name,
-            "pais": idCountry,
+            "name": name,
+            "country_id": idCountry,
             
         }).then((result)=>{
-            document.getElementById("contenedorDepartment").
-            innerHTML="<div class='alert alert-success' role='alert'>Departamento creado correctamente!</div>";
+            document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-success' role='alert'>Departamento creado correctamente!</div>";
         }).catch(()=>{
-            document.getElementById("contenedorDepartment").
-            innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+            document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
         });
            
     }
@@ -103,7 +100,7 @@ const CreateDepartmentView = () =>{
                         label="Nombre"
                         margin="normal"
                         name="name"
-                        onChange = {handleOnchangeName}                       
+                        onChange = { (e) =>{handleOnchangeName(e);handleChange(e)} }                       
                         onBlur={handleBlur}
                         type="text"
                         value={values.name}
@@ -131,13 +128,6 @@ const CreateDepartmentView = () =>{
                         style={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Pais al que pertenece" variant="outlined" />}
                         /> */}
-                        <Typography
-                                    color="textPrimary"
-                                    variant="h5"
-                                    mb={10}
-                                >
-                                    Seleccionar el pais
-                        </Typography>
                         
                         <SearchCountry callback = {getCountry}/>
 

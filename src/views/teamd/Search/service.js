@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://localhost:8000'
+const API_URL = 'http://localhost:8000'
 
 
 
@@ -29,6 +29,6 @@ export const GetGIforDeparment = (idDeparment) =>{
 }
 
 export const listCountriesService = () => {
-    const url= `${API_URL}/api/1.0/consultar_paise/`;
+    const url= `${API_URL}/api/1.0/consultar_pais/`;
     return axios.get(url);
 }
