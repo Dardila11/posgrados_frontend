@@ -26,16 +26,16 @@ const useStyles = makeStyles({
     marginTop: '15px'
   },
   statusActive: {
-    color: 'green'
+    color: '#4caf50'
   },
   statusInactive: {
-    color: 'gray'
+    color: '#757575'
   },
   statusRetired: {
-    color: 'red'
+    color: '#f44336'
   },
   statusGraduate: {
-    color: 'blue'
+    color: '#0277bd'
   }
 });
 

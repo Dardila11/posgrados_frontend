@@ -21,10 +21,8 @@ const useStyles = makeStyles(() => ({
     
   }));
 
-const SearchBar = (props) => {
+const SearchBar = ({className,context, ...rest }) => {
     const classes = useStyles();
-    const context = props.context;
-    const { handleSearch } = props.handleSearch;
     return (
         <Container className = {classes.Container}>
             
@@ -35,7 +33,7 @@ const SearchBar = (props) => {
                             <Grid container spacing = {3}>
                                 <Grid item lg={5} md={5} xs={12}>
                                     <Box maxWidth={500}>
-                                    <TextField  onChange= {handleSearch} fullWidth InputProps={{ startAdornment: (
+                                    <TextField  fullWidth InputProps={{ startAdornment: (
                                             <InputAdornment position="start">
                                             <SvgIcon fontSize="small" color="action">
                                             <SearchIcon/>
@@ -54,7 +52,7 @@ const SearchBar = (props) => {
                                     />
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={5} xs={12}>
+                                <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-cohorte'>Seleccionar Cohorte</InputLabel>
                                         <Select id='Select-cohorte'>
@@ -64,7 +62,7 @@ const SearchBar = (props) => {
                                         </Select>
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={5} xs={12}>
+                                <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-status'>Seleccionar estado</InputLabel>
                                         <Select name='Estado' id='Select-status'>
@@ -75,7 +73,7 @@ const SearchBar = (props) => {
                                         </Select>
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={5} xs={12}>
+                                <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-program'>Seleccionar programa</InputLabel>
                                         <Select name='Programa' id='Select-program'>

@@ -9,13 +9,6 @@ import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 import ListPagination from 'src/components/ListPagination';
 
-const handleSearch = (event) => {
-  console.log("Cadena de busqueda: ", event.target.value);
-  this.setState({
-    inputValue: event.target.value
-  })
-}
-
 const useStyles = makeStyles((theme) => ({
     root: {
       backgroundColor: theme.palette.background.dark,
@@ -27,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const ListStudentsView = () => {
+const CoordinatorListStudentsView = () => {
+
     const [studentsList, setStudentList] = useState([]);
 
     useEffect(() => {
@@ -38,15 +32,15 @@ const ListStudentsView = () => {
       fetchData();
     }, []);
 
-    const classes = useStyles();
+    const classes = useStyles();    
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
-            <SearchBar handleSearch={handleSearch} context='students'/>
+            <SearchBar context='students'/>
             <List list = {studentsList} option= 'Student'/>
             <ListPagination/>
         </Page>  
       ); 
 };
 
-export default ListStudentsView;
+export default CoordinatorListStudentsView;

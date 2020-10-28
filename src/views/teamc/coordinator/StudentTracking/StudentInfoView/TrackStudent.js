@@ -101,10 +101,11 @@ const TrackStudent = props => {
             <></>
           )}
           <TextField
-            id="outlined-basic"
+            id="outlined-multiline-static"
             label="Observaciones"
             variant="outlined"
             multiline
+            rows={5}
             required
           />
         </form>

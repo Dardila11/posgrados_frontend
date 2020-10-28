@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const CoordinatorListActivitiesView = () => {
+const DirectorListActivitiesView = () => {
     const [activityList, setActivityList] = useState([]);
 
     useEffect(() => {
@@ -49,4 +49,4 @@ const CoordinatorListActivitiesView = () => {
       ); 
 };
 
-export default CoordinatorListActivitiesView;
+export default DirectorListActivitiesView;
