@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {CreateInstitution} from './service';
+import {CreateInstitutionService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -9,10 +9,25 @@ import {
     Button,
     Container,
     TextField,
+    Typography,
 
     
   } from '@material-ui/core';
 
+  const listCountries = [ 
+    {
+        id: 1,
+        nombre: "Colombia"           
+    },
+    {
+        id: 2,
+        nombre: "Italia"           
+    },
+    {
+        id: 3,
+        nombre: "USA"           
+    }
+]
 const CreateInstitutionView =()=>{
     const [name, setname] = useState(" ")
     const [city,setcity]= useState(" ")
@@ -24,19 +39,25 @@ const CreateInstitutionView =()=>{
     }
 
     const handleOnchangeCity =(e) =>{
-        setcity(e.target.value);
+        let  selectCity= document.getElementById('opcionesCities').value;
+        setcity(selectCity);
     }
 
     const handleOnchangeDepartment =(e)=>{
-        setdepartment(e.target.value);
+        let  selectDepartment= document.getElementById('opcionesDepartments').value;
+        setcountry(selectDepartment);
+        //Aqui se debe consumir la API ciudades by idDepartment
     }
 
     const handleOnchangeCountry = (e) =>{
-        setcountry(e.target.value);
+        let  selectCountry= document.getElementById('opcionesCountries').value;
+        setcountry(selectCountry);
+        //Aqui se debe consumir la api de departamentos by idPais
+        console.log(selectCountry);
     }
 
     const handleCreate = ()=>{
-        CreateInstitution({
+        CreateInstitutionService({
             "nombre_ins": name,
             "ciudad": city,
             "departamento": department,
@@ -109,45 +130,51 @@ const CreateInstitutionView =()=>{
                         value={values.name}
                         variant="outlined"
                         />
-                    <TextField
-                        error={Boolean(touched.city && errors.city)}
-                        fullWidth
-                        helperText={touched.city && errors.city}
-                        label="Ciudad a la que pertenece"
-                        margin="normal"
-                        name="city"
-                        onBlur={handleBlur}
-                        onChange={handleOnchangeCity}
-                        type="text"
-                        value={values.city}
-                        variant="outlined"
-                        />
-                        <TextField
-                        error={Boolean(touched.department && errors.department)}
-                        fullWidth
-                        helperText={touched.department  && errors.department }
-                        label="Departamento a la que pertenece"
-                        margin="normal"
-                        name="department"
-                        onBlur={handleBlur}
-                        onChange={handleOnchangeDepartment}
-                        type="text"
-                        value={values.deparment}
-                        variant="outlined"
-                        />
-                        <TextField
-                        error={Boolean(touched.country && errors.country)}
-                        fullWidth
-                        helperText={touched.country && errors.country}
-                        label="Pais al que pertenece"
-                        margin="normal"
-                        name="country"
-                        onBlur={handleBlur}
-                        onChange={handleOnchangeCountry}
-                        type="text"
-                        value={values.country}
-                        variant="outlined"
-                        />
+
+                        <Typography
+                                    color="textPrimary"
+                                    variant="h5"
+                                    mb={10}
+                        >
+                                    Seleccionar el pais
+                        </Typography>
+
+                        <select  onChange={handleOnchangeCountry} className="browser-default custom-select mt-2" id="opcionesCountries">                       
+                        {
+                            listCountries.map(country=> 
+                            <option value={country.id} key={country.id}>{country.nombre}</option>)
+                        }
+                        </select>
+
+                        <Typography
+                                    color="textPrimary"
+                                    variant="h5"
+                                    mb={10}
+                        >
+                                    Seleccionar el departamento
+                        </Typography>
+                        <select   onChange={handleOnchangeDepartment} className="browser-default custom-select mt-2" id="opcionesDepartments">                       
+                        {
+                            //listCountries.map(department=> 
+                            //<option value={department.id} key={department.id}>{department.nombre}</option>)
+                        }
+                        </select>
+
+
+                        <Typography
+                                    color="textPrimary"
+                                    variant="h5"
+                                    mb={10}
+                        >
+                                    Seleccionar la Ciudad
+                        </Typography>
+                        <select  onChange={handleOnchangeCity} className="browser-default custom-select mt-2" id="opcionesCities">                       
+                        {
+                            //listCountries.map(city=> 
+                            //<option value={city.id} key={city.id}>{city.nombre}</option>)
+                        }
+                        </select>
+                    
                         
                         <Box my={2}>
                             <Button

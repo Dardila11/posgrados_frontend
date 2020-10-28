@@ -16,7 +16,7 @@ export const SearchDeparmentI = ({callback}) => {
     useEffect(() => {
         GetDeparmentIListService().then(result => {
             setlistDeparmentI(result.data);
-        }).catch();
+        }).catch(setlistDeparmentI([]));
     }, [])
     return (
             <Autocomplete

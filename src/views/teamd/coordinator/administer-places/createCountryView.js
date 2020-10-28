@@ -1,5 +1,5 @@
 import React,{Component, useState} from 'react';
-import {CreateCountry} from './service';
+import {CreateCountryService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Link as  useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ const CreateCountryView = () =>{
     const [name, setname] = useState(" ")
 
     const handleCreate = () =>{
-        CreateCountry({
+        CreateCountryService({
             "nombre": name
     
         }).then((result)=>{
@@ -77,7 +77,7 @@ const CreateCountryView = () =>{
                         label="Nombre"
                         margin="normal"
                         name="name"
-                        onChange = {(e)=>{handleChange(e); handleOnchangeName(e);}}
+                        onChange = {handleOnchangeName}
                         onBlur={handleBlur}
                         type="text"
                         value={values.name}

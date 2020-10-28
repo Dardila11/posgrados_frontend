@@ -1,30 +1,46 @@
 import axios from 'axios'
 const API_URL = 'http://localhost:8000';
 
-    export const CreateCountry = (Country) =>{
+    export const CreateCountryService = (Country) =>{
         const url= `${API_URL}/api/1.0/crear_pais/`;
         return axios.post(url,Country);
     }
-    export const CreateDeparment = (Deparment)  => {
+    export const CreateDeparmentService = (Deparment)  => {
         const url= `${API_URL}/api/1.0/crear_departamento/`;
         return axios.post(url,Deparment);
     }
-    export const CreateCity = (City) => {
+    export const CreateCityService = (City) => {
         const url= `${API_URL}/api/1.0/crear_ciudad/`;
         return axios.post(url,City);
     }
-    export const CreateInstitution = (Institution) => {
+    export const CreateInstitutionService = (Institution) => {
         const url= `${API_URL}/api/1.0/crear_institucion/`;
         return axios.post(url,Institution);
     }
-    export const listCountries = () => {
-        const url= `${API_URL}/api/1.0/listar_paises/`;
+    export const listCountriesService = () => {
+        const url= `${API_URL}/api/1.0/consultar_paise/`;
         return axios.get(url);
     }
-    export const listDeparments = (idPais) => {
+    export const listDeparmentsService = (idPais) => {
 
-        const url= `${API_URL}/api/1.0/listar_departamentos/${idPais}`;
+        const url= `${API_URL}/api/1.0/consultar_departamento_pais/${idPais}`;
         return axios.get(url);
     }
+    export const listCitiesService = (idDepartamento) => {
+
+        const url= `${API_URL}/api/1.0/consultar_ciudad_departamento/${idDepartamento}`;
+        return axios.get(url);
+    }
+
+    //TODO
+
+    // export const listInstitutions = (idDepartamento) => {
+
+    //     const url= `${API_URL}/api/1.0/consultar_ciudad_departamento/${idDepartamento}`;
+    //     return axios.get(url);
+    // }
+
+
+
     
 

@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-import {listCountries,listDeparments,CreateCity} from './service';
+import {CreateCityService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -13,66 +13,55 @@ import {
     
   } from '@material-ui/core';
 
+const listCountries = [ 
+        {
+            id: 1,
+            nombre: "Colombia"           
+        },
+        {
+            id: 2,
+            nombre: "Italia"           
+        },
+        {
+            id: 3,
+            nombre: "USA"           
+        }
+    ]
+
 const CreateCityView = () =>{
     const [name, setname] = useState(" ")
     const [department,setdepartment]= useState(" ")
+    const [country,setcountry]= useState(" ")
+    const [bandera, setbandera]=useState(" ")
 
+    const handleOnchangeCountry =(e) =>{
+        let  selectCountry= document.getElementById('opcionesCountries').value;
+        setcountry(selectCountry);
+        //Aqui se debe consumir la api de departamentos by idPais
+        console.log(selectCountry);
+    }
+
+
+    
     const handleOnchangeName = (e) =>{
         setname(e.target.value);
-        console.log(name)
     }
 
-    const handleOnchangeDepartment = (e) =>{ 
-         setdepartment(e.target.value);
+    const handleOnchangeDepartment =(e)=>{
+        let  selectDepartment= document.getElementById('opcionesDepartments').value;
+        setcountry(selectDepartment);
     }
 
-    const options = ()=>{
-        listCountries({
-            
-        }).then(async (result)=>{
-            document.getElementById("opcionesCountries").innerHTML=" ";
-            result.data.Paises.forEach(elemento => {
-                
-                let option = document.createElement("option")
-                option.setAttribute("value", elemento.id)
-                let textOption = document.createTextNode(elemento.nombre)
-                option.appendChild(textOption)
-                document.getElementById("opcionesCountries").appendChild(option);
-                    
-            })
-            
+    
 
-        }).catch(()=>{
-            
-        });
-
-        listDeparments("1").then(async (result)=>{
-            document.getElementById("opcionesDeparments").innerHTML=" ";
-            result.data.Paises.forEach(elemento => {
-                
-                let option = document.createElement("option")
-                option.setAttribute("value", elemento.id)
-                let textOption = document.createTextNode(elemento.nombre)
-                option.appendChild(textOption)
-                document.getElementById("opcionesDeparments").appendChild(option);
-                    
-            })
-            
-
-            
-            
-        }).catch(()=>{
-            
-        });
-
-
-        }
+    
     const handleCreate= () =>{
-        let selectCountry = document.getElementById('opcionesCountries').value;
-        CreateCity({
+        //let selectCountry = document.getElementById('opcionesCountries').value;
+        //let selectDepartment = document.getElementById('opcionesDepartments').value;
+        CreateCityService({
             "nombre": name,
             "departamento": department,
-            "pais": selectCountry,
+            "pais": country,
             
         }).then((result)=>{
 
@@ -120,7 +109,7 @@ const CreateCityView = () =>{
               values
             }) => (
             <>
-            {options()}
+            
             <Box
                 display="flex"
                 flexDirection="column"
@@ -137,24 +126,43 @@ const CreateCityView = () =>{
                         margin="normal"
                         name="city"
                         onBlur={handleBlur}
-                        onChange = { (e) => {handleOnchangeName(e); handleChange(e)} }
+                        onChange = {handleOnchangeName}
                         type="text"
-                        value={values.city}
+                        value={values.name}
                         variant="outlined"
                         />
-                        <TextField
-                        error={Boolean(touched.department && errors.department)}
-                        fullWidth
-                        helperText={touched.department  && errors.department }
-                        label="Departamento a la que pertenece"
-                        margin="normal"
-                        name="department"
-                        onBlur={handleBlur}
-                        onChange = {(e) => {handleChange(e);handleOnchangeDepartment (e)}}
-                        type="text"
-                        value={values.deparment}
-                        variant="outlined"
-                        />
+
+                        <Typography
+                                    color="textPrimary"
+                                    variant="h5"
+                                    mb={10}
+                        >
+                                    Seleccionar el pais
+                        </Typography>
+
+                        <select  onChange={handleOnchangeCountry} className="browser-default custom-select mt-2" id="opcionesCountries">                       
+                        {
+                            listCountries.map(country=> 
+                            <option value={country.id} key={country.id}>{country.nombre}</option>)
+                        }
+                        </select>
+
+                        <Typography
+                                    color="textPrimary"
+                                    variant="h5"
+                                    mb={10}
+                        >
+                                    Seleccionar el departamento
+                        </Typography>
+                        <select   onChange={handleOnchangeDepartment} className="browser-default custom-select mt-2" id="opcionesDepartments">                       
+                        {
+                            //listCountries.map(department=> 
+                            //<option value={department.id} key={department.id}>{department.nombre}</option>)
+                        }
+                        </select>
+                        
+
+                        
                         {/* <Typography
                                     color="textPrimary"
                                     variant="h5"
@@ -166,17 +174,8 @@ const CreateCityView = () =>{
                         
 
                         </select> */}
-                        <Typography
-                                    color="textPrimary"
-                                    variant="h5"
-                                    mb={10}
-                        >
-                                    Seleccionar el pais
-                        </Typography>
-                        <select className="browser-default custom-select mt-2" id="opcionesCountries">
                         
-
-                        </select>
+                        
                         
                         <Box my={2}>
                             <Button

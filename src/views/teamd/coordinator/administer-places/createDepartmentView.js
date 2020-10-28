@@ -1,5 +1,5 @@
-import React,{Component, useState} from 'react';
-import {CreateDeparment , listCountries} from './service';
+import React,{ useState} from 'react';
+
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,46 +11,33 @@ import {
     Typography,    
   } from '@material-ui/core';
 
+
+//Import component search
+
+import {SearchCountry} from 'src/views/teamd/Search/searchCountry'
+ // service
+
+ import {CreateDeparmentService} from './service'
+
 const CreateDepartmentView = () =>{
 
     const [name, setname] = useState(" ")
-
+    const [idCountry, setidCountry] = useState("")
     const handleOnchangeName = (e) =>{
         setname(e.target.value);
     }
-
-    const options = ()=>{
-        listCountries({
-            
-        }).then(async (result)=>{
-            document.getElementById("opcionesD").innerHTML=" ";
-            result.data.Paises.forEach(elemento => {
-                
-                let option = document.createElement("option")
-                option.setAttribute("value", elemento.id)
-                let textOption = document.createTextNode(elemento.nombre)
-                option.appendChild(textOption)
-                document.getElementById("opcionesD").appendChild(option);
-            })
-   
-        }).catch(()=>{
-            
-        });
-
-    }
     const handleCreate= () =>{
         let select = document.getElementById('opcionesD').value;
-        CreateDeparment({
+        CreateDeparmentService({
             "nombre": name,
-            "pais": select,
+            "pais": idCountry,
             
         }).then((result)=>{
-
-            document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-success' role='alert'>Departamento creado correctamente!</div>";
-
-
+            document.getElementById("contenedorDepartment").
+            innerHTML="<div class='alert alert-success' role='alert'>Departamento creado correctamente!</div>";
         }).catch(()=>{
-            document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+            document.getElementById("contenedorDepartment").
+            innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
         });
            
     }
@@ -59,7 +46,15 @@ const CreateDepartmentView = () =>{
         event.preventDefault();
     }
 
-    
+
+    const getCountry = (name,id) =>{
+        setidCountry(id);
+    }
+
+
+
+
+ 
     return(
             
             <Container maxWidth="sm">
@@ -91,7 +86,7 @@ const CreateDepartmentView = () =>{
             }) => (
                 
                 <>
-                {options()}
+               
             <Box
                 display="flex"
                 flexDirection="column"
@@ -100,7 +95,7 @@ const CreateDepartmentView = () =>{
             >
                 
                 <form  onSubmit={handleSubmit}>
-                    <Box mb={3}>
+                    <Box mb={3} id="box3">
                         <TextField
                         error={Boolean(touched.name && errors.name)}
                         fullWidth
@@ -108,12 +103,13 @@ const CreateDepartmentView = () =>{
                         label="Nombre"
                         margin="normal"
                         name="name"
-                        onChange = {(e) => {handleChange(e); handleOnchangeName(e)}}                       
+                        onChange = {handleOnchangeName}                       
                         onBlur={handleBlur}
                         type="text"
                         value={values.name}
                         variant="outlined"
                         />
+
                         {/* <TextField
                         error={Boolean(touched.country && errors.country)}
                         fullWidth
@@ -142,9 +138,8 @@ const CreateDepartmentView = () =>{
                                 >
                                     Seleccionar el pais
                         </Typography>
-                        <select className="browser-default custom-select mt-2" id="opcionesD">
-
-                        </select>
+                        
+                        <SearchCountry callback = {getCountry}/>
 
                         <Box my={2}>
                             <Button
@@ -167,10 +162,15 @@ const CreateDepartmentView = () =>{
             </>
             )}
             </Formik>
+            
             </Container>
+
+            
             
         
     )
+
+    
     
 }
 
