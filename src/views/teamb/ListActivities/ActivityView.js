@@ -14,8 +14,8 @@ import service from 'src/views/teamb/services/service';
 import { Grid, Select, TextField, MenuItem, InputLabel } from '@material-ui/core';
 import BreadCrumbs from 'src/views/teamb/ListActivities/BreadCrumbs';
 
+const objService = new service();
 
-const ObtPeriodo = new service();
 const styles = (theme) => ({
   root: { margin: 0, padding: theme.spacing(2) },
   closeButton: { position: 'absolute', right: theme.spacing(1), top: theme.spacing(1), color: theme.palette.grey[500] },
@@ -41,7 +41,6 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 const ActivityView = ({ className, ...rest }) => {
-  const refPeriodo = React.createRef();
   const [open, setOpen] = React.useState(false);
   const [activity, setActivity] = React.useState("");
   // Costante para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar
@@ -52,12 +51,13 @@ const ActivityView = ({ className, ...rest }) => {
   const [values, setValues] = useState({
   });
   const handleClickOpen = () => {
-    ObtPeriodo.ObtPeriodoService({ "periodo": refPeriodo }).then((result) => {
-      var periodoActual = result.data[0].periodo_matricula;
-      alert("El periodo actual es " + periodoActual);
-      document.getElementById("periodoAct").textContent = "Periodo " + periodoActual;
+    objService.GetPeriodService().then((result) => { 
+      var CurrentPeriod = result.data[0].periodo_matricula;
+      var CurrentAcadYear = objService.GetCurrentYear(CurrentPeriod);
+      document.getElementById("CurrentAcadYear").textContent = "Año academico actual " + CurrentAcadYear;
+      
     }).catch(() => {
-      alert("Error");
+      alert("Error, no hay registros para mostrar");
     });
     setOpen(true);
   };
@@ -90,7 +90,7 @@ const ActivityView = ({ className, ...rest }) => {
         <br></br>
         <h1 style={{ display: 'flex', justifyContent: 'center' }}>Crear actividad</h1>
         <br></br>
-        <InputLabel ref={refPeriodo} style={{ display: 'flex', justifyContent: 'center' }} id="periodoAct" title="periodo"> Periodo 2019-2020</InputLabel>
+        <InputLabel style={{ display: 'flex', justifyContent: 'center' }} id="CurrentAcadYear" title="periodo">  </InputLabel>
         <br></br>
         <DialogContent dividers>
           <Grid item xs={12} >
@@ -102,7 +102,7 @@ const ActivityView = ({ className, ...rest }) => {
               <MenuItem value={'activitythree'}>Publicaciones</MenuItem>
               <MenuItem value={'activityfour'}>Exposición de resultados parciales de investigación</MenuItem>
               <MenuItem value={'activityfive'}>Estancias de investigación en otras instituciones</MenuItem>
-              <MenuItem value={'activitysix'}>participación en proyectos de investigación</MenuItem>
+              <MenuItem value={'activitysix'}>Participación en proyectos de investigación</MenuItem>
             </Select>
           </Grid>
           <br></br>
@@ -120,20 +120,13 @@ const ActivityView = ({ className, ...rest }) => {
         </Dialog>
         {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar 
         en "Crear Actividad" */}
-        <Dialog
-          open={emergente}
-          onClose={handleNo}
-        >
+        <Dialog open={emergente} onClose={handleNo}>
           <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
           <DialogContent>
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleSi} color="primary">
-              Si
-            </Button>
-            <Button onClick={handleNo} color="primary" autoFocus>
-              No
-            </Button>
+            <Button onClick={handleSi} color="primary"> Si </Button>
+            <Button onClick={handleNo} color="primary" autoFocus> No </Button>
           </DialogActions>
         </Dialog>
     </div>
