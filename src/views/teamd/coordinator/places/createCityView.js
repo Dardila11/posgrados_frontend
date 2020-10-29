@@ -22,11 +22,12 @@ const CreateCityView = () =>{
     const [idDepartment,setidDdepartment]= useState(" ")
     const [idCountry,setidCountry]= useState(" ")
 
-    const getCountry = (name,id) =>{
+    const setCountry = (id) =>{
         setidCountry(id);
     }
 
-    const getDepartment = (name,id) =>{
+    const getDepartment = (id) =>{
+        console.log("el departamento es " , id)
         setidDdepartment(id);
     }
 
@@ -36,15 +37,10 @@ const CreateCityView = () =>{
         setname(e.target.value);
     }
 
-
-    
-
-    
     const handleCreate= () =>{
         CreateCityService({
             "name": name,
-            "department_id": idDepartment,
-            "country_id": idCountry,            
+            "department": idDepartment,    
         }).then((result)=>{
             document.getElementById("contenedorCity").innerHTML="<div class='alert alert-success' role='alert'>Ciudad creada correctamente!</div>";
         }).catch(()=>{
@@ -98,21 +94,22 @@ const CreateCityView = () =>{
                 <form  onSubmit={handleSubmit}>
                     <Box mb={3}>
                     <TextField
-                        error={Boolean(touched.city && errors.city)}
+                        error={Boolean(touched.name && errors.name)}
                         fullWidth
-                        helperText={touched.city && errors.city}
-                        label="Nombre de la ciudad"
+                        helperText={touched.name && errors.name}
+                        label="Nombre"
                         margin="normal"
-                        name="city"
+                        name="name"
+                        onChange = {(e) => {handleOnchangeName(e); handleChange(e)}}
                         onBlur={handleBlur}
-                        onChange = { (e) =>{handleOnchangeName(e);handleChange(e)} } 
                         type="text"
                         value={values.name}
                         variant="outlined"
                         />
 
-                        <SearchCountry callback = {getCountry}/>
-                        <SearchDepartment callback = {idCountry, getDepartment}/>                     
+                        <SearchCountry callback = {setCountry}/>
+
+                        <SearchDepartment idCountry = {idCountry} callback = {getDepartment}/>                     
                                               
                         
                         <Box my={2}>

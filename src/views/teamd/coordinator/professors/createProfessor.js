@@ -57,16 +57,19 @@ const CreateProfessorView = () => {
 
         if(isInternal === "Si"){
             setisInternal(1)
+            //setInstitution(1)
         }else{
             setisInternal(0)
+            //setdepartmentI("")
         }
         CreateProfessorApi({
 
             "cedula": identification,
             "nombre": name,
             "apellido": lastName,
-            "es_interno": isInternal
-            
+            "es_interno": isInternal,
+            //"institucion" : institucion,
+            //"departamentoi": departmentI,
 
 
             

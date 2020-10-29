@@ -18,7 +18,7 @@ const API_URL = 'http://localhost:8000';
         return axios.post(url,Institution);
     }
     export const listCountriesService = () => {
-        const url= `${API_URL}/api/1.0/consultar_paise/`;
+        const url= `${API_URL}/api/1.0/consultar_pais/`;
         return axios.get(url);
     }
     export const listDeparmentsService = (idPais) => {

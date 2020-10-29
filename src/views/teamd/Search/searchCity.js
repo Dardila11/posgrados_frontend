@@ -5,51 +5,51 @@ import {listCitiesService} from './service'
 
 
 
-export const SearchCity = (idDepartment, {callback}) => {
+export const SearchCity = ({idDepartment,callback}) => {
 
     const [listCities, setlistCities] = useState([])
     const [idCity, setidCity] = useState([])
 
 
     const getIdCity = (name) =>{
-
+        console.log("Encontró la ciudad ", name)
             let find = listCities.find( city => city.name === name )
             if (find === undefined){
                 setidCity("null")
             }else{
+                
                 setidCity(find.id);
+                callback(find.id)
             }
             
     }
-
     useEffect(() => {
-        listCitiesService(idDepartment).then(         
-            //existe probabilidad de error por parte del back   
-            result  => setlistCities(result.data.Cities)).
+        {listCitiesService(idDepartment).then(         
+            result  => setlistCities(result.data.Citys)).
             catch( setlistCities ([]))
-    },[])
-
+    }
+    }, [idDepartment])
     return(
         <Autocomplete
         id="searchCities"
-        options = {setlistCities}
+        options = {listCities}
         getOptionLabel = { option => ( option.name)}
+        style = {{marginBottom: 10, marginTop: 10,widht : 300}}
         
-    
-        style = {{widht : 300}}
         renderInput = {
             params => 
                 <TextField
                     id= "inputOptionCity" {...params}
                     label = "Ciudad"
-                    variant = "outlined" 
+                    variant = "outlined"
+                    required
 
                 />
         
         }
 
-        onInputChange = {(e,input) => {callback(input,idCity);
-            getIdCity(input)}}
+        onInputChange = {(e,input) => getIdCity(input)}
+        onChange = {(e,input) => getIdCity(input)}
     />
     )
 }

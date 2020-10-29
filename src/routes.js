@@ -24,9 +24,9 @@ import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
 import ListStudentsView from 'src/views/teamc/coordinator/ListStudentsView';
 import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 //StartImports teamD
-import AdministerView from 'src/views/teamd/coordinator/administer-GI/index'
-import AdministerPlacesView from 'src/views/teamd/coordinator/administer-places/index'
-import AdministerProfessorsView from 'src/views/teamd/coordinator/manage-Professors/index'
+import AdministerView from 'src/views/teamd/coordinator/GI/index'
+import AdministerPlacesView from 'src/views/teamd/coordinator/places/index'
+import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index'
 //EndImports TeamD
 /* End Coordinator imports*/
 /* Director imports */

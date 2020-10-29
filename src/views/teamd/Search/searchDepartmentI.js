@@ -23,14 +23,14 @@ export const SearchDeparmentI = ({callback}) => {
                 id="searchDepartmentI"
                 options = {listDeparmentI}
                 getOptionLabel = { option => option.name}
-                style = {{widht : 300}}
+                style = {{marginBottom: 10, marginTop: 10,widht : 300}}
                 renderInput = {
                     params => 
                         <TextField
                             id= "inputOptionDepartmentI" {...params}
                             label = "Departamento al que pertenece"
                             variant = "outlined"
-
+                            required
                         />
                 
                 }

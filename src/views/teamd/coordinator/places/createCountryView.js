@@ -1,5 +1,5 @@
-import React,{ useState} from 'react';
-
+import React,{Component, useState} from 'react';
+import {CreateCountryService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -8,71 +8,50 @@ import {
     Button,
     Container,
     TextField,
-    Typography,    
+
+    
   } from '@material-ui/core';
 
+const CreateCountryView = () =>{
 
-//Import component search
-
-import {SearchCountry} from 'src/views/teamd/Search/searchCountry'
- // service
-
- import {CreateDeparmentService} from './service'
-
-const CreateDepartmentView = () =>{
 
     const [name, setname] = useState(" ")
-    const [idCountry, setidCountry] = useState("")
 
-    const handleOnchangeName = (e) =>{
-        setname(e.target.value);
-    }
-    const handleCreate= () =>{
-        CreateDeparmentService({
-            "name": name,
-            "country_id": idCountry,
+    const handleCreate = () =>{
+        CreateCountryService({
             
+            "name": name
+    
         }).then((result)=>{
-            document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-success' role='alert'>Departamento creado correctamente!</div>";
+
+            document.getElementById("contenedorCountry").innerHTML="<div class='alert alert-success' role='alert'>Pais creado correctamente!</div>";
+
+
         }).catch(()=>{
-            document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+            document.getElementById("contenedorCountry").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
         });
            
     }
-    const handleSubmit = (event) =>{
-        handleCreate();
+    const handleSubmit = (event) => {
         event.preventDefault();
+        handleCreate();
     }
-
-
-    const getCountry = (name,id) =>{
-        setidCountry(id);
+    const handleOnchangeName = (e) => {
+        setname(e.target.value)
     }
-
-
-
-
- 
     return(
-            
             <Container maxWidth="sm">
             <Formik
                 initialValues={{
                     name:'',
-                    country:''
 
                     }}
                     validationSchema={
-                        Yup.object().shape({
+                          Yup.object().shape({
                           name: Yup.string().max(255).required('name is required'),
-                          country: Yup.string().max(255).required('country is required'),
 
                         })
                       }
-                      onSubmit={() => {
-                        
-                      }}
-                    
             >
             {({
               errors,
@@ -82,18 +61,15 @@ const CreateDepartmentView = () =>{
               touched,
               values
             }) => (
-                
                 <>
-               
             <Box
                 display="flex"
                 flexDirection="column"
                 height="100%"
                 justifyContent="center"
             >
-                
                 <form  onSubmit={handleSubmit}>
-                    <Box mb={3} id="box3">
+                    <Box mb={3}>
                         <TextField
                         error={Boolean(touched.name && errors.name)}
                         fullWidth
@@ -101,19 +77,17 @@ const CreateDepartmentView = () =>{
                         label="Nombre"
                         margin="normal"
                         name="name"
-                        onChange = { (e) =>{handleOnchangeName(e);handleChange(e)} }                       
+                        onChange = {(e) => {handleOnchangeName(e); handleChange(e)}}
                         onBlur={handleBlur}
                         type="text"
                         value={values.name}
                         variant="outlined"
                         />
-
                         
-                        <SearchCountry callback = {getCountry}/>
-
                         <Box my={2}>
                             <Button
                                 color="primary"
+                                disabled={isSubmitting}
                                 fullWidth
                                 size="large"
                                 type="submit"
@@ -126,22 +100,18 @@ const CreateDepartmentView = () =>{
                     </Box>   
                 </form>
             </Box>
-            <div id="contenedorDepartment">
+            <div id="contenedorCountry">
 
             </div>
             </>
+
+
             )}
             </Formik>
-            
             </Container>
-
-            
             
         
     )
-
-    
-    
 }
 
-export default CreateDepartmentView;
+export default CreateCountryView; 

@@ -28,27 +28,28 @@ const CreateInstitutionView =()=>{
     const [idCity, setidCity]=useState(" ")
 
     const handleOnchangeName = (e) =>{
-        setname(e.target.value);       
+        setname(e.target.value)
+        console.log(e.target.value);       
     }
     
-    const getCountry = (name,id) =>{
+    const getCountry = (id) =>{
         setidCountry(id);
     }
 
-    const getDepartment = (name,id) =>{
+    const getDepartment = (id) =>{
         setidDdepartment(id);
     }
 
-    const getCity = (name,id) =>{
+    const getCity = (id) =>{
         setidCity(id);
     }
 
     const handleCreate = ()=>{
         CreateInstitutionService({
-            "name": name,
-            "city_id": idCity,
-            "department_id": idDepartment,
-            "country_id": idCountry            
+            "name_inst": name,
+            "city": idCity,
+            "department": idDepartment,
+            "country": idCountry            
         }).then((result)=>{
             document.getElementById("contenedorInstitution").innerHTML="<div class='alert alert-success' role='alert'>Institucion creada correctamente!</div>";
         }).catch(()=>{
@@ -66,7 +67,7 @@ const CreateInstitutionView =()=>{
             <Container maxWidth="sm">
             <Formik
                 initialValues={{
-                    nombre:'',
+                    name:'',
 
                     }}
                     validationSchema={
@@ -104,19 +105,19 @@ const CreateInstitutionView =()=>{
                         error={Boolean(touched.name && errors.name)}
                         fullWidth
                         helperText={touched.name && errors.name}
-                        label="Nombre institucion"
+                        label="Nombre"
                         margin="normal"
                         name="name"
+                        onChange = {(e) => {handleOnchangeName(e); handleChange(e)}}
                         onBlur={handleBlur}
-                        onChange = { (e) =>{handleOnchangeName(e);handleChange(e)} } 
                         type="text"
                         value={values.name}
                         variant="outlined"
                         />
 
                         <SearchCountry callback = {getCountry}/>
-                        <SearchDepartment callback = {idCountry, getDepartment}/> 
-                        <SearchDepartment callback = {idDepartment, getCity}/> 
+                        <SearchDepartment idCountry = {idCountry} callback = {getDepartment}/> 
+                        <SearchCity idDepartment = {idDepartment} callback = {getCity}/> 
 
                         
                     

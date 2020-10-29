@@ -25,11 +25,12 @@ export const SearchKnowLedge = () => {
             id="searchKnowLedge"
             options={knowLedgeList}
             getOptionLabel={ (option) =>option.title}
-            style={{width: 300}}
+            style={{marginBottom: 10, marginTop: 10,widht : 300}}
             renderInput= {params => 
                             <TextField id="inputOption" {...params}
                                 label = "Area de conocimiento"
                                 variant = "outlined"
+                                required
                                 >
 
                                 </TextField>}
