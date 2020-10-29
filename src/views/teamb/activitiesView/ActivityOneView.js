@@ -17,13 +17,6 @@ const programa = [
   { value: 'T3', label: 'Programa-3' }
 ];
 
-const horas = [
-  { value: 'T1', label: '5' },
-  { value: 'T2', label: '10' },
-  { value: 'T3', label: '15' },
-  { value: 'T4', label: '20' }
-];
-
 const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
@@ -39,7 +32,7 @@ const useStyles = makeStyles(() => ({
 const ActivityOneView = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-  
+
   });
 
   const handleChange = (event) => {
@@ -62,106 +55,91 @@ const ActivityOneView = ({ className, ...rest }) => {
   return (
     <div>
       <BreadCrumbs />
-    <Container>
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
-      <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
-        <Card className={classes.root}>
-          <h1 style={{ display: 'flex', align:'center', justifyContent: 'center' } } align="center" name="crearactividad">
-            Datos de detalle Curso, dirección/revisión de proyectos
+      <Container>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
+            <Card className={classes.root}>
+              <h1 style={{ display: 'flex', align: 'center', justifyContent: 'center' }} align="center" name="crearactividad">
+                Datos de detalle Curso, dirección/revisión de proyectos
           </h1>
-          <br></br>
-          <Divider/>
-          <CardContent >
-            <br></br>
-            <Grid item md={12} xs={12}>
-              <TextField fullWidth label="Titulo" name="titulo" onChange={handleChange} required value={values.Titulo} variant="outlined"/>
               <br></br>
-              <br></br>
-              <TextField fullWidth label="Descripcion" name="descripcion" onChange={handleChange} required value={values.Descripcion} 
-                variant="outlined"
-              />
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Programa" name="programa" onChange={handleChange} required select SelectProps={{ native: true }}
-                variant="outlined"
-              >
-                {programa.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-              <br></br>
-              <br></br>  
-              <br></br>      
-            <Grid container spacing = {3} container justify="space-around">
-              <Grid>
-                <TextField id="date" label="Fecha inicio" type="date" defaultValue="2017-05-24"
-                  className={classes.textField} InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-              <Grid>
-                <TextField id="date" label="Fecha fin" type="date" defaultValue="2017-05-24" 
-                  className={classes.textField} InputLabelProps={{ shrink: true }}
-                />
-              </Grid>
-            </Grid>
-              <br></br> 
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Numero de horas asignadas" name="numero de horas asignadas" onChange={handleChange} required select
-                SelectProps={{ native: true }} variant="outlined"
-              >
-                {horas.map((option) => (
-                  <option key={option.value} value={option.value} >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-              <br></br>
-              <br></br>
-              <Button color="primary" variant="outlined"> Justificante </Button>
-            </Grid>
-            <br></br>
-          </CardContent>
+              <Divider />
+              <CardContent >
+                <br></br>
+                <Grid item md={12} xs={12}>
+                  <TextField fullWidth label="Titulo" name="titulo" onChange={handleChange} required value={values.Titulo} variant="outlined" />
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Descripcion" name="descripcion" onChange={handleChange} required value={values.Descripcion}
+                    variant="outlined"
+                  />
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Programa" name="programa" onChange={handleChange} required select SelectProps={{ native: true }}
+                    variant="outlined"
+                  >
+                    {programa.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <Grid container spacing={3} container justify="space-around">
+                    <Grid>
+                      <TextField id="date" label="Fecha inicio" type="date" defaultValue="2017-05-24"
+                        className={classes.textField} InputLabelProps={{ shrink: true }}
+                      />
+                    </Grid>
+                    <Grid>
+                      <TextField id="date" label="Fecha fin" type="date" defaultValue="2017-05-24"
+                        className={classes.textField} InputLabelProps={{ shrink: true }}
+                      />
+                    </Grid>
+                  </Grid>
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <TextField id="standard-number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }} variant="outlined" />
+                  <br></br>
+                  <br></br>
+                  <Button color="primary" variant="outlined"> Justificante </Button>
+                </Grid>
+                <br></br>
+              </CardContent>
 
-          <Box display="flex" justifyContent="flex-end" p={2}>
-            {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
+              <Box display="flex" justifyContent="flex-end" p={2}>
+                {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
           confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
-            <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
+                <Button onClick={handleClose} color="primary" variant="outlined">Cancelar</Button>
 
-            <Button color="primary" variant="contained"> Guardar </Button>
+                <Button color="primary" variant="contained"> Guardar </Button>
 
-            <Button color="primary" variant="contained"> Guardar y Enviar </Button>
-          </Box>
-        </Card>
-      </form>
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar 
+                <Button color="primary" variant="contained"> Guardar y Enviar </Button>
+              </Box>
+            </Card>
+          </form>
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar 
         en "Crear Actividad" */}
-      <Dialog
-        open={emergente}
-        onClose={handleNo}
-      >
-        <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        <RouterLink to = "../"> 
-            <Button color="primary">
-              Si
-            </Button>
-        </RouterLink>
-          <Button onClick={handleNo} color="primary" autoFocus>
-            No
-          </Button>
-        </DialogActions>
-      </Dialog>  
-    </div>
-    </Container>
+          <Dialog open={emergente} onClose={handleNo}>
+            <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              <RouterLink to="../">
+                <Button color="primary"> Si </Button>
+              </RouterLink>
+              <Button onClick={handleNo} color="primary" autoFocus> No </Button>
+            </DialogActions>
+          </Dialog>
+        </div>
+      </Container>
     </div>
   );
 };
-ActivityOneView.propTypes = { 
+ActivityOneView.propTypes = {
   className: PropTypes.string
 };
 export default ActivityOneView;

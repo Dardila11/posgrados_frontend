@@ -15,6 +15,7 @@ const pais = [
   { value: 'T2', label: 'Mexico' },
   { value: 'T3', label: 'USA' }
 ];
+
 const ciudad = [
   { value: 'T1', label: 'Madrid' },
   { value: 'T2', label: 'Sevilla' },
@@ -22,11 +23,18 @@ const ciudad = [
   { value: 'T4', label: 'Bilbao' }
 ];
 
+const institucion = [
+  { value: 'T1', label: 'Institucion 1' },
+  { value: 'T2', label: 'Institucion 2' },
+  { value: 'T3', label: 'Institucion 3' },
+  { value: 'T4', label: 'Institucion 4' }
+];
+
 const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
     width: '70%',
-    height: '800px',
+    height: '790px',
     marginTop: '15px'
   }, 
   status: {
@@ -103,9 +111,14 @@ const ActivityFiveView = ({ className, ...rest }) => {
               </TextField>
               <br></br>
               <br></br>
-              <TextField fullWidth label="Nombre de institución" name="titulo" onChange={handleChange} required
-                value={values.Titulo} variant="outlined"
-              />
+              <TextField fullWidth label="Nombre de la institucion" name="programa" onChange={handleChange} required select
+                SelectProps={{ native: true }} variant="outlined">
+                {institucion.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
               <br></br>
               <br></br>
               <br></br>
@@ -122,7 +135,6 @@ const ActivityFiveView = ({ className, ...rest }) => {
               </Grid>
             </Grid>
               <br></br> 
-              <br></br>
               <br></br>
               <TextField fullWidth label="Nombre responsable" name="titulo" onChange={handleChange} required
                 value={values.Titulo} variant="outlined"
@@ -142,22 +154,15 @@ const ActivityFiveView = ({ className, ...rest }) => {
           
         </Card>
       </form>
-      <Dialog
-        open={emergente}
-        onClose={handleNo}
-      >
+      <Dialog open={emergente} onClose={handleNo}>
         <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
         <DialogContent>
         </DialogContent>
         <DialogActions>
         <RouterLink to = "../"> 
-            <Button color="primary">
-              Si
-            </Button>
+            <Button color="primary"> Si </Button>
         </RouterLink>
-          <Button onClick={handleNo} color="primary" autoFocus>
-            No
-          </Button>
+          <Button onClick={handleNo} color="primary" autoFocus> No </Button>
         </DialogActions>
       </Dialog> 
     </div>

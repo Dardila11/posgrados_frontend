@@ -9,25 +9,31 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 
-const programa = [
+const investigador = [
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'Programa-1' },
-  { value: 'T2', label: 'Programa-2' },
-  { value: 'T3', label: 'Programa-3' }
+  { value: 'T1', label: 'Investigador-1' },
+  { value: 'T2', label: 'Investigador-2' },
+  { value: 'T3', label: 'Investigador-3' }
 ];
 
-const horas = [
-  { value: 'T1', label: '5' },
-  { value: 'T2', label: '10' },
-  { value: 'T3', label: '15' },
-  { value: 'T4', label: '20' }
+const lineaInvestigacion = [
+  { value: 'advert', label: 'Seleccione una opción' },
+  { value: 'T1', label: 'linea Investigacion-1' },
+  { value: 'T2', label: 'linea Investigacion-2' },
+  { value: 'T3', label: 'linea Investigacion-3' }
+];
+
+const tipo = [
+  { value: 'advert', label: 'Seleccione una opción' },
+  { value: 'T1', label: 'Interna' },
+  { value: 'T2', label: 'Externa' },
 ];
 
 const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
     width: '70%',
-    height: '650px',
+    height: '950px',
     marginTop: '15px'
   },
   status: {
@@ -75,9 +81,14 @@ const ActivitySixView = ({ className, ...rest }) => {
               />
               <br></br>
               <br></br>
-              <TextField fullWidth label="Nombre investigador principal" name="descripcion" onChange={handleChange} required 
-                value={values.Descripcion} variant="outlined"
-              />
+              <TextField fullWidth label="Nombre investigador principal" name="descripcion" onChange={handleChange} required select
+                SelectProps={{ native: true }} variant="outlined">
+                {investigador.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
               <br></br>
               <br></br>
               <TextField fullWidth label="Lugar de trabajo" name="lugartrabajo" onChange={handleChange}  required value={values.Descripcion}
@@ -88,6 +99,34 @@ const ActivitySixView = ({ className, ...rest }) => {
               <TextField fullWidth label="Descripción de actividad" name="descripcion" onChange={handleChange} required value={values.Descripcion}
                 variant="outlined"
               />
+              <br></br>
+              <br></br>
+              <TextField fullWidth label="Linea de investigacion" name="lineainvestigacion" onChange={handleChange} required select
+                SelectProps={{ native: true }} variant="outlined">
+                {lineaInvestigacion.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
+              <br></br>
+              <br></br>
+              <TextField id="standard-number" label="Codigo VRI" type="number" InputLabelProps={{ shrink: true, }} variant="outlined" />
+              <br></br>
+              <br></br>
+              <TextField fullWidth label="Convocatoria" name="convocatoria" onChange={handleChange} required value={values.Descripcion}
+                variant="outlined"
+              />
+              <br></br>
+              <br></br>
+              <TextField fullWidth label="Tipo convocatoria" name="tipoconvocatoria" onChange={handleChange} required select
+                SelectProps={{ native: true }} variant="outlined">
+                {tipo.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </TextField>
               <br></br>
               <br></br>
               <br></br>

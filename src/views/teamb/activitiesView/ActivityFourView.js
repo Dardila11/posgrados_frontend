@@ -9,18 +9,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 
-const pais = [
-  { value: 'advert', label: 'España'},
-  { value: 'T1', label: 'Colombia'},
-  { value: 'T2', label: 'Mexico'},
-  { value: 'T3', label: 'USA'}
-];
-const ciudad = [
-  { value: 'T1', label: 'Madrid'},
-  { value: 'T2', label: 'Sevilla' },
-  { value: 'T3', label: 'Barcelona'},
-  { value: 'T4', label: 'Bilbao'}
-];
 const modalidad = [
   { value: 'T1', label: 'Presencial'},
   { value: 'T2', label: 'Virtual'}
@@ -30,7 +18,7 @@ const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
     width: '70%',
-    height: '730px',
+    height: '700px',
     marginTop: '15px'
   },
   status: {
@@ -81,52 +69,23 @@ const ActivityFourView = ({ className, ...rest }) => {
                 />
               </Grid>
               <br></br>
-              
-              <InputLabel >Lugar de exposición</InputLabel>
+              <TextField fullWidth label="Lugar de celebracion" name="lugarcelebracion" onChange={handleChange} required value={values.Descripcion}
+                    variant="outlined"
+                  />
               <br></br>
-              <Grid container spacing = {3} container justify="flex-start">
-                <Grid item lg={2} md={2} xs={12}>
-                  <TextField  label="Pais" name="programa" onChange={handleChange} required select 
-                    SelectProps={{ native: true }} variant="outlined">
-                    {pais.map((option) => (
-                      <option key={option.value} value={option.value}> 
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField>
-                </Grid>
-                <Grid item lg={2} md={2} xs={12}>
-                  <TextField label="Ciudad" name="programa" onChange={handleChange} required select
-                    SelectProps={{ native: true }} variant="outlined">
-                    {ciudad.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField>
-                </Grid>
-              </Grid>
               <br></br>
               <TextField fullWidth label="Nombre del evento" name="descripcion" onChange={handleChange} required
                 value={values.Descripcion} variant="outlined"/>
               <br></br>
               <br></br>
-              <TextField fullWidth label="Modalidad de presentación" name="numero de horas asignadas" onChange={handleChange} 
-                required select SelectProps={{ native: true }} variant="outlined">
-                {modalidad.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Duración en horas" name="descripcion" onChange={handleChange} required
+              <TextField fullWidth label="Modalidad de presentación" name="modalidadpresentación" onChange={handleChange} required
                 value={values.Descripcion} variant="outlined"/>
-              
               <br></br>
               <br></br>
-              <Button color="primary" variant="outlined"> Justificante </Button>
+              <TextField id="standard-number" label="Duración en horas" type="number" InputLabelProps={{ shrink: true, }} variant="outlined" />
+              <br></br>
+              <br></br>
+              <Button color="primary" variant="outlined"> Certificado </Button>
             </Grid>
             </Grid>
             <br></br>
@@ -138,22 +97,15 @@ const ActivityFourView = ({ className, ...rest }) => {
           </Box>
         </Card>
       </form>
-      <Dialog
-        open={emergente}
-        onClose={handleNo}
-      >
+      <Dialog open={emergente} onClose={handleNo}>
         <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
         <DialogContent>
         </DialogContent>
         <DialogActions>
         <RouterLink to = "../"> 
-            <Button color="primary">
-              Si
-            </Button>
+            <Button color="primary"> Si </Button>
         </RouterLink>
-          <Button onClick={handleNo} color="primary" autoFocus>
-            No
-          </Button>
+          <Button onClick={handleNo} color="primary" autoFocus> No </Button>
         </DialogActions>
       </Dialog> 
     </div>
