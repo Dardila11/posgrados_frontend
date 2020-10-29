@@ -32,3 +32,13 @@ export const listCountriesService = () => {
     const url= `${API_URL}/api/1.0/consultar_pais/`;
     return axios.get(url);
 }
+
+export const listDeparmentsService = (idPais) => {
+    const url= `${API_URL}/api/1.0/consultar_departamento_pais/${idPais}`;
+    return axios.get(url);
+}
+
+export const listCitiesService = (idDepartamento) => {
+    const url= `${API_URL}/api/1.0/consultar_ciudad_departamento/${idDepartamento}`;
+    return axios.get(url);
+}

@@ -23,6 +23,7 @@ const CreateDepartmentView = () =>{
 
     const [name, setname] = useState(" ")
     const [idCountry, setidCountry] = useState("")
+
     const handleOnchangeName = (e) =>{
         setname(e.target.value);
     }
@@ -107,27 +108,6 @@ const CreateDepartmentView = () =>{
                         variant="outlined"
                         />
 
-                        {/* <TextField
-                        error={Boolean(touched.country && errors.country)}
-                        fullWidth
-                        helperText={touched.country && errors.country}
-                        label="Pais al que pertenece"
-                        margin="normal"
-                        name="country"
-                        inputRef={this.country}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        type="text"
-                        value={values.country}
-                        variant="outlined"
-                        /> */}
-                        {/* <Autocomplete
-                        id="combo-box-demo"
-                        options={opciones}
-                        getOptionLabel={(option) => option.nombre}
-                        style={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Pais al que pertenece" variant="outlined" />}
-                        /> */}
                         
                         <SearchCountry callback = {getCountry}/>
 
