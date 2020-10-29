@@ -27,7 +27,7 @@ const CreateCityView = () =>{
     }
 
     const getDepartment = (id) =>{
-        console.log("el departamento es " , id)
+        console.log("el departamento es  " , id)
         setidDdepartment(id);
     }
 
