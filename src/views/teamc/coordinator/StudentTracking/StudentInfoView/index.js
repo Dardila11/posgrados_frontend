@@ -5,7 +5,7 @@ import Page from 'src/components/Page';
 
 import { makeStyles,Typography } from '@material-ui/core';
 
-import ActivityList from './ActivityList';
+import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
 import StudentInfo from './StudentInfo';
 
@@ -39,10 +39,10 @@ const StudentView = () => {
       }*/
       setResult('ok');
       setActivityList(res);
+      
     };
     fetchData();
   }, []);
-
   return (
     <>
     <Page className={classes.root} title="Estudiante">
@@ -58,7 +58,7 @@ const StudentView = () => {
           <Typography className={classes.title} variant='h1'>
             Actividades de investigación del estudiante
           </Typography>
-          <ActivityList activityList={activityList} />
+          <List list = {activityList} option='Activity'/>
         </>
       ) : (
         <h1> Free accounts are limited to 200 requests per day. </h1>

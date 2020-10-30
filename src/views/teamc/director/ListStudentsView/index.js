@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Divider,
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
 import BreadCrumbs from './BreadCrumbs';
-import ListStudents from './ListStudents';
-import SearchBar from './SearchBar';
+import SearchBar from 'src/components/SearchBar';
+import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
+import ListPagination from 'src/components/ListPagination';
+
+const handleSearch = (event) => {
+  console.log("Cadena de busqueda: ", event.target.value);
+  this.setState({
+    inputValue: event.target.value
+  })
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -19,12 +28,12 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const ListStudentsView = () => {
+const DirectorListStudentsView = () => {
     const [studentsList, setStudentList] = useState([]);
 
     useEffect(() => {
       const fetchData = async () => {
-        const res = await api.getStudentsInfoLocal();
+        const res = await api.getStudentsInfoDirectorLocal(1);
         setStudentList(res);
       };
       fetchData();
@@ -34,10 +43,11 @@ const ListStudentsView = () => {
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
-            <SearchBar />
-            <ListStudents studentsList = {studentsList}/>
+            <SearchBar handleSearch={handleSearch} context='students'/>
+            <List list = {studentsList} option= 'Student'/>
+            <ListPagination/>
         </Page>  
       ); 
 };
 
-export default ListStudentsView;
+export default DirectorListStudentsView;

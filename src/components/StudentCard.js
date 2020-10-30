@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
     
   },
   CardAction: {
-    paddingTop : 10,
-    paddingBottom : 10,
+    paddingTop : 5,
+    paddingBottom : 5,
   },
   avatar: {
     height: 100,
@@ -26,14 +26,44 @@ const useStyles = makeStyles(() => ({
   Typography:{
     textAlign: 'center'
   },
+  statusActive: {
+    color: '#4caf50'
+  },
+  statusInactive: {
+    color: '#757575'
+  },
+  statusRetired: {
+    color: '#f44336'
+  },
+  statusGraduate: {
+    color: '#0277bd'
+  }
 }));
 
-const StudentCard = ({ className,student, ...rest }) => {
+const StudentCard = ({ className,element, ...rest }) => {
   const classes = useStyles();
+  const student = element;
   const link = 'student/'+student.id;
 
+  let statusclass = null;
+  switch (student.status) {
+    case "ACTIVO":
+      statusclass = classes.statusActive;
+      break;
+    case "INACTIVO":
+      statusclass = classes.statusInactive;
+      break;
+    case "RETIRADO":
+        statusclass = classes.statusRetired;
+        break;
+    case "GRADUADO":
+        statusclass = classes.statusGraduate;
+        break;
+    default:
+      break;
+  }
   return (    
-    <RouterLink to= {link}>    
+    <RouterLink to={link}>    
       <Box boxShadow={3}>
         <Card className={clsx(classes.root, className)} {...rest}>
           <CardActionArea className = {classes.CardAction}>
@@ -46,7 +76,9 @@ const StudentCard = ({ className,student, ...rest }) => {
                 {student.program}
               </Typography>                
               <Typography fontWeight="fontWeightBold" variant="body1">
-                {student.status}
+              <b> <span className={statusclass}>
+                {student.status}          
+              </span> </b>
               </Typography>
               <Typography color="textSecondary" variant="body1">
                 {student.cohorte}

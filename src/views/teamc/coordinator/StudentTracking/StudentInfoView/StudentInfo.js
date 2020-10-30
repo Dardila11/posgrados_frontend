@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import TrackStudent from './TrackStudent';
 
+import api from 'src/views/teamc/services/Api';
+
+import {useParams
+} from "react-router-dom";
 import {
   Card,
   CardActions,
@@ -18,17 +22,36 @@ import {
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    width: '70%',
-    height: '300px',
+    height: '250px',
     marginTop: '15px'
   },
-  status: {
-    color: 'green'
+  statusActive: {
+    color: '#4caf50'
+  },
+  statusInactive: {
+    color: '#757575'
+  },
+  statusRetired: {
+    color: '#f44336'
+  },
+  statusGraduate: {
+    color: '#0277bd'
   }
 });
 
+
 const StudentInfo = () => {
 
+  let {id} = useParams();
+  const [student, setStudent] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.getStudent(id);
+      setStudent(res);      
+    };
+    fetchData();
+  });
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -41,6 +64,23 @@ const StudentInfo = () => {
     setOpen(false);
   };
 
+  let statusclass = null;
+  switch (student.status) {
+    case "ACTIVO":
+      statusclass = classes.statusActive;
+      break;
+    case "INACTIVO":
+      statusclass = classes.statusInactive;
+      break;
+    case "RETIRADO":
+        statusclass = classes.statusRetired;
+        break;
+    case "GRADUADO":
+        statusclass = classes.statusGraduate;
+        break;
+    default:
+      break;
+  }
   return (
     <Container>
     <Card className={classes.root}>
@@ -49,16 +89,18 @@ const StudentInfo = () => {
           Información del estudiante
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Nombre: Juan David Gutiérrez Fuentes
+          Nombre: {student.first_name} {student.last_name}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Programa: Maestría en Computación
+          Programa: {student.program}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Cohorte: 2019
+          Cohorte: {student.cohorte}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Estado: <span className={classes.status}>ACTIVO</span>
+        Estado: <b> <span className={statusclass}>
+          {student.status}          
+          </span> </b>
         </Typography>
       </CardContent>
       <CardActions>

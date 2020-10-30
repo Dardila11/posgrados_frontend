@@ -1,3 +1,4 @@
+import { bool } from 'prop-types';
 import http from './ApiConfig';
 import studentData from './local_data/students-info.json';
 import activitiesData from './local_data/student_activities.json';
@@ -18,18 +19,30 @@ const getStudentsInfoLocal = () => {
   return studentData;
 };
 
-const getStudent = (id) =>{
-  studentData.forEach(student => {
-    if(student.id===id){
-      return student;
+const getStudentsInfoDirectorLocal = directorID => {
+  //TODO: GET STUDENTS OF A DIRECTOR
+  return studentData;
+};
+
+const getStudent = id => {
+  return studentData.find(student => student.id == id);
+};
+
+/*const getStudent = id => {
+  let student = null;
+  studentData.forEach(element => {
+    if (element.id == id) {
+      student = element;
     }
   });
-}
+  return student;
+};*/
 
 export default {
   getStudentActivitiesLocal,
   getStudentActivities,
   getStudentsInfoLocal,
+  getStudentsInfoDirectorLocal,
   getStudentsInfo,
   getStudent
 };

@@ -33,7 +33,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DirectorDashboardLayout = () => {
+const CoordinatorDashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
 
@@ -58,4 +58,4 @@ const DirectorDashboardLayout = () => {
   );
 };
 
-export default DirectorDashboardLayout;
+export default CoordinatorDashboardLayout;
