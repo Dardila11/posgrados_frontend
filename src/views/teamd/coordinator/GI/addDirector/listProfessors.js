@@ -57,7 +57,7 @@ export const  ListProfessors = ({professors,filterBy}) => {
               <TableRow
               hover
               key={i.id}
-            >
+              >
                     <TableCell>
                     <Box
                       alignItems="center"

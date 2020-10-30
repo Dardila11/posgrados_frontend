@@ -1,5 +1,5 @@
 import React,{useState} from 'react';
-//import CreateGI from './service';
+import {CreateKnowLedgeService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -11,10 +11,7 @@ import {
     
   } from '@material-ui/core';
 
-//const createGI = new CreateGI();
-const CreateKnowLedgeView = () =>{
-
-
+export const CreateKnowLedgeView = () =>{
     const [title, setTitle] = useState("")
     const [description, setdescription] = useState("")
     const handleChangeTitle  = (e)=>{
@@ -24,18 +21,16 @@ const CreateKnowLedgeView = () =>{
         setdescription(e.target.value);
     }
     const handleCreate = () =>{
-        // createGI.AddKnowLedgeService({
-        //     "nombre": title,
-        //     "descripcion": description
-        //     //"fechainicio": this.startDate.current.value,
-        //     //"fechafin": this.endDate.current.value,
-        //     //"estado": this.state.current.value,
+
+        CreateKnowLedgeService({
+            "name": title,
+            "description": description
             
-        // }).then((result)=>{
-        //     alert ("Area de conocimiento agregada creado!");
-        // }).catch(()=>{
-        //     alert("Error");
-        // });
+        }).then((result)=>{
+            alert ("Area de conocimiento agregada creado!");
+        }).catch(()=>{
+            alert("Error");
+        });
            
     }
     const handleSubmit = (event) =>{
@@ -107,38 +102,6 @@ const CreateKnowLedgeView = () =>{
                         value={values.description}
                         variant="outlined"
                         />
-                        {/* <TextField
-                        label="Fecha inicio"
-                        type="date"
-                        inputRef = {this.startDate}
-                        defaultValue="2020-01-01"
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                        />
-                        <TextField
-                        label="Fecha fin"
-                        type="date"
-                        inputRef = {this.endDate}
-                        defaultValue="2020-01-01"
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                        /> */}
-                        {/* <TextField
-                        error={Boolean(touched.state && errors.state)}
-                        fullWidth
-                        helperText={touched.state && errors.state}
-                        label="Estado"
-                        margin="normal"
-                        name="state"
-                        inputRef={this.state}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        type="text"
-                        value={values.state}
-                        variant="outlined"
-                        /> */}
                         <Box my={2}>
                             <Button
                                 color="primary"
@@ -161,4 +124,3 @@ const CreateKnowLedgeView = () =>{
     )
     
 }
-export default AddKnowLedgeView;

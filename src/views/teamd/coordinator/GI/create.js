@@ -45,11 +45,11 @@ const CreateView = () => {
   const handleCreate = () => {
     CreateGIApi({
 
-      "nombre": name,
-      "categoria": category,
+      "name": name,
+      "category": category,
       "email": email,
-      "fecha_fundacion": "2020/02/02",
-      "departamentoI": departmentI,
+      "foundation_date": "2020/02/02",
+      "deparment": departmentI,
       
     }).then((result)=>{
 

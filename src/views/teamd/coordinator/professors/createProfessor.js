@@ -11,6 +11,9 @@ import {
     Typography,
   } from '@material-ui/core';
 import { SearchDeparmentI } from '../../Search/searchDepartmentI';
+import {SearchInstitution} from '../../Search/searchInstitution'
+import { SettingsInputSvideo } from '@material-ui/icons';
+
 
 const CreateProfessorView = () => {
 
@@ -50,6 +53,9 @@ const CreateProfessorView = () => {
             setisInternal(true);
         }
 
+    }
+    const getIdInstitution = (id) =>{
+        setInstitution(id)
     }
     
 
@@ -194,19 +200,8 @@ const CreateProfessorView = () => {
                                 <SearchDeparmentI callback = {handleChangeDepartmentI}/>
                             </div>
                         ) : (
-                            <div /* Este es el div 2 */  >                        <TextField
-                                                        error={Boolean(touched.institution && errors.institution)}
-                                                        fullWidth
-                                                        helperText={touched.institution && errors.institution}
-                                                        label="Institucion a la que pertenece"
-                                                        margin="normal"
-                                                        name="institution"
-                                                        onBlur={handleBlur}
-                                                        onChange={(e)=> {handleChangeInstitution(e); handleChange(e)}}
-                                                        type="text"
-                                                        value={values.institution}
-                                                        variant="outlined"
-                                                        /></div>
+                            /* Institution*/
+                            <SearchInstitution callback = {getIdInstitution}/>                       
                         )}
                         </span>
 

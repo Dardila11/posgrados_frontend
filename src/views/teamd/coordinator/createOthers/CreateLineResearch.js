@@ -1,5 +1,5 @@
 import React,{Component, useState} from 'react';
-//import CreateGI from './service';
+import {CreateLineRearchService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
@@ -10,23 +10,21 @@ import {
 
     
   } from '@material-ui/core';
-//const crearGI = new CreateGI();
-const CreateLineResearchView = () => {
-
+export const CreateLineResearchView = () => {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const [knowLedge, setKnowLedge] = useState("")
     const handleCreate = () => {
-        // crearGI.AddLineRearchService({
-        //     "nombre": title,
-        //     "descripcion": description,
-        //     "area_con" : knowLedge,
+        CreateLineRearchService({
+            "name": title,
+            "description": description,
+            "know_area" : knowLedge,
             
-        // }).then((result)=>{
-        //     alert ("Linea de investigacion agregada!");
-        // }).catch(()=>{
-        //     alert("Error");
-        // });
+        }).then((result)=>{
+            alert ("Linea de investigacion agregada!");
+        }).catch(()=>{
+            alert("Error");
+        });
            
     }
     const handleChangeTitle = (e)=>{

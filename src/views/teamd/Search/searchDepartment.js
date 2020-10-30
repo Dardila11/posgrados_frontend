@@ -8,8 +8,10 @@ export const SearchDepartment = ({idCountry,callback}) => {
 
     const [listDeparments, setlistDepartments] = useState([])
     const [idDepartment, setidDepartment] = useState([])
-    const [country, setcountry] = useState("")
+    const [country, setcountry] = useState(idCountry)
+
     useEffect(() => {
+        console.log("buscando departamentos ")
         listDeparmentsService(idCountry).then(            
             result  => setlistDepartments(result.data.Departments)).
         catch( setlistDepartments ([]))

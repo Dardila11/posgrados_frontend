@@ -45,6 +45,11 @@ const items = [
     href: '/coordinator/administer-Professors',
     icon: BarChartIcon,
     title: 'Administar Profesores'
+  },
+  {
+    href: '/coordinator/create-others',
+    icon: BarChartIcon,
+    title: 'crear otras cosas'
   }
 
   // End Options Team D

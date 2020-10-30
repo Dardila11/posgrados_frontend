@@ -83,6 +83,7 @@ const AdministerPlacesView = () =>{
       title="Administer Places"
     >
       <Container maxWidth={false}>
+        <h1>TODO </h1>
         <Box mt={3}>
             <Card>
                 <AppBar className={classes.appbar} position="relative">

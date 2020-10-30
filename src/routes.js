@@ -27,6 +27,7 @@ import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 import AdministerView from 'src/views/teamd/coordinator/GI/index'
 import AdministerPlacesView from 'src/views/teamd/coordinator/places/index'
 import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index'
+import {CreateOtherView} from 'src/views/teamd/coordinator/createOthers/index'
 //EndImports TeamD
 /* End Coordinator imports*/
 /* Director imports */
@@ -52,6 +53,7 @@ const routes = [
       { path: '/administer-Gi', element: <AdministerView />},
       { path: '/administer-Places', element: <AdministerPlacesView />},
       { path: '/administer-Professors', element: <AdministerProfessorsView />},
+      { path: '/create-others', element: <CreateOtherView/>},
       { path: '*', element: <Navigate to="/404" /> }
       ]
   },

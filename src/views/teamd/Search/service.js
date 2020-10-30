@@ -19,7 +19,7 @@ export const GetLineResearch = (idArea) =>{
 
 
 export const GetDeparmentIListService = () =>{
-    const URL = `${API_URL}/api/1.0/consultar_departamentoU/`;
+    const URL = `${API_URL}/api/1.0/consultar_departamentoU_institucion/${1}`;
     return axios.get(URL);
 }
 
@@ -40,5 +40,10 @@ export const listDeparmentsService = (idPais) => {
 
 export const listCitiesService = (idDepartamento) => {
     const url= `${API_URL}/api/1.0/consultar_ciudad_departamento/${idDepartamento}`;
+    return axios.get(url);
+}
+
+export const GetlistInstitutionService = () => {
+    const url= `${API_URL}/api/1.0/consultar_institucion/`;
     return axios.get(url);
 }

@@ -15,7 +15,7 @@ export const SearchDeparmentI = ({callback}) => {
     //Obtener la lista de departamentos de la institución 
     useEffect(() => {
         GetDeparmentIListService().then(result => {
-            setlistDeparmentI(result.data);
+            setlistDeparmentI(result.data.DepartmentU);
         }).catch(setlistDeparmentI([]));
     }, [])
     return (
