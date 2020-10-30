@@ -8,18 +8,17 @@ export const SearchDepartment = ({ idCountry, callback }) => {
   const [listDepartments, setListDepartments] = useState([]);
   useEffect(() => {
     console.log('buscando departamentos ');
-    listDeparmentsService(idCountry)
-      .then(result => setListDepartments(result.data.Departments))
-      ;
+    listDeparmentsService(idCountry).then(result =>
+      setListDepartments(result.data.Departments)
+    );
   }, [idCountry]);
 
   const getIdDepartment = name => {
-    console.log(name)
+    console.log(name);
     let find = listDepartments.find(department => department.name === name);
     if (find === undefined) {
     } else {
       callback(find.id);
-      
     }
   };
   return (
@@ -38,7 +37,7 @@ export const SearchDepartment = ({ idCountry, callback }) => {
           required
         />
       )}
-      onInputChange={(e,input)=>getIdDepartment(input)}
+      onInputChange={(e, input) => getIdDepartment(input)}
       onChange={(e, input) => getIdDepartment(input)}
     />
   );

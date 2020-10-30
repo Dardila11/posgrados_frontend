@@ -11,8 +11,7 @@ import {
   Button,
   Container,
   FormGroup,
-  TextField,
-
+  TextField
 } from '@material-ui/core';
 import { CreateGIApi } from './service';
 
@@ -22,35 +21,39 @@ const CreateView = () => {
   const [departmentI, setDepartmentI] = useState('');
   const [dateFoundation, setDateFoundation] = useState('');
   const [category, setCategory] = useState('');
-  const handleChangeName = (event) => {
+  const handleChangeName = event => {
     setName(event.target.value);
   };
-  const handleChangeEmail = (event) => {
+  const handleChangeEmail = event => {
     setEmail(event.target.value);
   };
-  const handleChangeDepartmentI = (result) => {
+  const handleChangeDepartmentI = result => {
     setDepartmentI(result);
   };
-  const handleChangeCategory = (e) => {
+  const handleChangeCategory = e => {
     setCategory(e.target.value);
   };
-  const handleChangeDateFoundation = (e) => {
+  const handleChangeDateFoundation = e => {
     setDateFoundation(e.target.value);
   };
   const handleCreate = () => {
     CreateGIApi({
-      name : name,
-      category : category,
-      email : email,
+      name: name,
+      category: category,
+      email: email,
       foundation_date: dateFoundation,
-      department: departmentI,
-    }).then(() => {
-      document.getElementById('contenderGI').innerHTML = "<div class='alert alert-success' role='alert'>Grupo de investigacion creado correctamente!</div>";
-    }).catch(() => {
-      document.getElementById('contenderGI').innerHTML = "<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
-    });
+      department: departmentI
+    })
+      .then(() => {
+        document.getElementById('contenderGI').innerHTML =
+          "<div class='alert alert-success' role='alert'>Grupo de investigacion creado correctamente!</div>";
+      })
+      .catch(() => {
+        document.getElementById('contenderGI').innerHTML =
+          "<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+      });
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     handleCreate();
     event.preventDefault();
   };
@@ -64,24 +67,24 @@ const CreateView = () => {
           foundationDate: '',
           category: ''
         }}
-        validationSchema={
-                        Yup.object().shape({
-                          email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-                          name: Yup.string().max(255).required('Name is required'),
-                          department: Yup.string().max(255).required('department name is required'),
-                          foundationDate: Yup.string().max(255).required('FoundationDate is required'),
-                        })
-                      }
-
-        onSubmit={() => { }}
+        validationSchema={Yup.object().shape({
+          email: Yup.string()
+            .email('Must be a valid email')
+            .max(255)
+            .required('Email is required'),
+          name: Yup.string()
+            .max(255)
+            .required('Name is required'),
+          department: Yup.string()
+            .max(255)
+            .required('department name is required'),
+          foundationDate: Yup.string()
+            .max(255)
+            .required('FoundationDate is required')
+        })}
+        onSubmit={() => {}}
       >
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          touched,
-          values
-        }) => (
+        {({ errors, handleBlur, handleChange, touched, values }) => (
           <>
             <Box
               display="flex"
@@ -92,7 +95,6 @@ const CreateView = () => {
               <form onSubmit={handleSubmit}>
                 <Box mb={3}>
                   <FormGroup>
-
                     <TextField
                       error={Boolean(touched.name && errors.name)}
                       fullWidth
@@ -102,7 +104,10 @@ const CreateView = () => {
                       // margin="normal"
                       style={{ marginBottom: 10, marginTop: 10, width: 500 }}
                       onBlur={handleBlur}
-                      onChange={(e) => { handleChange(e); handleChangeName(e); }}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeName(e);
+                      }}
                       type="text"
                       value={values.name}
                       variant="outlined"
@@ -120,7 +125,10 @@ const CreateView = () => {
                       // margin = "normal"
                       style={{ marginBottom: 10, marginTop: 10, width: 500 }}
                       onBlur={handleBlur}
-                      onChange={(e) => { handleChange(e); handleChangeEmail(e); }}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeEmail(e);
+                      }}
                       type="email"
                       value={values.email}
                       variant="outlined"
@@ -157,7 +165,7 @@ const CreateView = () => {
                       required
                       style={{ marginBottom: 10, marginTop: 10, width: 200 }}
                       InputLabelProps={{
-                        shrink: true,
+                        shrink: true
                       }}
                       onInputCapture={handleChangeDateFoundation}
                     />
@@ -182,7 +190,6 @@ const CreateView = () => {
         )}
       </Formik>
     </Container>
-
   );
 };
 

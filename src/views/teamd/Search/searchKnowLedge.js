@@ -15,7 +15,6 @@ export const SearchKnowLedge = ({ callback }) => {
   }, []);
 
   const getIdKnowLedge = name => {
-    console.log(knowLedgeList);
     let find = knowLedgeList.find(knowl => knowl.name === name);
     if (find === undefined) {
     } else {
@@ -24,21 +23,21 @@ export const SearchKnowLedge = ({ callback }) => {
   };
   return (
     <Autocomplete
-  id="searchKnowLedge"
-  options={knowLedgeList}
-  getOptionLabel={option => option.name}
-  style={{ marginBottom: 10, marginTop: 10}}
-  renderInput={params => (
-    <TextField
-  id="inputOption"
-      {...params}
-  label="Area de conocimiento"
-  variant="outlined"
-  required
-  />
-  )}
-  onInputChange={(e, input) => getIdKnowLedge(input)}
-  onChange={(e, input) => getIdKnowLedge(input)}
-  />
+      id="searchKnowLedge"
+      options={knowLedgeList}
+      getOptionLabel={option => option.name}
+      style={{ marginBottom: 10, marginTop: 10 }}
+      renderInput={params => (
+        <TextField
+          id="inputOption"
+          {...params}
+          label="Area de conocimiento"
+          variant="outlined"
+          required
+        />
+      )}
+      onInputChange={(e, input) => getIdKnowLedge(input)}
+      onChange={(e, input) => getIdKnowLedge(input)}
+    />
   );
 };

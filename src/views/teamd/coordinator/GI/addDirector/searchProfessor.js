@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
 
-const SearchProfessor= ({onSearchProfessor}) =>{
+const SearchProfessor = ({ onSearchProfessor }) => {
+  const [searchInput, setsearchInput] = useState(' ');
 
-    const [searchInput, setsearchInput] = useState(" ")
-    
-    const handleSearch = (e) =>{
-        
-        setsearchInput (e.target.value)
-        onSearchProfessor(searchInput)
-    }
+  const handleSearch = e => {
+    setsearchInput(e.target.value);
+    onSearchProfessor(searchInput);
+  };
 
-
-
-
-    return (
-        <>
-        <p>Buscar Profesor</p>
-        <input type="text" placeholder="" onChange={handleSearch}></input>
-        </>
-    )
-}
+  return (
+    <>
+      <p>Buscar Profesor</p>
+      //TODO
+    </>
+  );
+};
 
 export default SearchProfessor;
