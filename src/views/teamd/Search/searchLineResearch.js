@@ -9,8 +9,7 @@ export const SearchLineLedge = ({ callback, idKnowLedge }) => {
   //llenando la lista de opciones
   useEffect(() => {
     GetLineResearch(idKnowLedge).then(request => {
-      //setLineResearchList(request.data.LineLedge)
-      console.log(request); //TODO
+      setLineResearchList(request.data.Lines)
     }).catch( () => console.log("no encontró nada con id ", idKnowLedge)); //TODO
   }, []);
 

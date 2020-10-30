@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import { SearchDeparmentI } from '../../Search/searchDepartmentI';
 import { SearchInstitution } from '../../Search/searchInstitution';
-import { SearchLineLedge } from '../../Search/searchLineResearch';
 const CreateProfessorView = () => {
   const [Institution, setInstitution] = useState('');
   const [name, setname] = useState('');
@@ -38,9 +37,6 @@ const CreateProfessorView = () => {
   const getIdInstitution = id => {
     setInstitution(id);
   };
-  const getid =(id) => {
-    console.log ("llegó", id)
-  }
 
   const handleChangeIsInternal = () => {
     let selecteds = document.getElementById('selectedIsInternal');
@@ -196,7 +192,6 @@ const CreateProfessorView = () => {
                       <option value="No">No</option>
                     </select>
                   </div>
-                  <SearchLineLedge callback={getid} idKnowLedge={1}/>
                   <span>
                     {isInternal ? (
                       <div /* Este es el div 1 */>
