@@ -10,13 +10,13 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
-import ActivityView from 'src/views/teamb/activities/ActivityView';
-import ActivityOneView from 'src/views/teamb/activities/ActivityOneView';
-import ActivityTwoView from 'src/views/teamb/activities/ActivityTwoView';
-import ActivityThreeView from 'src/views/teamb/activities/ActivityThreeView';
-import ActivityFourView from 'src/views/teamb/activities/ActivityFourView';
-import ActivityFiveView from 'src/views/teamb/activities/ActivityFiveView';
-import ActivitySixView from 'src/views/teamb/activities/ActivitySixView';
+import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
+import ActivityOneView from 'src/views/teamb/activitiesView/ActivityOneView';
+import ActivityTwoView from 'src/views/teamb/activitiesView/ActivityTwoView';
+import ActivityThreeView from 'src/views/teamb/activitiesView/ActivityThreeView';
+import ActivityFourView from 'src/views/teamb/activitiesView/ActivityFourView';
+import ActivityFiveView from 'src/views/teamb/activitiesView/ActivityFiveView';
+import ActivitySixView from 'src/views/teamb/activitiesView/ActivitySixView';
 import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
@@ -58,7 +58,6 @@ const routes = [
       { path: 'activity/activityfive', element: <ActivityFiveView />},
       { path: 'activity/activitysix', element: <ActivitySixView />},
       { path: 'activity', element: <ActivityView />},
-      { path: 'activities', element: <ActivityView />},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
