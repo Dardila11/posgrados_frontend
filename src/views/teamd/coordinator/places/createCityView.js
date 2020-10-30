@@ -8,7 +8,6 @@ import {
     Button,
     Container,
     TextField,
-    Typography,
 
     
   } from '@material-ui/core';
@@ -41,7 +40,7 @@ const CreateCityView = () =>{
         CreateCityService({
             "name": name,
             "department": idDepartment,    
-        }).then((result)=>{
+        }).then(()=>{
             document.getElementById("contenedorCity").innerHTML="<div class='alert alert-success' role='alert'>Ciudad creada correctamente!</div>";
         }).catch(()=>{
             document.getElementById("contenedorCity").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
@@ -79,7 +78,6 @@ const CreateCityView = () =>{
               errors,
               handleBlur,
               handleChange,
-              isSubmitting,
               touched,
               values
             }) => (

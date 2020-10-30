@@ -1,7 +1,9 @@
-import React,{Component, useState} from 'react';
+import React,{useState} from 'react';
 import {CreateLineRearchService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import {SearchKnowLedge} from 'src/views/teamd/Search/searchKnowLedge'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {
     Box,
     Button,
@@ -20,10 +22,10 @@ export const CreateLineResearchView = () => {
             "description": description,
             "know_area" : knowLedge,
             
-        }).then((result)=>{
-            alert ("Linea de investigacion agregada!");
+        }).then(()=>{
+            document.getElementById("alertLine").innerHTML="<div class='alert alert-success' role='alert'>Linea de investigación creada correctamente!</div>";
         }).catch(()=>{
-            alert("Error");
+            document.getElementById("alertLine").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
         });
            
     }
@@ -33,13 +35,14 @@ export const CreateLineResearchView = () => {
     const handleChangeDescription = (e)=>{
         setDescription(e.target.value)
     }
-    const handleChangeKnowLedge = (e)=>{
-        setKnowLedge(e.target.value)
+    const handleChangeKnowLedge = (id)=>{
+        setKnowLedge(id)
     }
     const handleSubmit = (event) =>{
         handleCreate();
         event.preventDefault();
     }
+
         return(
             <Container maxWidth="sm">
             <Formik
@@ -57,8 +60,7 @@ export const CreateLineResearchView = () => {
                       }
                       onSubmit={() => {
                         
-                      }}
-                    
+                      }}       
             >
             {({
               errors,
@@ -83,7 +85,7 @@ export const CreateLineResearchView = () => {
                         margin="normal"
                         name="title"
                         onBlur={handleBlur}
-                        onChange={handleChangeTitle}
+                        onChange={(e)=>{handleChangeTitle(e); handleChange(e)}}
                         type="text"
                         value={values.title}
                         variant="outlined"
@@ -96,25 +98,13 @@ export const CreateLineResearchView = () => {
                         margin="normal"
                         name="description"
                         onBlur={handleBlur}
-                        onChange={handleChangeDescription}
+                        onChange={ (e)=>{handleChangeDescription(e);handleChange(e)}}
                         type="text"
                         value={values.description}
                         variant="outlined"
                         />
                         
-                        <TextField
-                        error={Boolean(touched.KnowLedge && errors.KnowLedge)}
-                        fullWidth
-                        helperText={touched.KnowLedge && errors.KnowLedge}
-                        label="Area conocimiento" //TODO
-                        margin="normal"
-                        name="KnowLedge"
-                        onBlur={handleBlur}
-                        onChange={handleChangeKnowLedge}
-                        type="text"
-                        value={values.KnowLedge}
-                        variant="outlined"
-                        />
+                        <SearchKnowLedge callback = {handleChangeKnowLedge}/>
                         <Box my={2}>
                             <Button
                                 color="primary"
@@ -129,8 +119,10 @@ export const CreateLineResearchView = () => {
                         </Box>
                     </Box>   
                 </form>
+                <div id = "alertLine">console.log(1)</div>
             </Box>
             )}
+            
             </Formik>
             </Container>
         

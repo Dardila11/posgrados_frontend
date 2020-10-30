@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import {CreateKnowLedgeService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {
     Box,
     Button,
@@ -21,15 +22,15 @@ export const CreateKnowLedgeView = () =>{
         setdescription(e.target.value);
     }
     const handleCreate = () =>{
-
+        console.log("title:",title);
+        console.log (" description:",description); 
         CreateKnowLedgeService({
             "name": title,
-            "description": description
-            
-        }).then((result)=>{
-            alert ("Area de conocimiento agregada creado!");
+            "description": description, 
+        }).then(()=>{
+            document.getElementById("alertArea").innerHTML="<div class='alert alert-success' role='alert'>Area de conocimiento creada correctamente!</div>";
         }).catch(()=>{
-            alert("Error");
+            document.getElementById("alertArea").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
         });
            
     }
@@ -84,7 +85,7 @@ export const CreateKnowLedgeView = () =>{
                         margin="normal"
                         name="title"
                         onBlur={handleBlur}
-                        onChange={handleChangeTitle}
+                        onChange={(e)=> {handleChangeTitle(e); handleChange(e)}}
                         type="text"
                         value={values.title}
                         variant="outlined"
@@ -97,7 +98,7 @@ export const CreateKnowLedgeView = () =>{
                         margin="normal"
                         name="description"
                         onBlur={handleBlur}
-                        onChange={handleChangeDescription}
+                        onChange={ (e)=>{handleChangeDescription(e);handleChange(e)}}
                         type="text"
                         value={values.description}
                         variant="outlined"
@@ -116,8 +117,13 @@ export const CreateKnowLedgeView = () =>{
                         </Box>
                     </Box>   
                 </form>
+                <div id = "alertArea">
+                
+                </div>
             </Box>
+            
             )}
+
             </Formik>
             </Container>
         

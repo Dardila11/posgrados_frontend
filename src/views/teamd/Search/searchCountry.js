@@ -2,40 +2,21 @@ import React, { useState,useEffect } from 'react'
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {listCountriesService} from './service'
-import { get } from 'lodash';
-
 
 
 export const SearchCountry = ({callback}) => {
-
-    
-    const [listCountries, setlistCountries] = useState([])
-    const [idCountry, setidCountry] = useState([])
-
-
-
-
+    const [listCountries, setListCountries] = useState([])
     useEffect(() => {
         listCountriesService().then(
-            
-             result  => setlistCountries(result.data.Countrys)).
-             catch( setlistCountries ([]))
+            result  => setListCountries(result.data.Countrys)).catch( setListCountries ([]))
     },[])
-    
     const getIdContry = async (name) =>{
-
-
             let find = listCountries.find( country => country.name === name )
             if (find === undefined){
-                setidCountry("null")
             }else{
                 callback(find.id)
             }
-      
     }
-
-
-
     return(
         <Autocomplete
         id="searchCountries"
@@ -49,14 +30,10 @@ export const SearchCountry = ({callback}) => {
                     label = "Pais"
                     variant = "outlined"
                     required
-
                 />
-        
         }
         onInputChange = {(e,input) => getIdContry(input)}
         onChange = {(e,input) => getIdContry(input)}
-    
-        
     />
     )
 }

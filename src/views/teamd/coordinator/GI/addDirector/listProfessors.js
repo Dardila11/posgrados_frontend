@@ -7,7 +7,6 @@ import {
   TableBody,
   Dialog,
   DialogTitle,
-  DialogContentText,
   DialogContent,
   DialogActions,
   TextField,
@@ -26,10 +25,6 @@ export const  ListProfessors = ({professors,filterBy}) => {
     
 
     const [open, setOpen] = useState(false);
-
-
-
-    const [color, setcolor] = useState("rojo")
     const handleAssing = () =>{
       setOpen(true);
       
@@ -47,12 +42,10 @@ export const  ListProfessors = ({professors,filterBy}) => {
 
     }
     const list = () =>{
-      if (filterBy!=" "){
+      if (filterBy!==" "){
         return professors.map ( 
           (i) => {
-
             if (i.name.toLowerCase().search(filterBy.toLowerCase()) > -1){
-             
             return(  
               <TableRow
               hover
@@ -85,6 +78,9 @@ export const  ListProfessors = ({professors,filterBy}) => {
                   </TableCell>
             </TableRow>
             )
+          }
+          else{
+            return 1
           }
         }
         )

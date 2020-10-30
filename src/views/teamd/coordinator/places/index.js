@@ -15,7 +15,6 @@ import CreateCountryView from './createCountryView';
 import CreateDepartmentView from './createDepartmentView';
 import CreateCityView from './createCityView';
 import CreateInstitutionView from './createInstitutionView';
-
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -49,7 +48,7 @@ function options(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appbar :{
     marginLeft: '10px',
     marginRight: '10px',
@@ -82,15 +81,14 @@ const AdministerPlacesView = () =>{
       <Page
       title="Administer Places"
     >
-      <Container maxWidth={false}>
-        <h1>TODO </h1>
+      <Container maxWidth={false}> {/* TODOPagina lenta por peticiones innecesarias*/}
         <Box mt={3}>
             <Card>
                 <AppBar className={classes.appbar} position="relative">
 
                 <Tabs textColor="primary" indicatorColor="secondary" value={value} onChange={handleChange}>
                   <Tab label="Crear pais"  {...options(0)} />
-                  <Tab label="Crear departamento"  {...options(1)} />
+                  <Tab label="Crear departamento"   {...options(1)} />
                   <Tab label="Crear ciudad"  {...options(2)} />
                   <Tab label="Crear institucion"  {...options(3)} />
                 </Tabs>

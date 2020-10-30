@@ -13,7 +13,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CreateView from './create';
 import AddDirector from './addDirector/add-director'
-
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -47,7 +47,7 @@ function options(index) {
   };
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   appbar :{
     marginLeft: '10px',
     marginRight: '10px',
@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
 
   }
 }));
+
 
 const AdministerView = () =>{
 
@@ -83,8 +84,8 @@ const AdministerView = () =>{
                 <AppBar className={classes.appbar} position="relative">
 
                 <Tabs textColor="primary" indicatorColor="secondary" value={value} onChange={handleChange}>
-                  <Tab label="Crear"  {...options(0)} />
-                  <Tab label="Asignar director"  {...options(1)} />
+                  <Tab label={<><PersonAddIcon fontSize="inherit" /> Crear</>}  {...options(0)} />
+                  <Tab label={<><PersonAddIcon fontSize="inherit" /> Asignar director</>}  {...options(1)} />
                 </Tabs>
               </AppBar>
                   <TabPanel value={value} index={0}>

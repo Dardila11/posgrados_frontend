@@ -7,8 +7,7 @@ import {
     Box,
     Button,
     Container,
-    TextField,
-    Typography,    
+    TextField, 
   } from '@material-ui/core';
 
 
@@ -29,14 +28,11 @@ const CreateDepartmentView = () =>{
     }
     const handleCreate= () =>{
 
-
-
-
         CreateDeparmentService({
             "name": name,
             "country": idCountry
             
-        }).then((result)=>{
+        }).then(()=>{
             console.log(name)
             console.log (" pais id ",idCountry)
             document.getElementById("contenedorDepartment").innerHTML="<div class='alert alert-success' role='alert'>Departamento creado correctamente!</div>";
@@ -84,7 +80,6 @@ const CreateDepartmentView = () =>{
               errors,
               handleBlur,
               handleChange,
-              isSubmitting,
               touched,
               values
             }) => (
@@ -112,9 +107,7 @@ const CreateDepartmentView = () =>{
                         type="text"
                         value={values.name}
                         variant="outlined"
-                        />
-
-                        
+                        />    
                         <SearchCountry callback = {getCountry}/>
 
                         <Box my={2}>

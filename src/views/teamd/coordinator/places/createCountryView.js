@@ -1,4 +1,4 @@
-import React,{Component, useState} from 'react';
+import React,{useState} from 'react';
 import {CreateCountryService} from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -22,7 +22,7 @@ const CreateCountryView = () =>{
             
             "name": name
     
-        }).then((result)=>{
+        }).then(()=>{
 
             document.getElementById("contenedorCountry").innerHTML="<div class='alert alert-success' role='alert'>Pais creado correctamente!</div>";
 
@@ -52,6 +52,7 @@ const CreateCountryView = () =>{
 
                         })
                       }
+                onSubmit={()=> {return 1}}
             >
             {({
               errors,

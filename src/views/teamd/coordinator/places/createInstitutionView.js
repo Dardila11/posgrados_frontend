@@ -15,7 +15,6 @@ import {
     Button,
     Container,
     TextField,
-    Typography,
     
   } from '@material-ui/core';
 
@@ -50,7 +49,7 @@ const CreateInstitutionView =()=>{
             "city": idCity,
             "department": idDepartment,
             "country": idCountry            
-        }).then((result)=>{
+        }).then(()=>{
             document.getElementById("contenedorInstitution").innerHTML="<div class='alert alert-success' role='alert'>Institucion creada correctamente!</div>";
         }).catch(()=>{
             document.getElementById("contenedorInstitution").innerHTML="<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
@@ -88,7 +87,6 @@ const CreateInstitutionView =()=>{
               errors,
               handleBlur,
               handleChange,
-              isSubmitting,
               touched,
               values
             }) => (

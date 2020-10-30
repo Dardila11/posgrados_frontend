@@ -12,7 +12,6 @@ import {
   } from '@material-ui/core';
 import { SearchDeparmentI } from '../../Search/searchDepartmentI';
 import {SearchInstitution} from '../../Search/searchInstitution'
-import { SettingsInputSvideo } from '@material-ui/icons';
 
 
 const CreateProfessorView = () => {
@@ -38,11 +37,11 @@ const CreateProfessorView = () => {
     const handleChangeDepartmentI = (result) =>{
         setdepartmentI(result)
     }
-    const handleChangeInstitution = (e) =>{
-        setInstitution(e.target.value);
-    }  
+    const getIdInstitution = (id) =>{
+        setInstitution(id)
+    }
 
-    const handleChangeIsInternal = (e) =>{
+    const handleChangeIsInternal = () =>{
         let selecteds = document.getElementById("selectedIsInternal");
         setisInternal(selecteds.options[selecteds.selectedIndex].text);
         if (selecteds.options[selecteds.selectedIndex].text  === "No"){
@@ -54,9 +53,7 @@ const CreateProfessorView = () => {
         }
 
     }
-    const getIdInstitution = (id) =>{
-        setInstitution(id)
-    }
+
     
 
     const handleCreate = () =>{
@@ -74,12 +71,12 @@ const CreateProfessorView = () => {
             "nombre": name,
             "apellido": lastName,
             "es_interno": isInternal,
-            //"institucion" : institucion,
-            //"departamentoi": departmentI,
+            "institucion" : Institution,
+            "departamentoi": departmentI,
 
 
             
-        }).then((result)=>{
+        }).then(()=>{
 
             document.getElementById("contenedorProfesor").innerHTML="<div class='alert alert-success' role='alert'>Profesor creado correctamente!</div>";
 
@@ -128,7 +125,6 @@ const CreateProfessorView = () => {
               errors,
               handleBlur,
               handleChange,
-              isSubmitting,
               touched,
               values
             }) => (
