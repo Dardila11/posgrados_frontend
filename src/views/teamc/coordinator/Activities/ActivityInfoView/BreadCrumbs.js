@@ -18,13 +18,18 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BreadCrumbs = ({list}) => {
-  console.log("Lista de breadCrumb"+list);
+const BreadCrumbs = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Breadcrumbs maxItems={3} aria-label="breadcrumb">
-        
+        <Link color="inherit" href="/" onClick={handleClick}>
+          Coordinador
+        </Link>
+        <RouterLink color="inherit" to="/coordinator/list-actvities">
+          Lista Actividades
+        </RouterLink>
+        <Typography color="textPrimary">Información de la actividad</Typography>
       </Breadcrumbs>
     </div>
   );

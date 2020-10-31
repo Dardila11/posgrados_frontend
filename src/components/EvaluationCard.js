@@ -1,6 +1,6 @@
 import React from 'react';
 //import PropTypes from 'prop-types';
-import { Card, Typography, CardContent, makeStyles, createMuiTheme, colors } from '@material-ui/core';
+import { Card, Typography, CardContent, makeStyles, createMuiTheme, colors, CardActionArea } from '@material-ui/core';
 
 const theme = createMuiTheme({
   palette: {
@@ -32,21 +32,21 @@ const useStyles = makeStyles({
  * @param {activity}
  * @description las información de la actividad previamente obtenida desde backend
  */
-const ActivityCard = ({ activity }) => {
+const ActivityCard = ({ evaluation }) => {
   const classes = useStyles();
   return (
     <Card className={classes.root}>
-      <CardContent>
+      <CardActionArea>
         <Typography gutterBottom variant="h5" component="h2">
-          {activity.title}
+          {evaluation.title}
         </Typography>
         <Typography variant="body2" component="h3">
-          {activity.description}
+          {evaluation.description}
         </Typography>
         <Typography variant="body2" component="h3">
-          {activity.modality}
+          {evaluation.modality}
         </Typography>
-      </CardContent>
+      </CardActionArea>
     </Card>
   );
 };

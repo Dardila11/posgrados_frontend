@@ -7,7 +7,7 @@ import { makeStyles,Typography } from '@material-ui/core';
 
 import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
-import StudentInfo from './StudentInfo';
+import StudentInfo from './ActivityInfo';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -54,16 +54,6 @@ const StudentView = () => {
       <StudentInfo />
       {/* Button Track Student */}
       {/* Activity Card List */}
-      {result === 'ok' ? (
-        <>
-          <Typography className={classes.title} variant='h1'>
-            Actividades de investigación del estudiante
-          </Typography>
-          <List list = {activityList} option='Activity' context='/coordinator/list-activities'/>
-        </>
-      ) : (
-        <h1> Free accounts are limited to 200 requests per day. </h1>
-      )}
       </Page>
     </>
   );

@@ -23,7 +23,8 @@ import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
 import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
 import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
-import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/ActivityEvaluationsView/index';
+import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activities/ListActivitiesView';
+import ActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
 /* End Coordinator imports*/
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
@@ -52,7 +53,7 @@ const routes = [
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       { path: 'list-students/student/:id', element: <StudentView /> },
       { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
-      { path: 'list-activities/activity/:id', element: <StudentView /> },
+      { path: 'list-activities/activity/:id', element: <ActivityInfoView /> },
       { path: '*', element: <Navigate to="/404" /> }
       ]
   },

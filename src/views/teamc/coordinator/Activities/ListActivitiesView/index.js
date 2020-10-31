@@ -40,7 +40,7 @@ const CoordinatorListActivitiesView = () => {
     <Page className={classes.root} title="Listado de Actividades">
       <BreadCrumbs />
       <SearchBar handleSearch={handleSearch} context="activities" />
-      <List list={activityList} option="Activity" />
+      <List list={activityList} option="Activity" context="/coordinator/list-activities"/>
       <ListPagination />
     </Page>
   );

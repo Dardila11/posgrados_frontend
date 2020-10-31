@@ -69,7 +69,7 @@ const StudentCard = ({ className,element, ...rest }) => {
           <CardActionArea className = {classes.CardAction}>
             <Box alignItems="center" display="flex" flexDirection="column">
               <Avatar className={classes.avatar} src={student.image}/>
-              <Typography color="textPrimary" gutterBottom variant="h3">
+              <Typography color="textPrimary" gutterBottom variant="h4">
                 {student.first_name} {student.last_name}
               </Typography>
               <Typography className={classes.Typography} fontWeight="fontWeightMedium" variant="body1">

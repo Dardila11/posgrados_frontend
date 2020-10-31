@@ -28,11 +28,16 @@ const getStudent = id => {
   return studentData.find(student => student.id == id);
 };
 
+const getActivity = id => {
+  return activitiesData.find(activity => activity.id == id);
+};
+
 export default {
   getStudentActivitiesLocal,
   getStudentActivities,
   getStudentsInfoLocal,
   getStudentsInfoDirectorLocal,
   getStudentsInfo,
-  getStudent
+  getStudent,
+  getActivity
 };

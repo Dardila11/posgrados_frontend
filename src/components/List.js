@@ -3,7 +3,8 @@ import React from 'react';
 import StudentCard from 'src/components/StudentCard';
 import ActivityCard from 'src/components/ActivityCard';
 
-const List = ({ list, option }) => {
+const List = ({ list, option, context }) => {
+  console.log(option + context);
   return (
     <Container>
       <Grid container spacing={3}>
@@ -12,7 +13,7 @@ const List = ({ list, option }) => {
             {option === 'Student' ? (
               <StudentCard element={element} />
             ) : (
-              <ActivityCard key={element.id} activity={element} />
+              <ActivityCard key={element.id} activity={element} context={context}/>
             )}
           </Grid>
         ))}
