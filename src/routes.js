@@ -10,6 +10,8 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+
+/* Student imports*/ 
 import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
 import ActivityOneView from 'src/views/teamb/activitiesView/ActivityOneView';
 import ActivityTwoView from 'src/views/teamb/activitiesView/ActivityTwoView';
@@ -17,7 +19,10 @@ import ActivityThreeView from 'src/views/teamb/activitiesView/ActivityThreeView'
 import ActivityFourView from 'src/views/teamb/activitiesView/ActivityFourView';
 import ActivityFiveView from 'src/views/teamb/activitiesView/ActivityFiveView';
 import ActivitySixView from 'src/views/teamb/activitiesView/ActivitySixView';
+import StudentListActivitiesView from 'src/views/teamb/ListActivities';
+import ActivityStudentView from 'src/views/teamb/ActivityInfoView';
 import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
+/* End Student Imports*/
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
@@ -67,6 +72,8 @@ const routes = [
       { path: 'activity/activityfour', element: <ActivityFourView />},
       { path: 'activity/activityfive', element: <ActivityFiveView />},
       { path: 'activity/activitysix', element: <ActivitySixView />},
+      { path: 'list-activities', element: <StudentListActivitiesView/>},
+      { path: 'list-activities/activity/:id', element: <ActivityStudentView/>},
       { path: 'activity', element: <ActivityView />},
       { path: '*', element: <Navigate to="/404" /> }
     ]

@@ -1,6 +1,8 @@
 import React from 'react';
+import Typography from '@material-ui/core/Typography';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
 import Link from '@material-ui/core/Link';
+import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 
 const handleClick = e => {
@@ -20,17 +22,14 @@ const BreadCrumbs = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link color="inherit" href="/student" onClick={handleClick}>
-          Estudiante
+      <Breadcrumbs maxItems={3} aria-label="breadcrumb">
+        <Link color="inherit" href="/" onClick={handleClick}>
+          Coordinador
         </Link>
-        <Link
-          color="inherit"
-          href="/student/list-activities"
-          onClick={handleClick}
-        >
-          Lista de Actividades
-        </Link>
+        <RouterLink color="inherit" to="/student/list-activities">
+          Lista Actividades
+        </RouterLink>
+        <Typography color="textPrimary">Información de la actividad</Typography>
       </Breadcrumbs>
     </div>
   );
