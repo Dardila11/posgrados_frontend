@@ -42,10 +42,14 @@ const SearchBar = ({className,context, ...rest }) => {
                                         )
                                         }}
                                         placeholder = {
-                                            context === 'activities' ? (
+                                            context == 'activities' ? (
                                                 'Buscar actividad ...'
                                             ):(
-                                                'Buscar estudiante ...'
+                                                context == 'students' ? (
+                                                    'Buscar estudiante ...'
+                                                ): (
+                                                    'Buscar Evaluación ...'
+                                                )
                                             )
                                         }                                  
                                         variant="outlined"

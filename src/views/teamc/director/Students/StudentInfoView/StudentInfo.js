@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
+import TrackStudent from './TrackStudent';
+
 import api from 'src/views/teamc/services/Api';
 
 import {useParams
@@ -38,15 +40,15 @@ const useStyles = makeStyles({
 });
 
 
-const ActivityInfoView = () => {
+const StudentInfo = () => {
 
   let {id} = useParams();
-  const [activity, setActivity] = useState('');
+  const [student, setStudent] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getActivity(id);
-      setActivity(res);      
+      const res = await api.getStudent(id);
+      setStudent(res);      
     };
     fetchData();
   });
@@ -62,33 +64,54 @@ const ActivityInfoView = () => {
     setOpen(false);
   };
 
+  let statusclass = null;
+  switch (student.status) {
+    case "ACTIVO":
+      statusclass = classes.statusActive;
+      break;
+    case "INACTIVO":
+      statusclass = classes.statusInactive;
+      break;
+    case "RETIRADO":
+        statusclass = classes.statusRetired;
+        break;
+    case "GRADUADO":
+        statusclass = classes.statusGraduate;
+        break;
+    default:
+      break;
+  }
   return (
     <Container>
     <Card className={classes.root}>
       <CardContent>
         <Typography variant="h3" component="h2" gutterBottom>
-          Información de la actividad
+          Información del estudiante
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Titulo: { activity.title}
+          Nombre: {student.first_name} {student.last_name}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Descripcion: {activity.description}
+          Programa: {student.program}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Modalidad: {activity.modality}
+          Cohorte: {student.cohorte}
         </Typography>
-        
+        <Typography variant="body1" component="p" gutterBottom>
+        Estado: <b> <span className={statusclass}>
+          {student.status}          
+          </span> </b>
+        </Typography>
       </CardContent>
       <CardActions>
         <Button variant="contained" color="primary" onClick={handleClickOpen}>
-          Realizar Evaluación
+          Realizar seguimiento
         </Button>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle variant="h2" onClose={handleClose}>
-            Evaluación de la actividad
+            Seguimiento de estudiante
           </DialogTitle>
-          
+          <TrackStudent />
           <DialogActions>
             <Button variant="contained" onClick={handleClose}>
               Cancelar
@@ -104,4 +127,4 @@ const ActivityInfoView = () => {
   );
 };
 
-export default ActivityInfoView;
+export default StudentInfo;

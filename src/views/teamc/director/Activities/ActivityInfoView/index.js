@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 import api from 'src/views/teamc/services/Api';
 import Page from 'src/components/Page';
 
-import { makeStyles,Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
-import StudentInfo from './StudentInfo';
+import ActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView/ActivityInfo';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CoordinatorStudentView = () => {
+const DirectorActivityView = () => {
   const classes = useStyles();
   const [activityList, setActivityList] = useState([]);
   const [result, setResult] = useState('');
@@ -31,12 +30,6 @@ const CoordinatorStudentView = () => {
   useEffect(() => {
     const fetchData = async () => {
       const res = await api.getStudentActivitiesLocal();
-      /*if (res.status === 200) {
-        setResult('ok');
-        setActivityList(res.data);
-      } else if (res.status === 500) {
-        setResult('error');
-      }*/
       setResult('ok');
       setActivityList(res);
       
@@ -46,27 +39,17 @@ const CoordinatorStudentView = () => {
   const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes', '/coordinator/list-students'] ,['Listado de estudiantes']];
   return (
     <>
-    <Page className={classes.root} title="Estudiante">
+    <Page className={classes.root} title="Actividad">
       {/* BreadCrumbs */}
       <BreadCrumbs  />
       {/* Student Basic Info
           - Nombre, programa, cohorte*/}
-      <StudentInfo />
+      <ActivityInfoView />
       {/* Button Track Student */}
       {/* Activity Card List */}
-      {result === 'ok' ? (
-        <>
-          <Typography className={classes.title} variant='h1'>
-            Actividades de investigación del estudiante
-          </Typography>
-          <List list = {activityList} option='Activity' context='/coordinator/list-activities'/>
-        </>
-      ) : (
-        <h1> Free accounts are limited to 200 requests per day. </h1>
-      )}
       </Page>
     </>
   );
 };
 
-export default CoordinatorStudentView;
+export default DirectorActivityView;

@@ -2,6 +2,9 @@ import { Container, Grid } from '@material-ui/core';
 import React from 'react';
 import StudentCard from 'src/components/StudentCard';
 import ActivityCard from 'src/components/ActivityCard';
+import EvaluationCard from './EvaluationCard';
+
+
 
 const List = ({ list, option, context }) => {
   console.log(option + context);
@@ -13,7 +16,12 @@ const List = ({ list, option, context }) => {
             {option === 'Student' ? (
               <StudentCard element={element} />
             ) : (
-              <ActivityCard key={element.id} activity={element} context={context}/>
+              option == 'Activity' ? (
+                <ActivityCard key={element.id} activity={element} context={context}/>
+              ):(
+                <EvaluationCard key={element.id} evaluation={element} context={context}/>
+              )
+              
             )}
           </Grid>
         ))}

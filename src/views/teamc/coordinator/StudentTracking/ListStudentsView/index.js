@@ -9,6 +9,7 @@ import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumb from 'src/components/BreadCrumb';
+import BreadCrumbs from './BreadCrumbs';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -37,7 +38,7 @@ const CoordinatorListStudentsView = () => {
     const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes']];
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
-            <BreadCrumb list = {breadcrumb}/>
+            <BreadCrumbs />
             <SearchBar context='students'/>
             <List list = {studentsList} option= 'Student'/>
             <ListPagination/>

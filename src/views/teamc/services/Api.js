@@ -2,6 +2,7 @@ import { bool } from 'prop-types';
 import http from './ApiConfig';
 import studentData from './local_data/students-info.json';
 import activitiesData from './local_data/student_activities.json';
+import directorEvaluations from './local_data/director_evaluations.json';
 
 const getStudentActivities = () => {
   return http.get('/student_activities');
@@ -32,7 +33,12 @@ const getActivity = id => {
   return activitiesData.find(activity => activity.id == id);
 };
 
+const getEvaluationsDirectorLocal = () => {
+  return directorEvaluations;
+};
+
 export default {
+  getEvaluationsDirectorLocal,
   getStudentActivitiesLocal,
   getStudentActivities,
   getStudentsInfoLocal,

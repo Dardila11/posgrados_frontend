@@ -4,7 +4,7 @@ import { Card, Typography, Box, makeStyles, createMuiTheme, colors, CardActionAr
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 
-const theme = createMuiTheme({
+/*const theme = createMuiTheme({
   palette: {
     primary: {
       light: '#757ce8',
@@ -14,7 +14,7 @@ const theme = createMuiTheme({
     },
     secondary: colors.blue,  
   },
-});
+});*/
 
 const useStyles = makeStyles({
   root: {

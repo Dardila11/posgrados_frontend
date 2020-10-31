@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CoordinatorStudentView = () => {
+const DirectorStudentView = () => {
   const classes = useStyles();
   const [activityList, setActivityList] = useState([]);
   const [result, setResult] = useState('');
@@ -59,7 +59,7 @@ const CoordinatorStudentView = () => {
           <Typography className={classes.title} variant='h1'>
             Actividades de investigación del estudiante
           </Typography>
-          <List list = {activityList} option='Activity' context='/coordinator/list-activities'/>
+          <List list = {activityList} option='Activity' context='/director/list-activities'/>
         </>
       ) : (
         <h1> Free accounts are limited to 200 requests per day. </h1>
@@ -69,4 +69,4 @@ const CoordinatorStudentView = () => {
   );
 };
 
-export default CoordinatorStudentView;
+export default DirectorStudentView;

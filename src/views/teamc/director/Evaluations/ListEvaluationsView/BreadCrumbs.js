@@ -1,8 +1,8 @@
 import React from 'react';
 import Breadcrumbs from '@material-ui/core/Breadcrumbs';
-import Typography from '@material-ui/core/Typography';
-import { Link as RouterLink } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link as RouterLink } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -17,10 +17,10 @@ const BreadCrumbs = () => {
   return (
     <div className={classes.root}>
       <Breadcrumbs aria-label="breadcrumb">
-        <RouterLink color="inherit" to="/coordinator">
-          Coordinador
+        <RouterLink color="inherit" to="/director">
+          Director
         </RouterLink>
-        <Typography color="textPrimary">Lista Actividades</Typography>
+        <Typography color="textPrimary">Lista Evaluaciones</Typography>
       </Breadcrumbs>
     </div>
   );

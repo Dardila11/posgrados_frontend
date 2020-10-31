@@ -21,17 +21,24 @@ import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+import CoordinatorIndexView from 'src/views/teamc/coordinator';
 import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
-import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
+import CoordinatorStudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
 import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activities/ListActivitiesView';
-import ActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
+import CoordinatorActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
+import CoordinatorListEvaluationsView from './views/teamc/coordinator/Evaluations/ListEvaluationsView';
 /* End Coordinator imports*/
+
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
 import DirectorIndexView from 'src/views/teamc/director/index';
-import DirectorListStudentsView from 'src/views/teamc/director/ListStudentsView/index';
-import DirectorListActivitiesView from 'src/views/teamc/director/ActivityEvaluationsView/index';
+import DirectorListStudentsView from 'src/views/teamc/director/Students/ListStudentsView';
+import DirectorStudentView from 'src/views/teamc/director/Students/StudentInfoView';
+import DirectorListActivitiesView from 'src/views/teamc/director/Activities/ListActivitiesView';
+import DirectorActivityView from 'src/views/teamc/director/Activities/ActivityInfoView';
+import DirectorListEvaluationsView from 'src/views/teamc/director/Evaluations/ListEvaluationsView';
 /* End Director imports */
+
 const routes = [
   {
     path: 'director',
@@ -39,9 +46,10 @@ const routes = [
     children: [
       { path: '', element: <DirectorIndexView /> },
       { path: 'list-students', element: <DirectorListStudentsView /> },
-      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'list-students/student/:id', element: <DirectorStudentView /> },
       { path: 'list-activities', element: <DirectorListActivitiesView /> },
-      { path: 'list-activities/activity/:id', element: <StudentView /> },
+      { path: 'list-activities/activity/:id', element: <DirectorActivityView /> },
+      { path: 'list-evaluations', element: <DirectorListEvaluationsView/>},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
@@ -50,10 +58,12 @@ const routes = [
     path: 'coordinator',
     element: <CoordinatorDashboardLayout />,
     children: [
+      { path: '', element: <CoordinatorIndexView />},
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
-      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'list-students/student/:id', element: <CoordinatorStudentView /> },
       { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
-      { path: 'list-activities/activity/:id', element: <ActivityInfoView /> },
+      { path: 'list-activities/activity/:id', element: <CoordinatorActivityInfoView /> },
+      { path: 'list-evaluations', element: <CoordinatorListEvaluationsView/>},
       { path: '*', element: <Navigate to="/404" /> }
       ]
   },
