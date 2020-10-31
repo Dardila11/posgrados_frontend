@@ -91,8 +91,5 @@ const SearchBar = ({className,context, ...rest }) => {
     );
 }
 
-SearchBar.propTypes = {
-    handleSearch: propTypes.func.isRequired
-}
 
 export default SearchBar

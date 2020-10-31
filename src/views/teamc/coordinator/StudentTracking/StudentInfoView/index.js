@@ -43,11 +43,12 @@ const StudentView = () => {
     };
     fetchData();
   }, []);
+  const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes', '/coordinator/list-students'] ,['Listado de estudiantes']];
   return (
     <>
     <Page className={classes.root} title="Estudiante">
       {/* BreadCrumbs */}
-      <BreadCrumbs />
+      <BreadCrumb list={breadcrumb} />
       {/* Student Basic Info
           - Nombre, programa, cohorte*/}
       <StudentInfo />

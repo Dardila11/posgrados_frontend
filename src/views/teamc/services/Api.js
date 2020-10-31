@@ -28,16 +28,6 @@ const getStudent = id => {
   return studentData.find(student => student.id == id);
 };
 
-/*const getStudent = id => {
-  let student = null;
-  studentData.forEach(element => {
-    if (element.id == id) {
-      student = element;
-    }
-  });
-  return student;
-};*/
-
 export default {
   getStudentActivitiesLocal,
   getStudentActivities,

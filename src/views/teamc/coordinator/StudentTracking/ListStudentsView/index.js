@@ -3,11 +3,12 @@ import {
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
-import BreadCrumbs from './BreadCrumbs';
+
 import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 import ListPagination from 'src/components/ListPagination';
+import BreadCrumb from 'src/components/BreadCrumb';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,9 +34,10 @@ const CoordinatorListStudentsView = () => {
     }, []);
 
     const classes = useStyles();    
+    const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes']];
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
-            <BreadCrumbs />
+            <BreadCrumb list = {breadcrumb}/>
             <SearchBar context='students'/>
             <List list = {studentsList} option= 'Student'/>
             <ListPagination/>
