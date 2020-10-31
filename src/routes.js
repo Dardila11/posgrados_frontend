@@ -10,17 +10,18 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
-import ActivityView from 'src/views/teamb/activities/ActivityView';
-import ActivityOneView from 'src/views/teamb/activities/ActivityOneView';
-import ActivityTwoView from 'src/views/teamb/activities/ActivityTwoView';
-import ActivityThreeView from 'src/views/teamb/activities/ActivityThreeView';
-import ActivityFourView from 'src/views/teamb/activities/ActivityFourView';
-import ActivityFiveView from 'src/views/teamb/activities/ActivityFiveView';
-import ActivitySixView from 'src/views/teamb/activities/ActivitySixView';
+import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
+import ActivityOneView from 'src/views/teamb/activitiesView/ActivityOneView';
+import ActivityTwoView from 'src/views/teamb/activitiesView/ActivityTwoView';
+import ActivityThreeView from 'src/views/teamb/activitiesView/ActivityThreeView';
+import ActivityFourView from 'src/views/teamb/activitiesView/ActivityFourView';
+import ActivityFiveView from 'src/views/teamb/activitiesView/ActivityFiveView';
+import ActivitySixView from 'src/views/teamb/activitiesView/ActivitySixView';
 import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+
 import ListStudentsView from 'src/views/teamc/coordinator/ListStudentsView';
 import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 //StartImports teamD
@@ -30,17 +31,28 @@ import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/ind
 import {CreateOtherView} from './views/teamd/coordinator/createOthers'
 //import FreeSoloCreateOptionDialog from 'src/views/teamd/Search/prueba'
 //EndImports TeamD
+
+import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
+import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
+import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/ActivityEvaluationsView/index';
+
 /* End Coordinator imports*/
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
-import ListEvaluationsView from 'src/views/teamc/director';
+import DirectorIndexView from 'src/views/teamc/director/index';
+import DirectorListStudentsView from 'src/views/teamc/director/ListStudentsView/index';
+import DirectorListActivitiesView from 'src/views/teamc/director/ActivityEvaluationsView/index';
 /* End Director imports */
 const routes = [
   {
     path: 'director',
     element: <DirectorDashboardLayout />,
     children: [
-      { path: 'list-evaluations', element: <ListEvaluationsView /> },
+      { path: '', element: <DirectorIndexView /> },
+      { path: 'list-students', element: <DirectorListStudentsView /> },
+      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'list-activities', element: <DirectorListActivitiesView /> },
+      { path: 'list-activities/activity/:id', element: <StudentView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
@@ -49,12 +61,16 @@ const routes = [
     path: 'coordinator',
     element: <CoordinatorDashboardLayout />,
     children: [
-      { path: 'list-students', element: <ListStudentsView /> },
+      { path: 'list-students', element: <CoordinatorListStudentsView /> },
       { path: 'list-students/student/:id', element: <StudentView /> },
+
       { path: '/administer-Gi', element: <AdministerView />},
       { path: '/administer-Places', element: <AdministerPlacesView />},
       { path: '/administer-Professors', element: <AdministerProfessorsView />},
       { path: '/create-others', element: <CreateOtherView/>},      
+
+      { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
+      { path: 'list-activities/activity/:id', element: <StudentView /> },
       { path: '*', element: <Navigate to="/404" /> }
       ]
   },
@@ -69,7 +85,6 @@ const routes = [
       { path: 'activity/activityfive', element: <ActivityFiveView />},
       { path: 'activity/activitysix', element: <ActivitySixView />},
       { path: 'activity', element: <ActivityView />},
-      { path: 'activities', element: <ActivityView />},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

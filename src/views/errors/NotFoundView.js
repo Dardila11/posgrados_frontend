@@ -3,27 +3,31 @@ import {
   Box,
   Container,
   Typography,
-  makeStyles
+  makeStyles,
+  Button
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     height: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    justifyContent: 'center'
   },
   image: {
     marginTop: 50,
     display: 'inline-block',
     maxWidth: '100%',
     width: 560
-  }
+  },
 }));
 
 const NotFoundView = () => {
   const classes = useStyles();
+  const link = "/director";
 
   return (
     <Page
@@ -59,6 +63,7 @@ const NotFoundView = () => {
               src="/static/images/undraw_page_not_found_su7k.svg"
             />
           </Box>
+          <RouterLink to= {link} ><Button variant="contained" color="primary" size='large'> Back </Button></RouterLink>
         </Container>
       </Box>
     </Page>

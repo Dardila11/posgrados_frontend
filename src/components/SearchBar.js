@@ -1,6 +1,7 @@
 import React from 'react';
 import {Box, Card, CardContent, TextField, InputAdornment, SvgIcon, Container, makeStyles, Select,InputLabel, MenuItem, Grid} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
+import propTypes from 'prop-types';
 
 const useStyles = makeStyles(() => ({
     root: {  
@@ -20,9 +21,8 @@ const useStyles = makeStyles(() => ({
     
   }));
 
-const SearchBar = () => {
+const SearchBar = ({className,context, ...rest }) => {
     const classes = useStyles();
-    
     return (
         <Container className = {classes.Container}>
             
@@ -41,22 +41,28 @@ const SearchBar = () => {
                                             </InputAdornment>
                                         )
                                         }}
-                                        placeholder='Buscar Estudiante...'
+                                        placeholder = {
+                                            context === 'activities' ? (
+                                                'Buscar actividad ...'
+                                            ):(
+                                                'Buscar estudiante ...'
+                                            )
+                                        }                                  
                                         variant="outlined"
                                     />
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={5} xs={12}>
+                                <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-cohorte'>Seleccionar Cohorte</InputLabel>
                                         <Select id='Select-cohorte'>
-                                            <MenuItem value = {"2020"} >2020</MenuItem>
-                                            <MenuItem value = {"2019"} >2019</MenuItem>
-                                            <MenuItem value = {"2018"} >2018</MenuItem>
+                                            <MenuItem value = '2020' >2020</MenuItem>
+                                            <MenuItem value = '2019' >2019</MenuItem>
+                                            <MenuItem value = '2018' >2018</MenuItem>
                                         </Select>
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={5} xs={12}>
+                                <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-status'>Seleccionar estado</InputLabel>
                                         <Select name='Estado' id='Select-status'>
@@ -67,7 +73,7 @@ const SearchBar = () => {
                                         </Select>
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={5} xs={12}>
+                                <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
                                         <InputLabel htmlFor='Select-program'>Seleccionar programa</InputLabel>
                                         <Select name='Programa' id='Select-program'>
@@ -83,6 +89,10 @@ const SearchBar = () => {
                 </Box>
         </Container>
     );
+}
+
+SearchBar.propTypes = {
+    handleSearch: propTypes.func.isRequired
 }
 
 export default SearchBar

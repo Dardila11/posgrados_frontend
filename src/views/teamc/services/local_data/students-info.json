@@ -32,7 +32,7 @@
   "email": "spenser4@unicauca.edu.co",
   "status": "INACTIVO",
   "image": "https://robohash.org/temporeaccusamusesse.png?size=250x250&set=set1",
-  "program": "Maestría en Electrónica y Telecomunicaciones",
+  "program": "Maestría en Electrónica",
   "cohorte": 2016
 }, {
   "id": 5,
@@ -70,22 +70,4 @@
   "image": "https://robohash.org/etquisex.png?size=250x250&set=set1",
   "program": "Maestría en Automática",
   "cohorte": 2018
-}, {
-  "id": 9,
-  "first_name": "Angela",
-  "last_name": "Pottle",
-  "email": "angela9@unicauca.edu.co",
-  "status": "INACTIVO",
-  "image": "https://robohash.org/aliasdictaet.png?size=250x250&set=set1",
-  "program": "Maestría en Automática",
-  "cohorte": 2018
-}, {
-  "id": 10,
-  "first_name": "Maire",
-  "last_name": "Pyke",
-  "email": "maire10@unicauca.edu.co",
-  "status": "INACTIVO",
-  "image": "https://robohash.org/architectosapientedolore.png?size=250x250&set=set1",
-  "program": "Doctorado en Ingeniería Telemática",
-  "cohorte": 2019
 }]

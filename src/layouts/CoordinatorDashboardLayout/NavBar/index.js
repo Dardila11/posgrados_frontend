@@ -13,7 +13,8 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import {
-  BarChart as BarChartIcon
+  Users as UsersIcon,
+  Eye as EyeIcon
 } from 'react-feather';
 
 import NavItem from './NavItem';
@@ -27,7 +28,7 @@ const user = {
 const items = [
   {
     href: '/coordinator/list-students',
-    icon: BarChartIcon,
+    icon: UsersIcon,
     title: 'Visualizar Estudiantes'
   },
   // Options Team D
@@ -58,6 +59,16 @@ const items = [
     icon: UsersIcon,
     title: 'Visualizar Evaluaciones'
   } */
+  {
+    href: '/coordinator/list-activities',
+    icon: EyeIcon,
+    title: 'Actividades'
+  },
+  {
+    href: '/coordinator/list-evaluations',
+    icon: EyeIcon,
+    title: 'Evaluaciones'
+  }
 ];
 
 const useStyles = makeStyles(() => ({

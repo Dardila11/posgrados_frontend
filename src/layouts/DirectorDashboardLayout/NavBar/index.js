@@ -13,8 +13,8 @@ import {
 } from '@material-ui/core';
 
 import {
-  BarChart as BarChartIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  Eye as EyeIcon
 } from 'react-feather';
 
 import NavItem from './NavItem';
@@ -28,13 +28,18 @@ const user = {
 const items = [
   {
     href: '/director/list-students',
-    icon: BarChartIcon,
-    title: 'Visualizar Estudiantes'
+    icon: UsersIcon,
+    title: 'Mis Estudiantes'
+  },
+  {
+    href: '/director/list-activities',
+    icon: EyeIcon,
+    title: 'Actividades'
   },
   {
     href: '/director/list-evaluations',
-    icon: UsersIcon,
-    title: 'Visualizar Evaluaciones'
+    icon: EyeIcon,
+    title: 'Evaluaciones'
   }
 ];
 
