@@ -21,9 +21,21 @@ import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+
+import ListStudentsView from 'src/views/teamc/coordinator/ListStudentsView';
+import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
+//StartImports teamD
+import AdministerView from 'src/views/teamd/coordinator/GI/index'
+import AdministerPlacesView from 'src/views/teamd/coordinator/places/index'
+import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index'
+import {CreateOtherView} from './views/teamd/coordinator/createOthers'
+//import FreeSoloCreateOptionDialog from 'src/views/teamd/Search/prueba'
+//EndImports TeamD
+
 import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
 import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
 import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/ActivityEvaluationsView/index';
+
 /* End Coordinator imports*/
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
@@ -51,6 +63,12 @@ const routes = [
     children: [
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       { path: 'list-students/student/:id', element: <StudentView /> },
+
+      { path: '/administer-Gi', element: <AdministerView />},
+      { path: '/administer-Places', element: <AdministerPlacesView />},
+      { path: '/administer-Professors', element: <AdministerProfessorsView />},
+      { path: '/create-others', element: <CreateOtherView/>},      
+
       { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
       { path: 'list-activities/activity/:id', element: <StudentView /> },
       { path: '*', element: <Navigate to="/404" /> }

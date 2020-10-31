@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-
 import {
   Avatar,
   Box,
@@ -11,7 +10,8 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-
+import AddIcon from '@material-ui/icons/Add';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import {
   Users as UsersIcon,
   Eye as EyeIcon
@@ -31,6 +31,34 @@ const items = [
     icon: UsersIcon,
     title: 'Visualizar Estudiantes'
   },
+  // Options Team D
+  {
+    href: '/coordinator/administer-Gi',
+    icon: SupervisorAccountIcon,
+    title: 'Administar Grupo Investigacion'
+  },
+  {
+    href: '/coordinator/administer-Places',
+    icon: SupervisorAccountIcon,
+    title: 'Administar Lugares'
+  },
+  {
+    href: '/coordinator/administer-Professors',
+    icon: SupervisorAccountIcon,
+    title: 'Administar Profesores'
+  },
+  {
+    href: '/coordinator/create-others',
+    icon: AddIcon,
+    title: 'crear otras cosas'
+  }
+
+  // End Options Team D
+  /*   {
+    href: '/director/list-evaluations',
+    icon: UsersIcon,
+    title: 'Visualizar Evaluaciones'
+  } */
   {
     href: '/coordinator/list-activities',
     icon: EyeIcon,
