@@ -22,13 +22,12 @@ import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
 
-import ListStudentsView from 'src/views/teamc/coordinator/ListStudentsView';
-import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
+//import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 //StartImports teamD
-import AdministerView from 'src/views/teamd/coordinator/GI/index'
-import AdministerPlacesView from 'src/views/teamd/coordinator/places/index'
-import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index'
-import {CreateOtherView} from './views/teamd/coordinator/createOthers'
+import AdministerView from 'src/views/teamd/coordinator/GI/index';
+import AdministerPlacesView from 'src/views/teamd/coordinator/places/index';
+import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index';
+import { CreateOtherView } from './views/teamd/coordinator/createOthers';
 //import FreeSoloCreateOptionDialog from 'src/views/teamd/Search/prueba'
 //EndImports TeamD
 
@@ -64,27 +63,27 @@ const routes = [
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       { path: 'list-students/student/:id', element: <StudentView /> },
 
-      { path: '/administer-Gi', element: <AdministerView />},
-      { path: '/administer-Places', element: <AdministerPlacesView />},
-      { path: '/administer-Professors', element: <AdministerProfessorsView />},
-      { path: '/create-others', element: <CreateOtherView/>},      
+      { path: '/administer-Gi', element: <AdministerView /> },
+      { path: '/administer-Places', element: <AdministerPlacesView /> },
+      { path: '/administer-Professors', element: <AdministerProfessorsView /> },
+      { path: '/create-others', element: <CreateOtherView /> },
 
       { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
       { path: 'list-activities/activity/:id', element: <StudentView /> },
       { path: '*', element: <Navigate to="/404" /> }
-      ]
+    ]
   },
   {
     path: 'student',
     element: <StudentDashboardLayout />,
     children: [
-      { path: 'activity/activityone', element: <ActivityOneView />},
-      { path: 'activity/activitytwo', element: <ActivityTwoView />},
-      { path: 'activity/activitythree', element: <ActivityThreeView />},
-      { path: 'activity/activityfour', element: <ActivityFourView />},
-      { path: 'activity/activityfive', element: <ActivityFiveView />},
-      { path: 'activity/activitysix', element: <ActivitySixView />},
-      { path: 'activity', element: <ActivityView />},
+      { path: 'activity/activityone', element: <ActivityOneView /> },
+      { path: 'activity/activitytwo', element: <ActivityTwoView /> },
+      { path: 'activity/activitythree', element: <ActivityThreeView /> },
+      { path: 'activity/activityfour', element: <ActivityFourView /> },
+      { path: 'activity/activityfive', element: <ActivityFiveView /> },
+      { path: 'activity/activitysix', element: <ActivitySixView /> },
+      { path: 'activity', element: <ActivityView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

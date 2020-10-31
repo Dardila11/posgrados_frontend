@@ -12,10 +12,7 @@ import {
 } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
-import {
-  Users as UsersIcon,
-  Eye as EyeIcon
-} from 'react-feather';
+import { Users as UsersIcon, Eye as EyeIcon } from 'react-feather';
 
 import NavItem from './NavItem';
 
@@ -51,7 +48,7 @@ const items = [
     href: '/coordinator/create-others',
     icon: AddIcon,
     title: 'crear otras cosas'
-  }
+  },
 
   // End Options Team D
   /*   {
