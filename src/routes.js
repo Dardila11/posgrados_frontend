@@ -19,7 +19,44 @@ import ActivityFiveView from 'src/views/teamb/activitiesView/ActivityFiveView';
 import ActivitySixView from 'src/views/teamb/activitiesView/ActivitySixView';
 import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
+/* Coordinator imports */
+import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
+import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
+import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activities/ListActivitiesView';
+import ActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
+/* End Coordinator imports*/
+/* Director imports */
+import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
+import DirectorIndexView from 'src/views/teamc/director/index';
+import DirectorListStudentsView from 'src/views/teamc/director/ListStudentsView/index';
+import DirectorListActivitiesView from 'src/views/teamc/director/ActivityEvaluationsView/index';
+/* End Director imports */
 const routes = [
+  {
+    path: 'director',
+    element: <DirectorDashboardLayout />,
+    children: [
+      { path: '', element: <DirectorIndexView /> },
+      { path: 'list-students', element: <DirectorListStudentsView /> },
+      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'list-activities', element: <DirectorListActivitiesView /> },
+      { path: 'list-activities/activity/:id', element: <StudentView /> },
+      { path: '*', element: <Navigate to="/404" /> }
+    ]
+  },
+  /* Coordinator routes */
+  {
+    path: 'coordinator',
+    element: <CoordinatorDashboardLayout />,
+    children: [
+      { path: 'list-students', element: <CoordinatorListStudentsView /> },
+      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
+      { path: 'list-activities/activity/:id', element: <ActivityInfoView /> },
+      { path: '*', element: <Navigate to="/404" /> }
+      ]
+  },
   {
     path: 'student',
     element: <StudentDashboardLayout />,
