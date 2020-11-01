@@ -84,22 +84,7 @@ const ActivityInfoView = () => {
         </Typography>
         
       </CardContent>
-      <CardActions>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle variant="h2" onClose={handleClose}>
-            Evaluación de la actividad
-          </DialogTitle>
-          
-          <DialogActions>
-            <Button variant="contained" onClick={handleClose}>
-              Cancelar
-            </Button>
-            <Button variant="contained" color="primary" onClick={handleClose}>
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </CardActions>
+      
     </Card>
     </Container>
   );

@@ -7,9 +7,10 @@ export default class service {
         const url= `${API_URL}/api/periodo/`;
         return axios.get(url,periodo);
     }
-    ActivityView(actividad){
-        const url= `${API_URL}/api/1.0/crear_pais/`;
-        return axios.post(url,actividad);
+    PostActivityThree(activity){
+        console.log(activity);
+        const url= `${API_URL}/api/activity/`;
+        return axios.post(url,activity);
     }
     
     GetCurrentYear(currentPeriod) { 

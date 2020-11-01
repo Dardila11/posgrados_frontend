@@ -8,9 +8,10 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
-
+import service from '../services/service';
+const objService = new service();
 const tipo = [
-  { value: 'advert', label: 'Seleccione una opción' }, 
+  { value: 'advert', label: 'Seleccione una opción' },
   { value: 'T1', label: 'Artículo de revista (journal article)' },
   { value: 'T2', label: 'Acta de congreso (conference proceedings)' },
   { value: 'T3', label: 'Libro' },
@@ -31,14 +32,14 @@ const useStyles = makeStyles(() => ({
 const ActivityThreeView = ({ className, ...rest }) => {
   const classes = useStyles();
   const [values, setValues] = useState({
-    tituloArticulo:'',
-    tipoSeleccionado:'',
-    tituloLibro:'', 
-	  autores:'',
-	  editorial: '',
-	  datosGenerales: '',
+    tituloArticulo: '',
+    tipoSeleccionado: '',
+    tituloLibro: '',
+    autores: '',
+    editorial: '',
+    datosGenerales: '',
     fechaInicio: '',
-    fechaFin:''
+    fechaFin: ''
   });
   const handleChange = (event) => {
     setValues({
@@ -46,8 +47,8 @@ const ActivityThreeView = ({ className, ...rest }) => {
       [event.target.name]: event.target.value
     });
   };
-   //Asignamos a "tipo" de publicación en el valor de "event.target.value"
-   const tipoSeleccionado = (event) => {
+  //Asignamos a "tipo" de publicación en el valor de "event.target.value"
+  const tipoSeleccionado = (event) => {
     setValues({
       ...values,
       tipoSeleccionado: event.target.value
@@ -83,11 +84,12 @@ const ActivityThreeView = ({ className, ...rest }) => {
     setEmergenteCancelar(true);
   };
   // "handleNo" controla cuando se da click en el botón "NO" de la ventana emergente
- const handleCancelarNo = () => {
-  setEmergenteCancelar(false);
+  const handleCancelarNo = () => {
+    setEmergenteCancelar(false);
   };
   //TODO: Comentar
   const handleGuardar = () => {
+    console.log(setEmergenteGuardar(true));
     setEmergenteGuardar(true);
   };
 
@@ -97,61 +99,95 @@ const ActivityThreeView = ({ className, ...rest }) => {
   };
   //TODO: Comentar
   const handleGuardarYEnviar = () => {
-    if(values.tituloArticulo.length){
+    if (values.tituloArticulo.length) {
       setErrorTituloArticulo(null)
     }
-    else{
+    else {
       setErrorTituloArticulo("El campo es obligatorio")
     }
-	  if(values.tipoSeleccionado.length && values.tipoSeleccionado != "Seleccione una opción"){
+    if (values.tipoSeleccionado.length && values.tipoSeleccionado != "Seleccione una opción") {
       setErrorTipo(null)
     }
-    else{
+    else {
       setErrorTipo("Seleccione una opción válida")
     }
-    if(values.tituloLibro.length){
+    if (values.tituloLibro.length) {
       setErrorTituloLibro(null)
     }
-    else{
+    else {
       setErrorTituloLibro("El campo es obligatorio")
     }
-	  if(values.autores.length){
+    if (values.autores.length) {
       setErrorAutores(null)
     }
-    else{
+    else {
       setErrorAutores("El campo es obligatorio")
-    }   
-	  if(values.editorial.length){
+    }
+    if (values.editorial.length) {
       setErrorEditorial(null)
     }
-    else{
+    else {
       setErrorEditorial("El campo es obligatorio")
-    } 
-	  if(values.datosGenerales.length){
+    }
+    if (values.datosGenerales.length) {
       setErrorDatosGenerales(null)
     }
-    else{
+    else {
       setErrorDatosGenerales("El campo es obligatorio")
-    } 
-    if(values.fechaInicio.length && values.fechaFin.length){
-      if(values.fechaInicio<=values.fechaFin){
+    }
+    if (values.fechaInicio.length && values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) {
         setErrorFechas("")
       }
-      else{
+      else {
         setErrorFechas("La fecha de publicación debe ser después de la fecha de envió")
       }
     }
-    else{
+    else {
       setErrorFechas("Seleccióne una fecha de envió publicación y fecha de publicación válidas")
     }
     //setEmergenteGuardarYEnviar(true);
-    };
-	const handleGuardarYEnviarNo = () => {
+  };
+  const handleGuardarYEnviarNo = () => {
+      setEmergenteGuardarYEnviar(false);
+  };
+
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    var vartitulo = document.getElementById("titulo").value;
+    var vartipo = document.getElementById("tipo").value;
+    var varnombrepublicacion = document.getElementById("nombrepublicacion").value;
+    var varautores = document.getElementById("autores").value;
+    var varnombreeditorial = document.getElementById("nombreeditorial").value;
+    var vardatosgenerales = document.getElementById("datosgenerales").value;
+    var vardate1 = document.getElementById("date1").value;
+    var vardate2 = document.getElementById("date2").value;
+
+    objService.PostActivityThree(
+      { 
+        "title": vartitulo,
+        "name" : varnombrepublicacion,
+        "state" : 1,
+        "start_date" : vardate1,
+        "end_date" : vardate2,
+        "acedemic_year" : "2020-21",/* consultar año academico actual */
+        "type" : "publication",
+        "date_record": vardate1, /* Consultar fecha actual */
+        "date_update": vardate2, /* Consultar fecha actual */
+        "type_publication" : vartipo,
+        "authors" : varautores,
+        "generaldata" : vardatosgenerales,
+        "editorial" : varnombreeditorial,
+        "student" : 1, /* Consultar usuario actual */
+     }
+    ).then((result) => { 
+      alert("actividad registrada");      
+      
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
     
-    setEmergenteGuardarYEnviar(false);
-    };
-
-
+  }
   return (
     <div>
       <BreadCrumbs />
@@ -165,64 +201,64 @@ const ActivityThreeView = ({ className, ...rest }) => {
               <CardContent >
                 <br></br>
                 <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo del articulo, capitulo, libro, monografia..." name="tituloArticulo"
-                onChange={handleChange} required value={values.tituloArticulo} variant="outlined"/>
-			         {/* TODO: Comentar */}
-              {errorTituloArticulo? <p style={{ display: 'flex', color:'red' }}>{errorTituloArticulo}</p>:null}	
-              <br></br>
-              <br></br>
-              <TextField  fullWidth label="Tipo de publicación" name="tipo" onChange={tipoSeleccionado} required
-                select SelectProps={{ native: true }} variant="outlined">
-                {tipo.map((option) => (
-                  <option key={option.value} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-               {/* TODO: Comentar */}
-                {errorTipo? <p style={{ display: 'flex', color:'red' }}>{errorTipo}</p>:null}
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Nombre de la publicación o titulo del libro" name="tituloLibro" onChange={handleChange}
-                required value={values.tituloLibro} variant="outlined"/>
-			        {/* TODO: Comentar */}
-                {errorTituloLibro? <p style={{ display: 'flex', color:'red' }}>{errorTituloLibro}</p>:null}	
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Autores" name="autores" onChange={handleChange} required value={values.autores}
-                variant="outlined"/>
-			        {/* TODO: Comentar */}
-                {errorAutores? <p style={{ display: 'flex', color:'red' }}>{errorAutores}</p>:null}		
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Nombre de la editorial" name="editorial" onChange={handleChange} required
-                value={values.editorial} variant="outlined"/>
-			        {/* TODO: Comentar */}
-                {errorEditorial? <p style={{ display: 'flex', color:'red' }}>{errorEditorial}</p>:null}		
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Datos generales del tipo de publicación" name="datosGenerales" onChange={handleChange}
-                required value={values.datosGenerales} variant="outlined"/>
-			         {/* TODO: Comentar */}
-                {errorDatosGenerales? <p style={{ display: 'flex', color:'red' }}>{errorDatosGenerales}</p>:null}		
-              <br></br>
-              <br></br>
-              <br></br>
-              <Grid container spacing = {3} container justify="space-around">
-                <TextField id="date" label="Envío publicación" type="date"
-                  className={classes.textField} InputLabelProps={{ shrink: true }}
-                  onChange={handleFechaInicio}/>
-                <br></br>
-                <br></br>
-                <TextField id="date" label="Fecha de publicación" type="date" 
-                  className={classes.textField} InputLabelProps={{ shrink: true }}
-                  onChange={handleFechaFin}/>
-              </Grid>
-              <br></br>
-              {errorFechas? <p style={{ display: 'flex', justifyContent: 'center', color:'red' }}>{errorFechas}</p>:null}
-              <br></br>
-              <br></br>
-              <br></br>
+                  <TextField fullWidth label="Titulo del articulo, capitulo, libro, monografia..." name="tituloArticulo" id="titulo"
+                    onChange={handleChange} required value={values.tituloArticulo} variant="outlined" />
+                  {/* TODO: Comentar */}
+                  {errorTituloArticulo ? <p style={{ display: 'flex', color: 'red' }}>{errorTituloArticulo}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Tipo de publicación" name="tipo" id="tipo" onChange={tipoSeleccionado} required
+                    select SelectProps={{ native: true }} variant="outlined">
+                    {tipo.map((option) => (
+                      <option key={option.value} value={option.label}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </TextField>
+                  {/* TODO: Comentar */}
+                  {errorTipo ? <p style={{ display: 'flex', color: 'red' }}>{errorTipo}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Nombre de la publicación o titulo del libro" id="nombrepublicacion" name="tituloLibro" onChange={handleChange}
+                    required value={values.tituloLibro} variant="outlined" />
+                  {/* TODO: Comentar */}
+                  {errorTituloLibro ? <p style={{ display: 'flex', color: 'red' }}>{errorTituloLibro}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Autores" name="autores" id="autores" onChange={handleChange} required value={values.autores}
+                    variant="outlined" />
+                  {/* TODO: Comentar */}
+                  {errorAutores ? <p style={{ display: 'flex', color: 'red' }}>{errorAutores}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Nombre de la editorial" name="editorial" id="nombreeditorial" onChange={handleChange} required
+                    value={values.editorial} variant="outlined" />
+                  {/* TODO: Comentar */}
+                  {errorEditorial ? <p style={{ display: 'flex', color: 'red' }}>{errorEditorial}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Datos generales del tipo de publicación" name="datosGenerales" id="datosgenerales" onChange={handleChange}
+                    required value={values.datosGenerales} variant="outlined" />
+                  {/* TODO: Comentar */}
+                  {errorDatosGenerales ? <p style={{ display: 'flex', color: 'red' }}>{errorDatosGenerales}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <Grid container spacing={3} container justify="space-around">
+                    <TextField id="date1" label="Envío publicación" type="date"
+                      className={classes.textField} InputLabelProps={{ shrink: true }}
+                      onChange={handleFechaInicio} />
+                    <br></br>
+                    <br></br>
+                    <TextField id="date2" label="Fecha de publicación" type="date"
+                      className={classes.textField} InputLabelProps={{ shrink: true }}
+                      onChange={handleFechaFin} />
+                  </Grid>
+                  <br></br>
+                  {errorFechas ? <p style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>{errorFechas}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <br></br>
                   <Button color="primary" variant="outlined"> Agregar premio </Button>
                   <br></br>
                   <br></br>
@@ -231,49 +267,49 @@ const ActivityThreeView = ({ className, ...rest }) => {
                 <br></br>
               </CardContent>
               <Box display="flex" justifyContent="flex-end" p={2}>
-              <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
+                <Button onClick={handleClose} color="primary" variant="outlined">Cancelar</Button>
 
-              <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>
+                <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>
 
-              <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
+                <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
               </Box>
             </Card>
           </form>
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" en "Crear Actividad" */}
-      <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        <RouterLink to = "../"> 
-            <Button color="primary">Si</Button>
-        </RouterLink>
-          <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog> 
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
-      <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-          {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
-          <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog> 
-	     {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
+          <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              <RouterLink to="../">
+                <Button color="primary">Si</Button>
+              </RouterLink>
+              <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog>
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
+          <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              {/* TODO: Enviar a backend y guardar */}
+              <Button color="primary" onClick={SaveActivity} >Si</Button>
+              <Button onClick={handleGuardarNo}  color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog>
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
         en "Crear Actividad" */}
-      <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary">Si</Button>
-          <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog>  
+          <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
+              <Button color="primary"  >Si</Button>
+              <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog>
         </div>
       </Container>
     </div>
