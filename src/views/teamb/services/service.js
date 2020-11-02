@@ -27,4 +27,9 @@ export default class service {
         const url= `${API_URL}/api/presentationResult/`;
         return axios.post(url,activity);
     }
+    PostActivityFive(activity){
+        console.log(activity);
+        const url= `${API_URL}/api/researchStays/`;
+        return axios.post(url,activity);
+    }
 }

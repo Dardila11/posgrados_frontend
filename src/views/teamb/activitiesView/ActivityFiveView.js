@@ -8,6 +8,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+import service from '../services/service';
+import util from '../services/util';
+
+const objService = new service();
+const objUtil = new util();
 
 const pais = [
   { value: 'advert', label: 'Seleccione una opción' }, 
@@ -183,12 +188,50 @@ const ActivityFiveView = ({ className, ...rest }) => {
     else{
       setErrorFechas("Seleccióne una fecha inicio de estancia y fin de estancia válidas")
     }
-    //setEmergenteGuardarYEnviar(true);
+    setEmergenteGuardarYEnviar(true);
     };
 	const handleGuardarYEnviarNo = () => {
     setEmergenteGuardarYEnviar(false);
     };
+    
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
+    var varproposito = document.getElementById("proposito").value;
+    var vardescripcion = document.getElementById("descripcion").value;
+    var varpais = document.getElementById("pais").value;
+    var varciudad = document.getElementById("ciudad").value;
+    var varnombreinstitucion = document.getElementById("nombreinstitucion").value;
+    var varfecha1 = document.getElementById("fecha1").value;
+    var varfecha2 = document.getElementById("fecha2").value;
+    var varnombreresponsable = document.getElementById("nombreresponsable").value;
+    var now = objUtil.GetCurretTimeDate();
 
+    objService.PostActivityFive(
+      { 
+        "description" : vardescripcion,
+        "state" : 1,
+        "start_date" : varfecha1,
+        "end_date" : varfecha2,
+        "academic_year" : "2020-21", /* consultar año academico actual */
+        "type" : "researchStays",
+        "date_record": now,
+        "date_update": now, 
+        "purpose": varproposito,
+        "responsible" : varnombreresponsable,
+        "student" : 1, /* Consultar usuario actual */
+        "institution" : varnombreinstitucion,
+        "city" : varciudad,
+        "country" : varpais
+        
+      }
+    ).then((result) => { 
+      alert("actividad registrada");      
+        
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  }
   return (
     <div>
       <BreadCrumbs />
@@ -202,19 +245,19 @@ const ActivityFiveView = ({ className, ...rest }) => {
           <CardContent >
             <br></br>
             <Grid item md={12} xs={12}>
-              <TextField fullWidth label="Proposito estancia" name="proposito" onChange={handleChange} required 
+              <TextField fullWidth label="Proposito estancia" id="proposito" name="proposito" onChange={handleChange} required 
                 value={values.proposito} variant="outlined"/>
 			        {/* TODO: Comentar */}
               {errorProposito? <p style={{ display: 'flex', color:'red' }}>{errorProposito}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Descripcion actividades desarrolladas" name="descripcion" onChange={handleChange}
+              <TextField fullWidth label="Descripcion actividades desarrolladas" id="descripcion" name="descripcion" onChange={handleChange}
                 required value={values.descripcion} variant="outlined"/>
 			        {/* TODO: Comentar */}
               {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Pais de estancia" name="pais" onChange={paisSeleccionado} required select
+              <TextField fullWidth label="Pais de estancia" id="pais" name="pais" onChange={paisSeleccionado} required select
                 SelectProps={{ native: true }} variant="outlined">
                 {pais.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -226,7 +269,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
               {errorPais? <p style={{ display: 'flex', color:'red' }}>{errorPais}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Ciudad de estancia" name="ciudad" onChange={ciudadSeleccionada} required select
+              <TextField fullWidth label="Ciudad de estancia" id="ciudad" name="ciudad" onChange={ciudadSeleccionada} required select
                 SelectProps={{ native: true }} variant="outlined">
                 {ciudad.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -238,7 +281,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
               {errorCiudad? <p style={{ display: 'flex', color:'red' }}>{errorCiudad}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Nombre de la institucion" name="programa" onChange={institucionSeleccionado} required select
+              <TextField fullWidth label="Nombre de la institucion" id="nombreinstitucion" name="programa" onChange={institucionSeleccionado} required select
                 SelectProps={{ native: true }} variant="outlined">
                 {institucion.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -253,12 +296,12 @@ const ActivityFiveView = ({ className, ...rest }) => {
               <br></br>
               <Grid container spacing = {3} container justify="space-around">
               <Grid>
-                <TextField id="date" label="Fecha inicio estancia" type="date"
+                <TextField id="fecha1" label="Fecha inicio estancia" type="date"
                   className={classes.textField} InputLabelProps={{ shrink: true }}
                   onChange={handleFechaInicio}/>
               </Grid>
               <Grid>
-                <TextField id="date" label="Fecha fin estancia" type="date"
+                <TextField id="fecha2" label="Fecha fin estancia" type="date"
                   className={classes.textField} InputLabelProps={{ shrink: true }}
                   onChange={handleFechaFin}/>
               </Grid>
@@ -267,7 +310,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
               {errorFechas? <p style={{ display: 'flex', justifyContent: 'center', color:'red' }}>{errorFechas}</p>:null}
               <br></br> 
               <br></br>
-              <TextField fullWidth label="Nombre responsable" name="nombreResponsable" onChange={handleChange} required
+              <TextField fullWidth label="Nombre responsable" id="nombreresponsable" name="nombreResponsable" onChange={handleChange} required
                 value={values.nombreResponsable} variant="outlined"/>
 			        {/* TODO: Comentar */}
               {errorNombreResponsable? <p style={{ display: 'flex', color:'red' }}>{errorNombreResponsable}</p>:null}	
@@ -309,7 +352,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
           {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
+          <Button color="primary" onClick={SaveActivity}>Si</Button>
           <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog> 
@@ -321,7 +364,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
         {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary">Si</Button>
+          <Button color="primary" onClick={SaveActivity} >Si</Button>
           <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog>  
