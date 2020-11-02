@@ -8,13 +8,14 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
-
+import service from '../services/service';
+const objService = new service();
 
 const programa = [
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'Programa-1' },
-  { value: 'T2', label: 'Programa-2' },
-  { value: 'T3', label: 'Programa-3' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 }
 ];
 const useStyles = makeStyles(() => ({
   root: {
@@ -149,7 +150,35 @@ const ActivityOneView = ({ className, ...rest }) => {
     
     setEmergenteGuardarYEnviar(false);
   };
-
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    var vartitulo = document.getElementById("titulo").value;
+    var vardescripcion = document.getElementById("descripcion").value;
+    var varprograma = document.getElementById("programa").value;
+    var vardate1 = document.getElementById("date1").value;
+    var vardate2 = document.getElementById("date2").value;
+    var varnumber = document.getElementById("number").value;
+    objService.PostActivityOne(
+      { 
+        "title": vartitulo,
+        "description" : vardescripcion,
+        "state" : 1,
+        "program" : varprograma,
+        "start_date": vardate1,
+        "end_date": vardate2,
+        "academic_year" : "2020-21", /* consultar año academico actual */
+        "assigned_hours" : varnumber,
+        "type": "projectCourse",
+        "student" : 1, /* Consultar usuario actual */
+        
+      }
+    ).then((result) => { 
+      alert("actividad registrada");      
+      
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  }
   return (
     <div>
       <BreadCrumbs />
@@ -165,18 +194,18 @@ const ActivityOneView = ({ className, ...rest }) => {
               <CardContent >
                 <br></br>
                 <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
+                <TextField fullWidth label="Titulo" id="titulo"  name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
               {/* TODO: Comentar */}
               {errorTitulo? <p style={{ display: 'flex', color:'red' }}>{errorTitulo}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion} 
+              <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion} 
                 variant="outlined"/>
               {/* TODO: Comentar */}
               {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Programa" name="programa" onChange={handleProgramas} required select SelectProps={{ native: true }}
+              <TextField fullWidth label="Programa" id="programa" name="programa" onChange={handleProgramas} required select SelectProps={{ native: true }}
                 variant="outlined">
                 {programa.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -191,14 +220,14 @@ const ActivityOneView = ({ className, ...rest }) => {
               <br></br>      
             <Grid container spacing = {3} container justify="space-around">
               <Grid>
-                <TextField id="date" label="Fecha inicio" type="date" 
+                <TextField id="date1" name="date1" label="Fecha inicio" type="date" 
                   className={classes.textField} InputLabelProps={{ shrink: true }}
                   onChange={handleFechaInicio}
                 />
                 
               </Grid>
               <Grid>
-                <TextField id="date" label="Fecha fin" type="date"  
+                <TextField id="date2" name="date2" label="Fecha fin" type="date"  
                   className={classes.textField} InputLabelProps={{ shrink: true }}
                   onChange={handleFechaFin}
                 />
@@ -209,7 +238,7 @@ const ActivityOneView = ({ className, ...rest }) => {
               <br></br> 
               <br></br>
               <br></br>
-              <TextField id="standard-number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }} onChange={handleHoras} variant="outlined" />
+              <TextField id="number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }} onChange={handleHoras} variant="outlined" />
              {/* TODO: Comentar */}
               {errorHoras? <p style={{ display: 'flex', color:'red' }}>{errorHoras}</p>:null}
               <br></br>
@@ -254,7 +283,7 @@ const ActivityOneView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
           {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
+          <Button color="primary" onClick={SaveActivity} >Si</Button>
           <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog>                  
