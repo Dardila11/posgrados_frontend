@@ -2,18 +2,20 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider, InputLabel } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
+
 const objService = new service();
+
 const tipo = [
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'Artículo de revista (journal article)' },
-  { value: 'T2', label: 'Acta de congreso (conference proceedings)' },
+  { value: 'T1', label: 'Artículo de revista' },
+  { value: 'T2', label: 'Acta de congreso' },
   { value: 'T3', label: 'Libro' },
   { value: 'T4', label: 'Otras publicaciones' }
 ];
@@ -89,7 +91,6 @@ const ActivityThreeView = ({ className, ...rest }) => {
   };
   //TODO: Comentar
   const handleGuardar = () => {
-    console.log(setEmergenteGuardar(true));
     setEmergenteGuardar(true);
   };
 
@@ -163,28 +164,33 @@ const ActivityThreeView = ({ className, ...rest }) => {
     var vardate1 = document.getElementById("date1").value;
     var vardate2 = document.getElementById("date2").value;
 
+    var date = new Date();
+    var currentDate = date.getFullYear() + "-" + (date.getMonth() +1) + "-" + date.getDate();
+    var currentTime = date.getHours() + ":" + date.getMinutes();
+    var now = currentDate + " " + currentTime;
+
     objService.PostActivityThree(
       { 
         "title": vartitulo,
         "name" : varnombrepublicacion,
         "state" : 1,
-        "start_date" : vardate1,
-        "end_date" : vardate2,
-        "acedemic_year" : "2020-21",/* consultar año academico actual */
+        "academic_year" : "2020-21", /* consultar año academico actual */
         "type" : "publication",
-        "date_record": vardate1, /* Consultar fecha actual */
-        "date_update": vardate2, /* Consultar fecha actual */
         "type_publication" : vartipo,
         "authors" : varautores,
-        "generaldata" : vardatosgenerales,
+        "general_data" : vardatosgenerales,
         "editorial" : varnombreeditorial,
         "student" : 1, /* Consultar usuario actual */
-     }
+        "start_date" : vardate1,
+        "end_date" : vardate2,
+        "date_record": now,
+        "date_update": now 
+      }
     ).then((result) => { 
-      alert("actividad registrada");      
+      alert("Publicacion registrada");      
       
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
+    }).catch((error) => {
+      console.log(error.message);
     });
     
   }
@@ -306,7 +312,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
             </DialogContent>
             <DialogActions>
               {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-              <Button color="primary"  >Si</Button>
+              <Button color="primary">Si</Button>
               <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
             </DialogActions>
           </Dialog>
