@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles, Container } from '@material-ui/core';
 import Page from 'src/components/Page';
-import Button from '@material-ui/core/Button';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
 import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
-
+import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
 const handleSearch = event => {
   console.log('Cadena de busqueda: ', event.target.value);
   this.setState({
@@ -45,7 +44,7 @@ const StudentListActivitiesView = () => {
       <BreadCrumbs />
       <SearchBar handleSearch={handleSearch} context="activities" />
       <Container className= {classes.buttonContainer}>
-        <Button variant="outlined" color="primary" > CREAR ACTIVIDAD </Button>
+        <ActivityView/>
       </Container>
       <List list={activityList} option="Activity" context="/student/list-activities"/>
       <ListPagination />

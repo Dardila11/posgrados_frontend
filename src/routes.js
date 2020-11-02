@@ -66,15 +66,15 @@ const routes = [
     path: 'student',
     element: <StudentDashboardLayout />,
     children: [
-      { path: 'activity/activityone', element: <ActivityOneView />},
-      { path: 'activity/activitytwo', element: <ActivityTwoView />},
-      { path: 'activity/activitythree', element: <ActivityThreeView />},
-      { path: 'activity/activityfour', element: <ActivityFourView />},
-      { path: 'activity/activityfive', element: <ActivityFiveView />},
-      { path: 'activity/activitysix', element: <ActivitySixView />},
+      { path: 'list-activities/activityone', element: <ActivityOneView />},
+      { path: 'list-activities/activitytwo', element: <ActivityTwoView />},
+      { path: 'list-activities/activitythree', element: <ActivityThreeView />},
+      { path: 'list-activities/activityfour', element: <ActivityFourView />},
+      { path: 'list-activities/activityfive', element: <ActivityFiveView />},
+      { path: 'list-activities/activitysix', element: <ActivitySixView />},
       { path: 'list-activities', element: <StudentListActivitiesView/>},
       { path: 'list-activities/activity/:id', element: <ActivityStudentView/>},
-      { path: 'activity', element: <ActivityView />},
+      { path: 'list-activities', element: <ActivityView />},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

@@ -11,7 +11,6 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import { Grid, Select, TextField, MenuItem, InputLabel } from '@material-ui/core';
-import BreadCrumbs from 'src/views/teamb/ListActivities/BreadCrumbs';
 
 import util from 'src/views/teamb/services/util';
 import service from 'src/views/teamb/services/service';
@@ -128,7 +127,6 @@ const ActivityView = ({ className, ...rest }) => {
 
   return (
     <div>
-      <BreadCrumbs />
       <Button variant="outlined" color="primary" onClick={handleClickOpen}> CREAR ACTIVIDAD </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <br></br>
@@ -189,13 +187,9 @@ const ActivityView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
           <RouterLink to={activity}>
-            <Button color="primary">
-              Si
-              </Button>
+            <Button color="primary"> Si </Button>
           </RouterLink>
-          <Button onClick={handleDatosDetalleNo} color="primary" autoFocus>
-            No
-            </Button>
+          <Button onClick={handleDatosDetalleNo} color="primary" autoFocus> No </Button>
         </DialogActions>
       </Dialog>
     </div>
