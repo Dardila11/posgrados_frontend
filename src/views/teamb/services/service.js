@@ -15,6 +15,11 @@ export default class service {
         const url= `${API_URL}/api/projectCourse/`;
         return axios.post(url,activity);
     }
+    PostActivityTwo(activity){
+        console.log(activity);
+        const url= `${API_URL}/api/Lecture/`;
+        return axios.post(url,activity);
+    }
     PostActivityThree(activity) {
         const url= `${API_URL}/api/publication/`;
         return axios.post(url,activity);

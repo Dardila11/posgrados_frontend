@@ -8,7 +8,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
-
+import service from '../services/service';
+const objService = new service();
 const institucion = [
   { value: 'advert', label: 'Seleccione una opción' }, 
   { value: 'T1', label: 'Colombia' },
@@ -132,6 +133,35 @@ const ActivityTwoView = ({ className, ...rest }) => {
     
     setEmergenteGuardarYEnviar(false);
     };
+
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    var vartitulo = document.getElementById("titulo").value;
+    var vardescripcion = document.getElementById("descripcion").value;
+    var varnombreevento = document.getElementById("nombreevento").value;
+    var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
+    var varentidadorganizadora = document.getElementById("entidadorganizadora").value;
+    var vardate = document.getElementById("date").value;
+    objService.PostActivityTwo(
+      { 
+        "title": vartitulo,
+        "description" : vardescripcion,
+        "name" : varnombreevento,
+        "place" : varlugarcelebracion,
+        "institution": varentidadorganizadora,
+        "start_date" : vardate,
+        "state" : 1,
+        "academic_year" : "2020-21", /* consultar año academico actual */
+        "type" : "Lecture",
+        "student" : 1, /* Consultar usuario actual */        
+      }
+    ).then((result) => { 
+      alert("actividad registrada");      
+        
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  }
   return (
     <div>
       <BreadCrumbs />
@@ -147,29 +177,29 @@ const ActivityTwoView = ({ className, ...rest }) => {
               <CardContent >
                 <br></br>
                 <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo de la contribución" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
+                <TextField fullWidth label="Titulo de la contribución" id="titulo" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
                   {/* TODO: Comentar */}
                   {errorTitulo? <p style={{ display: 'flex', color:'red' }}>{errorTitulo}</p>:null}
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Descripcion general" name="descripcion" onChange={handleChange} required value={values.descripcion} variant="outlined"/>
+                  <TextField fullWidth label="Descripcion general" id="descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion} variant="outlined"/>
                   {/* TODO: Comentar */}
                   {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Nombre del evento" name="nombreEvento" onChange={handleChange} required value={values.nombreEvento} variant="outlined"/>
+                  <TextField fullWidth label="Nombre del evento" id="nombreevento" name="nombreEvento" onChange={handleChange} required value={values.nombreEvento} variant="outlined"/>
                   {/* TODO: Comentar */}
                   {errorNombreEvento? <p style={{ display: 'flex', color:'red' }}>{errorNombreEvento}</p>:null}
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Lugar de celebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
+                  <TextField fullWidth label="Lugar de celebracion" id="lugarcelebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
                     variant="outlined"/>
                      {/* TODO: Comentar */}
                     {errorLugar? <p style={{ display: 'flex', color:'red' }}>{errorLugar}</p>:null}
                   <br></br>
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Entidad organizadora" name="entidadorganizadora" onChange={institucionSeleccionado} required select SelectProps={{ native: true }}
+                  <TextField fullWidth label="Entidad organizadora" id="entidadorganizadora" name="entidadorganizadora" onChange={institucionSeleccionado} required select SelectProps={{ native: true }}
                     variant="outlined"
                   >
                     {institucion.map((option) => (
@@ -226,7 +256,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
           {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
+          <Button onClick={SaveActivity} color="primary">Si</Button>
           <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog> 
