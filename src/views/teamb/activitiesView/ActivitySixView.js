@@ -8,19 +8,24 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+import service from '../services/service';
+import util from '../services/util';
+
+const objService = new service();
+const objUtil = new util();
 
 const investigador = [
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'Investigador-1' },
-  { value: 'T2', label: 'Investigador-2' },
-  { value: 'T3', label: 'Investigador-3' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 }
 ];
 
 const lineaInvestigacion = [
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'linea Investigacion-1' },
-  { value: 'T2', label: 'linea Investigacion-2' },
-  { value: 'T3', label: 'linea Investigacion-3' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 }
 ];
 
 const tipo = [
@@ -195,13 +200,54 @@ const ActivitySixView = ({ className, ...rest }) => {
     else{
       setErrorFechas("Seleccióne fechas de inicio y fin del proyecto válidas")
     }
-    //setEmergenteGuardarYEnviar(true);
+    setEmergenteGuardarYEnviar(true);
     };
 	const handleGuardarYEnviarNo = () => {
     
     setEmergenteGuardarYEnviar(false);
     };
-  
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
+    var varnombreproyecto = document.getElementById("nombreproyecto").value;
+    var varnombreinvestigador = document.getElementById("nombreinvestigador").value;
+    var varlugartrabajo = document.getElementById("lugartrabajo").value;
+    var vardescripcion = document.getElementById("descripcion").value;
+    var varlineainvestigacion = document.getElementById("lineainvestigacion").value;
+    var varnumber = document.getElementById("number").value;
+    var varconvocatoria = document.getElementById("convocatoria").value;
+    var vartipoconvocatoria = document.getElementById("tipoconvocatoria").value;
+    var vardate1 = document.getElementById("date1").value;
+    var vardate2 = document.getElementById("date2").value;
+    var now = objUtil.GetCurretTimeDate();
+
+    objService.PostActivitySix(
+      { 
+        "name": varnombreproyecto,
+        "description" : vardescripcion,
+        "state" : 1,
+        "start_date" : vardate1,
+        "end_date" : vardate2,
+        "academic_year" : "2020-21", /* consultar año academico actual */
+        "type" : "participationProjects",
+        "date_record": now,
+        "date_update": now, 
+        "place" : varlugartrabajo,
+        "code_VRI" : varnumber,
+        "convocation" : varconvocatoria,
+        "type_convocation" : vartipoconvocatoria,
+        "student" : 1, /* Consultar usuario actual */
+        "investigation_line" : varlineainvestigacion,
+        "investigator" : varnombreinvestigador,
+        
+      }
+    ).then((result) => { 
+      alert("Actividad registrada");      
+        
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  } 
 
   return (
     <div>
@@ -218,14 +264,14 @@ const ActivitySixView = ({ className, ...rest }) => {
           <CardContent >
             <br></br>
             <Grid item md={12} xs={12}>
-            <TextField fullWidth label="Nombre del proyecto" name="nombreProyecto" onChange={handleChange} required value={values.nombreProyecto} 
+            <TextField fullWidth label="Nombre del proyecto" id="nombreproyecto" name="nombreProyecto" onChange={handleChange} required value={values.nombreProyecto} 
                 variant="outlined"/>
 			        {/* TODO: Comentar */}
               {errorNombreProyecto? <p style={{ display: 'flex', color:'red' }}>{errorNombreProyecto}</p>:null}
               <br></br>
              
               <br></br>
-              <TextField fullWidth label="Nombre investigador principal" name="investigador" onChange={investigadorSeleccionado} required select
+              <TextField fullWidth label="Nombre investigador principal" id="nombreinvestigador" name="investigador" onChange={investigadorSeleccionado} required select
                 SelectProps={{ native: true }} variant="outlined">
                 {investigador.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -238,21 +284,21 @@ const ActivitySixView = ({ className, ...rest }) => {
               <br></br>
               <br></br>
               
-              <TextField fullWidth label="Lugar de trabajo" name="lugarTrabajo" onChange={handleChange}  required value={values.lugarTrabajo}
+              <TextField fullWidth label="Lugar de trabajo" id="lugartrabajo" name="lugarTrabajo" onChange={handleChange}  required value={values.lugarTrabajo}
                 variant="outlined"/>
 			         {/* TODO: Comentar */}
               {errorLugarTrabajo? <p style={{ display: 'flex', color:'red' }}>{errorLugarTrabajo}</p>:null}
               <br></br>
               <br></br>
               
-              <TextField fullWidth label="Descripción de actividad" name="descripcion" onChange={handleChange} required value={values.descripcion}
+              <TextField fullWidth label="Descripción de actividad" id="descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion}
                 variant="outlined"/>
 			        {/* TODO: Comentar */}
               {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}	
               <br></br>
               <br></br>
               
-              <TextField fullWidth label="Linea de investigacion" name="lineaInvestigacion" onChange={lineaSeleccionada} required select
+              <TextField fullWidth label="Linea de investigacion" id="lineainvestigacion" name="lineaInvestigacion" onChange={lineaSeleccionada} required select
                 SelectProps={{ native: true }} variant="outlined">
                 {lineaInvestigacion.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -265,19 +311,19 @@ const ActivitySixView = ({ className, ...rest }) => {
               <br></br>
               <br></br>
     
-              <TextField id="standard-number" label="Codigo VRI" type="number" InputLabelProps={{ shrink: true, }} onChange={codigoVRI} variant="outlined" />
+              <TextField id="number" label="Codigo VRI" type="number" InputLabelProps={{ shrink: true, }} onChange={codigoVRI} variant="outlined" />
               {/* TODO: Comentar */}
               {errorCodigoVRI? <p style={{ display: 'flex',  color:'red' }}>{errorCodigoVRI}</p>:null}	
               <br></br>
-             
-              <TextField fullWidth label="Convocatoria" name="convocatoria" onChange={handleChange} required value={values.convocatoria}
+             <br></br>
+              <TextField fullWidth label="Convocatoria" id="convocatoria" name="convocatoria" onChange={handleChange} required value={values.convocatoria}
                 variant="outlined"
               />
               {/* TODO: Comentar */}
               {errorConvocatoria? <p style={{ display: 'flex',  color:'red' }}>{errorConvocatoria}</p>:null}	
               <br></br>
               <br></br>
-              <TextField fullWidth label="Tipo convocatoria" name="tipo" onChange={tipoSeleccionado} required select
+              <TextField fullWidth label="Tipo convocatoria" id="tipoconvocatoria" name="tipo" onChange={tipoSeleccionado} required select
                 SelectProps={{ native: true }} variant="outlined">
                 {tipo.map((option) => (
                   <option key={option.value} value={option.label}>
@@ -293,12 +339,12 @@ const ActivitySixView = ({ className, ...rest }) => {
               <br></br>
               <Grid container spacing = {3} container justify="space-around">
                 <Grid>
-                  <TextField id="date" label="Fecha Inicio proyecto" type="date"
+                  <TextField id="date1" label="Fecha Inicio proyecto" type="date"
                     className={classes.textField} InputLabelProps={{ shrink: true }}
                     onChange={handleFechaInicio}/>
                 </Grid>
                 <Grid>
-                  <TextField id="date" label="Fecha Fin proyecto" type="date" 
+                  <TextField id="date2" label="Fecha Fin proyecto" type="date" 
                     className={classes.textField} InputLabelProps={{ shrink: true }}
                     onChange={handleFechaFin}/>
                 </Grid>
@@ -344,7 +390,7 @@ const ActivitySixView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
           {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
+          <Button color="primary" onClick={SaveActivity}>Si</Button>
           <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog> 
@@ -356,7 +402,7 @@ const ActivitySixView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
         {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary">Si</Button>
+          <Button color="primary" onClick={SaveActivity}>Si</Button>
           <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog>  

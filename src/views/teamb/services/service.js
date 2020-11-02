@@ -9,12 +9,10 @@ export default class service {
     }
     
     PostActivityOne(activity){
-        console.log(activity);
         const url= `${API_URL}/api/projectCourse/`;
         return axios.post(url,activity);
     }
     PostActivityTwo(activity){
-        console.log(activity);
         const url= `${API_URL}/api/lecture/`;
         return axios.post(url,activity);
     }
@@ -23,13 +21,15 @@ export default class service {
         return axios.post(url,activity);
     }
     PostActivityFour(activity){
-        console.log(activity);
         const url= `${API_URL}/api/presentationResult/`;
         return axios.post(url,activity);
     }
     PostActivityFive(activity){
-        console.log(activity);
         const url= `${API_URL}/api/researchStays/`;
+        return axios.post(url,activity);
+    }
+    PostActivitySix(activity){
+        const url= `${API_URL}/api/participationProjects/`;
         return axios.post(url,activity);
     }
 }
