@@ -183,7 +183,7 @@ const ActivityOneView = ({ className, ...rest }) => {
       alert("Actividad registrada");      
       
     }).catch(() => {
-      alert("Error, no hay registros para mostrar");
+      alert("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
   }
   return (

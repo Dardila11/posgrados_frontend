@@ -190,7 +190,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
       alert("Actividad registrada");      
       
     }).catch((error) => {
-      console.log(error.message);
+      alert("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
     
   }
