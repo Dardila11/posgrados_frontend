@@ -26,7 +26,7 @@ const BreadCrumbs = () => {
         <Link color="inherit" href="/" onClick={handleClick}>
           Estudiante
         </Link>
-        <RouterLink color="inherit" to="/student/activity">
+        <RouterLink color="inherit" to="/student/list-activities">
           Actividades
         </RouterLink>
         <Typography color="textPrimary">Datos de detalle</Typography>

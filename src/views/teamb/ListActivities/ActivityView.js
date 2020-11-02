@@ -12,10 +12,8 @@ import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import service from 'src/views/teamb/services/service';
 import { Grid, Select, TextField, MenuItem, InputLabel } from '@material-ui/core';
-import BreadCrumbs from 'src/views/teamb/ListActivities/BreadCrumbs';
 
 const objService = new service();
-
 const styles = (theme) => ({
   root: { margin: 0, padding: theme.spacing(2) },
   closeButton: { position: 'absolute', right: theme.spacing(1), top: theme.spacing(1), color: theme.palette.grey[500] },
@@ -125,7 +123,6 @@ const ActivityView = ({ className, ...rest }) => {
 
   return (
     <div>
-      <BreadCrumbs />
       <Button variant="outlined" color="primary" onClick={handleClickOpen}> CREAR ACTIVIDAD </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <br></br>

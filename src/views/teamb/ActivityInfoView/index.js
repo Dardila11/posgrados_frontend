@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
 import api from 'src/views/teamc/services/Api';
 import Page from 'src/components/Page';
-
 import { makeStyles,Typography } from '@material-ui/core';
-
-import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
 import ActivityInfoView from './ActivityInfo';
 
@@ -43,7 +39,7 @@ const ActivityStudentView = () => {
     };
     fetchData();
   }, []);
-  const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes', '/coordinator/list-students'] ,['Listado de estudiantes']];
+  const breadcrumb = [['Student','/student'],['Listado de estudiantes', '/student/list-students'] ,['Listado de estudiantes']];
   return (
     <>
     <Page className={classes.root} title="Estudiante">

@@ -1,8 +1,11 @@
 import axios from 'axios'
+import activitiesData from '../services/student_activities.json';
 const API_URL = 'http://localhost:8000';
 
 export default class service {
-    
+    GetStudentActivitiesLocal = () => {
+        return activitiesData;
+    };
     GetPeriodService(periodo) {
         const url= `${API_URL}/api/periodo/`;
         return axios.get(url,periodo);
@@ -12,7 +15,6 @@ export default class service {
         const url= `${API_URL}/api/activity/`;
         return axios.post(url,activity);
     }
-    
     GetCurrentYear(currentPeriod) { 
         var Splits = currentPeriod.split(".");
         var CurrentYear = Splits[0];
