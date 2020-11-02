@@ -9,13 +9,17 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
+import util from '../services/util';
+
 const objService = new service();
+const objUtil = new util();
+
 const institucion = [
   { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: 'Colombia' },
-  { value: 'T2', label: 'España' },
-  { value: 'T3', label: 'Mexico' },
-  { value: 'T4', label: 'USA' }
+  { value: 'T1', label: '1' },
+  { value: 'T2', label: '2' },
+  { value: 'T3', label: '3' },
+  { value: 'T4', label: '4' }
 ];
 
 const useStyles = makeStyles(() => ({
@@ -142,6 +146,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
     var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
     var varentidadorganizadora = document.getElementById("entidadorganizadora").value;
     var vardate = document.getElementById("date").value;
+    var now = objUtil.GetCurretTimeDate();
     objService.PostActivityTwo(
       { 
         "title": vartitulo,
@@ -153,7 +158,9 @@ const ActivityTwoView = ({ className, ...rest }) => {
         "state" : 1,
         "academic_year" : "2020-21", /* consultar año academico actual */
         "type" : "Lecture",
-        "student" : 1, /* Consultar usuario actual */        
+        "student" : 1, /* Consultar usuario actual */
+        "date_record": now,
+        "date_update": now         
       }
     ).then((result) => { 
       alert("actividad registrada");      
