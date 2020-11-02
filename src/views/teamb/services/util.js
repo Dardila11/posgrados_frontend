@@ -21,4 +21,12 @@ export default class util {
         }
         return (Year1 + "-" + Year2)
     }
+
+    GetCurretTimeDate() {
+        var date = new Date();
+        var currentDate = date.getFullYear() + "-" + (date.getMonth() +1) + "-" + date.getDate();
+        var currentTime = date.getHours() + ":" + date.getMinutes();
+        var now = currentDate + " " + currentTime;
+        return now;
+    }
 }

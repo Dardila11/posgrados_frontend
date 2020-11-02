@@ -9,7 +9,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
+import util from '../services/util';
+
 const objService = new service();
+const objUtil = new util();
 
 const programa = [
   { value: 'advert', label: 'Seleccione una opción' },
@@ -151,6 +154,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     setEmergenteGuardarYEnviar(false);
   };
   const SaveActivity = () => {
+
     setEmergenteGuardar(false);
     var vartitulo = document.getElementById("titulo").value;
     var vardescripcion = document.getElementById("descripcion").value;
@@ -158,6 +162,8 @@ const ActivityOneView = ({ className, ...rest }) => {
     var vardate1 = document.getElementById("date1").value;
     var vardate2 = document.getElementById("date2").value;
     var varnumber = document.getElementById("number").value;
+    var now = objUtil.GetCurretTimeDate();
+
     objService.PostActivityOne(
       { 
         "title": vartitulo,
@@ -170,7 +176,8 @@ const ActivityOneView = ({ className, ...rest }) => {
         "assigned_hours" : varnumber,
         "type": "projectCourse",
         "student" : 1, /* Consultar usuario actual */
-        
+        "date_record": now,
+        "date_update": now 
       }
     ).then((result) => { 
       alert("actividad registrada");      

@@ -9,8 +9,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
+import util from '../services/util';
 
 const objService = new service();
+const objUtil = new util();
 
 const tipo = [
   { value: 'advert', label: 'Seleccione una opción' },
@@ -154,7 +156,9 @@ const ActivityThreeView = ({ className, ...rest }) => {
   };
 
   const SaveActivity = () => {
+    
     setEmergenteGuardar(false);
+    
     var vartitulo = document.getElementById("titulo").value;
     var vartipo = document.getElementById("tipo").value;
     var varnombrepublicacion = document.getElementById("nombrepublicacion").value;
@@ -163,11 +167,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
     var vardatosgenerales = document.getElementById("datosgenerales").value;
     var vardate1 = document.getElementById("date1").value;
     var vardate2 = document.getElementById("date2").value;
-
-    var date = new Date();
-    var currentDate = date.getFullYear() + "-" + (date.getMonth() +1) + "-" + date.getDate();
-    var currentTime = date.getHours() + ":" + date.getMinutes();
-    var now = currentDate + " " + currentTime;
+    var now = objUtil.GetCurretTimeDate();
 
     objService.PostActivityThree(
       { 
