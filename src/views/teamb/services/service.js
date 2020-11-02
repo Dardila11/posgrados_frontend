@@ -1,5 +1,4 @@
-import axios from 'axios'
-import activitiesData from '../services/student_activities.json';
+import axios from 'axios';
 const API_URL = 'http://localhost:8000';
 
 export default class service {
@@ -16,12 +15,16 @@ export default class service {
     }
     PostActivityTwo(activity){
         console.log(activity);
-        const url= `${API_URL}/api/Lecture/`;
+        const url= `${API_URL}/api/lecture/`;
         return axios.post(url,activity);
     }
     PostActivityThree(activity) {
         const url= `${API_URL}/api/publication/`;
         return axios.post(url,activity);
     }
-    
+    PostActivityFour(activity){
+        console.log(activity);
+        const url= `${API_URL}/api/presentationResult/`;
+        return axios.post(url,activity);
+    }
 }

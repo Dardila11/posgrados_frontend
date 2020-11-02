@@ -8,6 +8,11 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+import util from '../services/util';
+import service from '../services/service';
+
+const objService = new service();
+const objUtil = new util();
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -117,13 +122,45 @@ const ActivityFourView = ({ className, ...rest }) => {
     else{
          setErrorFechas("Seleccióne fecha")
     }
-    //setEmergenteGuardarYEnviar(true);
+    setEmergenteGuardarYEnviar(true);
     };
 
 	const handleGuardarYEnviarNo = () => {
-    
     setEmergenteGuardarYEnviar(false);
-    };
+  };
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
+    var vardescripcion = document.getElementById("descripcion").value;
+    var vardate = document.getElementById("date").value;
+    var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
+    var varnombreevento = document.getElementById("nombreevento").value;
+    var varmodalidadpresentación = document.getElementById("modalidadpresentación").value;
+    var varhours = document.getElementById("hours").value;
+    var now = objUtil.GetCurretTimeDate();
+
+    objService.PostActivityFour(
+      { 
+        "name" : varnombreevento,
+        "description": vardescripcion,
+        "state" : 1,
+        "start_date" : vardate,
+        "academic_year" : "2020-21", /* consultar año academico actual */
+        "type" : "presentationResults",
+        "date_record": now,
+        "date_update": now, 
+        "modality" : varmodalidadpresentación,
+        "duration_hours" : varhours,
+        "place" : varlugarcelebracion,
+        "student" : 1, /* Consultar usuario actual */
+      }
+    ).then((result) => { 
+      alert("actividad registrada");      
+        
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  }  
   return (
     <div>
       <BreadCrumbs />
@@ -138,7 +175,7 @@ const ActivityFourView = ({ className, ...rest }) => {
             <br></br>
             <Grid container spacing = {3}>
             <Grid item md={12} xs={12}>
-              <TextField fullWidth label="Descripcion" name="descripcion" onChange={handleChange} required
+              <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required
                 value={values.descripcion} variant="outlined"/>
 			        {/* TODO: Comentar */}
               {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
@@ -154,26 +191,26 @@ const ActivityFourView = ({ className, ...rest }) => {
               <br></br> 
               
               <br></br>
-              <TextField fullWidth label="Lugar de celebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
+              <TextField fullWidth label="Lugar de celebracion" id="lugarcelebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
                     variant="outlined"
                   />
                 {/* TODO: Comentar */}   
                {errorLugarCelebracion? <p style={{ display: 'flex', color:'red' }}>{errorLugarCelebracion}</p>:null}   
               <br></br>
               <br></br>
-              <TextField fullWidth label="Nombre del evento" name="nombreEvento" onChange={handleChange} required
+              <TextField fullWidth label="Nombre del evento" id="nombreevento" name="nombreEvento" onChange={handleChange} required
                 value={values.nombreEvento} variant="outlined"/>
 			        	{/* TODO: Comentar */}
                 {errorNombreEvento? <p style={{ display: 'flex', color:'red' }}>{errorNombreEvento}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Modalidad de presentación" name="modalidad" onChange={handleChange} required
+              <TextField fullWidth label="Modalidad de presentación" id="modalidadpresentación" name="modalidad" onChange={handleChange} required
                 value={values.modalidad} variant="outlined"/>
                 {/* TODO: Comentar */}
                 {errorModalidad? <p style={{ display: 'flex', color:'red' }}>{errorModalidad}</p>:null}
               <br></br>
               <br></br>
-              <TextField id="standard-number" label="Duración en horas" type="number" InputLabelProps={{ shrink: true, }} onChange={duracionSeleccionada} variant="outlined" />
+              <TextField id="standard-number" label="Duración en horas" id="hours" type="number" InputLabelProps={{ shrink: true, }} onChange={duracionSeleccionada} variant="outlined" />
               {/* TODO: Comentar */}
               {errorDuracion? <p style={{ display: 'flex', color:'red' }}>{errorDuracion}</p>:null}
               <br></br>
@@ -213,7 +250,7 @@ const ActivityFourView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
           {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
+          <Button onClick={SaveActivity} color="primary">Si</Button>
           <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog> 
@@ -225,7 +262,7 @@ const ActivityFourView = ({ className, ...rest }) => {
         </DialogContent>
         <DialogActions>
         {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary">Si</Button>
+          <Button onClick={SaveActivity} color="primary">Si</Button>
           <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
         </DialogActions>
       </Dialog>   
