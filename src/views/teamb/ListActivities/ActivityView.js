@@ -95,35 +95,19 @@ const ActivityView = ({ className, ...rest }) => {
   };
   //"handleDatosDetalle" para que despliegue la ventana emergente que pide confirmar la creacion de la actividad
   const handleDatosDetalle = () => {
-
     //Validamos que los campos tengan los datos correspondientes 
-    if (values.descripcion.length) {
-      setErrorDescripcion(null)
-    }
-    else {
-      setErrorDescripcion("El campo es obligatorio")
-    }
-    if (activity.length) {
-      setErrorActivity(null)
-    }
-    else {
-      setErrorActivity("Seleccione una opción válida")
-    }
-
-    if (values.descripcion.length && activity.length) {
-      setEmergenteDatosDetalle(true);
-    }
+    /* if (values.descripcion.length) { setErrorDescripcion(null) }
+    else { setErrorDescripcion("El campo es obligatorio") } */
+    if (activity.length) { setErrorActivity(null) }
+    else { setErrorActivity("Seleccione una opción válida") }
+    //if (values.descripcion.length && activity.length) {
+    if (activity.length) { setEmergenteDatosDetalle(true); }
   };
-
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleDatosDetalleNo = () => {
     setEmergenteDatosDetalle(false);
   };
-
-  const handleDetails = () => {
-
-  }
 
   return (
     <div>
@@ -151,13 +135,13 @@ const ActivityView = ({ className, ...rest }) => {
             {errorActivity ? <p style={{ display: 'flex', color: 'red' }}>{errorActivity}</p> : null}
           </Grid>
           <br></br>
+          {/* 
           <Grid item xs={12}>
             <TextField fullWidth label="Descripción" name="descripcion" onChange={handleChange} required value={values.descripcion}
               variant="outlined" />
-            {/* Se verifica el estado de "errorDescripcion" y se muestra el mensaje en caso de que 
-              el usuario desee crear la actividad sin agregar la descripcion */}
             {errorDescripcion ? <p style={{ display: 'flex', color: 'red' }}>{errorDescripcion}</p> : null}
           </Grid>
+           */}
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button>
@@ -169,8 +153,6 @@ const ActivityView = ({ className, ...rest }) => {
         en "Crear Actividad" */}
       <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
         <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelarSi} color="primary"> Si </Button>
           <Button onClick={handleCancelarNo} color="primary" autoFocus> No </Button>
@@ -178,13 +160,8 @@ const ActivityView = ({ className, ...rest }) => {
       </Dialog>
       {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "DATOS DE DETALLE" 
         en "Crear Actividad" */}
-      <Dialog
-        open={EmergenteDatosDetalle}
-        onClose={handleDatosDetalleNo}
-      >
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea crear la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
+      <Dialog open={EmergenteDatosDetalle} onClose={handleDatosDetalleNo}>
+        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea crear una nueva actividad?"}</DialogTitle>
         <DialogActions>
           <RouterLink to={activity}>
             <Button color="primary"> Si </Button>
