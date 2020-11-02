@@ -16,26 +16,26 @@ const objUtil = new util();
 
 const pais = [
   { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: 'Colombia' },
-  { value: 'T2', label: 'España' },
-  { value: 'T3', label: 'Mexico' },
-  { value: 'T4', label: 'USA' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 },
+  { value: 'T4', label: 4 }
 ];
 
   const ciudad = [ 
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'Madrid' },
-  { value: 'T2', label: 'Sevilla' },
-  { value: 'T3', label: 'Barcelona' },
-  { value: 'T4', label: 'Bilbao' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 },
+  { value: 'T4', label: 4 }
 ];
 
 const institucion = [
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 'Institucion 1' },
-  { value: 'T2', label: 'Institucion 2' },
-  { value: 'T3', label: 'Institucion 3' },
-  { value: 'T4', label: 'Institucion 4' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 },
+  { value: 'T4', label: 4 }
 ];
 
 const useStyles = makeStyles(() => ({
@@ -226,7 +226,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
         
       }
     ).then((result) => { 
-      alert("actividad registrada");      
+      alert("Actividad registrada");      
         
     }).catch(() => {
       alert("Error, no hay registros para mostrar");

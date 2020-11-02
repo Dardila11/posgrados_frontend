@@ -155,7 +155,7 @@ const ActivityFourView = ({ className, ...rest }) => {
         "student" : 1, /* Consultar usuario actual */
       }
     ).then((result) => { 
-      alert("actividad registrada");      
+      alert("Actividad registrada");      
         
     }).catch(() => {
       alert("Error, no hay registros para mostrar");

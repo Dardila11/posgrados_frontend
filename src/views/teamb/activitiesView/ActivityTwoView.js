@@ -16,10 +16,10 @@ const objUtil = new util();
 
 const institucion = [
   { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: '1' },
-  { value: 'T2', label: '2' },
-  { value: 'T3', label: '3' },
-  { value: 'T4', label: '4' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 },
+  { value: 'T4', label: 4 }
 ];
 
 const useStyles = makeStyles(() => ({
@@ -157,13 +157,13 @@ const ActivityTwoView = ({ className, ...rest }) => {
         "start_date" : vardate,
         "state" : 1,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "Lecture",
+        "type" : "lecture",
         "student" : 1, /* Consultar usuario actual */
         "date_record": now,
         "date_update": now         
       }
     ).then((result) => { 
-      alert("actividad registrada");      
+      alert("Actividad registrada");      
         
     }).catch(() => {
       alert("Error, no hay registros para mostrar");

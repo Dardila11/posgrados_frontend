@@ -187,7 +187,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
         "date_update": now 
       }
     ).then((result) => { 
-      alert("Publicacion registrada");      
+      alert("Actividad registrada");      
       
     }).catch((error) => {
       console.log(error.message);

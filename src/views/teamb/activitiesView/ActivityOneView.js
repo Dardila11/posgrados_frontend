@@ -180,7 +180,7 @@ const ActivityOneView = ({ className, ...rest }) => {
         "date_update": now 
       }
     ).then((result) => { 
-      alert("actividad registrada");      
+      alert("Actividad registrada");      
       
     }).catch(() => {
       alert("Error, no hay registros para mostrar");
