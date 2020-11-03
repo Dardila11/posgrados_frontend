@@ -11,6 +11,15 @@ import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
 import util from '../services/util';
 
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Slide from '@material-ui/core/Slide';
+
+//Transición  de la ventana emergente que muestra 
+//el resultado de enviar los datos del formulario al backend
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const objService = new service();
 const objUtil = new util();
 
@@ -83,6 +92,25 @@ const ActivityThreeView = ({ className, ...rest }) => {
   const [errorEditorial, setErrorEditorial] = useState(null);
   const [errorDatosGenerales, setErrorDatosGenerales] = useState(null);
   const [errorFechas, setErrorFechas] = useState(null);
+
+
+  // Costante para definir el estado de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [emergenteEnviarBack, setEmergenteEnviarBack] = React.useState(false);
+
+  // Costante para definir el mensaje de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [resultadoBack, setResultadoBack] = useState(null);
+
+  const handleEnviarBackAceptar = () => {
+    setEmergenteEnviarBack(false);
+    setResultadoBack(null);
+  };
+
+
+
+
+
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
@@ -93,63 +121,83 @@ const ActivityThreeView = ({ className, ...rest }) => {
   };
   //TODO: Comentar
   const handleGuardar = () => {
-    setEmergenteGuardar(true);
+    if(validar()){
+      setEmergenteGuardar(true);
+    }
   };
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
   };
-  //TODO: Comentar
-  const handleGuardarYEnviar = () => {
+
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+  const validar =()=>{
+    var result = true;
+
     if (values.tituloArticulo.length) {
       setErrorTituloArticulo(null)
     }
     else {
-      setErrorTituloArticulo("El campo es obligatorio")
+      setErrorTituloArticulo("El campo es obligatorio");
+      result = false;
     }
     if (values.tipoSeleccionado.length && values.tipoSeleccionado != "Seleccione una opción") {
       setErrorTipo(null)
     }
     else {
-      setErrorTipo("Seleccione una opción válida")
+      setErrorTipo("Seleccione una opción válida");
+      result = false;
     }
     if (values.tituloLibro.length) {
       setErrorTituloLibro(null)
     }
     else {
-      setErrorTituloLibro("El campo es obligatorio")
+      setErrorTituloLibro("El campo es obligatorio");
+      result = false;
     }
     if (values.autores.length) {
       setErrorAutores(null)
     }
     else {
-      setErrorAutores("El campo es obligatorio")
+      setErrorAutores("El campo es obligatorio");
+      result = false;
     }
     if (values.editorial.length) {
       setErrorEditorial(null)
     }
     else {
-      setErrorEditorial("El campo es obligatorio")
+      setErrorEditorial("El campo es obligatorio");
+      result = false;
     }
     if (values.datosGenerales.length) {
       setErrorDatosGenerales(null)
     }
     else {
-      setErrorDatosGenerales("El campo es obligatorio")
+      setErrorDatosGenerales("El campo es obligatorio");
+      result = false;
     }
     if (values.fechaInicio.length && values.fechaFin.length) {
       if (values.fechaInicio <= values.fechaFin) {
         setErrorFechas("")
       }
       else {
-        setErrorFechas("La fecha de publicación debe ser después de la fecha de envió")
+        setErrorFechas("La fecha de publicación debe ser después de la fecha de envió");
+        result = false;
       }
     }
     else {
-      setErrorFechas("Seleccióne una fecha de envió publicación y fecha de publicación válidas")
+      setErrorFechas("Seleccióne una fecha de envió publicación y fecha de publicación válidas");
+      result = false;
     }
-    //setEmergenteGuardarYEnviar(true);
+    return result;
+  }
+  //TODO: Comentar
+  const handleGuardarYEnviar = () => {
+    
+    if(validar()){
+      setEmergenteGuardarYEnviar(true);
+    }
   };
   const handleGuardarYEnviarNo = () => {
       setEmergenteGuardarYEnviar(false);
@@ -169,6 +217,11 @@ const ActivityThreeView = ({ className, ...rest }) => {
     var vardate2 = document.getElementById("date2").value;
     var now = objUtil.GetCurretTimeDate();
 
+
+    //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
+    //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
+    var send_email = emergenteGuardarYEnviar;
+
     objService.PostActivityThree(
       { 
         "title": vartitulo,
@@ -184,15 +237,29 @@ const ActivityThreeView = ({ className, ...rest }) => {
         "start_date" : vardate1,
         "end_date" : vardate2,
         "date_record": now,
-        "date_update": now 
+        "date_update": now,
+        "send_email": send_email 
       }
     ).then((result) => { 
-      alert("Actividad registrada");      
+      setResultadoBack("Actividad registrada correctamente");
+      setValues({
+        ...values,
+        tituloArticulo: '',
+        tipoSeleccionado: '',
+        tituloLibro: '',
+        autores: '',
+        editorial: '',
+        datosGenerales: '',
+        fechaInicio: '',
+        fechaFin: ''
+      });      
       
-    }).catch((error) => {
-      alert("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
+    }).catch(() => {
+      setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
-    
+    setEmergenteEnviarBack(true);
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
   }
   return (
     <div>
@@ -281,6 +348,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
               </Box>
             </Card>
           </form>
+        
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" en "Crear Actividad" */}
           <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
             <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
@@ -293,6 +361,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
               <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
             </DialogActions>
           </Dialog>
+         
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
           <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
             <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
@@ -304,18 +373,46 @@ const ActivityThreeView = ({ className, ...rest }) => {
               <Button onClick={handleGuardarNo}  color="primary" autoFocus>No</Button>
             </DialogActions>
           </Dialog>
+          
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
-        en "Crear Actividad" */}
+          en "Crear Actividad" */}
           <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
             <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
             <DialogContent>
             </DialogContent>
             <DialogActions>
               {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-              <Button color="primary">Si</Button>
+              <Button color="primary" onClick={SaveActivity} >Si</Button>
               <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
             </DialogActions>
           </Dialog>
+        
+                    
+
+
+          {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
+          <Dialog
+            open={emergenteEnviarBack}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleEnviarBackAceptar}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+              {resultadoBack? <p style={{ display: 'flex'}}>{resultadoBack}</p>:null}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleEnviarBackAceptar} color="primary">
+                Aceptar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
         </div>
       </Container>
     </div>
