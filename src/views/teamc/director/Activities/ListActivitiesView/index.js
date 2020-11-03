@@ -29,12 +29,14 @@ const DirectorListActivitiesView = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getStudentActivitiesLocal();
-      setActivityList(res);
+      await api.getDirectorActivities(5).then(res => {
+        setActivityList(res.data.activities);
+      });
+      
     };
     fetchData();
   }, []);
-
+  console.log(activityList);
   const classes = useStyles();
   return (
     <Page className={classes.root} title="Listado de Actividades">

@@ -7,7 +7,6 @@ import EvaluationCard from './EvaluationCard';
 
 
 const List = ({ list, option, context }) => {
-  console.log(option + context);
   return (
     <Container>
       <Grid container spacing={3}>

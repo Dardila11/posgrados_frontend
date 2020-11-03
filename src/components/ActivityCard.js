@@ -47,7 +47,10 @@ const ActivityCard = ({ className,activity,context, ...rest }) => {
                 {activity.description}
               </Typography>              
               <Typography color="textSecondary" variant="body1">
-                {activity.modality}
+                {activity.type}
+              </Typography>
+              <Typography color="textSecondary" variant="body1">
+                {activity.academic_year}
               </Typography>
             </Box>
           </CardActionArea>

@@ -29,16 +29,17 @@ const useStyles = makeStyles((theme) => ({
 
 
 const DirectorListStudentsView = () => {
-    const [studentsList, setStudentList] = useState([]);
+    const [studentsList, setStudentsList] = useState([]);
 
     useEffect(() => {
       const fetchData = async () => {
-        const res = await api.getStudentsInfoDirectorLocal(1);
-        setStudentList(res);
+        await api.getDirectorStudents(5).then(res => {
+          setStudentsList(res.data.students);
+        });
+        
       };
       fetchData();
     }, []);
-
     const classes = useStyles();
     return (
         <Page className={classes.root} title="Listado de estudiantes">      

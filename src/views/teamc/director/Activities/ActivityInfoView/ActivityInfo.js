@@ -40,16 +40,23 @@ const useStyles = makeStyles({
 
 const ActivityInfoView = () => {
 
+  const [activityList, setActivityList] = useState([]);
   let {id} = useParams();
-  const [activity, setActivity] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getActivity(id);
-      setActivity(res);      
+      await api.getDirectorActivities(5).then(res => {
+        setActivityList(res.data.activities);
+      });      
     };
     fetchData();
-  });
+  }, []);
+  console.log(activityList);
+  console.log('List data: ')
+  console.log(activityList);
+  console.log('Searching data: ');
+  const activity = activityList.find(activity => activity.id == id);
+  console.log(activity);
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);

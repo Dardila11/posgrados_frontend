@@ -43,15 +43,7 @@ const useStyles = makeStyles({
 const StudentInfo = () => {
 
   let {id} = useParams();
-  const [student, setStudent] = useState('');
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.getStudent(id);
-      setStudent(res);      
-    };
-    fetchData();
-  });
+  const [data, setStudent] = useState('');
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -63,24 +55,50 @@ const StudentInfo = () => {
   const handleClose = () => {
     setOpen(false);
   };
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      await api.getStudent(id).then(res => {
+        setStudent(res.data.student);
+      });      
+    };
+    fetchData();
+  });
+
+  
+  console.log("Student info" + data);
+  const student = data.student.user;
+  const program = data.student.program;
+  const period = data.period;
+  const status = data.state;
 
   let statusclass = null;
-  switch (student.status) {
-    case "ACTIVO":
+  let state = null;
+  switch (status) {
+    case 1:
       statusclass = classes.statusActive;
+      state = 'ACTIVO';
       break;
-    case "INACTIVO":
+    case 2:
       statusclass = classes.statusInactive;
+      state = 'INACTIVO';
       break;
-    case "RETIRADO":
-        statusclass = classes.statusRetired;
-        break;
-    case "GRADUADO":
+    case 3:
         statusclass = classes.statusGraduate;
+        state = 'GRADUADO';
+        break;
+    case 4:
+        statusclass = classes.statusBalanced;
+        state = 'BALANCEADO';
+        break;
+    case 5:
+        statusclass = classes.statusRetired;
+        state = 'RETIRADO';
         break;
     default:
       break;
   }
+  
   return (
     <Container>
     <Card className={classes.root}>
@@ -92,14 +110,14 @@ const StudentInfo = () => {
           Nombre: {student.first_name} {student.last_name}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Programa: {student.program}
+          Programa: {program}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Cohorte: {student.cohorte}
+          Cohorte: {period}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
         Estado: <b> <span className={statusclass}>
-          {student.status}          
+          {status}          
           </span> </b>
         </Typography>
       </CardContent>
