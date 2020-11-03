@@ -11,6 +11,15 @@ import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
 import util from '../services/util';
 
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Slide from '@material-ui/core/Slide';
+
+//Transición  de la ventana emergente que muestra 
+//el resultado de enviar los datos del formulario al backend
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const objService = new service();
 const objUtil = new util();
 
@@ -121,6 +130,23 @@ const ActivityFiveView = ({ className, ...rest }) => {
   const [errorNombreInstitucion, setErrorNombreInstitucion] = useState(null);
   const [errorNombreResponsable, setErrorNombreResponsable] = useState(null);
   const [errorFechas, setErrorFechas] = useState(null);
+
+  // Costante para definir el estado de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [emergenteEnviarBack, setEmergenteEnviarBack] = React.useState(false);
+
+  // Costante para definir el mensaje de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [resultadoBack, setResultadoBack] = useState(null);
+
+  const handleEnviarBackAceptar = () => {
+    setEmergenteEnviarBack(false);
+    setResultadoBack(null);
+  };
+
+
+
+
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
@@ -132,64 +158,87 @@ const ActivityFiveView = ({ className, ...rest }) => {
 
   //TODO: Comentar
   const handleGuardar = () => {
-    setEmergenteGuardar(true);
+    if(validar()){
+      setEmergenteGuardar(true);
+    }
   };
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
   };
-  //TODO: Comentar
-  const handleGuardarYEnviar = () => {
+
+
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+  const validar =()=>{
+    var result = true;
+    
     if(values.proposito.length){
       setErrorProposito(null)
     }
     else{
-      setErrorProposito("El campo es obligatorio")
+      setErrorProposito("El campo es obligatorio");
+      result = false;
     }
     if(values.descripcion.length){
       setErrorDescripcion(null)
     }
     else{
-      setErrorDescripcion("El campo es obligatorio")
+      setErrorDescripcion("El campo es obligatorio");
+      result = false;
     }
     if(values.paisSeleccionado.length && values.paisSeleccionado != "Seleccione una opción"){
       setErrorPais(null)
     }
     else{
-      setErrorPais("Seleccione una opción válida")
+      setErrorPais("Seleccione una opción válida");
+      result = false;
     }
 	  if(values.ciudadSeleccionada.length && values.ciudadSeleccionada != "Seleccione una opción"){
       setErrorCiudad(null)
     }
     else{
-      setErrorCiudad("Seleccione una opción válida")
+      setErrorCiudad("Seleccione una opción válida");
+      result = false;
     }
 	  if(values.institucionSeleccionado.length && values.institucionSeleccionado != "Seleccione una opción"){
       setErrorNombreInstitucion(null)
     }
     else{
-      setErrorNombreInstitucion("Seleccione una opción válida")
+      setErrorNombreInstitucion("Seleccione una opción válida");
+      result = false;
     }
   	if(values.nombreResponsable.length){
       setErrorNombreResponsable(null)
     }
     else{
-      setErrorNombreResponsable("El campo es obligatorio")
+      setErrorNombreResponsable("El campo es obligatorio");
+      result = false;
     }    
     if(values.fechaInicio.length && values.fechaFin.length){
       if(values.fechaInicio<=values.fechaFin){
         setErrorFechas("")
       }
       else{
-        setErrorFechas("La fecha de finalización de la estancia debe ser después de la fecha inicio de estancia")
+        setErrorFechas("La fecha de finalización de la estancia debe ser después de la fecha inicio de estancia");
+        result = false;
       }
     }
     else{
-      setErrorFechas("Seleccióne una fecha inicio de estancia y fin de estancia válidas")
+      setErrorFechas("Seleccióne una fecha inicio de estancia y fin de estancia válidas");
+      result = false;
     }
-    setEmergenteGuardarYEnviar(true);
-    };
+    return result
+  }
+  
+  
+  //TODO: Comentar
+  const handleGuardarYEnviar = () => {
+    
+    if(validar()){
+      setEmergenteGuardarYEnviar(true);
+    }
+  };
 	const handleGuardarYEnviarNo = () => {
     setEmergenteGuardarYEnviar(false);
     };
@@ -207,6 +256,11 @@ const ActivityFiveView = ({ className, ...rest }) => {
     var varnombreresponsable = document.getElementById("nombreresponsable").value;
     var now = objUtil.GetCurretTimeDate();
 
+
+    //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
+    //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
+    var send_email = emergenteGuardarYEnviar;
+
     objService.PostActivityFive(
       { 
         "description" : vardescripcion,
@@ -222,15 +276,30 @@ const ActivityFiveView = ({ className, ...rest }) => {
         "student" : 1, /* Consultar usuario actual */
         "institution" : varnombreinstitucion,
         "city" : varciudad,
-        "country" : varpais
+        "country" : varpais,
+        "send_email": send_email 
         
       }
     ).then((result) => { 
-      alert("Actividad registrada");      
-        
+      setResultadoBack("Actividad registrada correctamente");
+      setValues({
+        ...values,
+        proposito:'',
+        descripcion:'',
+        paisSeleccionado:'',
+        ciudadSeleccionada: '',
+        institucionSeleccionado:'',
+        nombreResponsable:'',
+        fechaInicio: '',
+        fechaFin:''
+      });      
+      
     }).catch(() => {
-      alert("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
+      setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
+    setEmergenteEnviarBack(true);
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
   }
   return (
     <div>
@@ -333,41 +402,68 @@ const ActivityFiveView = ({ className, ...rest }) => {
           
         </Card>
       </form>
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" en "Crear Actividad" */}
-      <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        <RouterLink to = "../"> 
-            <Button color="primary">Si</Button>
-        </RouterLink>
-          <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog> 
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
-      <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-          {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary" onClick={SaveActivity}>Si</Button>
-          <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog> 
-	  {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
-        en "Crear Actividad" */}
-      <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary" onClick={SaveActivity} >Si</Button>
-          <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog>  
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" en "Crear Actividad" */}
+          <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+            <RouterLink to = "../"> 
+                <Button color="primary">Si</Button>
+            </RouterLink>
+              <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog> 
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
+          <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              {/* TODO: Enviar a backend y guardar */}
+              <Button color="primary" onClick={SaveActivity}>Si</Button>
+              <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog> 
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
+              en "Crear Actividad" */}
+          <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
+              <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
+              <DialogContent>
+              </DialogContent>
+              <DialogActions>
+              {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
+                <Button color="primary" onClick={SaveActivity} >Si</Button>
+                <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
+              </DialogActions>
+            </Dialog>  
+                    
+
+
+          {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
+          <Dialog
+            open={emergenteEnviarBack}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleEnviarBackAceptar}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+              {resultadoBack? <p style={{ display: 'flex'}}>{resultadoBack}</p>:null}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleEnviarBackAceptar} color="primary">
+                Aceptar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
+    
     </div>
     </Container>
     </div>

@@ -96,12 +96,13 @@ const ActivityView = ({ className, ...rest }) => {
   //"handleDatosDetalle" para que despliegue la ventana emergente que pide confirmar la creacion de la actividad
   const handleDatosDetalle = () => {
     //Validamos que los campos tengan los datos correspondientes 
-    /* if (values.descripcion.length) { setErrorDescripcion(null) }
-    else { setErrorDescripcion("El campo es obligatorio") } */
-    if (activity.length) { setErrorActivity(null) }
+
+    if (activity.length) { 
+      setErrorActivity("");
+      setEmergenteDatosDetalle(true);
+    }
     else { setErrorActivity("Seleccione una opción válida") }
-    //if (values.descripcion.length && activity.length) {
-    if (activity.length) { setEmergenteDatosDetalle(true); }
+
   };
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente

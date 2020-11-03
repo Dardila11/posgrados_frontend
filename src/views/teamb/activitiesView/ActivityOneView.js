@@ -11,6 +11,16 @@ import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
 import service from '../services/service';
 import util from '../services/util';
 
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Slide from '@material-ui/core/Slide';
+
+//Transición  de la ventana emergente que muestra 
+//el resultado de enviar los datos del formulario al backend
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+
 const objService = new service();
 const objUtil = new util();
 
@@ -41,7 +51,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     programaSeleccionado:'',
     horasAsignadas:0,
     fechaInicio: '',
-    fechaFin:''
+    fechaFin:'',
   });
   //Asignamos a "programaSeleccionado" el valor de "event.target.value"
   const handleProgramas = (event) => {
@@ -88,6 +98,23 @@ const ActivityOneView = ({ className, ...rest }) => {
   const [errorPrograma, setErrorPrograma] = useState(null);
   const [errorHoras, setErrorHoras] = useState(null);
   const [errorFechas, setErrorFechas] = useState(null);
+
+  // Costante para definir el estado de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [emergenteEnviarBack, setEmergenteEnviarBack] = React.useState(false);
+
+  // Costante para definir el mensaje de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [resultadoBack, setResultadoBack] = useState(null);
+
+  const handleEnviarBackAceptar = () => {
+    setEmergenteEnviarBack(false);
+    setResultadoBack(null);
+  };
+
+
+
+
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
@@ -99,32 +126,40 @@ const ActivityOneView = ({ className, ...rest }) => {
 
     //TODO: Comentar
   const handleGuardar = () => {
-    setEmergenteGuardar(true);
+    if(validar()){
+      setEmergenteGuardar(true);
+    }
+    
   };
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
   };
-  //TODO: Comentar
-  const handleGuardarYEnviar = () => {
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+  const validar = () => {
+    var result = true;
+
     if(values.titulo.length){
       setErrorTitulo(null)
     }
     else{
       setErrorTitulo("El campo es obligatorio")
+      result = false;
     }
     if(values.descripcion.length){
       setErrorDescripcion(null)
     }
     else{
       setErrorDescripcion("El campo es obligatorio")
+      result = false;
     }
     if(values.programaSeleccionado.length && values.programaSeleccionado != "Seleccione una opción"){
       setErrorPrograma(null)
     }
     else{
       setErrorPrograma("Seleccione una opción válida")
+      result = false;
     }
 
     if(values.horasAsignadas.length && values.horasAsignadas > 0){
@@ -132,6 +167,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     }
     else{
       setErrorHoras("Seleccione un número de horas valido")
+      result = false;
     }
 
     if(values.fechaInicio.length && values.fechaFin.length){
@@ -140,13 +176,22 @@ const ActivityOneView = ({ className, ...rest }) => {
       }
       else{
         setErrorFechas("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
       }
     }
     else{
       setErrorFechas("Seleccióne una fecha inicial y una fecha final válidas")
+      result = false;
     }
-    console.log(values.fechaInicio)
-    //setEmergenteGuardarYEnviar(true);
+    return result;
+  }
+  //TODO: Comentar
+  const handleGuardarYEnviar = () => {
+    
+    if(validar()){
+      setEmergenteGuardarYEnviar(true);
+    }
+    
   };
 
   const handleGuardarYEnviarNo = () => {
@@ -155,7 +200,6 @@ const ActivityOneView = ({ className, ...rest }) => {
   };
   const SaveActivity = () => {
 
-    setEmergenteGuardar(false);
     var vartitulo = document.getElementById("titulo").value;
     var vardescripcion = document.getElementById("descripcion").value;
     var varprograma = document.getElementById("programa").value;
@@ -164,11 +208,15 @@ const ActivityOneView = ({ className, ...rest }) => {
     var varnumber = document.getElementById("number").value;
     var now = objUtil.GetCurretTimeDate();
 
+    //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
+    //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
+    var send_email = emergenteGuardarYEnviar;
+
     objService.PostActivityOne(
       { 
         "title": vartitulo,
         "description" : vardescripcion,
-        "state" : 1,
+        "state" : 1,  
         "program" : varprograma,
         "start_date": vardate1,
         "end_date": vardate2,
@@ -177,14 +225,27 @@ const ActivityOneView = ({ className, ...rest }) => {
         "type": "projectCourse",
         "student" : 1, /* Consultar usuario actual */
         "date_record": now,
-        "date_update": now 
+        "date_update": now,
+        "send_email": send_email 
       }
     ).then((result) => { 
-      alert("Actividad registrada");      
+      setResultadoBack("Actividad registrada correctamente");
+      setValues({
+        ...values,
+        titulo:'',
+        descripcion:'',
+        programaSeleccionado:'',
+        horasAsignadas:0,
+        fechaInicio: '',
+        fechaFin:'',
+      });      
       
     }).catch(() => {
-      alert("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
+      setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
+    setEmergenteEnviarBack(true);
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
   }
   return (
     <div>
@@ -257,9 +318,7 @@ const ActivityOneView = ({ className, ...rest }) => {
 
               <Box display="flex" justifyContent="flex-end" p={2}>
                 {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
-          confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
-                {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
-          confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
+                confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
             <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
 
             <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>
@@ -268,45 +327,72 @@ const ActivityOneView = ({ className, ...rest }) => {
               </Box>
             </Card>
           </form>
+          
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" 
-        en "Crear Actividad" */}
-      <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea cancelar?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        <RouterLink to = "../"> 
-            <Button color="primary">Si</Button>
-        </RouterLink>
-          <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog>
+          en "Crear Actividad" */}
+          <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea cancelar?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+            <RouterLink to = "../"> 
+                <Button color="primary">Si</Button>
+            </RouterLink>
+              <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog>
 
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" 
-      en "Crear Actividad" */}
-      <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-          {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary" onClick={SaveActivity} >Si</Button>
-          <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog>                  
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" 
+          en "Crear Actividad" */}
+          <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              {/* TODO: Enviar a backend y guardar */}
+              <Button color="primary" onClick={SaveActivity} >Si</Button>
+              <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog>                  
 
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
-        en "Crear Actividad" */}
-      <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary">Si</Button>
-          <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog>
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
+            en "Crear Actividad" */}
+          <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+            {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
+              <Button color="primary" onClick={SaveActivity} >Si</Button>
+              <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
+            </DialogActions>
+          </Dialog>
+          
+
+
+          {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
+          <Dialog
+            open={emergenteEnviarBack}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleEnviarBackAceptar}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+              {resultadoBack? <p style={{ display: 'flex'}}>{resultadoBack}</p>:null}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleEnviarBackAceptar} color="primary">
+                Aceptar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
         </div>
       </Container>
     </div>
