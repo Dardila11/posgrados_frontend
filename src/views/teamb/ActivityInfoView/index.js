@@ -21,24 +21,7 @@ const useStyles = makeStyles(theme => ({
 
 const ActivityStudentView = () => {
   const classes = useStyles();
-  const [activityList, setActivityList] = useState([]);
-  const [result, setResult] = useState('');
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.getStudentActivitiesLocal();
-      /*if (res.status === 200) {
-        setResult('ok');
-        setActivityList(res.data);
-      } else if (res.status === 500) {
-        setResult('error');
-      }*/
-      setResult('ok');
-      setActivityList(res);
-      
-    };
-    fetchData();
-  }, []);
   const breadcrumb = [['Student','/student'],['Listado de estudiantes', '/student/list-students'] ,['Listado de estudiantes']];
   return (
     <>

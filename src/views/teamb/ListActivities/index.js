@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Container } from '@material-ui/core';
+import { makeStyles, Container, Box, Typography } from '@material-ui/core';
 import Page from 'src/components/Page';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
-import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
-import api from 'src/views/teamc/services/Api';
 import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
+import service from 'src/views/teamb/services/service';
+const objService = new service();
 const handleSearch = event => {
   console.log('Cadena de busqueda: ', event.target.value);
   this.setState({
@@ -25,29 +25,34 @@ const useStyles = makeStyles(theme => ({
   buttonContainer: {  
     paddingBottom: theme.spacing(1)
   }
+  
 }));
 
 const StudentListActivitiesView = () => {
-  const [activityList, setActivityList] = useState([]);
 
+  const [activities, setActivities] = useState([]);
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.getStudentActivitiesLocal();
-      setActivityList(res);
-    };
-    fetchData();
-  }, []);
+    objService.GetActivities(8,"2020-21").then((result) => {
+      var dataActivities = result.data;
+      setActivities(dataActivities.list_activities);
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  },[]);
 
   const classes = useStyles();
   return (
     <Page className={classes.root} title="Listado de Actividades del estudiante">
       <BreadCrumbs />
-      <SearchBar handleSearch={handleSearch} context="activities" />
+      <Typography variant="h1" style={{ display: 'flex', justifyContent: 'center' }}>Actividades</Typography>
+      <Box>
+      
+      </Box>
       <Container className= {classes.buttonContainer}>
         <ActivityView/>
       </Container>
-      <List list={activityList} option="Activity" context="/student/list-activities"/>
-      <ListPagination />
+      <List list={activities} option="Activity" context="/student/list-activities"/>
+     
       
     </Page>
   );

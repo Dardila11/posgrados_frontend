@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://mdquilindo.pythonanywhere.com';
 
 export default class service {
 
@@ -7,7 +7,17 @@ export default class service {
         const url= `${API_URL}/api/period/student/1/`; //El numero depende del id del usuario/estudiante actual
         return axios.get(url,periodo);
     }
-    
+    GetActivities(id, academic_year) {
+        const url= `${API_URL}/api/activities/student/`+id+`/`+academic_year+`/`; 
+        const result = axios.get(url);
+        return axios.get(url);
+    }
+
+    GetActivity(id) {
+        const url= `${API_URL}/api/activity/`+id+`/`; 
+        return axios.get(url);
+    }
+
     PostActivityOne(activity){
         const url= `${API_URL}/api/projectCourse/`;
         return axios.post(url,activity);

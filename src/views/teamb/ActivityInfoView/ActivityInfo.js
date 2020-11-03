@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import TrackStudent from './TrackStudent';
-
-import api from 'src/views/teamc/services/Api';
+import service from 'src/views/teamb/services/service';
 
 import {useParams
 } from "react-router-dom";
@@ -18,7 +16,7 @@ import {
   DialogTitle,
   Container
 } from '@material-ui/core';
-
+const objService = new service();
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
@@ -43,15 +41,18 @@ const useStyles = makeStyles({
 const ActivityInfoView = () => {
 
   let {id} = useParams();
+  
   const [activity, setActivity] = useState('');
-
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await api.getActivity(id);
-      setActivity(res);      
-    };
-    fetchData();
-  });
+    objService.GetActivity(id).then((result) => {
+      var dataActivity = result.data;
+      console.log(dataActivity);
+      setActivity(dataActivity);
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  },[]);
+ 
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -71,16 +72,16 @@ const ActivityInfoView = () => {
           Información de la actividad
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Titulo: { activity.title}
+          Id: { activity.id}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Descripcion: {activity.description}
+          Descripcion: { activity.description}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          Modalidad: {activity.modality}
+          Tipo: {activity.type}
         </Typography>
         <Typography variant="body1" component="p" gutterBottom>
-          fecha: 10/20/2020
+          Fecha Inicio: {activity.start_date}
         </Typography>
         
       </CardContent>

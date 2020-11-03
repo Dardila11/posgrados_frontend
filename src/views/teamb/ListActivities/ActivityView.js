@@ -121,6 +121,7 @@ const ActivityView = ({ className, ...rest }) => {
         <DialogContent dividers>
           <Grid item xs={12} >
             <InputLabel>Tipo de actividad:</InputLabel>
+            <br></br>
             <Select fullWidth label="Tipo de actividad" id="activity-type" variant="outlined" type="select" defaultValue={""}
               onChange={e => changeActivityType(e.target.value)}>
               <MenuItem value={'activityone'}>Curso, dirección/revisión de proyectos</MenuItem>
