@@ -2,25 +2,45 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Select from '@material-ui/core/Select';
+import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import { SearchDeparmentI } from 'src/views/teamd/Search/searchDepartmentI';
+import { AlertView } from '../../../../components/Alert'
 import {
   Box,
   Button,
   Container,
   FormGroup,
-  TextField
+  TextField,
+  Typography
 } from '@material-ui/core';
 import { CreateGIApi } from './service';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MailRoundedIcon from '@material-ui/icons/MailRounded';
+const useStyles = makeStyles({
+  root: {
+    background: 'white',
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    paddingTop: '30px',
+
+    marginTop: '40px'
+  }
+});
 
 const CreateView = () => {
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
+  const clases = useStyles();
   const [name, setName] = useState(' ');
   const [email, setEmail] = useState('');
   const [departmentI, setDepartmentI] = useState('');
   const [dateFoundation, setDateFoundation] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('A');
   const handleChangeName = event => {
     setName(event.target.value);
   };
@@ -37,6 +57,7 @@ const CreateView = () => {
     setDateFoundation(e.target.value);
   };
   const handleCreate = () => {
+    setOpen(false)
     CreateGIApi({
       name: name,
       category: category,
@@ -45,12 +66,14 @@ const CreateView = () => {
       department: departmentI
     })
       .then(() => {
-        document.getElementById('contenderGI').innerHTML =
-          "<div class='alert alert-success' role='alert'>Grupo de investigacion creado correctamente!</div>";
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Institucion creada correctamente')
       })
       .catch(() => {
-        document.getElementById('contenderGI').innerHTML =
-          "<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Error, Verifica los datos')
       });
   };
   const handleSubmit = event => {
@@ -58,7 +81,10 @@ const CreateView = () => {
     event.preventDefault();
   };
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={clases.root}>
+      <Typography color="textPrimary" variant="h1" align="center">
+        Grupo de investigación
+      </Typography>
       <Formik
         initialValues={{
           name: '',
@@ -91,6 +117,7 @@ const CreateView = () => {
               flexDirection="column"
               height="100%"
               alignItems="center"
+              paddingTop={3}
             >
               <form onSubmit={handleSubmit}>
                 <Box mb={3}>
@@ -112,6 +139,13 @@ const CreateView = () => {
                       value={values.name}
                       variant="outlined"
                       required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AccountCircle />
+                          </InputAdornment>
+                        )
+                      }}
                     />
                   </FormGroup>
 
@@ -133,28 +167,45 @@ const CreateView = () => {
                       value={values.email}
                       variant="outlined"
                       required
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <MailRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
                     />
                   </FormGroup>
                   <FormGroup>
                     <SearchDeparmentI callback={handleChangeDepartmentI} />
                   </FormGroup>
 
-                  <FormGroup>
-                    <InputLabel id="label-category">Categoria</InputLabel>
-                    <Select
-                      labelId="label-category select"
-                      id="category-select"
-                      value={category}
-                      onChange={handleChangeCategory}
-                      style={{ marginBottom: 10, marginTop: 10, width: 100 }}
-                      required
-                      fullWidth
-                    >
-                      <MenuItem value="A">A</MenuItem>
-                      <MenuItem value="B">B</MenuItem>
-                      <MenuItem value="C">C</MenuItem>
-                    </Select>
-                  </FormGroup>
+                  <TextField
+                    id="categoriaId"
+                    label="Categoria"
+                    style={{ width: '100px' }}
+                    variant="outlined"
+                    select
+                    margin="normal"
+                    onChange={e => {
+                      handleChange(e);
+                      handleChangeCategory(e);
+                    }}
+                    onBlur={handleBlur}
+                    value={category}
+                    required
+                    fullWidth
+                  >
+                    <MenuItem key="CategoryOption1" value="A">
+                      A
+                    </MenuItem>
+                    <MenuItem key="CategoryOption2" value="B">
+                      B
+                    </MenuItem>
+                    <MenuItem key="CategoryOption3" value="C">
+                      C
+                    </MenuItem>
+                  </TextField>
 
                   <FormGroup>
                     <InputLabel id="label-date">Fecha fundación</InputLabel>
@@ -185,10 +236,10 @@ const CreateView = () => {
                 </Box>
               </form>
             </Box>
-            <div id="contenderGI" />
           </>
         )}
       </Formik>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </Container>
   );
 };

@@ -9,12 +9,13 @@ export const SearchDeparmentI = ({ callback }) => {
   useEffect(() => {
     GetDeparmentIListService()
       .then(result => {
-        setListDepartmentI(result.data.DepartmentU);
+        setListDepartmentI(result.data.Department);
       })
-      .catch(setListDepartmentI([]));
+      .catch(()=>setListDepartmentI([]));
   }, []);
   const getIdDepartmentI = async name => {
     let find = listDepartmentI.find(department => department.name === name);
+    console.log(find);
     if (find === undefined) {
     } else {
       callback(find.id);

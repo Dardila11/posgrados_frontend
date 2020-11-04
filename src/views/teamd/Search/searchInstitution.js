@@ -36,8 +36,8 @@ export const SearchInstitution = ({ callback }) => {
         <TextField
           id="inputOptionInstitution"
           {...params}
-          label="Institucion"
-          variant="outlined"
+          label='Institucion'
+          variant='outlined'
           required
         />
       )}

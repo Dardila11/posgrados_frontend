@@ -8,7 +8,7 @@ export const SearchCountry = ({ callback }) => {
   useEffect(() => {
     listCountriesService()
       .then(result => setListCountries(result.data.Countrys))
-      .catch(setListCountries([]));
+      .catch(()=> setListCountries([]));
   }, []);
   const getIdContry = async name => {
     let find = listCountries.find(country => country.name === name);
