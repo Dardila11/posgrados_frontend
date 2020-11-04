@@ -33,6 +33,7 @@ const StudentListActivitiesView = () => {
 
   const [activities, setActivities] = useState([]);
   useEffect(() => {
+    /* Dato quemado desde la tabla User: id_user*/
     objService.GetActivities(8,"2020-21").then((result) => {
       var dataActivities = result.data;
       setActivities(dataActivities.list_activities);

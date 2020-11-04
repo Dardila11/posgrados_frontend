@@ -1,5 +1,6 @@
 import axios from 'axios';
 const API_URL = 'http://mdquilindo.pythonanywhere.com';
+//const API_URL = 'http://localhost:8000';
 
 export default class service {
 

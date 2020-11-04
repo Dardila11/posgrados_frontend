@@ -195,13 +195,13 @@ const ActivityFourView = ({ className, ...rest }) => {
         "state" : 1,
         "start_date" : vardate,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "presentationResults",
+        "type" : "Exposición de resultados", /* Colocar el tipo numerico al que corresponda */
         "date_record": now,
         "date_update": now, 
         "modality" : varmodalidadpresentación,
         "duration_hours" : varhours,
         "place" : varlugarcelebracion,
-        "student" : 1, /* Consultar usuario actual */
+        "student" : 36, /* Consultar el id del estudiante actual */
         "send_email": send_email 
       }
     ).then((result) => { 

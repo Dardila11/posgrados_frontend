@@ -24,10 +24,13 @@ export default class util {
 
     GetAcademicYears(dataPeriods) {
         var periods = dataPeriods;
-        var list = [];
+        var list = [], aux = [];
         periods.forEach(element => {
             var academicYear = this.GetCurrentYear(element.period);
-            list.push({academicYear});
+            if ( ! aux.includes(academicYear) ) {
+                list.push({academicYear});
+                aux.push(academicYear);
+            }
         });
         return list;
     }

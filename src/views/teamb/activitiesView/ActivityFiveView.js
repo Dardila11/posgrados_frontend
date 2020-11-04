@@ -25,18 +25,18 @@ const objUtil = new util();
 
 const pais = [
   { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: 1 },
-  { value: 'T2', label: 2 },
-  { value: 'T3', label: 3 },
-  { value: 'T4', label: 4 }
+  { value: 'T1', label: 5 },
+  { value: 'T2', label: 1 },
+  { value: 'T3', label: 2 },
+  { value: 'T4', label: 3 }
 ];
 
   const ciudad = [ 
   { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 1 },
-  { value: 'T2', label: 2 },
-  { value: 'T3', label: 3 },
-  { value: 'T4', label: 4 }
+  { value: 'T1', label: 5 },
+  { value: 'T2', label: 1 },
+  { value: 'T3', label: 2 },
+  { value: 'T4', label: 3 }
 ];
 
 const institucion = [
@@ -269,12 +269,12 @@ const ActivityFiveView = ({ className, ...rest }) => {
         "start_date" : varfecha1,
         "end_date" : varfecha2,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "researchStays",
+        "type" : "Estancia de investigación", /* Colocar el tipo numerico al que corresponda */
         "date_record": now,
         "date_update": now, 
         "purpose": varproposito,
         "responsible" : varnombreresponsable,
-        "student" : 1, /* Consultar usuario actual */
+        "student" : 36, /* Consultar el id del estudiante actual */
         "institution" : varnombreinstitucion,
         "city" : varciudad,
         "country" : varpais,

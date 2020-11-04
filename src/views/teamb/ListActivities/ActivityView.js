@@ -60,6 +60,7 @@ const ActivityView = ({ className, ...rest }) => {
   const [errorDescripcion, setErrorDescripcion] = useState(null);
 
   const handleClickOpen = () => {
+    /* Dato quemado desde la tabla User: id_user */
     objService.GetPeriodService(8).then((result) => {
       var CurrentPeriod = result.data.period;
       var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);

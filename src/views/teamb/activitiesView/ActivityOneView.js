@@ -8,18 +8,18 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
-import service from '../services/service';
-import util from '../services/util';
 
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Slide from '@material-ui/core/Slide';
+
+import service from '../services/service';
+import util from '../services/util';
 
 //Transición  de la ventana emergente que muestra 
 //el resultado de enviar los datos del formulario al backend
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 const objService = new service();
 const objUtil = new util();
@@ -113,9 +113,6 @@ const ActivityOneView = ({ className, ...rest }) => {
     setResultadoBack(null);
   };
 
-
-
-
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
@@ -141,46 +138,36 @@ const ActivityOneView = ({ className, ...rest }) => {
   const validar = () => {
     var result = true;
 
-    if(values.titulo.length){
-      setErrorTitulo(null)
-    }
-    else{
+    if (values.titulo.length) { setErrorTitulo(null) }
+    else { 
       setErrorTitulo("El campo es obligatorio")
       result = false;
     }
-    if(values.descripcion.length){
-      setErrorDescripcion(null)
-    }
-    else{
+    if (values.descripcion.length) { setErrorDescripcion(null) }
+    else {
       setErrorDescripcion("El campo es obligatorio")
       result = false;
-    }
-    if(values.programaSeleccionado.length && values.programaSeleccionado != "Seleccione una opción"){
+    } 
+    if (values.programaSeleccionado.length && values.programaSeleccionado != "Seleccione una opción") {
       setErrorPrograma(null)
     }
-    else{
+    else {
       setErrorPrograma("Seleccione una opción válida")
       result = false;
     }
-
-    if(values.horasAsignadas.length && values.horasAsignadas > 0){
-      setErrorHoras(null)
-    }
-    else{
+    if (values.horasAsignadas.length && values.horasAsignadas > 0) { setErrorHoras(null) }
+    else {
       setErrorHoras("Seleccione un número de horas valido")
       result = false;
     }
-
-    if(values.fechaInicio.length && values.fechaFin.length){
-      if(values.fechaInicio<=values.fechaFin){
-        setErrorFechas("")
-      }
-      else{
+    if (values.fechaInicio.length && values.fechaFin.length) {
+      if (values.fechaInicio<=values.fechaFin) { setErrorFechas("") }
+      else {
         setErrorFechas("La fecha de finalización debe ser después de la fecha de inicio")
         result = false;
       }
     }
-    else{
+    else {
       setErrorFechas("Seleccióne una fecha inicial y una fecha final válidas")
       result = false;
     }
@@ -192,13 +179,12 @@ const ActivityOneView = ({ className, ...rest }) => {
     if(validar()){
       setEmergenteGuardarYEnviar(true);
     }
-    
   };
 
   const handleGuardarYEnviarNo = () => {
-    
     setEmergenteGuardarYEnviar(false);
   };
+
   const SaveActivity = () => {
 
     var vartitulo = document.getElementById("titulo").value;
@@ -221,10 +207,10 @@ const ActivityOneView = ({ className, ...rest }) => {
         "program" : varprograma,
         "start_date": vardate1,
         "end_date": vardate2,
-        "academic_year" : "2020-21", /* consultar año academico actual */
+        "academic_year" : "2020-21", /* Consultar año academico actual */
         "assigned_hours" : varnumber,
-        "type": "projectCourse",
-        "student" : 1, /* Consultar usuario actual */
+        "type": "Curso, direccion o revisión de proyectos", /* Colocar el tipo numerico al que corresponda */
+        "student" : 36, /* Consultar el id del estudiante actual */
         "date_record": now,
         "date_update": now,
         "send_email": send_email 
@@ -238,6 +224,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
+
   return (
     <div>
       <BreadCrumbs />
@@ -246,26 +233,29 @@ const ActivityOneView = ({ className, ...rest }) => {
           <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
             <Card className={classes.root}>
               <h1 style={{ display: 'flex', align: 'center', justifyContent: 'center' }} align="center" name="crearactividad">
-                Datos de detalle Curso, dirección/revisión de proyectos
-          </h1>
+                Curso, dirección/revisión de proyectos
+              </h1>
               <br></br>
               <Divider />
               <CardContent >
                 <br></br>
                 <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo" id="titulo"  name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
+                <TextField fullWidth label="Titulo" id="titulo"  name="titulo" onChange={handleChange} required 
+                  value={values.titulo} variant="outlined"
+                />
               {/* TODO: Comentar */}
               {errorTitulo? <p style={{ display: 'flex', color:'red' }}>{errorTitulo}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion} 
-                variant="outlined"/>
+              <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required 
+                value={values.descripcion} variant="outlined"/>
               {/* TODO: Comentar */}
               {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Programa" id="programa" name="programa" onChange={handleProgramas} required select SelectProps={{ native: true }}
-                variant="outlined">
+              <TextField fullWidth label="Programa" id="programa" name="programa" onChange={handleProgramas} 
+                required select SelectProps={{ native: true }} variant="outlined"
+              >
                 {programa.map((option) => (
                   <option key={option.value} value={option.label}>
                     {option.label}
@@ -279,16 +269,13 @@ const ActivityOneView = ({ className, ...rest }) => {
               <br></br>      
             <Grid container spacing = {3} container justify="space-around">
               <Grid>
-                <TextField id="date1" name="date1" label="Fecha inicio" type="date" 
-                  className={classes.textField} InputLabelProps={{ shrink: true }}
-                  onChange={handleFechaInicio}
+                <TextField id="date1" name="date1" label="Fecha inicio" type="date" className={classes.textField} 
+                  InputLabelProps={{ shrink: true }} onChange={handleFechaInicio}
                 />
-                
               </Grid>
               <Grid>
-                <TextField id="date2" name="date2" label="Fecha fin" type="date"  
-                  className={classes.textField} InputLabelProps={{ shrink: true }}
-                  onChange={handleFechaFin}
+                <TextField id="date2" name="date2" label="Fecha fin" type="date" className={classes.textField} 
+                  InputLabelProps={{ shrink: true }} onChange={handleFechaFin}
                 />
               </Grid>
             </Grid>
@@ -297,7 +284,9 @@ const ActivityOneView = ({ className, ...rest }) => {
               <br></br> 
               <br></br>
               <br></br>
-              <TextField id="number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }} onChange={handleHoras} variant="outlined" />
+              <TextField id="number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }} 
+                onChange={handleHoras} variant="outlined" 
+              />
              {/* TODO: Comentar */}
               {errorHoras? <p style={{ display: 'flex', color:'red' }}>{errorHoras}</p>:null}
               <br></br>
@@ -358,17 +347,10 @@ const ActivityOneView = ({ className, ...rest }) => {
               <Button color="primary" onClick={SaveActivity} >Si</Button>
             </DialogActions>
           </Dialog>
-          
-
 
           {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
-          <Dialog
-            open={emergenteEnviarBack}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={handleEnviarBackAceptar}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
+          <Dialog open={emergenteEnviarBack} TransitionComponent={Transition} keepMounted onClose={handleEnviarBackAceptar}
+            aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description"
           >
             <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
             <DialogContent>
@@ -377,9 +359,7 @@ const ActivityOneView = ({ className, ...rest }) => {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleEnviarBackAceptar} color="primary">
-                Aceptar
-              </Button>
+              <Button onClick={handleEnviarBackAceptar} color="primary"> Aceptar </Button>
             </DialogActions>
           </Dialog>
         </div>

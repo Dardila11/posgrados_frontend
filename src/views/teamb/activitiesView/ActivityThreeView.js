@@ -229,12 +229,12 @@ const ActivityThreeView = ({ className, ...rest }) => {
         "name" : varnombrepublicacion,
         "state" : 1,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "publication",
+        "type" : "Publicacion", /* Colocar el tipo numerico al que corresponda */
         "type_publication" : vartipo,
         "authors" : varautores,
         "general_data" : vardatosgenerales,
         "editorial" : varnombreeditorial,
-        "student" : 1, /* Consultar usuario actual */
+        "student" : 36, /* Consultar el id del estudiante actual */
         "start_date" : vardate1,
         "end_date" : vardate2,
         "date_record": now,

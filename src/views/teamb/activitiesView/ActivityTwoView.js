@@ -208,8 +208,8 @@ const ActivityTwoView = ({ className, ...rest }) => {
         "start_date" : vardate,
         "state" : 1,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "lecture",
-        "student" : 1, /* Consultar usuario actual */
+        "type" : "Ponencia", /* Colocar el tipo numerico al que corresponda */
+        "student" : 36, /* Consultar el id del estudiante actual */
         "date_record": now,
         "date_update": now,
         "send_email": send_email          
