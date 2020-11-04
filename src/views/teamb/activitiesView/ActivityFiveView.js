@@ -393,9 +393,9 @@ const ActivityFiveView = ({ className, ...rest }) => {
           <Box spacing = {3} display="flex" justifyContent="flex-end" p={2}>
             {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
           confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
-            <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
+            <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>&nbsp;
 
-            <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>
+            <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>&nbsp;
 
             <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
           </Box>
@@ -408,10 +408,10 @@ const ActivityFiveView = ({ className, ...rest }) => {
             <DialogContent>
             </DialogContent>
             <DialogActions>
+            <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
             <RouterLink to = "../"> 
                 <Button color="primary">Si</Button>
             </RouterLink>
-              <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
             </DialogActions>
           </Dialog> 
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
@@ -421,8 +421,8 @@ const ActivityFiveView = ({ className, ...rest }) => {
             </DialogContent>
             <DialogActions>
               {/* TODO: Enviar a backend y guardar */}
-              <Button color="primary" onClick={SaveActivity}>Si</Button>
               <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
+              <Button color="primary" onClick={SaveActivity}>Si</Button>
             </DialogActions>
           </Dialog> 
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
@@ -433,8 +433,8 @@ const ActivityFiveView = ({ className, ...rest }) => {
               </DialogContent>
               <DialogActions>
               {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-                <Button color="primary" onClick={SaveActivity} >Si</Button>
                 <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
+                <Button color="primary" onClick={SaveActivity} >Si</Button>
               </DialogActions>
             </Dialog>  
                     
