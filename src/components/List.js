@@ -4,7 +4,7 @@ import StudentCard from 'src/components/StudentCard';
 import ActivityCard from 'src/components/ActivityCard';
 
 const List = ({ list, option, context }) => {
-  console.log(option + context);
+  //console.log(option + context);
   return (
     <Container>
       <Grid container spacing={3}>

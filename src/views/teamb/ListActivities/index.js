@@ -9,7 +9,7 @@ import SearchActivities from 'src/views/teamb/ListActivities/SearchActivities';
 import service from 'src/views/teamb/services/service';
 const objService = new service();
 const handleSearch = event => {
-  console.log('Cadena de busqueda: ', event.target.value);
+  //console.log('Cadena de busqueda: ', event.target.value);
   this.setState({
     inputValue: event.target.value
   });

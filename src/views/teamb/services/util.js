@@ -22,6 +22,16 @@ export default class util {
         return (Year1 + "-" + Year2)
     }
 
+    GetAcademicYears(dataPeriods) {
+        var periods = dataPeriods;
+        var list = [];
+        periods.forEach(element => {
+            var academicYear = this.GetCurrentYear(element.period);
+            list.push({academicYear});
+        });
+        return list;
+    }
+
     GetCurretTimeDate() {
         var date = new Date();
         var currentDate = date.getFullYear() + "-" + (date.getMonth() +1) + "-" + date.getDate();

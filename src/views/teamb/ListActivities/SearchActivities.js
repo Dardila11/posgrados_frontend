@@ -1,8 +1,15 @@
-import React from 'react';
-import {Box, Card, CardContent, TextField, InputAdornment, SvgIcon, Container, makeStyles, Select,InputLabel, MenuItem, Grid} from '@material-ui/core';
+import React, { useState, useEffect } from 'react';
+import { Box, Card, CardContent, TextField, InputAdornment, SvgIcon, Container, makeStyles, Select, InputLabel, MenuItem, Grid, NativeSelect } from '@material-ui/core';
+
+import util from 'src/views/teamb/services/util';
+import service from 'src/views/teamb/services/service';
+import { element } from 'prop-types';
+
+const objService = new service();
+const objUtil = new util();
 
 const useStyles = makeStyles(() => ({
-    root: {  
+    root: {
     },
     Container: {
         height: 100
@@ -11,44 +18,59 @@ const useStyles = makeStyles(() => ({
         paddingTop: 0,
         paddingBottom: 2,
         height: 90,
-        
-    },
-    Select:{
-        alignItems: 'center' 
-    },
-    
-  }));
 
-const SearchBar = ({className,context, ...rest }) => {
-    const [activity, setActivity] = React.useState("");
-    const changeActivityType = (e) => { 
-        setActivity(e) 
-      }
+    },
+    Select: {
+        alignItems: 'center'
+    },
+
+}));
+
+const SearchBar = ({ className, context, ...rest }) => {
+
+    const [academicYears, setAcademicYears] = useState({
+        years: []
+    })
+    
+    useEffect(() => {
+        objService.GetPeriodsService(8).then((result) => {
+            var dataPeriods = result.data.list_period;
+            var acadYears = objUtil.GetAcademicYears(dataPeriods);
+            setAcademicYears({ years: acadYears });
+        }).catch(() => {
+            alert("Error, no hay registros para mostrar");
+        });
+    }, []);
+
     const classes = useStyles();
- 
+    const [activity, setActivity] = React.useState("");
+    const handleChange = (event) => {
+        setActivity(event.target.value);
+    };
+
     return (
-        <Container className = {classes.Container}>
+        <Container className={classes.Container}>
             <Box mt={2}>
-                <Card className = {classes.SearchBar}>
-                <CardContent>
-                        <Grid style={{ display: 'flex', justifyContent: 'center' }} container spacing = {3}  >
+                <Card className={classes.SearchBar}>
+                    <CardContent>
+                        <Grid style={{ display: 'flex', justifyContent: 'center' }} container spacing={3}  >
                             <Grid item lg={2} md={2} xs={1}>
                                 <InputLabel>Año academico</InputLabel>
                             </Grid>
                             <Grid item lg={5} md={5} xs={12}>
                                 <Box maxWidth={500}>
-                                    <Select  fullWidth label="año academico" id="activity-type" type="select" defaultValue={""} variant="outlined"
-                                    onChange={e => changeActivityType(e.target.value)}>
-                                        <MenuItem value={'activityone'}>2019-02</MenuItem>
-                                        <MenuItem value={'activitytwo'}>2020-01</MenuItem>
-                                        <MenuItem value={'activitythree'}>2020-02</MenuItem>
+                                    <Select fullWidth label="año academico" id="activity-type" type="select" defaultValue={""} variant="outlined"
+                                        onChange={handleChange}>
+                                        {academicYears.years.map(element => (
+                                            <MenuItem key={element.academicYear} value={element.academicYear}> {element.academicYear} </MenuItem>
+                                        ))}
                                     </Select>
                                 </Box>
                             </Grid>
-                        </Grid>     
-                      
+                        </Grid>
+
                     </CardContent>
-                </Card>                    
+                </Card>
             </Box>
         </Container>
     );

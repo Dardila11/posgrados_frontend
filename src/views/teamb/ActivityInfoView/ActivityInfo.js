@@ -46,7 +46,6 @@ const ActivityInfoView = () => {
   useEffect(() => {
     objService.GetActivity(id).then((result) => {
       var dataActivity = result.data;
-      console.log(dataActivity);
       setActivity(dataActivity);
     }).catch(() => {
       alert("Error, no hay registros para mostrar");
