@@ -90,7 +90,7 @@ const ActivityInfoView = () => {
         
       </CardContent>
       <Box display="flex" justifyContent="flex-end" p={2}>
-        <IconButton aria-label="delete" disabled color="primary">
+        <IconButton aria-label="delete" >
         <DeleteIcon />
         </IconButton>
         <IconButton color="secondary" aria-label="add an edit">
