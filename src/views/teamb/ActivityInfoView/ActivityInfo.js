@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
 import service from 'src/views/teamb/services/service';
-
 import {useParams
 } from "react-router-dom";
 import {
   Card,
   CardActions,
   CardContent,
-  Button,
+  Button, 
+  Box,
   Typography,
   makeStyles,
   Dialog,
@@ -16,6 +16,11 @@ import {
   DialogTitle,
   Container
 } from '@material-ui/core';
+
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+
 const objService = new service();
 const useStyles = makeStyles({
   root: {
@@ -84,7 +89,14 @@ const ActivityInfoView = () => {
         </Typography>
         
       </CardContent>
-      
+      <Box display="flex" justifyContent="flex-end" p={2}>
+        <IconButton aria-label="delete" >
+        <DeleteIcon />
+        </IconButton>
+        <IconButton color="secondary" aria-label="add an edit">
+        <EditIcon />
+        </IconButton>
+      </Box>
     </Card>
     </Container>
   );
