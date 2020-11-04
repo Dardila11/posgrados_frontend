@@ -3,11 +3,19 @@ import studentData from './local_data/students-info.json';
 import activitiesData from './local_data/student_activities.json';
 import directorEvaluations from './local_data/director_evaluations.json';
 
+/* COORDINATOR*/
 const getStudents = () => {
   let content = http.get('/api/student');
   console.log('Api get: Students');
   return content;
 };
+
+const getCoordinatorActivities = id =>{
+  let content = http.get('/api/coordinator/' + id + '/activity');
+  console.log('Api get: Coordinator activities');
+  console.log(content);
+  return content;
+}
 
 const getDirectorStudents = id => {
   let content = http.get('/api/director/' + id + '/student');
@@ -62,6 +70,7 @@ const getEvaluationsDirectorLocal = () => {
 export default {
   getDirectorActivities,
   getDirectorStudents,
+  getCoordinatorActivities,
   getEvaluationsDirectorLocal,
   getStudentActivitiesLocal,
   getStudentActivities,

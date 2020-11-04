@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Typography } from '@material-ui/core';
 import Page from 'src/components/Page';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
@@ -21,16 +21,27 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(1)
+  },
+  title:{
+    textAlign: 'center',
+    margin: '20px'
   }
 }));
 
 const CoordinatorListActivitiesView = () => {
   const [activityList, setActivityList] = useState([]);
+  const [state, setState] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getStudentActivitiesLocal();
-      setActivityList(res);
+      await api.getCoordinatorActivities(5).then(res => {
+        console.log(res.data.activities.length)
+        if(res.data.activities.length == 0){
+          setState(false);
+        }else{
+          setActivityList(res.data.activities);
+        }
+        });
     };
     fetchData();
   }, []);
@@ -40,8 +51,12 @@ const CoordinatorListActivitiesView = () => {
     <Page className={classes.root} title="Listado de Actividades">
       <BreadCrumbs />
       <SearchBar handleSearch={handleSearch} context="activities" />
-      <List list={activityList} option="Activity" context="/coordinator/list-activities"/>
-      <ListPagination />
+      {!state ? (
+        <Typography className={classes.title} variant='h3'> No se encontraron Actividades </Typography>
+      ):(
+        <List list={activityList} option="Activity" context="/coordinator/list-activities"/>
+      )}
+      
     </Page>
   );
 };
