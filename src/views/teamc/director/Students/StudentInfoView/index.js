@@ -3,11 +3,13 @@ import React, { useState, useEffect } from 'react';
 import api from 'src/views/teamc/services/Api';
 import Page from 'src/components/Page';
 
-import { makeStyles,Typography } from '@material-ui/core';
+import { LinearProgress, makeStyles,Typography } from '@material-ui/core';
 
 import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
 import StudentInfo from './StudentInfo';
+
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,25 +22,28 @@ const useStyles = makeStyles(theme => ({
   title: {
     textAlign: 'center',
     margin: '20px'
+  },progress:{
+    marginTop : '30'
   }
 }));
 
-const CoordinatorStudentView = () => {
+const DirectorStudentView = () => {
+  let { id } = useParams();
   const classes = useStyles();
   const [activityList, setActivityList] = useState([]);
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getStudentActivitiesLocal();
-      /*if (res.status === 200) {
-        setResult('ok');
-        setActivityList(res.data);
-      } else if (res.status === 500) {
-        setResult('error');
-      }*/
-      setResult('ok');
-      setActivityList(res);
+      await api.getStudentActivities(id).then(res => {
+        if(res.data.activities.length == 0){
+          setResult(false);
+        }else{
+          setActivityList(res.data.activities);
+          setLoading(false);
+        }
+      });
       
     };
     fetchData();
@@ -54,19 +59,28 @@ const CoordinatorStudentView = () => {
       <StudentInfo />
       {/* Button Track Student */}
       {/* Activity Card List */}
-      {result === 'ok' ? (
+      {result ? (
         <>
-          <Typography className={classes.title} variant='h1'>
-            Actividades de investigación del estudiante
-          </Typography>
-          <List list = {activityList} option='Activity' context='/coordinator/list-activities'/>
+          {loading ? (
+            <LinearProgress className={classes.progress}/>
+          ):(
+            <>
+            <Typography className={classes.title} variant='h1'>
+              Actividades de investigación del estudiante
+            </Typography>
+            <List list = {activityList} option='Activity' context='/director/list-activities'/>
+            </>
+          )}
+          
         </>
       ) : (
-        <h1> Free accounts are limited to 200 requests per day. </h1>
+        <Typography className={classes.title} variant='h3'>
+            El estudiante no tiene actividades de investigación
+          </Typography>
       )}
       </Page>
     </>
   );
 };
 
-export default CoordinatorStudentView;
+export default DirectorStudentView;

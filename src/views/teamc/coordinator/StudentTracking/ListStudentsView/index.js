@@ -3,11 +3,13 @@ import {
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
-import BreadCrumbs from './BreadCrumbs';
+
 import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 import ListPagination from 'src/components/ListPagination';
+import BreadCrumb from 'src/components/BreadCrumb';
+import BreadCrumbs from './BreadCrumbs';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,17 +24,21 @@ const useStyles = makeStyles((theme) => ({
 
 const CoordinatorListStudentsView = () => {
 
-    const [studentsList, setStudentList] = useState([]);
+  const [studentsList, setStudentsList] = useState([]);
 
-    useEffect(() => {
-      const fetchData = async () => {
-        const res = await api.getStudentsInfoLocal();
-        setStudentList(res);
-      };
-      fetchData();
-    }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      await api.getStudents().then(res => {
+        setStudentsList(res.data.students);
+      });
+      
+    };
+    fetchData();
+  }, []);
+  console.log(studentsList);
 
     const classes = useStyles();    
+    const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes']];
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />

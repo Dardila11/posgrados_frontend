@@ -24,26 +24,26 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DirectorListActivitiesView = () => {
-  const [activityList, setActivityList] = useState([]);
+const DirectorListEvaluationsView = () => {
+  const [evaluationsList, setEvaluationsList] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getStudentActivitiesLocal();
-      setActivityList(res);
+      const res = await api.getEvaluationsDirectorLocal();
+      setEvaluationsList(res);
     };
     fetchData();
   }, []);
 
   const classes = useStyles();
   return (
-    <Page className={classes.root} title="Listado de Actividades">
+    <Page className={classes.root} title="Listado de Evaluaciones">
       <BreadCrumbs />
-      <SearchBar handleSearch={handleSearch} context="activities" />
-      <List list={activityList} option="Activity" />
+      <SearchBar handleSearch={handleSearch} context="evaluations" />
+      <List list={evaluationsList} option="Evaluation" context="/director/list-evaluations"/>
       <ListPagination />
     </Page>
   );
 };
 
-export default DirectorListActivitiesView;
+export default DirectorListEvaluationsView;

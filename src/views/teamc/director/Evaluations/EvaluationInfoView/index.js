@@ -3,11 +3,11 @@ import React, { useState, useEffect } from 'react';
 import api from 'src/views/teamc/services/Api';
 import Page from 'src/components/Page';
 
-import { makeStyles,Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
 import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
-import StudentInfo from './StudentInfo';
+import StudentInfo from './EvaluationInfo';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CoordinatorStudentView = () => {
+const EvaluationsView = () => {
   const classes = useStyles();
   const [activityList, setActivityList] = useState([]);
   const [result, setResult] = useState('');
@@ -46,27 +46,12 @@ const CoordinatorStudentView = () => {
   const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes', '/coordinator/list-students'] ,['Listado de estudiantes']];
   return (
     <>
-    <Page className={classes.root} title="Estudiante">
-      {/* BreadCrumbs */}
-      <BreadCrumbs  />
-      {/* Student Basic Info
-          - Nombre, programa, cohorte*/}
-      <StudentInfo />
-      {/* Button Track Student */}
-      {/* Activity Card List */}
-      {result === 'ok' ? (
-        <>
-          <Typography className={classes.title} variant='h1'>
-            Actividades de investigación del estudiante
-          </Typography>
-          <List list = {activityList} option='Activity' context='/coordinator/list-activities'/>
-        </>
-      ) : (
-        <h1> Free accounts are limited to 200 requests per day. </h1>
-      )}
-      </Page>
+    {/**TODO: Evaluation modal on click */}
+    <Container>
+
+    </Container>
     </>
   );
 };
 
-export default CoordinatorStudentView;
+export default EvaluationsView;

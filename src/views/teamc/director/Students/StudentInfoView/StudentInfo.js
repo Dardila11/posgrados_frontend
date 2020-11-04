@@ -42,6 +42,15 @@ const StudentInfo = () => {
   let { id } = useParams();
   const [studentInfo, setStudentInfo] = useState({});
   const [isBusy, setBusy] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await api.getStudent(id);
+      setStudentInfo(res.data.student);
+      setBusy(false);
+    };
+    fetchData();
+  });
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -53,16 +62,6 @@ const StudentInfo = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await api.getStudent(id).then(res => {
-        setStudentInfo(res.data.student);
-        setBusy(false);
-      });
-    };
-    fetchData();
-  }, []);
 
   let statusclass = null;
   let status = '';
@@ -90,7 +89,6 @@ const StudentInfo = () => {
     default:
       break;
   }
-
   return (
     <Container>
       {isBusy ? (
@@ -109,25 +107,17 @@ const StudentInfo = () => {
               Programa: {studentInfo && studentInfo.student.program.name}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Cohorte: {studentInfo && studentInfo.period}
+              Cohorte: {studentInfo.period}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
               Estado:{' '}
               <b>
-                <span className={classes.statusclass}>
-                  {studentInfo && status}
-                </span>
+                {' '}
+                <span className={statusclass}>{status}</span>{' '}
               </b>
             </Typography>
           </CardContent>
           <CardActions>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleClickOpen}
-            >
-              Realizar seguimiento
-            </Button>
             <Dialog open={open} onClose={handleClose}>
               <DialogTitle variant="h2" onClose={handleClose}>
                 Seguimiento de estudiante

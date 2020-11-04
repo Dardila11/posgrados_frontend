@@ -4,7 +4,7 @@ import { Card, Typography, Box, makeStyles, createMuiTheme, colors, CardActionAr
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 
-/*const theme = createMuiTheme({
+const theme = createMuiTheme({
   palette: {
     primary: {
       light: '#757ce8',
@@ -14,7 +14,7 @@ import clsx from 'clsx';
     },
     secondary: colors.blue,  
   },
-});*/
+});
 
 const useStyles = makeStyles({
   root: {
@@ -22,42 +22,55 @@ const useStyles = makeStyles({
   CardAction: {
     paddingTop : 5,
     paddingBottom : 5,
+  },
+  calificacionAcepted: {
+    color: '#4caf50'
+  },
+  calificacionReject: {
+    color: '#f44336'
   }
 });
 
 /**
  *
- * @param {activity}
- * @description las información de la actividad previamente obtenida desde backend
+ * @param {evaluation}
+ * @description las información de la evaluacion previamente obtenida desde backend
  */
-const ActivityCard = ({ className,activity,context, ...rest }) => {
+const EvaluationCard = ({ className,evaluation,context, ...rest }) => {
   const classes = useStyles();
-  const link = context+'/activity/'+activity.id;
-  console.log(context);
-  return (
-    <RouterLink to={link}>    
+  const link = context+'/evaluation/'+evaluation.id;
+  let statusclass = null;
+  switch (evaluation.calificacion) {
+    case "ACEPTADA":
+      statusclass = classes.calificacionAcepted;
+      break;
+    case "RECHAZADA":
+      statusclass = classes.calificacionReject;
+      break;
+    default:
+      break;
+  }
+  return ( 
       <Box boxShadow={3}>
         <Card className={clsx(classes.root, className)} {...rest}>
           <CardActionArea className = {classes.CardAction}>
             <Box alignItems="center" display="flex" flexDirection="column">
               <Typography color="textPrimary" gutterBottom variant="h4">
-                {activity.title}
+                {evaluation.title}
               </Typography>
               <Typography className={classes.Typography} fontWeight="fontWeightMedium" variant="body1">
-                {activity.description}
+                {evaluation.description}
               </Typography>              
               <Typography color="textSecondary" variant="body1">
-                {activity.type}
-              </Typography>
-              <Typography color="textSecondary" variant="body1">
-                {activity.academic_year}
+              <b> <span className={statusclass}>
+                {evaluation.calificacion}          
+              </span> </b>
               </Typography>
             </Box>
           </CardActionArea>
         </Card>
       </Box>
-    </RouterLink>
   );
 };
 
-export default ActivityCard;
+export default EvaluationCard;

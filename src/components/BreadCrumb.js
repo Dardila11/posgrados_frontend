@@ -18,18 +18,13 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const BreadCrumbs = () => {
+const BreadCrumbs = ({list}) => {
+  console.log("Lista de breadCrumb"+list);
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <Breadcrumbs maxItems={3} aria-label="breadcrumb">
-      <RouterLink color="inherit" to="/coordinator">
-          Coordinador
-        </RouterLink>
-        <RouterLink color="inherit" to="/coordinator/list-students">
-          Lista Estudiantes
-        </RouterLink>
-        <Typography color="textPrimary">Información del Estudiante</Typography>
+        
       </Breadcrumbs>
     </div>
   );

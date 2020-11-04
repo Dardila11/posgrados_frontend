@@ -1,7 +1,6 @@
 import React from 'react';
 import {Box, Card, CardContent, TextField, InputAdornment, SvgIcon, Container, makeStyles, Select,InputLabel, MenuItem, Grid} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import propTypes from 'prop-types';
 
 const useStyles = makeStyles(() => ({
     root: {  
@@ -21,7 +20,8 @@ const useStyles = makeStyles(() => ({
     
   }));
 
-const SearchBar = ({className,context, ...rest }) => {
+const SearchBar = ({className,context,periods,status,programs, ...rest }) => {
+
     const classes = useStyles();
     return (
         <Container className = {classes.Container}>
@@ -42,57 +42,62 @@ const SearchBar = ({className,context, ...rest }) => {
                                         )
                                         }}
                                         placeholder = {
-                                            context === 'activities' ? (
+                                            context == 'activities' ? (
                                                 'Buscar actividad ...'
                                             ):(
-                                                'Buscar estudiante ...'
+                                                context == 'students' ? (
+                                                    'Buscar estudiante ...'
+                                                ): (
+                                                    'Buscar Evaluación ...'
+                                                )
                                             )
                                         }                                  
                                         variant="outlined"
                                     />
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} md={2} xs={12}>
+                                {periods == undefined ? (
+                                    console.log('No period parameter filther')
+                                ):(
+                                    <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
-                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar Cohorte</InputLabel>
+                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar periodo</InputLabel>
                                         <Select id='Select-cohorte'>
-                                            <MenuItem value = '2020' >2020</MenuItem>
-                                            <MenuItem value = '2019' >2019</MenuItem>
-                                            <MenuItem value = '2018' >2018</MenuItem>
+                                            {periods.map(element => <MenuItem key={element} value = {element} > {element}</MenuItem>)}
                                         </Select>
                                     </Box>
-                                </Grid>
-                                <Grid item lg={2} md={2} xs={12}>
+                                    </Grid>
+                                )}
+                                {status == undefined ? (
+                                    console.log('No status parameter filther')
+                                ):(
+                                    <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
-                                        <InputLabel htmlFor='Select-status'>Seleccionar estado</InputLabel>
-                                        <Select name='Estado' id='Select-status'>
-                                            <MenuItem value = 'ACTIVO' >ACTIVO</MenuItem>
-                                            <MenuItem value = 'INACTIVO' >INACTIVO</MenuItem>
-                                            <MenuItem value = 'GRADUADO' >GRADUADO</MenuItem>
-                                            <MenuItem value = 'RETIRADO' >RETIRADO</MenuItem>
+                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar Tipo</InputLabel>
+                                        <Select id='Select-cohorte'>
+                                            {status.map(element => <MenuItem key={element} value = {element} > {element}</MenuItem>)}
                                         </Select>
                                     </Box>
-                                </Grid>
-                                <Grid item lg={2} md={2} xs={12}>
+                                    </Grid>
+                                )}
+                                {programs == undefined ? (
+                                    console.log('No programs parameter filther')
+                                ):(
+                                    <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
-                                        <InputLabel htmlFor='Select-program'>Seleccionar programa</InputLabel>
-                                        <Select name='Programa' id='Select-program'>
-                                            <MenuItem value = {1} >Maestria en Computacion</MenuItem>
-                                            <MenuItem value = {2} >Maestria en Electronica</MenuItem>
-                                            <MenuItem value = {3} >Maestria en Automatica</MenuItem>
+                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar programa</InputLabel>
+                                        <Select id='Select-cohorte'>
+                                            {programs.map(element => <MenuItem key={element} value = {element} > {element}</MenuItem>)}
                                         </Select>
                                     </Box>
-                                </Grid>
+                                    </Grid>
+                                )}
                             </Grid>
                         </CardContent>
                         </Card>                    
                 </Box>
         </Container>
     );
-}
-
-SearchBar.propTypes = {
-    handleSearch: propTypes.func.isRequired
 }
 
 export default SearchBar
