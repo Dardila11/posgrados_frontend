@@ -5,6 +5,7 @@ import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
 import List from 'src/components/List';
 import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
+import SearchActivities from 'src/views/teamb/ListActivities/SearchActivities';
 import service from 'src/views/teamb/services/service';
 const objService = new service();
 const handleSearch = event => {
@@ -46,7 +47,7 @@ const StudentListActivitiesView = () => {
       <BreadCrumbs />
       <Typography variant="h1" style={{ display: 'flex', justifyContent: 'center' }}>Actividades</Typography>
       <Box>
-      
+      <SearchActivities/>
       </Box>
       <Container className= {classes.buttonContainer}>
         <ActivityView/>
