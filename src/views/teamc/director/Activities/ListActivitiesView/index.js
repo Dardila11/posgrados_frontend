@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { CircularProgress, LinearProgress, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
@@ -21,16 +21,20 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: theme.spacing(3),
     paddingTop: theme.spacing(1),
     paddingLeft: theme.spacing(1)
+  },
+  progress:{
+    marginTop: '30'
   }
 }));
 
 const DirectorListActivitiesView = () => {
   const [activityList, setActivityList] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorActivities(5).then(res => {
         setActivityList(res.data.activities);
+        setLoading(false);
       });
       
     };
@@ -43,8 +47,15 @@ const DirectorListActivitiesView = () => {
     <Page className={classes.root} title="Listado de Actividades">
       <BreadCrumbs />
       <SearchBar handleSearch={handleSearch} context="activities" periods = {periods} status = {status}/>
-      <List list={activityList} option="Activity" context="/director/list-activities" />
-      <ListPagination />
+      {loading ? (
+        
+        <LinearProgress className={classes.progress}/>
+      ):(
+        <>
+        <List list={activityList} option="Activity" context="/director/list-activities" />
+        <ListPagination />        
+        </>
+      )}      
     </Page>
   );
 };

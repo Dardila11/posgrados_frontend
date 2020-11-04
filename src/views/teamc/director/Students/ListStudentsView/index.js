@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Divider,
+  LinearProgress,
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
@@ -24,17 +25,22 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: theme.spacing(3),
       paddingTop: theme.spacing(1),
       paddingLeft: theme.spacing(1)      
+    },
+    progress: {
+      marginTop : '30'
     }
   }));
 
 
 const DirectorListStudentsView = () => {
     const [studentsList, setStudentsList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
       const fetchData = async () => {
         await api.getDirectorStudents(5).then(res => {
           setStudentsList(res.data.students);
+          setLoading(false);
         });
         
       };
@@ -48,8 +54,15 @@ const DirectorListStudentsView = () => {
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
             <SearchBar handleSearch={handleSearch} context='students' periods = {periods} status = {status} programs = {programs}/>
-            <List list = {studentsList} option= 'Student'/>
-            <ListPagination/>
+            { loading ? (
+              <LinearProgress className={classes.progress}/>
+            ):(
+              <>  
+              <List list = {studentsList} option= 'Student'/>
+              <ListPagination/>
+              </>
+            )}
+            
         </Page>  
       ); 
 };

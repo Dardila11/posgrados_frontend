@@ -34,8 +34,11 @@ const getDirectorActivities = id => {
   return http.get('/api/director/' + id + '/activity');
 };
 
-const getStudentActivities = () => {
-  return http.get('/student_activities');
+const getStudentActivities = id => {
+  let content = http.get('/api/student/' + id + '/activity');
+  console.log('Api get: Student activities '+id);
+  console.log(content);
+  return content;
 };
 
 const getStudentActivitiesLocal = () => {
