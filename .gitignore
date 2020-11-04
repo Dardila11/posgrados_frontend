@@ -7,6 +7,7 @@
 
 # testing
 /coverage
+/src/views/teamd/Search/prueba.js
 
 # production
 /build
