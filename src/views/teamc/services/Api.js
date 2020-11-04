@@ -9,23 +9,21 @@ const getStudents = () => {
   return content;
 };
 
-const getDirectorStudents = (id) => {
-  let content = http.get('/api/director/'+id+'/student');
+const getDirectorStudents = id => {
+  let content = http.get('/api/director/' + id + '/student');
   console.log('Api get: Director students');
   console.log(content);
   return content;
-}
+};
 
-const getStudent = (id) => {
-  let content = http.get('/api/student/'+id);
-  console.log('Api get: Student '+id);
+const getStudent = id => {
+  let content = http.get('/api/student/' + id);
+  console.log('Api get: Student ' + id);
   return content;
 };
 
-const getDirectorActivities = (id) => {
-  let content = http.get('/api/director/'+id+'/activity');
-  console.log('Api get: Director Activities ');
-  return content;
+const getDirectorActivities = id => {
+  return http.get('/api/director/' + id + '/activity');
 };
 
 const getStudentActivities = () => {
