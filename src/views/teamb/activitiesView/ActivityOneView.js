@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Typography, Divider } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -108,6 +108,7 @@ const ActivityOneView = ({ className, ...rest }) => {
   const [resultadoBack, setResultadoBack] = useState(null);
 
   const handleEnviarBackAceptar = () => {
+    window.location.href = window.location.href;
     setEmergenteEnviarBack(false);
     setResultadoBack(null);
   };
@@ -229,17 +230,7 @@ const ActivityOneView = ({ className, ...rest }) => {
         "send_email": send_email 
       }
     ).then((result) => { 
-      setResultadoBack("Actividad registrada correctamente");
-      setValues({
-        ...values,
-        titulo:'',
-        descripcion:'',
-        programaSeleccionado:'',
-        horasAsignadas:0,
-        fechaInicio: '',
-        fechaFin:'',
-      });      
-      
+      setResultadoBack("Actividad registrada correctamente");   
     }).catch(() => {
       setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
@@ -382,7 +373,7 @@ const ActivityOneView = ({ className, ...rest }) => {
             <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
-              {resultadoBack? <p style={{ display: 'flex'}}>{resultadoBack}</p>:null}
+              {resultadoBack? <Typography component={'span'} variant={'body2'}>{resultadoBack}</Typography>:null}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -391,8 +382,6 @@ const ActivityOneView = ({ className, ...rest }) => {
               </Button>
             </DialogActions>
           </Dialog>
-
-
         </div>
       </Container>
     </div>
