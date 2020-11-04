@@ -102,7 +102,7 @@ const StudentInfo = () => {
               Información del estudiante
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Nombre: {studentInfo && studentInfo.student.user.first_name}
+              Nombre: {studentInfo && studentInfo.student.user.first_name}{' '}
               {studentInfo && studentInfo.student.user.last_name}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
