@@ -36,16 +36,45 @@ const DirectorListActivitiesView = () => {
     };
     fetchData();
   }, []);
-  console.log(activityList);
   const classes = useStyles();
+  const periods = get_period(activityList);
+  const status = get_status(activityList);
   return (
     <Page className={classes.root} title="Listado de Actividades">
       <BreadCrumbs />
-      <SearchBar handleSearch={handleSearch} context="activities" />
-      <List list={activityList} option="Activity" context="/director/list-activities"/>
+      <SearchBar handleSearch={handleSearch} context="activities" periods = {periods} status = {status}/>
+      <List list={activityList} option="Activity" context="/director/list-activities" />
       <ListPagination />
     </Page>
   );
+};
+
+function get_period (list){
+  let res = [];
+  list.map(element =>(
+    !res.includes(element.academic_year) ? (
+      res.push(element.academic_year) 
+      ):(
+        console.log('')
+      )
+    )
+  );
+  console.log(res);
+  return res;  
+};
+
+function get_status (list){
+  let res = [];
+  list.map(element =>(
+    !res.includes(element.type) ? (
+      res.push(element.type) 
+      ):(
+        console.log('')
+      )
+    )
+  );
+  console.log(res);
+  return res;  
 };
 
 export default DirectorListActivitiesView;

@@ -40,15 +40,59 @@ const DirectorListStudentsView = () => {
       };
       fetchData();
     }, []);
+    const periods = get_period(studentsList);
+    const status = get_status(studentsList);
+    const programs = get_programs(studentsList);
     const classes = useStyles();
     return (
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
-            <SearchBar handleSearch={handleSearch} context='students'/>
+            <SearchBar handleSearch={handleSearch} context='students' periods = {periods} status = {status} programs = {programs}/>
             <List list = {studentsList} option= 'Student'/>
             <ListPagination/>
         </Page>  
       ); 
 };
 
+function get_period (list){
+  let res = [];
+  console.log(list);
+  list.map(element =>(
+    !res.includes(element.period) ? (
+      res.push(element.period) 
+      ):(
+        console.log('')
+      )
+    )
+  );
+  return res;  
+};
+
+function get_status (list){
+  let res = [];
+  console.log(list);
+  list.map(element =>(
+    !res.includes(element.state) ? (
+      res.push(element.state) 
+      ):(
+        console.log('')
+      )
+    )
+  );
+  return res;  
+};
+
+function get_programs (list){
+  let res = [];
+  console.log(list);
+  list.map(element =>(
+    !res.includes(element.student.program.name) ? (
+      res.push(element.student.program.name) 
+      ):(
+        console.log('')
+      )
+    )
+  );
+  return res;  
+};
 export default DirectorListStudentsView;
