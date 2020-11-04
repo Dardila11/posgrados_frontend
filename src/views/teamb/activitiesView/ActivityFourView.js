@@ -85,7 +85,9 @@ const ActivityFourView = ({ className, ...rest }) => {
   const [resultadoBack, setResultadoBack] = useState(null);
 
   const handleEnviarBackAceptar = () => {
-    window.location.href = window.location.href;
+    if(resultadoBack == "Actividad registrada correctamente") {
+      window.location.href = window.location.href;
+    }
     setEmergenteEnviarBack(false);
     setResultadoBack(null);
   };
