@@ -64,34 +64,32 @@ const StudentInfo = () => {
     fetchData();
   }, []);
 
-  /*const setClassStatus = () => {
-    let statusclass = null;
-    let status = '';
-    switch (studentInfo.student.state) {
-      case 1:
-        statusclass = classes.statusActive;
-        status = 'ACTIVO';
-        break;
-      case 2:
-        statusclass = classes.statusInactive;
-        status = 'INACTIVO';
-        break;
-      case 3:
-        statusclass = classes.statusGraduate;
-        status = 'GRADUADO';
-        break;
-      case 4:
-        statusclass = classes.statusBalanced;
-        status = 'BALANCEADO';
-        break;
-      case 5:
-        statusclass = classes.statusRetired;
-        status = 'RETIRADO';
-        break;
-      default:
-        break;
-    }
-  };*/
+  let statusclass = null;
+  let status = '';
+  switch (studentInfo.state) {
+    case 1:
+      statusclass = classes.statusActive;
+      status = 'ACTIVO';
+      break;
+    case 2:
+      statusclass = classes.statusInactive;
+      status = 'INACTIVO';
+      break;
+    case 3:
+      statusclass = classes.statusGraduate;
+      status = 'GRADUADO';
+      break;
+    case 4:
+      statusclass = classes.statusBalanced;
+      status = 'BALANCEADO';
+      break;
+    case 5:
+      statusclass = classes.statusRetired;
+      status = 'RETIRADO';
+      break;
+    default:
+      break;
+  }
 
   return (
     <Container>
@@ -114,10 +112,10 @@ const StudentInfo = () => {
               Cohorte: {studentInfo && studentInfo.period}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Estado:
+              Estado:{' '}
               <b>
-                <span className={classes.statusActive}>
-                  {studentInfo && studentInfo.state}
+                <span className={classes.statusclass}>
+                  {studentInfo && status}
                 </span>
               </b>
             </Typography>
