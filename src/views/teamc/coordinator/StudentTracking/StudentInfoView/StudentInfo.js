@@ -4,8 +4,7 @@ import TrackStudent from './TrackStudent';
 
 import api from 'src/views/teamc/services/Api';
 
-import {useParams
-} from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import {
   Card,
   CardActions,
@@ -39,11 +38,10 @@ const useStyles = makeStyles({
   }
 });
 
-
 const StudentInfo = () => {
-
-  let {id} = useParams();
-  const [data, setStudent] = useState('');
+  let { id } = useParams();
+  const [studentInfo, setStudentInfo] = useState({});
+  const [isBusy, setBusy] = useState(true);
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -55,92 +53,102 @@ const StudentInfo = () => {
   const handleClose = () => {
     setOpen(false);
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
       await api.getStudent(id).then(res => {
-        setStudent(res.data.student);
-      });      
+        setStudentInfo(res.data.student);
+        setBusy(false);
+      });
     };
     fetchData();
-  });
-
-  
-  console.log("Student info" + data);
-  const student = data.student.user;
-  const program = data.student.program;
-  const period = data.period;
-  const status = data.state;
+  }, []);
 
   let statusclass = null;
-  let state = null;
-  switch (status) {
+  let status = '';
+  switch (studentInfo.state) {
     case 1:
       statusclass = classes.statusActive;
-      state = 'ACTIVO';
+      status = 'ACTIVO';
       break;
     case 2:
       statusclass = classes.statusInactive;
-      state = 'INACTIVO';
+      status = 'INACTIVO';
       break;
     case 3:
-        statusclass = classes.statusGraduate;
-        state = 'GRADUADO';
-        break;
+      statusclass = classes.statusGraduate;
+      status = 'GRADUADO';
+      break;
     case 4:
-        statusclass = classes.statusBalanced;
-        state = 'BALANCEADO';
-        break;
+      statusclass = classes.statusBalanced;
+      status = 'BALANCEADO';
+      break;
     case 5:
-        statusclass = classes.statusRetired;
-        state = 'RETIRADO';
-        break;
+      statusclass = classes.statusRetired;
+      status = 'RETIRADO';
+      break;
     default:
       break;
   }
-  
+
   return (
     <Container>
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h3" component="h2" gutterBottom>
-          Información del estudiante
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Nombre: {student.first_name} {student.last_name}
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Programa: {program}
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Cohorte: {period}
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-        Estado: <b> <span className={statusclass}>
-          {status}          
-          </span> </b>
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
-          Realizar seguimiento
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle variant="h2" onClose={handleClose}>
-            Seguimiento de estudiante
-          </DialogTitle>
-          <TrackStudent />
-          <DialogActions>
-            <Button variant="contained" onClick={handleClose}>
-              Cancelar
+      {isBusy ? (
+        <h1>Cargando</h1>
+      ) : (
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography variant="h3" component="h2" gutterBottom>
+              Información del estudiante
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Nombre: {studentInfo && studentInfo.student.user.first_name}
+              {studentInfo && studentInfo.student.user.last_name}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Programa: {studentInfo && studentInfo.student.program.name}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Cohorte: {studentInfo && studentInfo.period}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Estado:{' '}
+              <b>
+                <span className={classes.statusclass}>
+                  {studentInfo && status}
+                </span>
+              </b>
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClickOpen}
+            >
+              Realizar seguimiento
             </Button>
-            <Button variant="contained" color="primary" onClick={handleClose}>
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </CardActions>
-    </Card>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle variant="h2" onClose={handleClose}>
+                Seguimiento de estudiante
+              </DialogTitle>
+              <TrackStudent />
+              <DialogActions>
+                <Button variant="contained" onClick={handleClose}>
+                  Cancelar
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  Guardar
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </CardActions>
+        </Card>
+      )}
     </Container>
   );
 };
