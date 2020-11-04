@@ -3,33 +3,62 @@ import { CreateCountryService } from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Box, Button, Container, TextField } from '@material-ui/core';
-
+import { AlertView } from '../../../../components/Alert'
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+const useStyles = makeStyles({
+  root: {
+    background: 'white',
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    paddingTop: '30px',
+    paddingLeft: '50px',
+    paddingRight: '50px',
+    paddingBottom: '40px'
+  },
+  container: {
+    marginTop: '30px'
+  }
+});
 const CreateCountryView = () => {
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
+  const clases = useStyles();
   const [name, setname] = useState(' ');
-
   const handleCreate = () => {
+    setOpen(false)
     CreateCountryService({
       name: name
     })
       .then(() => {
-        document.getElementById('contenedorCountry').innerHTML =
-          "<div class='alert alert-success' role='alert'>Pais creado correctamente!</div>";
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Pais creado correctamente')
       })
       .catch(() => {
-        document.getElementById('contenedorCountry').innerHTML =
-          "<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Error, verifica los datos!')
+
       });
   };
   const handleSubmit = event => {
-    event.preventDefault();
+    event.preventDefault()
     handleCreate();
   };
   const handleOnchangeName = e => {
     setname(e.target.value);
   };
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={clases.container}>
       <Formik
         initialValues={{
           name: ''
@@ -58,7 +87,10 @@ const CreateCountryView = () => {
               height="100%"
               justifyContent="center"
             >
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={e => handleSubmit(e)} className={clases.root}>
+                <Typography color="textPrimary" variant="h1" align="center">
+                  Pais
+                </Typography>
                 <Box mb={3}>
                   <TextField
                     error={Boolean(touched.name && errors.name)}
@@ -91,12 +123,14 @@ const CreateCountryView = () => {
                   </Box>
                 </Box>
               </form>
+              
             </Box>
-            <div id="contenedorCountry"></div>
           </>
         )}
       </Formik>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </Container>
+    
   );
 };
 

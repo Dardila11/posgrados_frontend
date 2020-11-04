@@ -3,15 +3,42 @@ import { CreateInstitutionService } from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { AlertView } from '../../../../components/Alert'
+import { makeStyles } from '@material-ui/core/styles';
 //Import component search
 import { SearchCountry } from 'src/views/teamd/Search/searchCountry';
 import { SearchDepartment } from 'src/views/teamd/Search/searchDepartment';
 import { SearchCity } from 'src/views/teamd/Search/searchCity';
 
-import { Box, Button, Container, TextField } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography
+} from '@material-ui/core';
+
+const useStyles = makeStyles({
+  root: {
+    background: 'white',
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    paddingTop: '30px',
+    paddingLeft: '50px',
+    paddingRight: '50px',
+    paddingBottom: '40px'
+  },
+  container: {
+    marginTop: '30px'
+  }
+});
 
 const CreateInstitutionView = () => {
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
+  const clases = useStyles();
   const [name, setname] = useState(' ');
   const [idDepartment, setidDdepartment] = useState(' ');
   const [idCountry, setidCountry] = useState(' ');
@@ -35,6 +62,7 @@ const CreateInstitutionView = () => {
   };
 
   const handleCreate = () => {
+    setOpen(false)
     CreateInstitutionService({
       name_inst: name,
       city: idCity,
@@ -42,12 +70,14 @@ const CreateInstitutionView = () => {
       country: idCountry
     })
       .then(() => {
-        document.getElementById('contenedorInstitution').innerHTML =
-          "<div class='alert alert-success' role='alert'>Institucion creada correctamente!</div>";
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Institución creada correctamente')
       })
       .catch(() => {
-        document.getElementById('contenedorInstitution').innerHTML =
-          "<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Error, Verifica los datos!')
       });
   };
   const handleSubmit = event => {
@@ -56,7 +86,7 @@ const CreateInstitutionView = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={clases.container}>
       <Formik
         initialValues={{
           name: ''
@@ -85,7 +115,10 @@ const CreateInstitutionView = () => {
               height="100%"
               justifyContent="center"
             >
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className={clases.root}>
+                <Typography color="textPrimary" variant="h1" align="center">
+                  Institución
+                </Typography>
                 <Box mb={3}>
                   <TextField
                     error={Boolean(touched.name && errors.name)}
@@ -125,10 +158,10 @@ const CreateInstitutionView = () => {
                 </Box>
               </form>
             </Box>
-            <div id="contenedorInstitution"></div>
           </>
         )}
       </Formik>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </Container>
   );
 };

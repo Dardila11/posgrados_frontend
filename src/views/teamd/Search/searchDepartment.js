@@ -8,8 +8,9 @@ export const SearchDepartment = ({ idCountry, callback }) => {
   const [listDepartments, setListDepartments] = useState([]);
   useEffect(() => {
     console.log('buscando departamentos ');
+    console.log(idCountry);
     listDeparmentsService(idCountry).then(result =>
-      setListDepartments(result.data.Departments)
+      setListDepartments(result.data.States)
     );
   }, [idCountry]);
 
@@ -27,7 +28,6 @@ export const SearchDepartment = ({ idCountry, callback }) => {
       options={listDepartments}
       getOptionLabel={option => option.name}
       style={{ marginBottom: 10, marginTop: 10 }}
-      freeSolo
       renderInput={params => (
         <TextField
           id="inputOptionDepartment"

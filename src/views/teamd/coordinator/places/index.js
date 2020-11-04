@@ -69,33 +69,31 @@ const AdministerPlacesView = () => {
         {' '}
         {/* TODOPagina lenta por peticiones innecesarias*/}
         <Box mt={3}>
-          <Card>
-            <AppBar className={classes.appbar} position="relative">
-              <Tabs
-                textColor="primary"
-                indicatorColor="secondary"
-                value={value}
-                onChange={handleChange}
-              >
-                <Tab label="Crear pais" {...options(0)} />
-                <Tab label="Crear departamento" {...options(1)} />
-                <Tab label="Crear ciudad" {...options(2)} />
-                <Tab label="Crear institucion" {...options(3)} />
-              </Tabs>
-            </AppBar>
-            <TabPanel value={value} index={0}>
-              <CreateCountryView />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <CreateDepartmentView />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
-              <CreateCityView />
-            </TabPanel>
-            <TabPanel value={value} index={3}>
-              <CreateInstitutionView />
-            </TabPanel>
-          </Card>
+          <AppBar className={classes.appbar} position="relative">
+            <Tabs
+              textColor="primary"
+              indicatorColor="secondary"
+              value={value}
+              onChange={handleChange}
+            >
+              <Tab label="Crear pais" {...options(0)} />
+              <Tab label="Crear departamento" {...options(1)} />
+              <Tab label="Crear ciudad" {...options(2)} />
+              <Tab label="Crear institucion" {...options(3)} />
+            </Tabs>
+          </AppBar>
+          <TabPanel value={value} index={0}>
+            <CreateCountryView />
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <CreateDepartmentView />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+            <CreateCityView />
+          </TabPanel>
+          <TabPanel value={value} index={3}>
+            <CreateInstitutionView />
+          </TabPanel>
         </Box>
       </Container>
     </Page>

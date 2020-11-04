@@ -3,13 +3,40 @@ import { CreateCityService } from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Box, Button, Container, TextField } from '@material-ui/core';
-
+import { AlertView } from '../../../../components/Alert'
+import {
+  Box,
+  Button,
+  Container,
+  TextField,
+  Typography
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 //Import component search
 import { SearchCountry } from 'src/views/teamd/Search/searchCountry';
 import { SearchDepartment } from 'src/views/teamd/Search/searchDepartment';
 
+const useStyles = makeStyles({
+  root: {
+    background: 'white',
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    paddingTop: '30px',
+    paddingLeft: '50px',
+    paddingRight: '50px',
+    paddingBottom: '40px'
+  },
+  container: {
+    marginTop: '30px'
+  }
+});
+
 const CreateCityView = () => {
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
+  const clases = useStyles();
   const [name, setname] = useState(' ');
   const [idDepartment, setidDdepartment] = useState(' ');
   const [idCountry, setidCountry] = useState(' ');
@@ -28,17 +55,20 @@ const CreateCityView = () => {
   };
 
   const handleCreate = () => {
+    setOpen(false)
     CreateCityService({
       name: name,
-      department: idDepartment
+      state: idDepartment
     })
       .then(() => {
-        document.getElementById('contenedorCity').innerHTML =
-          "<div class='alert alert-success' role='alert'>Ciudad creada correctamente!</div>";
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Ciudad creada correctamente')
       })
       .catch(() => {
-        document.getElementById('contenedorCity').innerHTML =
-          "<div class='alert alert-danger' role='alert'>Error!.Verifica los datos!</div>";
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Error, Verifica los datos!')
       });
   };
   const handleSubmit = event => {
@@ -47,23 +77,15 @@ const CreateCityView = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" className={clases.container}>
       <Formik
         initialValues={{
-          name: '',
-          department: '',
-          country: ''
+          name: ''
         }}
         validationSchema={Yup.object().shape({
-          city: Yup.string()
+          name: Yup.string()
             .max(255)
-            .required('name is required'),
-          department: Yup.string()
-            .max(255)
-            .required('department is required'),
-          country: Yup.string()
-            .max(255)
-            .required('country is required')
+            .required('name is required')
         })}
         onSubmit={() => {}}
       >
@@ -75,51 +97,48 @@ const CreateCityView = () => {
               height="100%"
               justifyContent="center"
             >
-              <form onSubmit={handleSubmit}>
-                <Box mb={3}>
-                  <TextField
-                    error={Boolean(touched.name && errors.name)}
-                    fullWidth
-                    helperText={touched.name && errors.name}
-                    label="Nombre"
-                    margin="normal"
-                    name="name"
-                    onChange={e => {
-                      handleOnchangeName(e);
-                      handleChange(e);
-                    }}
-                    onBlur={handleBlur}
-                    type="text"
-                    value={values.name}
-                    variant="outlined"
-                  />
-
-                  <SearchCountry callback={setCountry} />
-
-                  <SearchDepartment
-                    idCountry={idCountry}
-                    callback={getDepartment}
-                  />
-
-                  <Box my={2}>
-                    <Button
-                      color="primary"
-                      fullWidth
-                      size="large"
-                      type="submit"
-                      variant="contained"
-                    >
-                      Crear
-                    </Button>
-                  </Box>
-                </Box>
+              <form onSubmit={handleSubmit} className={clases.root}>
+                <Typography color="textPrimary" variant="h1" align="center">
+                  Ciudad
+                </Typography>
+                <TextField
+                  error={Boolean(touched.name && errors.name)}
+                  helperText={touched.name && errors.name}
+                  fullWidth
+                  label="Nombre"
+                  margin="normal"
+                  name="name"
+                  onChange={e => {
+                    handleOnchangeName(e);
+                    handleChange(e);
+                  }}
+                  onBlur={handleBlur}
+                  type="text"
+                  value={values.name}
+                  variant="outlined"
+                />
+                <SearchCountry callback={setCountry} />
+                <SearchDepartment
+                  idCountry={idCountry}
+                  callback={getDepartment}
+                />
+                <Button
+                  color="primary"
+                  fullWidth
+                  size="large"
+                  type="submit"
+                  variant="contained"
+                >
+                  Crear
+                </Button>
               </form>
             </Box>
-            <div id="contenedorCity"></div>
           </>
         )}
       </Formik>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </Container>
+    
   );
 };
 export default CreateCityView;

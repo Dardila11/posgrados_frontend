@@ -8,9 +8,11 @@ export const SearchLineLedge = ({ callback, idKnowLedge }) => {
   const [lineResearchList, setLineResearchList] = useState([]);
   //llenando la lista de opciones
   useEffect(() => {
-    GetLineResearch(idKnowLedge).then(request => {
-      setLineResearchList(request.data.Lines)
-    }).catch( () => console.log("no encontró nada con id ", idKnowLedge)); //TODO
+    GetLineResearch(idKnowLedge)
+      .then(request => {
+        setLineResearchList(request.data.Lines);
+      })
+      .catch(() => console.log('no encontró nada con id ', idKnowLedge)); //TODO
   }, []);
 
   const getIdLineResearch = name => {

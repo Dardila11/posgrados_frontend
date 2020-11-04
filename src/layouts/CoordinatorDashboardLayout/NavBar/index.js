@@ -13,7 +13,7 @@ import {
 import AddIcon from '@material-ui/icons/Add';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { Users as UsersIcon, Eye as EyeIcon } from 'react-feather';
-
+import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import NavItem from './NavItem';
 
 const user = {
@@ -44,10 +44,16 @@ const items = [
     icon: SupervisorAccountIcon,
     title: 'Administar Profesores'
   },
+
+  {
+    href: '/coordinator/administerUsers',
+    icon: GroupRoundedIcon,
+    title: 'Administrar Usuarios'
+  },
   {
     href: '/coordinator/create-others',
     icon: AddIcon,
-    title: 'crear otras cosas'
+    title: 'Crear otras cosas'
   },
 
   // End Options Team D
