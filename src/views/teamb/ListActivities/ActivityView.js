@@ -146,7 +146,7 @@ const ActivityView = ({ className, ...rest }) => {
            */}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button>
+          <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button> &nbsp;  
           {/*Todo: comentar*/}
           <Button onClick={handleDatosDetalle} variant="contained" color="primary"> Datos de detalle</Button>
         </DialogActions>
@@ -156,8 +156,8 @@ const ActivityView = ({ className, ...rest }) => {
       <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
         <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
         <DialogActions>
-          <Button onClick={handleCancelarSi} color="primary"> Si </Button>
           <Button onClick={handleCancelarNo} color="primary" autoFocus> No </Button>
+          <Button onClick={handleCancelarSi} color="primary"> Si </Button>
         </DialogActions>
       </Dialog>
       {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "DATOS DE DETALLE" 
@@ -165,10 +165,10 @@ const ActivityView = ({ className, ...rest }) => {
       <Dialog open={EmergenteDatosDetalle} onClose={handleDatosDetalleNo}>
         <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea crear una nueva actividad?"}</DialogTitle>
         <DialogActions>
+          <Button onClick={handleDatosDetalleNo} color="primary" autoFocus> No </Button>
           <RouterLink to={activity}>
             <Button color="primary"> Si </Button>
           </RouterLink>
-          <Button onClick={handleDatosDetalleNo} color="primary" autoFocus> No </Button>
         </DialogActions>
       </Dialog>
     </div>
