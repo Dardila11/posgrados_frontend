@@ -45,9 +45,9 @@ const ActivityCard = ({ className,activity,context, ...rest }) => {
               </Typography>
               <Typography className={classes.Typography} fontWeight="fontWeightMedium" variant="body1">
                 {activity.description}
-              </Typography>              
+              </Typography>
               <Typography color="textSecondary" variant="body1">
-                {activity.id}
+                {activity.start_date}
               </Typography>
             </Box>
           </CardActionArea>

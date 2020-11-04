@@ -3,9 +3,9 @@ const API_URL = 'http://mdquilindo.pythonanywhere.com';
 
 export default class service {
 
-    GetPeriodService(periodo) {
-        const url= `${API_URL}/api/period/student/1/`; //El numero depende del id del usuario/estudiante actual
-        return axios.get(url,periodo);
+    GetPeriodService(id) {
+        const url= `${API_URL}/api/period/student/`+id+`/`; //El numero depende del id del usuario/estudiante actual
+        return axios.get(url);
     }
     GetActivities(id, academic_year) {
         const url= `${API_URL}/api/activities/student/`+id+`/`+academic_year+`/`; 

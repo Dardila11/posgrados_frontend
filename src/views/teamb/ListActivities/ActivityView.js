@@ -60,7 +60,7 @@ const ActivityView = ({ className, ...rest }) => {
   const [errorDescripcion, setErrorDescripcion] = useState(null);
 
   const handleClickOpen = () => {
-    objService.GetPeriodService().then((result) => {
+    objService.GetPeriodService(8).then((result) => {
       var CurrentPeriod = result.data.period;
       var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
       document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;

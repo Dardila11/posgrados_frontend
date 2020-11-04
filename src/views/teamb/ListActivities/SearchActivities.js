@@ -33,7 +33,7 @@ const SearchBar = ({className,context, ...rest }) => {
                 <CardContent>
                         <Grid style={{ display: 'flex', justifyContent: 'center' }} container spacing = {3}  >
                             <Grid item lg={2} md={2} xs={1}>
-                                <InputLabel>Periodo academico</InputLabel>
+                                <InputLabel>Año academico</InputLabel>
                             </Grid>
                             <Grid item lg={5} md={5} xs={12}>
                                 <Box maxWidth={500}>
