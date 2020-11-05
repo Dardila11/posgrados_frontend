@@ -13,7 +13,8 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  Container
+  Container,
+  LinearProgress
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -33,12 +34,15 @@ const useStyles = makeStyles({
   },
   statusGraduate: {
     color: '#0277bd'
+  }, 
+  progress: {
+    marginTop: '30'
   }
 });
 
 const ActivityInfoView = () => {
-  const [activityList, setActivityList] = useState([]);
   const [activity1, setActivity] = useState({});
+  const [loading, setLoading] = useState(true);
   let { id } = useParams();
 
   useEffect(() => {
@@ -48,6 +52,7 @@ const ActivityInfoView = () => {
           activity => activity.id == id
         );
         setActivity(activity);
+        setLoading(false);
       });
     };
     fetchData();
@@ -65,7 +70,10 @@ const ActivityInfoView = () => {
 
   return (
     <Container>
-      <Card className={classes.root}>
+      {loading ? (
+        <LinearProgress className={classes.progress}/>
+      ):(
+        <Card className={classes.root}>
         <CardContent>
           <Typography variant="h3" component="h2" gutterBottom>
             Información de la actividad
@@ -100,6 +108,8 @@ const ActivityInfoView = () => {
           </Dialog>
         </CardActions>
       </Card>
+      )}
+      
     </Container>
   );
 };
