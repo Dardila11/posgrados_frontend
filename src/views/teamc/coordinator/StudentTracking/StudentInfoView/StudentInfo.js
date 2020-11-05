@@ -133,18 +133,6 @@ const StudentInfo = () => {
                 Seguimiento de estudiante
               </DialogTitle>
               <TrackStudent />
-              <DialogActions>
-                <Button variant="contained" onClick={handleClose}>
-                  Cancelar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleClose}
-                >
-                  Guardar
-                </Button>
-              </DialogActions>
             </Dialog>
           </CardActions>
         </Card>

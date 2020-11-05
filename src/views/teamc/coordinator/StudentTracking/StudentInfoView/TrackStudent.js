@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   DialogContent,
   TextField,
   Select,
   MenuItem,
-  makeStyles
+  makeStyles,
+  DialogActions,
+  Button
 } from '@material-ui/core';
+import { SentimentSatisfied } from '@material-ui/icons';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -20,6 +23,32 @@ const useStyles = makeStyles(theme => ({
 const TrackStudent = props => {
   const classes = useStyles();
   const [studentStatus, setStudentStatus] = useState('');
+  const [trackStudent, setTrackStudent] = useState({
+    state: 1,
+    enrollment_date: null,
+    graduation_date: null,
+    num_folio: '',
+    num_acta: '',
+    num_diploma: '',
+    num_resolution: '',
+    observations: '',
+    date_record: '2020-10-01T04:00',
+    date_update: '2020-10-01T04:00',
+    student: 1
+  });
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setTrackStudent(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const postData = () => {
+    console.log(trackStudent);
+    // aqui hacemos el post
+  };
 
   const changeStudentStatus = e => {
     setStudentStatus(e);
@@ -37,6 +66,9 @@ const TrackStudent = props => {
             type="date"
             defaultValue="2020-10-19"
             variant="outlined"
+            name="date_record"
+            value={trackStudent.date_record}
+            onChange={handleChange}
             InputLabelProps={{
               shrink: true
             }}
@@ -47,8 +79,10 @@ const TrackStudent = props => {
             variant="outlined"
             type="select"
             defaultValue={1}
+            name="state"
+            value={trackStudent.state}
             required
-            onChange={event => changeStudentStatus(event.target.value)}
+            onChange={handleChange}
           >
             <MenuItem value={0}>Activo</MenuItem>
             <MenuItem value={1}>Inactivo</MenuItem>
@@ -66,6 +100,9 @@ const TrackStudent = props => {
                 type="date"
                 defaultValue="2020-10-19"
                 variant="outlined"
+                name="graduation_date"
+                onChange={handleChange}
+                value={trackStudent.graduation_date}
                 InputLabelProps={{
                   shrink: true
                 }}
@@ -75,18 +112,27 @@ const TrackStudent = props => {
                 id="outlined-basic"
                 label="Folio"
                 variant="outlined"
+                name="num_folio"
+                onChange={handleChange}
+                value={trackStudent.num_folio}
                 required
               />
               <TextField
                 id="outlined-basic"
                 label="Numero Acta"
                 variant="outlined"
+                name="num_acta"
+                onChange={handleChange}
+                value={trackStudent.num_acta}
                 required
               />
               <TextField
                 id="outlined-basic"
                 label="Resolución"
                 variant="outlined"
+                name="num_resolution"
+                onChange={handleChange}
+                value={trackStudent.num_resolution}
                 required
               />
               <TextField
@@ -106,10 +152,18 @@ const TrackStudent = props => {
             variant="outlined"
             multiline
             rows={5}
+            name="observations"
+            value={trackStudent.observations}
+            onChange={handleChange}
             required
           />
         </form>
       </DialogContent>
+      <DialogActions>
+        <Button variant="contained" color="primary" onClick={postData}>
+          Guardar
+        </Button>
+      </DialogActions>
     </>
   );
 };

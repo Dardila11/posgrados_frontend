@@ -10,23 +10,39 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
-import ActivityView from 'src/views/teamb/activities/ActivityView';
-import ActivityOneView from 'src/views/teamb/activities/ActivityOneView';
-import ActivityTwoView from 'src/views/teamb/activities/ActivityTwoView';
-import ActivityThreeView from 'src/views/teamb/activities/ActivityThreeView';
-import ActivityFourView from 'src/views/teamb/activities/ActivityFourView';
-import ActivityFiveView from 'src/views/teamb/activities/ActivityFiveView';
-import ActivitySixView from 'src/views/teamb/activities/ActivitySixView';
+import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
+import ActivityOneView from 'src/views/teamb/activitiesView/ActivityOneView';
+import ActivityTwoView from 'src/views/teamb/activitiesView/ActivityTwoView';
+import ActivityThreeView from 'src/views/teamb/activitiesView/ActivityThreeView';
+import ActivityFourView from 'src/views/teamb/activitiesView/ActivityFourView';
+import ActivityFiveView from 'src/views/teamb/activitiesView/ActivityFiveView';
+import ActivitySixView from 'src/views/teamb/activitiesView/ActivitySixView';
 import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
+
+//import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
+//StartImports teamD
+import AdministerView from 'src/views/teamd/coordinator/GI/index';
+import AdministerPlacesView from 'src/views/teamd/coordinator/places/index';
+import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index';
+import { CreateOtherView } from './views/teamd/coordinator/createOthers';
+import { CreateUserView } from './views/teamd/coordinator/users/CreateUser'
+//import FreeSoloCreateOptionDialog from 'src/views/teamd/Search/prueba'
+//EndImports TeamD
+
+//import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
+import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
+//import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/ActivityEvaluationsView/index';
+
 import CoordinatorIndexView from 'src/views/teamc/coordinator';
 import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
 import CoordinatorStudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
 import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activities/ListActivitiesView';
 import CoordinatorActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
 import CoordinatorListEvaluationsView from './views/teamc/coordinator/Evaluations/ListEvaluationsView';
+
 /* End Coordinator imports*/
 
 /* Director imports */
@@ -61,24 +77,29 @@ const routes = [
       { path: '', element: <CoordinatorIndexView />},
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       { path: 'list-students/student/:id', element: <CoordinatorStudentView /> },
+      //{ path: 'list-students/student/:id', element: <StudentView /> },
+      { path: '/administer-Gi', element: <AdministerView /> },
+      { path: '/administer-Places', element: <AdministerPlacesView /> },
+      { path: '/administer-Professors', element: <AdministerProfessorsView /> },
+      { path: '/create-others', element: <CreateOtherView /> },
+      { path: '/administerUsers', element: <CreateUserView /> },
       { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
       { path: 'list-activities/activity/:id', element: <CoordinatorActivityInfoView /> },
       { path: 'list-evaluations', element: <CoordinatorListEvaluationsView/>},
       { path: '*', element: <Navigate to="/404" /> }
-      ]
+    ]
   },
   {
     path: 'student',
     element: <StudentDashboardLayout />,
     children: [
-      { path: 'activity/activityone', element: <ActivityOneView />},
-      { path: 'activity/activitytwo', element: <ActivityTwoView />},
-      { path: 'activity/activitythree', element: <ActivityThreeView />},
-      { path: 'activity/activityfour', element: <ActivityFourView />},
-      { path: 'activity/activityfive', element: <ActivityFiveView />},
-      { path: 'activity/activitysix', element: <ActivitySixView />},
-      { path: 'activity', element: <ActivityView />},
-      { path: 'activities', element: <ActivityView />},
+      { path: 'activity/activityone', element: <ActivityOneView /> },
+      { path: 'activity/activitytwo', element: <ActivityTwoView /> },
+      { path: 'activity/activitythree', element: <ActivityThreeView /> },
+      { path: 'activity/activityfour', element: <ActivityFourView /> },
+      { path: 'activity/activityfive', element: <ActivityFiveView /> },
+      { path: 'activity/activitysix', element: <ActivitySixView /> },
+      { path: 'activity', element: <ActivityView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

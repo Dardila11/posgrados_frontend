@@ -48,6 +48,7 @@ const ActivityInfoView = () => {
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorActivities(5).then(res => {
+        // TODO check if res.data is empty
         const activity = res.data.activities.find(
           activity => activity.id == id
         );

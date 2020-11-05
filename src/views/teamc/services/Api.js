@@ -25,9 +25,7 @@ const getDirectorStudents = id => {
 };
 
 const getStudent = id => {
-  let content = http.get('/api/student/' + id);
-  console.log('Api get: Student ' + id);
-  return content;
+  return http.get('/api/student/' + id);
 };
 
 const getDirectorActivities = id => {
@@ -68,6 +66,10 @@ const getActivity = id => {
 
 const getEvaluationsDirectorLocal = () => {
   return directorEvaluations;
+};
+
+const postStudentTracking = data => {
+  return http.post('/api/tracking/', data);
 };
 
 export default {
