@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { Container, LinearProgress, makeStyles, Typography } from '@material-ui/core';
 import Page from 'src/components/Page';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
@@ -26,11 +26,16 @@ const useStyles = makeStyles(theme => ({
 
 const CoordinatorListEvaluationsView = () => {
   const [evaluationsList, setEvaluationsList] = useState([]);
-
+  const [serviceState, setServiceState] = useState(true);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getEvaluationsDirectorLocal();
-      setEvaluationsList(res);
+      await api.getCoordinatorEvaluations(5).then(res => {
+        setServiceState(false);
+        setEvaluationsList(res.data);
+        setLoading(false);
+      });
+      
     };
     fetchData();
   }, []);
@@ -40,8 +45,21 @@ const CoordinatorListEvaluationsView = () => {
     <Page className={classes.root} title="Listado de Evaluaciones">
       <BreadCrumbs />
       <SearchBar handleSearch={handleSearch} context="evaluations" />
-      <List list={evaluationsList} option="Evaluation" context="/coordinator/list-evaluations"/>
-      <ListPagination />
+      {loading ? (
+        <LinearProgress />
+      ):(
+        serviceState ? (
+          <>
+          <List list={evaluationsList} option="Evaluation" context="/coordinator/list-evaluations"/>
+          <ListPagination />
+        </>
+        ):(
+          <Container>
+            <Typography variant='h3'>No se obtuvieron resultados</Typography>
+          </Container>
+        )        
+      )        
+      }
     </Page>
   );
 };

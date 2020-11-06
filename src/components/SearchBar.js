@@ -61,8 +61,8 @@ const SearchBar = ({className,context,periods,status,programs, ...rest }) => {
                                 ):(
                                     <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
-                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar periodo</InputLabel>
-                                        <Select id='Select-cohorte'>
+                                        <InputLabel htmlFor='Select-period'>Seleccionar periodo</InputLabel>
+                                        <Select id='Select-period'>
                                             {periods.map(element => <MenuItem key={element} value = {element} > {element}</MenuItem>)}
                                         </Select>
                                     </Box>
@@ -73,8 +73,8 @@ const SearchBar = ({className,context,periods,status,programs, ...rest }) => {
                                 ):(
                                     <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
-                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar Tipo</InputLabel>
-                                        <Select id='Select-cohorte'>
+                                        <InputLabel htmlFor='Select-status'>Seleccionar tipo</InputLabel>
+                                        <Select id='Select-status'>
                                             {status.map(element => <MenuItem key={element} value = {element} > {element}</MenuItem>)}
                                         </Select>
                                     </Box>
@@ -85,8 +85,8 @@ const SearchBar = ({className,context,periods,status,programs, ...rest }) => {
                                 ):(
                                     <Grid item lg={2} md={2} xs={12}>
                                     <Box className= {classes.Select}>
-                                        <InputLabel htmlFor='Select-cohorte'>Seleccionar programa</InputLabel>
-                                        <Select id='Select-cohorte'>
+                                        <InputLabel htmlFor='Select-programs'>Seleccionar programa</InputLabel>
+                                        <Select id='Select-programs'>
                                             {programs.map(element => <MenuItem key={element} value = {element} > {element}</MenuItem>)}
                                         </Select>
                                     </Box>

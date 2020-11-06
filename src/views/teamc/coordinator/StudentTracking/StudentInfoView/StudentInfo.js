@@ -94,7 +94,7 @@ const StudentInfo = () => {
   return (
     <Container>
       {isBusy ? (
-        <h1>Cargando</h1>
+        console.log('Loading student')
       ) : (
         <Card className={classes.root}>
           <CardContent>

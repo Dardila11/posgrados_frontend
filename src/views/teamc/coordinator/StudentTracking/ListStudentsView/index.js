@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  LinearProgress,
     makeStyles
   } from '@material-ui/core';
 import Page from 'src/components/Page';
@@ -25,11 +26,13 @@ const useStyles = makeStyles((theme) => ({
 const CoordinatorListStudentsView = () => {
 
   const [studentsList, setStudentsList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       await api.getStudents().then(res => {
         setStudentsList(res.data.students);
+        setLoading(false);
       });
       
     };
@@ -43,8 +46,14 @@ const CoordinatorListStudentsView = () => {
         <Page className={classes.root} title="Listado de estudiantes">      
             <BreadCrumbs />
             <SearchBar context='students'/>
-            <List list = {studentsList} option= 'Student'/>
-            <ListPagination/>
+            {loading ? (
+              <LinearProgress />
+            ):(
+              <>
+                <List list = {studentsList} option= 'Student'/>
+                <ListPagination/>
+              </>
+            )}
         </Page>  
       ); 
 };
