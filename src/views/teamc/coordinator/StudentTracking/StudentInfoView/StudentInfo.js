@@ -12,11 +12,10 @@ import {
   Button,
   Typography,
   makeStyles,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   Container
 } from '@material-ui/core';
+
+import DialogForm from 'src/components/DialogForm';
 
 const useStyles = makeStyles({
   root: {
@@ -128,12 +127,21 @@ const StudentInfo = () => {
             >
               Realizar seguimiento
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+
+            {/* <Dialog open={open} onClose={handleClose}>
               <DialogTitle variant="h2" onClose={handleClose}>
                 Seguimiento de estudiante
               </DialogTitle>
               <TrackStudent />
-            </Dialog>
+            </Dialog> */}
+
+            <DialogForm
+              title="Seguimiento de estudiante"
+              open={open}
+              handleClose={handleClose}
+              handleOpen={handleClickOpen}
+              component={<TrackStudent />}
+            />
           </CardActions>
         </Card>
       )}
