@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import api from 'src/views/teamc/services/Api';
 
-import {useParams
-} from "react-router-dom";
+import { useParams } from 'react-router-dom';
 import {
   Card,
   CardActions,
@@ -14,7 +13,8 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  Container
+  Container,
+  LinearProgress
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -37,16 +37,16 @@ const useStyles = makeStyles({
   }
 });
 
-
 const ActivityInfoView = () => {
-
-  let {id} = useParams();
-  const [activity, setActivity] = useState('');
+  let { id } = useParams();
+  const [activityInfo, setActivityInfo] = useState({});
+  const [isBusy, setBusy] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await api.getActivity(id);
-      setActivity(res);      
+      setActivityInfo(res.data);
+      setBusy(false);
     };
     fetchData();
   });
@@ -64,42 +64,53 @@ const ActivityInfoView = () => {
 
   return (
     <Container>
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h3" component="h2" gutterBottom>
-          Información de la actividad
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Titulo: { activity.title}
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Descripcion: {activity.description}
-        </Typography>
-        <Typography variant="body1" component="p" gutterBottom>
-          Modalidad: {activity.modality}
-        </Typography>
-        
-      </CardContent>
-      <CardActions>
-        <Button variant="contained" color="primary" onClick={handleClickOpen}>
-          Realizar Evaluación
-        </Button>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle variant="h2" onClose={handleClose}>
-            Evaluación de la actividad
-          </DialogTitle>
-          
-          <DialogActions>
-            <Button variant="contained" onClick={handleClose}>
-              Cancelar
+      {isBusy ? (
+        <LinearProgress />
+      ) : (
+        <Card className={classes.root}>
+          <CardContent>
+            <Typography variant="h3" component="h2" gutterBottom>
+              Información de la actividad
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Titulo: {activityInfo.title}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Descripcion: {activityInfo.description}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Modalidad: {activityInfo.academic_year}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleClickOpen}
+            >
+              Realizar Evaluación
             </Button>
-            <Button variant="contained" color="primary" onClick={handleClose}>
-              Guardar
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </CardActions>
-    </Card>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle variant="h2" onClose={handleClose}>
+                Evaluación de la actividad
+              </DialogTitle>
+
+              <DialogActions>
+                <Button variant="contained" onClick={handleClose}>
+                  Cancelar
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClose}
+                >
+                  Guardar
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </CardActions>
+        </Card>
+      )}
     </Container>
   );
 };
