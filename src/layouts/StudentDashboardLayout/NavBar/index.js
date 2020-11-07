@@ -32,7 +32,7 @@ const user = {
 
 const items = [
   {
-    href: '/student/activity',
+    href: '/student/list-activities',
     icon: UsersIcon,
     title: 'Activities'
   },

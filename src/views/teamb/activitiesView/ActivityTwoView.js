@@ -2,19 +2,33 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Container, Divider } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Typography, Container, Divider } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+import service from '../services/service';
+import util from '../services/util';
+
+import DialogContentText from '@material-ui/core/DialogContentText';
+import Slide from '@material-ui/core/Slide';
+
+//Transición  de la ventana emergente que muestra 
+//el resultado de enviar los datos del formulario al backend
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const objService = new service();
+const objUtil = new util();
 
 const institucion = [
   { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: 'Colombia' },
-  { value: 'T2', label: 'España' },
-  { value: 'T3', label: 'Mexico' },
-  { value: 'T4', label: 'USA' }
+  { value: 'T1', label: 1 },
+  { value: 'T2', label: 2 },
+  { value: 'T3', label: 3 },
+  { value: 'T4', label: 4 }
 ];
 
 const useStyles = makeStyles(() => ({
@@ -70,6 +84,26 @@ const ActivityTwoView = ({ className, ...rest }) => {
   const [errorLugar, setErrorLugar] = useState(null);
   const [errorInstitucion, setErrorInstitucion] = useState(null);
   const [errorFechas, setErrorFechas] = useState(null);
+
+
+  // Costante para definir el estado de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [emergenteEnviarBack, setEmergenteEnviarBack] = React.useState(false);
+
+  // Costante para definir el mensaje de la ventana emergente que muestra 
+  //el resultado de enviar los datos del formulario al backend
+  const [resultadoBack, setResultadoBack] = useState(null);
+
+  const handleEnviarBackAceptar = () => {
+    if(resultadoBack == "Actividad registrada correctamente") {
+      window.location.href = window.location.href;
+    }
+    setEmergenteEnviarBack(false);
+    setResultadoBack(null);
+  };
+
+
+
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
@@ -81,57 +115,116 @@ const ActivityTwoView = ({ className, ...rest }) => {
 
   //TODO: Comentar
   const handleGuardar = () => {
-    setEmergenteGuardar(true);
+    if(validar()){
+      setEmergenteGuardar(true);
+    }
   };
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
   };
-  //TODO: Comentar
-  const handleGuardarYEnviar = () => {
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+  const validar =()=>{
+    var result = true;
+
     if(values.titulo.length){
       setErrorTitulo(null)
     }
     else{
-      setErrorTitulo("El campo es obligatorio")
+      setErrorTitulo("El campo es obligatorio");
+      result = false;
     }
     if(values.descripcion.length){
       setErrorDescripcion(null)
     }
     else{
-      setErrorDescripcion("El campo es obligatorio")
+      setErrorDescripcion("El campo es obligatorio");
+      result = false;
     }
     if(values.nombreEvento.length){
       setErrorNombreEvento(null)
     }
     else{
-      setErrorNombreEvento("El campo es obligatorio")
+      setErrorNombreEvento("El campo es obligatorio");
+      result = false;
     }
 	  if(values.lugarCelebracion.length){
       setErrorLugar(null)
     }
     else{
-      setErrorLugar("El campo es obligatorio")
+      setErrorLugar("El campo es obligatorio");
+      result = false;
     }
     if(values.institucionSeleccionado.length && values.institucionSeleccionado != "Seleccione una opción"){
       setErrorInstitucion(null)
     }
     else{
-      setErrorInstitucion("Seleccione una opción válida")
+      setErrorInstitucion("Seleccione una opción válida");
+      result = false;
     }
 	  if(values.fechaRealizacion.length){
         setErrorFechas("")
     }    
     else{
-        setErrorFechas("Seleccióne fecha")  
+        setErrorFechas("Seleccióne una fecha");
+        result = false;  
     }
-    //setEmergenteGuardarYEnviar(true);
-    };
+    return result;
+  }
+
+  //TODO: Comentar
+  const handleGuardarYEnviar = () => {
+    
+    if(validar()){
+      setEmergenteGuardarYEnviar(true);
+    }
+  };
 	const handleGuardarYEnviarNo = () => {
     
     setEmergenteGuardarYEnviar(false);
     };
+
+  const SaveActivity = () => {
+    setEmergenteGuardar(false);
+    var vartitulo = document.getElementById("titulo").value;
+    var vardescripcion = document.getElementById("descripcion").value;
+    var varnombreevento = document.getElementById("nombreevento").value;
+    var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
+    var varentidadorganizadora = document.getElementById("entidadorganizadora").value;
+    var vardate = document.getElementById("date").value;
+    var now = objUtil.GetCurretTimeDate();
+    
+
+    //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
+    //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
+    var send_email = emergenteGuardarYEnviar;
+
+    objService.PostActivityTwo(
+      { 
+        "title": vartitulo,
+        "description" : vardescripcion,
+        "name" : varnombreevento,
+        "place" : varlugarcelebracion,
+        "institution": varentidadorganizadora,
+        "start_date" : vardate,
+        "state" : 1,
+        "academic_year" : "2020-21", /* consultar año academico actual */
+        "type" : "Ponencia", /* Colocar el tipo numerico al que corresponda */
+        "student" : 36, /* Consultar el id del estudiante actual */
+        "date_record": now,
+        "date_update": now,
+        "send_email": send_email          
+      }
+    ).then((result) => { 
+      setResultadoBack("Actividad registrada correctamente");
+    }).catch(() => {
+      setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
+    });
+    setEmergenteEnviarBack(true);
+    setEmergenteGuardar(false);
+    setEmergenteGuardarYEnviar(false);
+  }
   return (
     <div>
       <BreadCrumbs />
@@ -147,29 +240,29 @@ const ActivityTwoView = ({ className, ...rest }) => {
               <CardContent >
                 <br></br>
                 <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo de la contribución" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
+                <TextField fullWidth label="Titulo de la contribución" id="titulo" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
                   {/* TODO: Comentar */}
                   {errorTitulo? <p style={{ display: 'flex', color:'red' }}>{errorTitulo}</p>:null}
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Descripcion general" name="descripcion" onChange={handleChange} required value={values.descripcion} variant="outlined"/>
+                  <TextField fullWidth label="Descripcion general" id="descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion} variant="outlined"/>
                   {/* TODO: Comentar */}
                   {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Nombre del evento" name="nombreEvento" onChange={handleChange} required value={values.nombreEvento} variant="outlined"/>
+                  <TextField fullWidth label="Nombre del evento" id="nombreevento" name="nombreEvento" onChange={handleChange} required value={values.nombreEvento} variant="outlined"/>
                   {/* TODO: Comentar */}
                   {errorNombreEvento? <p style={{ display: 'flex', color:'red' }}>{errorNombreEvento}</p>:null}
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Lugar de celebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
+                  <TextField fullWidth label="Lugar de celebracion" id="lugarcelebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
                     variant="outlined"/>
                      {/* TODO: Comentar */}
                     {errorLugar? <p style={{ display: 'flex', color:'red' }}>{errorLugar}</p>:null}
                   <br></br>
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Entidad organizadora" name="entidadorganizadora" onChange={institucionSeleccionado} required select SelectProps={{ native: true }}
+                  <TextField fullWidth label="Entidad organizadora" id="entidadorganizadora" name="entidadorganizadora" onChange={institucionSeleccionado} required select SelectProps={{ native: true }}
                     variant="outlined"
                   >
                     {institucion.map((option) => (
@@ -198,50 +291,79 @@ const ActivityTwoView = ({ className, ...rest }) => {
 
               <Box display="flex" justifyContent="flex-end" p={2}>
                 {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
-          confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
-            <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>
+                confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
+                <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>&nbsp;
 
-            <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>
+                <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>&nbsp;
 
-            <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
+                <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
               </Box>
             </Card>
           </form>
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" en "Crear Actividad" */}
-      <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        <RouterLink to = "../"> 
-            <Button color="primary">Si</Button>
-        </RouterLink>
-          <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog> 
-      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
-      <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-          {/* TODO: Enviar a backend y guardar */}
-          <Button color="primary">Si</Button>
-          <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
-        </DialogActions>
-      </Dialog> 
-	  {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
-        en "Crear Actividad" */}
-      <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
+          <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+            <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
+            <RouterLink to = "../"> 
+                <Button color="primary">Si</Button>
+            </RouterLink>
+            </DialogActions>
+          </Dialog> 
+          
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
+          <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
+            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
+            <DialogContent>
+            </DialogContent>
+            <DialogActions>
+              {/* TODO: Enviar a backend y guardar */}
+              <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
+              <Button onClick={SaveActivity} color="primary">Si</Button>
+            </DialogActions>
+          </Dialog> 
+          
+          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
+            en "Crear Actividad" */}
+          <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
         <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
         <DialogContent>
         </DialogContent>
         <DialogActions>
         {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button color="primary">Si</Button>
           <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
+          <Button color="primary" onClick={SaveActivity} >Si</Button>
         </DialogActions>
       </Dialog>  
+        
+                    
+
+
+          {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
+          <Dialog
+            open={emergenteEnviarBack}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={handleEnviarBackAceptar}
+            aria-labelledby="alert-dialog-slide-title"
+            aria-describedby="alert-dialog-slide-description"
+          >
+            <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-slide-description">
+              {resultadoBack? <Typography component={'span'} variant={'body2'}>{resultadoBack}</Typography>:null}
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleEnviarBackAceptar} color="primary">
+                Aceptar
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+
         </div>
       </Container>
     </div>
