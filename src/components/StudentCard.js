@@ -37,27 +37,43 @@ const useStyles = makeStyles(() => ({
   },
   statusGraduate: {
     color: '#0277bd'
+  },
+  statusBalanced: {
+    color:'#ff9100'
   }
 }));
 
 const StudentCard = ({ className,element, ...rest }) => {
   const classes = useStyles();
-  const student = element;
+  const student = element.student.user;
+  const program = element.student.program;
+  const period = element.period;
+  const status = element.state;
   const link = 'student/'+student.id;
 
   let statusclass = null;
-  switch (student.status) {
-    case "ACTIVO":
+  let state = "";
+  console.log(state);
+  switch (status) {
+    case 1:
       statusclass = classes.statusActive;
+      state = 'ACTIVO';
       break;
-    case "INACTIVO":
+    case 2:
       statusclass = classes.statusInactive;
+      state = 'INACTIVO';
       break;
-    case "RETIRADO":
-        statusclass = classes.statusRetired;
-        break;
-    case "GRADUADO":
+    case 3:
         statusclass = classes.statusGraduate;
+        state = 'GRADUADO';
+        break;
+    case 4:
+        statusclass = classes.statusBalanced;
+        state = 'BALANCEADO';
+        break;
+    case 5:
+        statusclass = classes.statusRetired;
+        state = 'RETIRADO';
         break;
     default:
       break;
@@ -73,15 +89,15 @@ const StudentCard = ({ className,element, ...rest }) => {
                 {student.first_name} {student.last_name}
               </Typography>
               <Typography className={classes.Typography} fontWeight="fontWeightMedium" variant="body1">
-                {student.program}
+                {program.name}
               </Typography>                
               <Typography fontWeight="fontWeightBold" variant="body1">
               <b> <span className={statusclass}>
-                {student.status}          
+                {state}          
               </span> </b>
               </Typography>
               <Typography color="textSecondary" variant="body1">
-                {student.cohorte}
+                {period}
               </Typography>
             </Box>
           </CardActionArea>

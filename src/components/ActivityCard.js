@@ -1,10 +1,18 @@
 import React from 'react';
 //import PropTypes from 'prop-types';
-import { Card, Typography, Box, makeStyles, createMuiTheme, colors, CardActionArea } from '@material-ui/core';
+import {
+  Card,
+  Typography,
+  Box,
+  makeStyles,
+  createMuiTheme,
+  colors,
+  CardActionArea
+} from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 
-const theme = createMuiTheme({
+/*const theme = createMuiTheme({
   palette: {
     primary: {
       light: '#757ce8',
@@ -14,14 +22,13 @@ const theme = createMuiTheme({
     },
     secondary: colors.blue,  
   },
-});
+});*/
 
 const useStyles = makeStyles({
-  root: {
-  },
+  root: {},
   CardAction: {
-    paddingTop : 5,
-    paddingBottom : 5,
+    paddingTop: 5,
+    paddingBottom: 5
   }
 });
 
@@ -30,23 +37,38 @@ const useStyles = makeStyles({
  * @param {activity}
  * @description las información de la actividad previamente obtenida desde backend
  */
-const ActivityCard = ({ className,activity,context, ...rest }) => {
+const ActivityCard = ({ className, activity, context, ...rest }) => {
   const classes = useStyles();
-  const link = context+'/activity/'+activity.id;
+  const link = context + '/activity/' + activity.id;
   //console.log(context);
   return (
-    <RouterLink to={link}>    
+    <RouterLink to={link}>
       <Box boxShadow={3}>
         <Card className={clsx(classes.root, className)} {...rest}>
-          <CardActionArea className = {classes.CardAction}>
-            <Box alignItems="center" display="flex" flexDirection="column" textAlign="center">
+          <CardActionArea className={classes.CardAction}>
+            <Box
+              alignItems="center"
+              display="flex"
+              flexDirection="column"
+              textAlign="center"
+            >
               <Typography color="textPrimary" gutterBottom variant="h4">
-                {activity.type}
+                {activity.title}
               </Typography>
-              <Typography className={classes.Typography} fontWeight="fontWeightMedium" variant="body1" >
+              <Typography
+                className={classes.Typography}
+                fontWeight="fontWeightMedium"
+                variant="body1"
+              >
                 {activity.description}
               </Typography>
-              <Typography color="textSecondary" variant="body1" >
+              <Typography color="textSecondary" variant="body1">
+                {activity.type}
+              </Typography>
+              {/* <Typography color="textSecondary" variant="body1">
+                {activity.academic_year}
+              </Typography> */}
+              <Typography color="textSecondary" variant="body1">
                 {activity.start_date}
               </Typography>
             </Box>

@@ -11,7 +11,8 @@ import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
 
-/* Student imports*/ 
+/* Student imports*/
+
 import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
 import ActivityOneView from 'src/views/teamb/activitiesView/ActivityOneView';
 import ActivityTwoView from 'src/views/teamb/activitiesView/ActivityTwoView';
@@ -26,17 +27,40 @@ import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 
 /* Coordinator imports */
 import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
-import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
+
+//import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
+//StartImports teamD
+import AdministerView from 'src/views/teamd/coordinator/GI/index';
+import AdministerPlacesView from 'src/views/teamd/coordinator/places/index';
+import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index';
+import { CreateOtherView } from './views/teamd/coordinator/createOthers';
+import { CreateUserView } from './views/teamd/coordinator/users/CreateUser';
+//import FreeSoloCreateOptionDialog from 'src/views/teamd/Search/prueba'
+//EndImports TeamD
+
+//import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
 import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
+//import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/ActivityEvaluationsView/index';
+
+import CoordinatorIndexView from 'src/views/teamc/coordinator';
+import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
+import CoordinatorStudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
 import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activities/ListActivitiesView';
-import ActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
+import CoordinatorActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
+import CoordinatorListEvaluationsView from './views/teamc/coordinator/Evaluations/ListEvaluationsView';
+
 /* End Coordinator imports*/
+
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
 import DirectorIndexView from 'src/views/teamc/director/index';
-import DirectorListStudentsView from 'src/views/teamc/director/ListStudentsView/index';
-import DirectorListActivitiesView from 'src/views/teamc/director/ActivityEvaluationsView/index';
+import DirectorListStudentsView from 'src/views/teamc/director/Students/ListStudentsView';
+import DirectorStudentView from 'src/views/teamc/director/Students/StudentInfoView';
+import DirectorListActivitiesView from 'src/views/teamc/director/Activities/ListActivitiesView';
+import DirectorActivityView from 'src/views/teamc/director/Activities/ActivityInfoView';
+import DirectorListEvaluationsView from 'src/views/teamc/director/Evaluations/ListEvaluationsView';
 /* End Director imports */
+
 const routes = [
   {
     path: 'director',
@@ -44,9 +68,13 @@ const routes = [
     children: [
       { path: '', element: <DirectorIndexView /> },
       { path: 'list-students', element: <DirectorListStudentsView /> },
-      { path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'list-students/student/:id', element: <DirectorStudentView /> },
       { path: 'list-activities', element: <DirectorListActivitiesView /> },
-      { path: 'list-activities/activity/:id', element: <StudentView /> },
+      {
+        path: 'list-activities/activity/:id',
+        element: <DirectorActivityView />
+      },
+      { path: 'list-evaluations', element: <DirectorListEvaluationsView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
@@ -55,26 +83,43 @@ const routes = [
     path: 'coordinator',
     element: <CoordinatorDashboardLayout />,
     children: [
+      { path: '', element: <CoordinatorIndexView /> },
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
-      { path: 'list-students/student/:id', element: <StudentView /> },
+      {
+        path: 'list-students/student/:id',
+        element: <CoordinatorStudentView />
+      },
+      //{ path: 'list-students/student/:id', element: <StudentView /> },
+      { path: '/administer-Gi', element: <AdministerView /> },
+      { path: '/administer-Places', element: <AdministerPlacesView /> },
+      { path: '/administer-Professors', element: <AdministerProfessorsView /> },
+      { path: '/create-others', element: <CreateOtherView /> },
+      { path: '/administerUsers', element: <CreateUserView /> },
       { path: 'list-activities', element: <CoordinatorListActivitiesView /> },
-      { path: 'list-activities/activity/:id', element: <ActivityInfoView /> },
+      {
+        path: 'list-activities/activity/:id',
+        element: <CoordinatorActivityInfoView />
+      },
+      { path: 'list-evaluations', element: <CoordinatorListEvaluationsView /> },
       { path: '*', element: <Navigate to="/404" /> }
-      ]
+    ]
   },
   {
     path: 'student',
     element: <StudentDashboardLayout />,
     children: [
-      { path: 'list-activities/activityone', element: <ActivityOneView />},
-      { path: 'list-activities/activitytwo', element: <ActivityTwoView />},
-      { path: 'list-activities/activitythree', element: <ActivityThreeView />},
-      { path: 'list-activities/activityfour', element: <ActivityFourView />},
-      { path: 'list-activities/activityfive', element: <ActivityFiveView />},
-      { path: 'list-activities/activitysix', element: <ActivitySixView />},
-      { path: 'list-activities', element: <StudentListActivitiesView/>},
-      { path: 'list-activities/activity/:id', element: <ActivityStudentView/>},
-      { path: 'list-activities', element: <ActivityView />},
+      { path: 'list-activities/activityone', element: <ActivityOneView /> },
+      { path: 'list-activities/activitytwo', element: <ActivityTwoView /> },
+      { path: 'list-activities/activitythree', element: <ActivityThreeView /> },
+      { path: 'list-activities/activityfour', element: <ActivityFourView /> },
+      { path: 'list-activities/activityfive', element: <ActivityFiveView /> },
+      { path: 'list-activities/activitysix', element: <ActivitySixView /> },
+      { path: 'list-activities', element: <StudentListActivitiesView /> },
+      {
+        path: 'list-activities/activity/:id',
+        element: <ActivityStudentView />
+      },
+      { path: 'list-activities', element: <ActivityView /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

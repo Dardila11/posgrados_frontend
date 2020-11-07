@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import TrackStudent from './TrackStudent';
-
 import api from 'src/views/teamc/services/Api';
 
 import {useParams

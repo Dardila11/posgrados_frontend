@@ -23,9 +23,9 @@ const BreadCrumbs = () => {
   return (
     <div className={classes.root}>
       <Breadcrumbs maxItems={3} aria-label="breadcrumb">
-        <Link color="inherit" href="/" onClick={handleClick}>
+      <RouterLink color="inherit" to="/coordinator">
           Coordinador
-        </Link>
+        </RouterLink>
         <RouterLink color="inherit" to="/coordinator/list-students">
           Lista Estudiantes
         </RouterLink>

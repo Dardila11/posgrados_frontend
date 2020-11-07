@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 import api from 'src/views/teamc/services/Api';
 import Page from 'src/components/Page';
 
-import { makeStyles,Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 
-import List from 'src/components/List';
 import BreadCrumbs from './BreadCrumbs';
-import StudentInfo from './ActivityInfo';
+import ActivityInfoView from './ActivityInfo';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -23,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StudentView = () => {
+const CoordinatorActivityView = () => {
   const classes = useStyles();
   const [activityList, setActivityList] = useState([]);
   const [result, setResult] = useState('');
@@ -46,12 +45,12 @@ const StudentView = () => {
   const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes', '/coordinator/list-students'] ,['Listado de estudiantes']];
   return (
     <>
-    <Page className={classes.root} title="Estudiante">
+    <Page className={classes.root} title="Actividad">
       {/* BreadCrumbs */}
       <BreadCrumbs  />
       {/* Student Basic Info
           - Nombre, programa, cohorte*/}
-      <StudentInfo />
+      <ActivityInfoView />
       {/* Button Track Student */}
       {/* Activity Card List */}
       </Page>
@@ -59,4 +58,4 @@ const StudentView = () => {
   );
 };
 
-export default StudentView;
+export default CoordinatorActivityView;

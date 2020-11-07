@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const StudentView = () => {
+const CoordinatorStudentView = () => {
   const classes = useStyles();
   const [activityList, setActivityList] = useState([]);
   const [result, setResult] = useState('');
@@ -69,4 +69,4 @@ const StudentView = () => {
   );
 };
 
-export default StudentView;
+export default CoordinatorStudentView;
