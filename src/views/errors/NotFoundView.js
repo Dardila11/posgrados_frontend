@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 
 const NotFoundView = () => {
   const classes = useStyles();
-  const link = "/director";
+  const link = "/student";
 
   return (
     <Page

@@ -1,36 +1,49 @@
-import axios from 'axios'
-const API_URL = 'http://localhost:8000';
+import axios from 'axios';
+const API_URL = 'http://mdquilindo.pythonanywhere.com';
+//const API_URL = 'http://localhost:8000';
 
 export default class service {
-    
-    GetPeriodService(periodo) {
-        const url= `${API_URL}/api/periodo/`;
-        return axios.get(url,periodo);
-    }
-    ActivityView(actividad){
-        const url= `${API_URL}/api/1.0/crear_pais/`;
-        return axios.post(url,actividad);
-    }
-    
-    GetCurrentYear(currentPeriod) { 
-        var Splits = currentPeriod.split(".");
-        var CurrentYear = Splits[0];
-        var semester = Splits[1];
 
-        var Year1, Year2;
+    GetPeriodService(id) {
+        const url= `${API_URL}/api/period/student/`+id+`/`;
+        return axios.get(url);
+    }
+    GetPeriodsService(id) {
+        const url= `${API_URL}/api/periods/student/`+id+`/`; 
+        return axios.get(url);
+    }
+    GetActivities(id, academic_year) {
+        const url= `${API_URL}/api/activities/student/`+id+`/`+academic_year+`/`; 
+        const result = axios.get(url);
+        return axios.get(url);
+    }
+    GetActivity(id) {
+        const url= `${API_URL}/api/activity/`+id+`/`; 
+        return axios.get(url);
+    }
 
-        if (parseInt(semester) > 1) {
-            Year1 = CurrentYear;
-            Year2 = CurrentYear.slice(2);
-            parseInt(Year2);
-            Year2++;
-        }
-        else {
-            Year2 = CurrentYear.slice(2);
-            Year1 = parseInt(CurrentYear);
-            parseInt(Year1);
-            Year1--;
-        }
-        return (Year1 + "-" + Year2)
+    PostActivityOne(activity){
+        const url= `${API_URL}/api/projectCourse/`;
+        return axios.post(url,activity);
+    }
+    PostActivityTwo(activity){
+        const url= `${API_URL}/api/lecture/`;
+        return axios.post(url,activity);
+    }
+    PostActivityThree(activity) {
+        const url= `${API_URL}/api/publication/`;
+        return axios.post(url,activity);
+    }
+    PostActivityFour(activity){
+        const url= `${API_URL}/api/presentationResults/`;
+        return axios.post(url,activity);
+    }
+    PostActivityFive(activity){
+        const url= `${API_URL}/api/researchStays/`;
+        return axios.post(url,activity);
+    }
+    PostActivitySix(activity){
+        const url= `${API_URL}/api/participationProjects/`;
+        return axios.post(url,activity);
     }
 }

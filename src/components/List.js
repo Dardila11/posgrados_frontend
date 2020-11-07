@@ -4,8 +4,6 @@ import StudentCard from 'src/components/StudentCard';
 import ActivityCard from 'src/components/ActivityCard';
 import EvaluationCard from './EvaluationCard';
 
-
-
 const List = ({ list, option, context }) => {
   return (
     <Container>
@@ -14,13 +12,18 @@ const List = ({ list, option, context }) => {
           <Grid item lg={3} md={6} xs={12} key={element.id}>
             {option === 'Student' ? (
               <StudentCard element={element} />
+            ) : option == 'Activity' ? (
+              <ActivityCard
+                key={element.id}
+                activity={element}
+                context={context}
+              />
             ) : (
-              option == 'Activity' ? (
-                <ActivityCard key={element.id} activity={element} context={context}/>
-              ):(
-                <EvaluationCard key={element.id} evaluation={element} context={context}/>
-              )
-              
+              <EvaluationCard
+                key={element.id}
+                evaluation={element}
+                context={context}
+              />
             )}
           </Grid>
         ))}
