@@ -4,7 +4,6 @@ import Page from 'src/components/Page';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
 import List from 'src/components/List';
-import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
 import SearchActivities from 'src/views/teamb/ListActivities/SearchActivities';
 import service from 'src/views/teamb/services/service';
 const objService = new service();
@@ -31,15 +30,8 @@ const useStyles = makeStyles(theme => ({
 
 const StudentListActivitiesView = () => {
 
-  const [activities, setActivities] = useState([]);
   useEffect(() => {
-    /* Dato quemado desde la tabla User: id_user*/
-    objService.GetActivities(8,"2020-21").then((result) => {
-      var dataActivities = result.data;
-      setActivities(dataActivities.list_activities);
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
+
   },[]);
 
   const classes = useStyles();
@@ -50,12 +42,6 @@ const StudentListActivitiesView = () => {
       <Box>
       <SearchActivities/>
       </Box>
-      <Container className= {classes.buttonContainer}>
-        <ActivityView/>
-      </Container>
-      <List list={activities} option="Activity" context="/student/list-activities"/>
-     
-      
     </Page>
   );
 };
