@@ -211,7 +211,7 @@ const ActivityOneView = ({ className, ...rest }) => {
         "end_date": vardate2,
         "academic_year" : "2020-21", /* Consultar año academico actual */
         "assigned_hours" : varnumber,
-        "type": "Curso, direccion o revisión de proyectos", /* Colocar el tipo numerico al que corresponda */
+        "type": 1,
         "student" : 36, /* Consultar el id del estudiante actual */
         "date_record": now,
         "date_update": now,

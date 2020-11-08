@@ -50,7 +50,6 @@ const SearchBar = ({ className, context, ...rest }) => {
     const [activities, setActivities] = useState([]);
     const handleChange = (event) => {
         setAcademicYear(event.target.value);
-        console.log(academicYear);
     };
 
     const changeList = () => {

@@ -197,7 +197,7 @@ const ActivityFourView = ({ className, ...rest }) => {
         "state" : 1,
         "start_date" : vardate,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "Exposición de resultados", /* Colocar el tipo numerico al que corresponda */
+        "type" : 4, 
         "date_record": now,
         "date_update": now, 
         "modality" : varmodalidadpresentación,

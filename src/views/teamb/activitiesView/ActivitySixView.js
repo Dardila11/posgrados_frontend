@@ -286,7 +286,7 @@ const ActivitySixView = ({ className, ...rest }) => {
         "start_date" : vardate1,
         "end_date" : vardate2,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "Participación en proyectos", /* Colocar el tipo numerico al que corresponda */
+        "type" : 6,
         "date_record": now,
         "date_update": now, 
         "place" : varlugartrabajo,

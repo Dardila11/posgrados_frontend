@@ -271,7 +271,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
         "start_date" : varfecha1,
         "end_date" : varfecha2,
         "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "Estancia de investigación", /* Colocar el tipo numerico al que corresponda */
+        "type" : 5,
         "date_record": now,
         "date_update": now, 
         "purpose": varproposito,
