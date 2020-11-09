@@ -251,10 +251,8 @@ const ActivityOneView = ({ className, ...rest }) => {
               <h1 style={{ display: 'flex', align: 'center', justifyContent: 'center' }} align="center" name="crearactividad">
                 Curso, dirección/revisión de proyectos
               </h1>
-              <br></br>
               <Divider />
               <CardContent >
-                <br></br>
                 <Grid item md={12} xs={12}>
                   <TextField fullWidth label="Titulo" id="titulo" name="titulo" onChange={handleChange} required
                     value={values.titulo} variant="outlined"

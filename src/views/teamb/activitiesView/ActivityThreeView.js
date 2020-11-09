@@ -257,11 +257,11 @@ const ActivityThreeView = ({ className, ...rest }) => {
         <div style={{ display: 'flex', justifyContent: 'center' }}>
           <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
             <Card className={classes.root}>
-              <h1 style={{ display: 'flex', justifyContent: 'center' }} name="crearactividad" >Datos de detalle Publicaciones</h1>
-              <br></br>
+              <h1 style={{ display: 'flex', justifyContent: 'center' }} align='center' name="crearactividad" >
+                Datos de detalle Publicaciones
+              </h1>
               <Divider />
               <CardContent >
-                <br></br>
                 <Grid item md={12} xs={12}>
                   <TextField fullWidth label="Titulo del articulo, capitulo, libro, monografia..." name="tituloArticulo" id="titulo"
                     onChange={handleChange} required value={values.tituloArticulo} variant="outlined" />
@@ -318,12 +318,11 @@ const ActivityThreeView = ({ className, ...rest }) => {
                   </Grid>
                   <br></br>
                   {errorFechas ? <p style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>{errorFechas}</p> : null}
+                  {/*<br></br>
                   <br></br>
                   <br></br>
+                  <Button color="primary" variant="outlined"> Agregar premio </Button>*/}
                   <br></br>
-                  {/*<Button color="primary" variant="outlined"> Agregar premio </Button>
-                  <br></br>
-                  <br></br>*/}
                   <InputLabel>Justificante *</InputLabel>
                   <Input type="file" name="file" inputProps={{ accept: '.pdf' }} onChange={(e) => uploadFile(e.target.files)} />
                 </Grid>

@@ -298,10 +298,8 @@ const ActivityFiveView = ({ className, ...rest }) => {
           <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
             <Card className={classes.root}>
               <h1 style={{ display: 'flex', justifyContent: 'center' }} align="center" name="crearactividad" >Datos de detalle estancias de investigación en otras instituciones</h1>
-              <br></br>
               <Divider />
               <CardContent >
-                <br></br>
                 <Grid item md={12} xs={12}>
                   <TextField fullWidth label="Proposito estancia" id="proposito" name="proposito" onChange={handleChange} required
                     value={values.proposito} variant="outlined" />
@@ -366,7 +364,6 @@ const ActivityFiveView = ({ className, ...rest }) => {
                   </Grid>
                   <br></br>
                   {errorFechas ? <p style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>{errorFechas}</p> : null}
-                  <br></br>
                   <br></br>
                   <TextField fullWidth label="Nombre responsable" id="nombreresponsable" name="nombreResponsable" onChange={handleChange} required
                     value={values.nombreResponsable} variant="outlined" />

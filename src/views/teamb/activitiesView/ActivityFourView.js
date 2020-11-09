@@ -225,10 +225,8 @@ const ActivityFourView = ({ className, ...rest }) => {
           <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
             <Card className={classes.root}>
               <h1 style={{ display: 'flex', justifyContent: 'center' }} align="center" name="crearactividad" >Datos de detalle exposición de resultados parciales de investigación</h1>
-              <br></br>
               <Divider/>
               <CardContent >
-                <br></br>
                 <Grid container spacing = {3}>
                 <Grid item md={12} xs={12}>
                   <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required
@@ -244,8 +242,6 @@ const ActivityFourView = ({ className, ...rest }) => {
                   </Grid>
                   {/* TODO: Comentar */}
                   {errorFechas? <p style={{ display: 'flex', color:'red' }}>{errorFechas}</p>:null}
-                  <br></br> 
-                  
                   <br></br>
                   <TextField fullWidth label="Lugar de celebracion" id="lugarcelebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
                         variant="outlined"

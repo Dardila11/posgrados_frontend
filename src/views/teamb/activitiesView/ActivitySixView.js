@@ -318,10 +318,8 @@ const ActivitySixView = ({ className, ...rest }) => {
               <h1 style={{ display: 'flex', justifyContent: 'center' }} align="center" name="crearactividad">
                 Datos de detalle Participación en proyectos de investigación
           </h1>
-              <br></br>
               <Divider />
               <CardContent >
-                <br></br>
                 <Grid item md={12} xs={12}>
                   <TextField fullWidth label="Nombre del proyecto" id="nombreproyecto" name="nombreProyecto" onChange={handleChange} required value={values.nombreProyecto}
                     variant="outlined" />
@@ -395,7 +393,6 @@ const ActivitySixView = ({ className, ...rest }) => {
                   <br></br>
                   <br></br>
                   <br></br>
-                  <br></br>
                   <Grid container spacing={3} container justify="space-around">
                     <Grid>
                       <TextField id="date1" label="Fecha Inicio proyecto" type="date"
@@ -408,11 +405,9 @@ const ActivitySixView = ({ className, ...rest }) => {
                         onChange={handleFechaFin} />
                     </Grid>
                   </Grid>
-                  <br></br>
                   {/* TODO: Comentar */}
+                  <br></br>
                   {errorFechas ? <p style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>{errorFechas}</p> : null}
-                  <br></br>
-                  <br></br>
                   <br></br>
                   <InputLabel>Justificante *</InputLabel>
                   <Input type="file" name="file" inputProps={{ accept: '.pdf' }} onChange={(e) => uploadFile(e.target.files)} />

@@ -245,10 +245,8 @@ const ActivityTwoView = ({ className, ...rest }) => {
               <h1 style={{ display: 'flex', justifyContent: 'center' }} align="center" name="crearactividad">
                 Datos de detalle ponencias en congreso, simposios y/o jornadas
               </h1>
-              <br></br>
               <Divider />
               <CardContent >
-                <br></br>
                 <Grid item md={12} xs={12}>
                 <TextField fullWidth label="Titulo de la contribución" id="titulo" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
                   {/* TODO: Comentar */}
