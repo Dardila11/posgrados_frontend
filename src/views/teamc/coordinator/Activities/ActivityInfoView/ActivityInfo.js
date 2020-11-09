@@ -14,13 +14,14 @@ import {
   DialogActions,
   DialogTitle,
   Container,
-  LinearProgress
+  LinearProgress,
+  Link
 } from '@material-ui/core';
+import { isUndefined } from 'lodash';
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    height: '250px',
     marginTop: '15px'
   },
   statusActive: {
@@ -44,12 +45,13 @@ const ActivityInfoView = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await api.getActivity(id);
-      setActivityInfo(res.data);
-      setBusy(false);
+      await api.getActivity(id).then(res => {
+        setActivityInfo(res.data);
+        setBusy(false);
+      });      
     };
     fetchData();
-  });
+  },[]);
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -61,7 +63,23 @@ const ActivityInfoView = () => {
   const handleClose = () => {
     setOpen(false);
   };
-
+  /*
+  academic_year: "2020"
+  date_record: "2020-11-02T16:16:08-05:00"
+  date_update: "2020-11-02T16:16:10-05:00"
+  description: "Descripcion de la actividad"
+  end_date: null
+  id: 1
+  is_active: true
+  name: "revision tecnica formal"
+  receipt: "http://mdquilindo.pythonanywhere.com/media/b_activities_app/archivos/14719904672.pdf"
+  start_date: "2020-11-02"
+  state: 1
+  student: 1
+  title: "revision tecnica formal"
+  type: "Simposio"
+  */
+  console.log(activityInfo);
   return (
     <Container>
       {isBusy ? (
@@ -72,15 +90,34 @@ const ActivityInfoView = () => {
             <Typography variant="h3" component="h2" gutterBottom>
               Información de la actividad
             </Typography>
-            <Typography variant="body1" component="p" gutterBottom>
-              Titulo: {activityInfo.title}
-            </Typography>
-            <Typography variant="body1" component="p" gutterBottom>
-              Descripcion: {activityInfo.description}
-            </Typography>
-            <Typography variant="body1" component="p" gutterBottom>
-              Modalidad: {activityInfo.academic_year}
-            </Typography>
+            {isUndefined(activityInfo.title) || activityInfo.title==null || activityInfo.title==""?(console.log('')):(
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Titulo:</b> {activityInfo.title}
+              </Typography>
+            )}
+            {isUndefined(activityInfo.description) || activityInfo.description==null || activityInfo.description==""?(console.log('')):(
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Descripcion:</b> {activityInfo.description}
+              </Typography>
+            )}
+            {isUndefined(activityInfo.academic_year) || activityInfo.academic_year==null?(console.log('')):(
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Año academico:</b> {activityInfo.academic_year}
+              </Typography>
+            )}
+            {isUndefined(activityInfo.type) || activityInfo.type==null ?(console.log('')):(
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Tipo:</b> {activityInfo.type}
+              </Typography>
+            )}
+            {isUndefined(activityInfo.receipt) || activityInfo.receipt==null ?(console.log('')):(
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Soporte: </b> 
+                  <Link href={activityInfo.receipt}>
+                      Descargar Soporte
+                  </Link>
+              </Typography>
+            )}
           </CardContent>
           <CardActions>
             <Button
