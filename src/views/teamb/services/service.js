@@ -12,6 +12,10 @@ export default class service {
         const url= `${API_URL}/api/periods/student/`+id+`/`; 
         return axios.get(url);
     }
+    GetPrograms(){
+        const url= `${API_URL}/api/program/`;
+        return axios.get(url);
+    }
     GetActivities(id, academic_year) {
         const url= `${API_URL}/api/activities/student/`+id+`/`+academic_year+`/`; 
         const result = axios.get(url);

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Typography, Divider } from '@material-ui/core';
+import { Select, MenuItem, Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Typography, Divider } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -60,7 +60,23 @@ const ActivityOneView = ({ className, ...rest }) => {
       programaSeleccionado: event.target.value
     });
   };
+  //programs list
   
+  const [NumPrograms, setPrograms] = useState({
+    programs: []
+  })
+
+  useEffect(() => {
+      /* Dato quemado desde la tabla User: id_user */
+      objService.GetPrograms().then((result) => {
+          var dataPrograms = result.data;
+          setPrograms({ programs: dataPrograms });
+          
+      }).catch(() => {
+          alert("Error, no hay registros para mostrar");
+      });
+  }, []);
+
  //Asignamos a "HorasSeleccionado" el valor de "event.target.value"
  const handleHoras = (event) => {
   setValues({
@@ -150,7 +166,7 @@ const ActivityOneView = ({ className, ...rest }) => {
       setErrorDescripcion("El campo es obligatorio")
       result = false;
     } 
-    if (values.programaSeleccionado.length && values.programaSeleccionado != "Seleccione una opción") {
+    if (values.programaSeleccionado != "") {
       setErrorPrograma(null)
     }
     else {
@@ -226,7 +242,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
-
+  
   return (
     <div>
       <BreadCrumbs />
@@ -255,15 +271,13 @@ const ActivityOneView = ({ className, ...rest }) => {
               {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
               <br></br>
               <br></br>
-              <TextField fullWidth label="Programa" id="programa" name="programa" onChange={handleProgramas} 
-                required select SelectProps={{ native: true }} variant="outlined"
-              >
-                {programa.map((option) => (
-                  <option key={option.value} value={option.label}>
-                    {option.label}
-                  </option>
+              <Select fullWidth label="Programa" id="programa" type="select" defaultValue
+                variant="outlined" onChange={handleProgramas}
+                >
+                {NumPrograms.programs.map(element => (
+                  <MenuItem key={element.id} value={element.id}> {element.name} </MenuItem>
                 ))}
-              </TextField>
+              </Select>
               {/* TODO: Comentar */}
               {errorPrograma? <p style={{ display: 'flex', color:'red' }}>{errorPrograma}</p>:null}
               <br></br>
