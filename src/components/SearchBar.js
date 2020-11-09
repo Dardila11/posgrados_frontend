@@ -33,6 +33,12 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+function useFilterContext() {
+  
+  const props = useContext(FilterContext )
+  return props
+}
+
 const SearchBar = ({
   className,
   context,
@@ -43,24 +49,25 @@ const SearchBar = ({
 }) => {
   const classes = useStyles();
 
-  const { state, dispatch } = useContext(FilterContext);
-
+  //const { state, dispatch } = useContext(FilterContext);
+  const getContextProps = useFilterContext()
+  
   // TODO esto deberia estar en una sola función, es que me dio pereza.
   // función que actualiza el estado de period en el context
   const changePeriod = newPeriod => {
-    dispatch({ type: 'UPDATE_PERIOD', data: newPeriod });
+    getContextProps.dispatch({ type: 'UPDATE_PERIOD', data: newPeriod });
   };
   // función que actualiza el estado de studentName en el context
   const changeName = newName => {
-    dispatch({ type: 'UPDATE_NAME', data: newName });
+    getContextProps.dispatch({ type: 'UPDATE_NAME', data: newName });
   };
   // función que actualiza el estado de period en el context
   const changeType = newType => {
-    dispatch({ type: 'UPDATE_TYPE', data: newType });
+    getContextProps.dispatch({ type: 'UPDATE_TYPE', data: newType });
   };
   // función que actualiza el estado de studentName en el context
   const changeProgram = newProgram => {
-    dispatch({ type: 'UPDATE_PROGRAM', data: newProgram });
+    getContextProps.dispatch({ type: 'UPDATE_PROGRAM', data: newProgram });
   };
 
   return (
@@ -72,9 +79,10 @@ const SearchBar = ({
               <Grid item lg={5} md={5} xs={12}>
                 <Box maxWidth={500}>
                   <TextField
-                    value={state.studentName}
+                    value={getContextProps == null ? null : getContextProps.state.studentName}
                     onChange={e => changeName(e.target.value)}
                     fullWidth
+                    disabled
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -105,7 +113,7 @@ const SearchBar = ({
                     </InputLabel>
                     <Select
                       id="Select-period"
-                      value={state.period}
+                      value={getContextProps == null ? null : getContextProps.state.period}
                       onChange={e => changePeriod(e.target.value)}
                     >
                       {periods.map(element => (
