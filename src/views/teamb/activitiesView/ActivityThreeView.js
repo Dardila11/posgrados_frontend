@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider, Typography, InputLabel } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Divider, Typography, InputLabel, Input } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -202,10 +202,13 @@ const ActivityThreeView = ({ className, ...rest }) => {
       setEmergenteGuardarYEnviar(false);
   };
 
+  const [archivo, setArchivo] = useState(null);
+
+  const uploadFile = e => {
+    setArchivo(e);
+  }
+
   const SaveActivity = () => {
-    
-    setEmergenteGuardar(false);
-    
     var vartitulo = document.getElementById("titulo").value;
     var vartipo = document.getElementById("tipo").value;
     var varnombrepublicacion = document.getElementById("nombrepublicacion").value;
@@ -215,31 +218,30 @@ const ActivityThreeView = ({ className, ...rest }) => {
     var vardate1 = document.getElementById("date1").value;
     var vardate2 = document.getElementById("date2").value;
     var now = objUtil.GetCurretTimeDate();
-
-
     //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
     //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
     var send_email = emergenteGuardarYEnviar;
 
-    objService.PostActivityThree(
-      { 
-        "title": vartitulo,
-        "name" : varnombrepublicacion,
-        "state" : 1,
-        "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : 3,
-        "type_publication" : vartipo,
-        "authors" : varautores,
-        "general_data" : vardatosgenerales,
-        "editorial" : varnombreeditorial,
-        "student" : 36, /* Consultar el id del estudiante actual */
-        "start_date" : vardate1,
-        "end_date" : vardate2,
-        "date_record": now,
-        "date_update": now,
-        "send_email": send_email 
-      }
-    ).then((result) => { 
+    const fd = new FormData();
+
+    fd.append("title", vartitulo);
+    fd.append("name", varnombrepublicacion);
+    fd.append("state", 1);
+    fd.append("academic_year", "2020-21"); // Consultar año academico actual 
+    fd.append("type", 3);
+    fd.append("type_publication", vartipo);
+    fd.append("authors", varautores);
+    fd.append("general_data", vardatosgenerales); 
+    fd.append("editorial", varnombreeditorial);
+    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("start_date", vardate1);
+    fd.append("end_date", vardate2);
+    fd.append("date_record", now);
+    fd.append("date_update", now);
+    fd.append("send_email", send_email);
+    fd.append("receipt", archivo[0]);
+
+    objService.PostActivityThree(fd).then((result) => { 
       setResultadoBack("Actividad registrada correctamente");   
     }).catch(() => {
       setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
@@ -319,10 +321,11 @@ const ActivityThreeView = ({ className, ...rest }) => {
                   <br></br>
                   <br></br>
                   <br></br>
-                  <Button color="primary" variant="outlined"> Agregar premio </Button>
+                  {/*<Button color="primary" variant="outlined"> Agregar premio </Button>
                   <br></br>
-                  <br></br>
-                  <Button color="primary" variant="outlined"> Justificante </Button>
+                  <br></br>*/}
+                  <InputLabel>Justificante *</InputLabel>
+                  <Input type="file" name="file" inputProps={{ accept: '.pdf' }} onChange={(e) => uploadFile(e.target.files)} />
                 </Grid>
                 <br></br>
               </CardContent>

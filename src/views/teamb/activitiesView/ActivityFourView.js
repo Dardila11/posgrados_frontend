@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Container, Typography, Divider } from '@material-ui/core';
+import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Container, Typography, Divider, Input } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -92,9 +92,6 @@ const ActivityFourView = ({ className, ...rest }) => {
     setResultadoBack(null);
   };
 
-
-
-
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
@@ -170,14 +167,19 @@ const ActivityFourView = ({ className, ...rest }) => {
     if(validar()){
       setEmergenteGuardarYEnviar(true);
     }
-    };
+  };
 
 	const handleGuardarYEnviarNo = () => {
     setEmergenteGuardarYEnviar(false);
   };
+
+  const [archivo, setArchivo] = useState(null);
+
+  const uploadFile = e => {
+    setArchivo(e);
+  }
+
   const SaveActivity = () => {
-    setEmergenteGuardar(false);
-    setEmergenteGuardarYEnviar(false);
     var vardescripcion = document.getElementById("descripcion").value;
     var vardate = document.getElementById("date").value;
     var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
@@ -185,28 +187,28 @@ const ActivityFourView = ({ className, ...rest }) => {
     var varmodalidadpresentación = document.getElementById("modalidadpresentación").value;
     var varhours = document.getElementById("hours").value;
     var now = objUtil.GetCurretTimeDate();
-
     //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
     //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
     var send_email = emergenteGuardarYEnviar;
 
-    objService.PostActivityFour(
-      { 
-        "name" : varnombreevento,
-        "description": vardescripcion,
-        "state" : 1,
-        "start_date" : vardate,
-        "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : 4, 
-        "date_record": now,
-        "date_update": now, 
-        "modality" : varmodalidadpresentación,
-        "duration_hours" : varhours,
-        "place" : varlugarcelebracion,
-        "student" : 36, /* Consultar el id del estudiante actual */
-        "send_email": send_email 
-      }
-    ).then((result) => { 
+    const fd = new FormData();
+
+    fd.append("description", vardescripcion);
+    fd.append("name", varnombreevento);
+    fd.append("state", 1);
+    fd.append("academic_year", "2020-21"); // Consultar año academico actual 
+    fd.append("start_date", vardate);
+    fd.append("type", 4);
+    fd.append("date_record", now);
+    fd.append("date_update", now);
+    fd.append("modality", varmodalidadpresentación);
+    fd.append("duration_hours", varhours); 
+    fd.append("place", varlugarcelebracion);
+    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("send_email", send_email);
+    fd.append("receipt", archivo[0]);
+
+    objService.PostActivityFour(fd).then((result) => { 
       setResultadoBack("Actividad registrada correctamente");   
     }).catch(() => {
       setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
@@ -269,7 +271,8 @@ const ActivityFourView = ({ className, ...rest }) => {
                   {errorDuracion? <p style={{ display: 'flex', color:'red' }}>{errorDuracion}</p>:null}
                   <br></br>
                   <br></br>
-                  <Button color="primary" variant="outlined"> Certificado </Button>
+                  <InputLabel>Certificado *</InputLabel>
+                  <Input type="file" name="file" inputProps={{ accept: '.pdf' }} onChange={(e) => uploadFile(e.target.files)} />
                 </Grid>
                 </Grid>
                 <br></br>
@@ -321,8 +324,6 @@ const ActivityFourView = ({ className, ...rest }) => {
           </DialogActions>
         </Dialog>   
                   
-
-
           {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
           <Dialog
             open={emergenteEnviarBack}
@@ -344,9 +345,6 @@ const ActivityFourView = ({ className, ...rest }) => {
               </Button>
             </DialogActions>
           </Dialog>
-
-
-    
         </div>
       </Container>
     </div>

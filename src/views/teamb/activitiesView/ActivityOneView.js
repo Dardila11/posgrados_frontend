@@ -210,7 +210,6 @@ const ActivityOneView = ({ className, ...rest }) => {
     var vardate2 = document.getElementById("date2").value;
     var varnumber = document.getElementById("number").value;
     var now = objUtil.GetCurretTimeDate();
-
     //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
     //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
     var send_email = emergenteGuardarYEnviar;
@@ -298,13 +297,11 @@ const ActivityOneView = ({ className, ...rest }) => {
                   <br></br>
                   {errorFechas ? <p style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>{errorFechas}</p> : null}
                   <br></br>
-                  <br></br>
                   <TextField id="number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }}
                     onChange={handleHoras} variant="outlined"
                   />
                   {/* TODO: Comentar */}
                   {errorHoras ? <p style={{ display: 'flex', color: 'red' }}>{errorHoras}</p> : null}
-                  <br></br>
                   <br></br>
                   <br></br>
                   <InputLabel>Justificante *</InputLabel>

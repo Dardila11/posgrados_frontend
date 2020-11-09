@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Select, MenuItem, Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Typography, Container, Divider } from '@material-ui/core';
+import { Select, MenuItem, Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Typography, Container, Divider, Input } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -190,8 +190,13 @@ const ActivityTwoView = ({ className, ...rest }) => {
     setEmergenteGuardarYEnviar(false);
     };
 
+  const [archivo, setArchivo] = useState(null);
+
+  const uploadFile = e => {
+    setArchivo(e);
+  }
+
   const SaveActivity = () => {
-    setEmergenteGuardar(false);
     var vartitulo = document.getElementById("titulo").value;
     var vardescripcion = document.getElementById("descripcion").value;
     var varnombreevento = document.getElementById("nombreevento").value;
@@ -199,28 +204,28 @@ const ActivityTwoView = ({ className, ...rest }) => {
     var varentidadorganizadora = values.institucionSeleccionado;
     var vardate = document.getElementById("date").value;
     var now = objUtil.GetCurretTimeDate();
-    
-
     //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
     //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
     var send_email = emergenteGuardarYEnviar;
-    objService.PostActivityTwo(
-      { 
-        "title": vartitulo,
-        "description" : vardescripcion,
-        "name" : varnombreevento,
-        "place" : varlugarcelebracion,
-        "institution": varentidadorganizadora,
-        "start_date" : vardate,
-        "state" : 1,
-        "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : 2,
-        "student" : 36, /* Consultar el id del estudiante actual */
-        "date_record": now,
-        "date_update": now,
-        "send_email": send_email          
-      }
-    ).then((result) => { 
+
+    const fd = new FormData();
+
+    fd.append("title", vartitulo);
+    fd.append("description", vardescripcion);
+    fd.append("name", varnombreevento);
+    fd.append("place", varlugarcelebracion);
+    fd.append("institution", varentidadorganizadora);
+    fd.append("start_date", vardate);
+    fd.append("state", 1); 
+    fd.append("academic_year", "2020-21"); // Consultar año academico actual 
+    fd.append("type", 2);
+    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("date_record", now);
+    fd.append("date_update", now);
+    fd.append("send_email", send_email);
+    fd.append("receipt", archivo[0]);
+    
+    objService.PostActivityTwo(fd).then((result) => { 
       setResultadoBack("Actividad registrada correctamente");
     }).catch(() => {
       setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
@@ -266,7 +271,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
                     {errorLugar? <p style={{ display: 'flex', color:'red' }}>{errorLugar}</p>:null}
                   <br></br>
                   <br></br>
-                  <br></br>
+                  <InputLabel>Entidad organizadora *</InputLabel>
                   <Select fullWidth label="Entidad organizadora" id="entidadorganizadora" type="select" defaultValue
                   variant="outlined" onChange={institucionSeleccionado}
                     >
@@ -278,17 +283,17 @@ const ActivityTwoView = ({ className, ...rest }) => {
                   {errorInstitucion? <p style={{ display: 'flex', color:'red' }}>{errorInstitucion}</p>:null}
                   <br></br>
                   <br></br>
-                  <br></br>
                   <TextField id="date" label="Fecha de realización" type="date"
                     className={classes.textField} InputLabelProps={{ shrink: true }}
                     onChange={fechaRealizacion}/>
                   <br></br>
                   {errorFechas? <p style={{ display: 'flex', color:'red' }}>{errorFechas}</p>:null}
                   <br></br>
-                  <Button color="primary" variant="outlined"> Agregar premio </Button>
+                  {/*<Button color="primary" variant="outlined"> Agregar premio </Button>
                   <br></br>
-                  <br></br>
-                  <Button color="primary" variant="outlined"> Justificante </Button>
+                  <br></br>*/}
+                  <InputLabel>Justificante *</InputLabel>
+                  <Input type="file" name="file" inputProps={{ accept: '.pdf' }} onChange={(e) => uploadFile(e.target.files)} />
                 </Grid>
                 <br></br>
               </CardContent>
