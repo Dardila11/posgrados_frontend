@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Typography, Container, Divider } from '@material-ui/core';
+import { Select, MenuItem, Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Typography, Container, Divider } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -22,14 +22,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const objService = new service();
 const objUtil = new util();
-
-const institucion = [
-  { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: 1 },
-  { value: 'T2', label: 2 },
-  { value: 'T3', label: 3 },
-  { value: 'T4', label: 4 }
-];
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -53,6 +45,19 @@ const ActivityTwoView = ({ className, ...rest }) => {
 	  fechaRealizacion: ''
   });
 
+  const [NumInstitutions, setInstitutions] = useState({
+    institution: []
+  })
+
+  useEffect(() => {
+      objService.GetInstitutions().then((result) => {
+          var dataInstitutions = result.data;
+          setInstitutions({ institution: dataInstitutions });
+          
+      }).catch(() => {
+          alert("Error, no hay registros para mostrar");
+      });
+  }, []);
   const handleChange = (event) => {
     setValues({
       ...values,
@@ -156,7 +161,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
       setErrorLugar("El campo es obligatorio");
       result = false;
     }
-    if(values.institucionSeleccionado.length && values.institucionSeleccionado != "Seleccione una opción"){
+    if(values.institucionSeleccionado != ""){
       setErrorInstitucion(null)
     }
     else{
@@ -191,7 +196,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
     var vardescripcion = document.getElementById("descripcion").value;
     var varnombreevento = document.getElementById("nombreevento").value;
     var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
-    var varentidadorganizadora = document.getElementById("entidadorganizadora").value;
+    var varentidadorganizadora = values.institucionSeleccionado;
     var vardate = document.getElementById("date").value;
     var now = objUtil.GetCurretTimeDate();
     
@@ -199,7 +204,6 @@ const ActivityTwoView = ({ className, ...rest }) => {
     //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
     //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
     var send_email = emergenteGuardarYEnviar;
-
     objService.PostActivityTwo(
       { 
         "title": vartitulo,
@@ -225,6 +229,7 @@ const ActivityTwoView = ({ className, ...rest }) => {
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
+  
   return (
     <div>
       <BreadCrumbs />
@@ -262,15 +267,14 @@ const ActivityTwoView = ({ className, ...rest }) => {
                   <br></br>
                   <br></br>
                   <br></br>
-                  <TextField fullWidth label="Entidad organizadora" id="entidadorganizadora" name="entidadorganizadora" onChange={institucionSeleccionado} required select SelectProps={{ native: true }}
-                    variant="outlined"
-                  >
-                    {institucion.map((option) => (
-                      <option key={option.value} value={option.label}>
-                        {option.label}
-                      </option>
+                  <Select fullWidth label="Entidad organizadora" id="entidadorganizadora" type="select" defaultValue
+                  variant="outlined" onChange={institucionSeleccionado}
+                    >
+                    {NumInstitutions.institution.map(element => (
+                      <MenuItem key={element.id} value={element.id}> {element.name_inst} </MenuItem>
                     ))}
-                  </TextField>
+                  </Select>
+                  {/* TODO: Comentar */}
                   {errorInstitucion? <p style={{ display: 'flex', color:'red' }}>{errorInstitucion}</p>:null}
                   <br></br>
                   <br></br>
