@@ -54,11 +54,11 @@ const TrackStudent = props => {
     console.log(trackStudent);
     let res = await Api.postStudentTracking(trackStudent);
     console.log(res)
-    if(res.status == 201){
+    // aqui debe ir la condicional del codigo de respuesta
       setOpen(true)
       setTypeAlert("success")
       setMessage("El estado del estudiante ha cambiado")
-    }
+    
   };
 
   return (
@@ -77,15 +77,16 @@ const TrackStudent = props => {
           required
           onChange={handleChange}
         >
-          <MenuItem value={0}>Activo</MenuItem>
-          <MenuItem value={1}>Inactivo</MenuItem>
-          <MenuItem value={2}>Graduado</MenuItem>
-          <MenuItem value={3}>Retirado</MenuItem>
+          <MenuItem value={1}>Activo</MenuItem>
+          <MenuItem value={2}>Inactivo</MenuItem>
+          <MenuItem value={3}>Graduado</MenuItem>
+          <MenuItem value={4}>Balanceado</MenuItem>
+          <MenuItem value={5}>Retirado</MenuItem>
         </Select>
         {/* Si es Graduado, muestra los siguientes campos */}
         {/* Fecha de Grado* */} {/* Folio* */} {/* Numero de acta* */}
         {/* Resolución* */} {/* Premios* */}
-        {trackStudent.state === 2 ? (
+        {trackStudent.state === 3 ? (
           <>
             <TextField
               id="date"
