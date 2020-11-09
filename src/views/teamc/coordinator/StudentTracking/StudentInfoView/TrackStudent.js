@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import {
   DialogContent,
@@ -11,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { SentimentSatisfied } from '@material-ui/icons';
 import Api from 'src/views/teamc/services/Api';
+import { AlertView } from 'src/components/Alert';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,6 +26,9 @@ const useStyles = makeStyles(theme => ({
 const TrackStudent = props => {
   const classes = useStyles();
   const [studentStatus, setStudentStatus] = useState('');
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
   const [trackStudent, setTrackStudent] = useState({
     state: 1,
     enrollment_date: null,
@@ -33,7 +38,7 @@ const TrackStudent = props => {
     num_diploma: '',
     num_resolution: '',
     observations: '',
-    student: 1
+    student: parseInt(props.studentId)
   });
 
   const handleChange = e => {
@@ -45,12 +50,15 @@ const TrackStudent = props => {
   };
 
   const postData = async () => {
+    setOpen(false)
     console.log(trackStudent);
     let res = await Api.postStudentTracking(trackStudent);
-  };
-
-  const changeStudentStatus = e => {
-    setStudentStatus(e);
+    console.log(res)
+    if(res.status == 201){
+      setOpen(true)
+      setTypeAlert("success")
+      setMessage("El estado del estudiante ha cambiado")
+    }
   };
 
   return (
@@ -145,6 +153,7 @@ const TrackStudent = props => {
           Guardar
         </Button>
       </DialogActions>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </>
   );
 };

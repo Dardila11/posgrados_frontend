@@ -41,6 +41,7 @@ const StudentInfo = () => {
   let { id } = useParams();
   const [studentInfo, setStudentInfo] = useState({});
   const [isBusy, setBusy] = useState(true);
+  const [pk, setPk] = useState("");
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -57,6 +58,7 @@ const StudentInfo = () => {
     const fetchData = async () => {
       await api.getStudent(id).then(res => {
         setStudentInfo(res.data.student);
+        setPk(res.data.student.student.id)
         setBusy(false);
       });
     };
@@ -140,7 +142,7 @@ const StudentInfo = () => {
               open={open}
               handleClose={handleClose}
               handleOpen={handleClickOpen}
-              component={<TrackStudent />}
+              component={<TrackStudent studentId={pk} />}
             />
           </CardActions>
         </Card>
