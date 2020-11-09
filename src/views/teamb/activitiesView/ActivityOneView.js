@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Select, MenuItem, Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Typography, Divider } from '@material-ui/core';
+import { Select, MenuItem, Box, Button, Card, CardContent, Grid, TextField, makeStyles, Container, Typography, Divider, Input, InputLabel } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -24,12 +24,6 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const objService = new service();
 const objUtil = new util();
 
-const programa = [
-  { value: 'advert', label: 'Seleccione una opción' },
-  { value: 'T1', label: 1 },
-  { value: 'T2', label: 2 },
-  { value: 'T3', label: 3 }
-];
 const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
@@ -46,12 +40,12 @@ const ActivityOneView = ({ className, ...rest }) => {
   const classes = useStyles();
   //TODO: Comentar 
   const [values, setValues] = useState({
-    titulo:'',
-    descripcion:'',
-    programaSeleccionado:'',
-    horasAsignadas:0,
+    titulo: '',
+    descripcion: '',
+    programaSeleccionado: '',
+    horasAsignadas: 0,
     fechaInicio: '',
-    fechaFin:'',
+    fechaFin: '',
   });
   //Asignamos a "programaSeleccionado" el valor de "event.target.value"
   const handleProgramas = (event) => {
@@ -61,28 +55,28 @@ const ActivityOneView = ({ className, ...rest }) => {
     });
   };
   //programs list
-  
+
   const [NumPrograms, setPrograms] = useState({
     programs: []
   })
 
   useEffect(() => {
-      /* Dato quemado desde la tabla User: id_user */
-      objService.GetPrograms().then((result) => {
-          var dataPrograms = result.data;
-          setPrograms({ programs: dataPrograms });
-          
-      }).catch(() => {
-          alert("Error, no hay registros para mostrar");
-      });
+    /* Dato quemado desde la tabla User: id_user */
+    objService.GetPrograms().then((result) => {
+      var dataPrograms = result.data;
+      setPrograms({ programs: dataPrograms });
+
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
   }, []);
 
- //Asignamos a "HorasSeleccionado" el valor de "event.target.value"
- const handleHoras = (event) => {
-  setValues({
-    ...values,
-    horasAsignadas: event.target.value
-  });
+  //Asignamos a "HorasSeleccionado" el valor de "event.target.value"
+  const handleHoras = (event) => {
+    setValues({
+      ...values,
+      horasAsignadas: event.target.value
+    });
   };
   const handleChange = (event) => {
     setValues({
@@ -124,7 +118,7 @@ const ActivityOneView = ({ className, ...rest }) => {
   const [resultadoBack, setResultadoBack] = useState(null);
 
   const handleEnviarBackAceptar = () => {
-    if(resultadoBack == "Actividad registrada correctamente") {
+    if (resultadoBack == "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
     setEmergenteEnviarBack(false);
@@ -135,17 +129,17 @@ const ActivityOneView = ({ className, ...rest }) => {
   const handleClose = () => {
     setEmergenteCancelar(true);
   };
- // "handleNo" controla cuando se da click en el botón "NO" de la ventana emergente
- const handleCancelarNo = () => {
-  setEmergenteCancelar(false);
+  // "handleNo" controla cuando se da click en el botón "NO" de la ventana emergente
+  const handleCancelarNo = () => {
+    setEmergenteCancelar(false);
   };
 
-    //TODO: Comentar
+  //TODO: Comentar
   const handleGuardar = () => {
-    if(validar()){
+    if (validar()) {
       setEmergenteGuardar(true);
     }
-    
+
   };
 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
@@ -157,7 +151,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     var result = true;
 
     if (values.titulo.length) { setErrorTitulo(null) }
-    else { 
+    else {
       setErrorTitulo("El campo es obligatorio")
       result = false;
     }
@@ -165,7 +159,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     else {
       setErrorDescripcion("El campo es obligatorio")
       result = false;
-    } 
+    }
     if (values.programaSeleccionado != "") {
       setErrorPrograma(null)
     }
@@ -179,7 +173,7 @@ const ActivityOneView = ({ className, ...rest }) => {
       result = false;
     }
     if (values.fechaInicio.length && values.fechaFin.length) {
-      if (values.fechaInicio<=values.fechaFin) { setErrorFechas("") }
+      if (values.fechaInicio <= values.fechaFin) { setErrorFechas("") }
       else {
         setErrorFechas("La fecha de finalización debe ser después de la fecha de inicio")
         result = false;
@@ -193,8 +187,8 @@ const ActivityOneView = ({ className, ...rest }) => {
   }
   //TODO: Comentar
   const handleGuardarYEnviar = () => {
-    
-    if(validar()){
+
+    if (validar()) {
       setEmergenteGuardarYEnviar(true);
     }
   };
@@ -203,11 +197,15 @@ const ActivityOneView = ({ className, ...rest }) => {
     setEmergenteGuardarYEnviar(false);
   };
 
-  const SaveActivity = () => {
+  const [archivo, setArchivo] = useState(null);
 
+  const uploadFile = e => {
+    setArchivo(e);
+  }
+
+  const SaveActivity = () => {
     var vartitulo = document.getElementById("titulo").value;
     var vardescripcion = document.getElementById("descripcion").value;
-    var varprograma = document.getElementById("programa").value;
     var vardate1 = document.getElementById("date1").value;
     var vardate2 = document.getElementById("date2").value;
     var varnumber = document.getElementById("number").value;
@@ -217,24 +215,25 @@ const ActivityOneView = ({ className, ...rest }) => {
     //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
     var send_email = emergenteGuardarYEnviar;
 
-    objService.PostActivityOne(
-      { 
-        "title": vartitulo,
-        "description" : vardescripcion,
-        "state" : 1,  
-        "program" : varprograma,
-        "start_date": vardate1,
-        "end_date": vardate2,
-        "academic_year" : "2020-21", /* Consultar año academico actual */
-        "assigned_hours" : varnumber,
-        "type": 1,
-        "student" : 36, /* Consultar el id del estudiante actual */
-        "date_record": now,
-        "date_update": now,
-        "send_email": send_email 
-      }
-    ).then((result) => { 
-      setResultadoBack("Actividad registrada correctamente");   
+    const fd = new FormData();
+
+    fd.append("title", vartitulo);
+    fd.append("description", vardescripcion);
+    fd.append("state", 1);
+    fd.append("program", values.programaSeleccionado);
+    fd.append("start_date", vardate1);
+    fd.append("end_date", vardate2);
+    fd.append("academic_year", "2020-21"); // Consultar año academico actual 
+    fd.append("assigned_hours", varnumber);
+    fd.append("type", 1);
+    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("date_record", now);
+    fd.append("date_update", now);
+    fd.append("send_email", send_email);
+    fd.append("receipt", archivo[0]);
+
+    objService.PostActivityOne(fd).then((result) => {
+      setResultadoBack("Actividad registrada correctamente");
     }).catch(() => {
       setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
     });
@@ -242,7 +241,7 @@ const ActivityOneView = ({ className, ...rest }) => {
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
-  
+
   return (
     <div>
       <BreadCrumbs />
@@ -258,72 +257,74 @@ const ActivityOneView = ({ className, ...rest }) => {
               <CardContent >
                 <br></br>
                 <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo" id="titulo"  name="titulo" onChange={handleChange} required 
-                  value={values.titulo} variant="outlined"
-                />
-              {/* TODO: Comentar */}
-              {errorTitulo? <p style={{ display: 'flex', color:'red' }}>{errorTitulo}</p>:null}
-              <br></br>
-              <br></br>
-              <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required 
-                value={values.descripcion} variant="outlined"/>
-              {/* TODO: Comentar */}
-              {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
-              <br></br>
-              <br></br>
-              <Select fullWidth label="Programa" id="programa" type="select" defaultValue
-                variant="outlined" onChange={handleProgramas}
-                >
-                {NumPrograms.programs.map(element => (
-                  <MenuItem key={element.id} value={element.id}> {element.name} </MenuItem>
-                ))}
-              </Select>
-              {/* TODO: Comentar */}
-              {errorPrograma? <p style={{ display: 'flex', color:'red' }}>{errorPrograma}</p>:null}
-              <br></br>
-              <br></br>  
-              <br></br>      
-            <Grid container spacing = {3} container justify="space-around">
-              <Grid>
-                <TextField id="date1" name="date1" label="Fecha inicio" type="date" className={classes.textField} 
-                  InputLabelProps={{ shrink: true }} onChange={handleFechaInicio}
-                />
-              </Grid>
-              <Grid>
-                <TextField id="date2" name="date2" label="Fecha fin" type="date" className={classes.textField} 
-                  InputLabelProps={{ shrink: true }} onChange={handleFechaFin}
-                />
-              </Grid>
-            </Grid>
-            <br></br> 
-            {errorFechas? <p style={{ display: 'flex', justifyContent: 'center', color:'red' }}>{errorFechas}</p>:null}
-              <br></br> 
-              <br></br>
-              <br></br>
-              <TextField id="number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }} 
-                onChange={handleHoras} variant="outlined" 
-              />
-             {/* TODO: Comentar */}
-              {errorHoras? <p style={{ display: 'flex', color:'red' }}>{errorHoras}</p>:null}
-              <br></br>
-              <br></br>
-              <Button color="primary" variant="outlined"> Justificante </Button>
-            </Grid>
+                  <TextField fullWidth label="Titulo" id="titulo" name="titulo" onChange={handleChange} required
+                    value={values.titulo} variant="outlined"
+                  />
+                  {/* TODO: Comentar */}
+                  {errorTitulo ? <p style={{ display: 'flex', color: 'red' }}>{errorTitulo}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField fullWidth label="Descripcion" id="descripcion" name="descripcion" onChange={handleChange} required
+                    value={values.descripcion} variant="outlined" />
+                  {/* TODO: Comentar */}
+                  {errorDescripcion ? <p style={{ display: 'flex', color: 'red' }}>{errorDescripcion}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <InputLabel>Programa *</InputLabel>
+                  <Select fullWidth label="Programa" id="programa" type="select" defaultValue
+                    variant="outlined" onChange={handleProgramas}
+                  >
+                    {NumPrograms.programs.map(element => (
+                      <MenuItem key={element.id} value={element.id}> {element.name} </MenuItem>
+                    ))}
+                  </Select>
+                  {/* TODO: Comentar */}
+                  {errorPrograma ? <p style={{ display: 'flex', color: 'red' }}>{errorPrograma}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <Grid container spacing={3} container justify="space-around">
+                    <Grid>
+                      <TextField id="date1" name="date1" label="Fecha inicio" type="date" className={classes.textField}
+                        InputLabelProps={{ shrink: true }} onChange={handleFechaInicio}
+                      />
+                    </Grid>
+                    <Grid>
+                      <TextField id="date2" name="date2" label="Fecha fin" type="date" className={classes.textField}
+                        InputLabelProps={{ shrink: true }} onChange={handleFechaFin}
+                      />
+                    </Grid>
+                  </Grid>
+                  <br></br>
+                  {errorFechas ? <p style={{ display: 'flex', justifyContent: 'center', color: 'red' }}>{errorFechas}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <TextField id="number" label="Número de horas asignadas" type="number" InputLabelProps={{ shrink: true, }}
+                    onChange={handleHoras} variant="outlined"
+                  />
+                  {/* TODO: Comentar */}
+                  {errorHoras ? <p style={{ display: 'flex', color: 'red' }}>{errorHoras}</p> : null}
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <InputLabel>Justificante *</InputLabel>
+                  <Input type="file" name="file" inputProps={{ accept: '.pdf' }} onChange={(e) => uploadFile(e.target.files)} />
+                </Grid>
                 <br></br>
               </CardContent>
 
               <Box display="flex" justifyContent="flex-end" p={2}>
                 {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
                 confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
-            <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button> &nbsp; 
+                <Button onClick={handleClose} color="primary" variant="outlined">Cancelar</Button> &nbsp;
 
-            <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button> &nbsp; 
+            <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button> &nbsp;
 
             <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
               </Box>
             </Card>
           </form>
-          
+
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" 
           en "Crear Actividad" */}
           <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
@@ -331,10 +332,10 @@ const ActivityOneView = ({ className, ...rest }) => {
             <DialogContent>
             </DialogContent>
             <DialogActions>
-            <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
-            <RouterLink to = "../"> 
+              <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
+              <RouterLink to="../">
                 <Button color="primary">Si</Button>
-            </RouterLink>
+              </RouterLink>
             </DialogActions>
           </Dialog>
 
@@ -346,10 +347,10 @@ const ActivityOneView = ({ className, ...rest }) => {
             </DialogContent>
             <DialogActions>
               {/* TODO: Enviar a backend y guardar */}
-               <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
-               <Button color="primary" onClick={SaveActivity} >Si</Button>
+              <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
+              <Button color="primary" onClick={SaveActivity} >Si</Button>
             </DialogActions>
-          </Dialog>                  
+          </Dialog>
 
           {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
             en "Crear Actividad" */}
@@ -358,7 +359,7 @@ const ActivityOneView = ({ className, ...rest }) => {
             <DialogContent>
             </DialogContent>
             <DialogActions>
-            {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
+              {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
               <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
               <Button color="primary" onClick={SaveActivity} >Si</Button>
             </DialogActions>
@@ -371,7 +372,7 @@ const ActivityOneView = ({ className, ...rest }) => {
             <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-slide-description">
-              {resultadoBack? <Typography component={'span'} variant={'body2'}>{resultadoBack}</Typography>:null}
+                {resultadoBack ? <Typography component={'span'} variant={'body2'}>{resultadoBack}</Typography> : null}
               </DialogContentText>
             </DialogContent>
             <DialogActions>
