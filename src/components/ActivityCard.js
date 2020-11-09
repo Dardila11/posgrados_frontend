@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 //import PropTypes from 'prop-types';
 import {
   Card,
@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
+import { isUndefined } from 'lodash';
 
 /*const theme = createMuiTheme({
   palette: {
@@ -40,7 +41,8 @@ const useStyles = makeStyles({
 const ActivityCard = ({ className, activity, context, ...rest }) => {
   const classes = useStyles();
   const link = context + '/activity/' + activity.id;
-  //console.log(context);
+  let option = true;
+  if(isUndefined(activity.title) || activity.title==null || activity.title=="") option=false;
   return (
     <RouterLink to={link}>
       <Box boxShadow={3}>
@@ -52,16 +54,25 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
               flexDirection="column"
               textAlign="center"
             >
-              <Typography color="textPrimary" gutterBottom variant="h4">
+              {isUndefined(activity.title) || activity.title==null || activity.title==""?(console.log('')):(
+              <Typography variant="body1" component="h1" variant="h4" gutterBottom>
                 {activity.title}
               </Typography>
-              <Typography
+            )}
+            {option?(
+                <Typography
                 className={classes.Typography}
                 fontWeight="fontWeightMedium"
                 variant="body1"
               >
                 {activity.description}
               </Typography>
+            ):(
+              <Typography variant="body1" component="h1" variant="h4" gutterBottom>
+                {activity.description}
+              </Typography>
+            )}
+              
               <Typography color="textSecondary" variant="body1">
                 {activity.type}
               </Typography>
