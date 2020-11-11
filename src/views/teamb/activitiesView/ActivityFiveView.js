@@ -278,7 +278,7 @@ const ActivityFiveView = ({ className, ...rest }) => {
     fd.append("institution", varnombreinstitucion);
     fd.append("city", varciudad);
     fd.append("country", varpais);
-    fd.append("send_email", send_email);
+    if(send_email) { fd.append("send_email", send_email); }
     fd.append("receipt", archivo[0]);
 
     objService.PostActivityFive(fd).then((result) => {

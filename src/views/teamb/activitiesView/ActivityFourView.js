@@ -205,7 +205,7 @@ const ActivityFourView = ({ className, ...rest }) => {
     fd.append("duration_hours", varhours); 
     fd.append("place", varlugarcelebracion);
     fd.append("student", 36); // Consultar el id del estudiante actual
-    fd.append("send_email", send_email);
+    if(send_email) { fd.append("send_email", send_email); }
     fd.append("receipt", archivo[0]);
 
     objService.PostActivityFour(fd).then((result) => { 

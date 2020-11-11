@@ -238,7 +238,7 @@ const ActivityThreeView = ({ className, ...rest }) => {
     fd.append("end_date", vardate2);
     fd.append("date_record", now);
     fd.append("date_update", now);
-    fd.append("send_email", send_email);
+    if(send_email) { fd.append("send_email", send_email); }
     fd.append("receipt", archivo[0]);
 
     objService.PostActivityThree(fd).then((result) => { 

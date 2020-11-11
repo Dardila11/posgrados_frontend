@@ -295,7 +295,7 @@ const ActivitySixView = ({ className, ...rest }) => {
     fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("investigation_line", varlineainvestigacion);
     fd.append("investigator", varnombreinvestigador);
-    fd.append("send_email", send_email);
+    if(send_email) { fd.append("send_email", send_email); }
     fd.append("receipt", archivo[0]);
 
     objService.PostActivitySix(fd).then((result) => {
