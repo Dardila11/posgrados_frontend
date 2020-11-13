@@ -7,8 +7,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CreateView from './create';
-import AddDirector from './addDirector/add-director';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ListProfessors from './addDirector/listProfessors';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -95,7 +95,7 @@ const AdministerView = () => {
               <CreateView />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <AddDirector />
+              <ListProfessors />
             </TabPanel>
           
         </Box>
