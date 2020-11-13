@@ -1,26 +1,23 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 
-export const AssignDirector = ({state,getState}) => {
+export const AssignDirector = ({state,setState,listContext}) => {
  
-    const [open, setOpen] = useState(false)
-    const [open2,setOpen2] = useState (true)
+    const [open, setOpen] = useState(true)
+    const [idGi, setIdGi] = useState([])
     useEffect(() => {
-        setOpen(state)
-        console.log("useEffect ", state)
+         setOpen(state)
     }, [state])
-
     const handleClose = () =>{
-        console.log("Handle close ", open);
         setOpen(false);
-        setOpen2(10);
-        console.log("Handle close  2", open2);
-        console.log("Handle close ", open);
-        getState(open);
+        setState(false);
     };
     const handleAssign = () => {
-        console.log("Dialog Asignar director")
         setOpen(false)
+        setState(false);
+    }
+    const getIdGi = (id) =>{
+        setIdGi(id)
     }
     
     return (
@@ -32,14 +29,7 @@ export const AssignDirector = ({state,getState}) => {
                         Para asignar el director debes elejir
                         un grupo de investigación    
                     </DialogContentText>
-                    <TextField
-                        margin="dense"
-                        id="gi"
-                        label="Grupo de investigacion" //TODO : UTILIZAR COMPONENTE SEARCHGI
-                        type="text"
-                        variant = "outlined"
-                        fullWidth>
-                    </TextField>  
+                 <SearchGI callback = {getIdGi} listGi = {listContext}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleAssign} color="primary" variant="outlined">Asignar</Button>

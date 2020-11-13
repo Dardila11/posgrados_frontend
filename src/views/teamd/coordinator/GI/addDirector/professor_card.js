@@ -18,11 +18,9 @@ export const Professor_card = ({profesor}) => {
 
     const getState = (state)=> {
         setDialogState(state)
-        console.log("estado cuando se obtiene ", dialogState)
     }
     const handleAssign = () =>{
         setDialogState(true)
-        console.log("Asignar director")
     }
 
     return (
@@ -59,7 +57,7 @@ export const Professor_card = ({profesor}) => {
                     </Typography>
                     )}
             </CardContent>
-           <AssignDirector state = {dialogState} getState = {getState} />
+           <AssignDirector state = {dialogState} setState = {getState} />
 
 
         </Card>
