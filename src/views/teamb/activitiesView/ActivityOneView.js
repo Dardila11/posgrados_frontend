@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Select, MenuItem, Card, Grid, TextField, makeStyles, Container, Typography, Divider, InputLabel, FormControl
+  Card, Grid, TextField, makeStyles, Container, Typography, Divider
 } from '@material-ui/core';
 
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
@@ -9,6 +9,7 @@ import PDFUpload from 'src/views/teamb/activitiesView/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/ConfirmOption';
 import Response from 'src/views/teamb/activitiesView/Response';
+import SelectField from 'src/views/teamb/activitiesView/SelectField';
 
 import service from '../services/service';
 import util from '../services/util';
@@ -60,19 +61,6 @@ const ActivityOneView = ({ className, ...rest }) => {
     });
   };
 
-  const [statePrograms, setStatePrograms] = useState({
-    programs: []
-  })
-
-  useEffect(() => {
-    objService.GetPrograms().then((result) => {
-      var dataPrograms = result.data;
-      setStatePrograms({ programs: dataPrograms });
-    }).catch(() => {
-      alert("No hay programas registrados");
-    });
-  }, []);
-
   const [archivo, setArchivo] = useState(null);
 
   const uploadFile = e => {
@@ -105,7 +93,7 @@ const ActivityOneView = ({ className, ...rest }) => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validar()) { setEmergenteGuardar(true); }
+    if ( validar() ) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -114,7 +102,7 @@ const ActivityOneView = ({ className, ...rest }) => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if ( validar() ) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -194,7 +182,6 @@ const ActivityOneView = ({ className, ...rest }) => {
     const fd = new FormData();
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
-    fd.append("state", 1);
     fd.append("program", values.programaSeleccionado);
     fd.append("start_date", values.fechaInicio);
     fd.append("end_date", values.fechaFin);
@@ -204,7 +191,12 @@ const ActivityOneView = ({ className, ...rest }) => {
     fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("date_record", now);
     fd.append("date_update", now);
-    if (send_email) { fd.append("send_email", send_email); }
+    //fd.append("is_active", true);
+    if (send_email) { 
+      fd.append("send_email", send_email); 
+      fd.append("state", 2);
+    }
+    else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
     objService.PostActivityOne(fd).then((result) => {
@@ -240,15 +232,7 @@ const ActivityOneView = ({ className, ...rest }) => {
               {/* Validacion del campo */}
               {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
 
-              <FormControl className={classes.field} fullWidth required variant="outlined">
-                <InputLabel> Programa </InputLabel>
-                <Select defaultValue={0} onChange={handleChange} label="Programa" name="programaSeleccionado">
-                  <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
-                  {statePrograms.programs.map(element => (
-                    <MenuItem key={element.id} value={element.id}> {element.name} </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
+              <SelectField name="programaSeleccionado" label="Programa" handleChange={handleChange} />
               {/* Validacion del campo */}
               {errorPrograma ? <Typography className={classes.validator}> {errorPrograma} </Typography> : null}
 
