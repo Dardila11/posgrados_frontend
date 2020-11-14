@@ -1,25 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
 import {
-  Select, MenuItem, Button, Card, Grid, TextField, makeStyles, Container, Typography,
-  Divider, Input, InputLabel, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions,
-  Slide, FormControl
+  Select, MenuItem, Card, Grid, TextField, makeStyles, Container, Typography, Divider, InputLabel, FormControl
 } from '@material-ui/core';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+import PDFUpload from 'src/views/teamb/activitiesView/UploadPDF';
+import FormOption from 'src/views/teamb/activitiesView/FormOption';
+import ConfirmOption from 'src/views/teamb/activitiesView/ConfirmOption';
+import Response from 'src/views/teamb/activitiesView/Response';
 
 import service from '../services/service';
 import util from '../services/util';
 
 const objService = new service();
 const objUtil = new util();
-
-// Transición de la ventana emergente que muestra el resultado de enviar los datos del formulario al backend
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,7 +27,7 @@ const useStyles = makeStyles(() => ({
   title: {
     margin: '20px'
   },
-  form: {
+  content: {
     marginBottom: '16px',
     marginLeft: '16px',
     marginRight: '16px'
@@ -43,10 +38,6 @@ const useStyles = makeStyles(() => ({
   validator: {
     color: 'red',
     fontSize: 13
-  },
-  options: {
-    marginTop: '10px',
-    marginLeft: '8px'
   }
 }));
 
@@ -101,6 +92,7 @@ const ActivityOneView = ({ className, ...rest }) => {
   const [errorPrograma, setErrorPrograma] = useState(null);
   const [errorHoras, setErrorHoras] = useState(null);
   const [errorFechas, setErrorFechas] = useState(null);
+  const [errorFile, setErrorFile] = useState(null);
 
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
@@ -113,7 +105,7 @@ const ActivityOneView = ({ className, ...rest }) => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if ( validar() ) { setEmergenteGuardar(true); }
+    if (validar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -122,7 +114,7 @@ const ActivityOneView = ({ className, ...rest }) => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if ( validar() ) { setEmergenteGuardarYEnviar(true); }
+    if (validar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -164,23 +156,33 @@ const ActivityOneView = ({ className, ...rest }) => {
       setErrorFechas("Seleccióne una fecha inicial y una fecha final válidas")
       result = false;
     }
+    var textFile = document.getElementById("text-file").textContent;
+    if (textFile.length > 0) { setErrorFile(null) }
+    else {
+      setErrorFile("Es necesario subir el justificante")
+      result = false;
+    }
     return result;
   }
 
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
-  const [emergenteEnviarBack, setEmergenteEnviarBack] = React.useState(false);
+  const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
 
   // Costante para definir el mensaje de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
-  const [resultadoBack, setResultado] = useState(null);
+  const [response, setResponse] = useState(null);
 
-  const handleEnviarBackAceptar = () => {
-    if (resultadoBack == "Actividad registrada correctamente") {
+  const handleResponseAccept = () => {
+    if (response == "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
-    setEmergenteEnviarBack(false);
-    setResultado(null);
+    setPopUpRequestPost(false);
+    setResponse(null);
+  };
+
+  const handleBack = () => {
+    window.location.href='./';
   };
 
   const SaveActivity = () => {
@@ -203,14 +205,14 @@ const ActivityOneView = ({ className, ...rest }) => {
     fd.append("date_record", now);
     fd.append("date_update", now);
     if (send_email) { fd.append("send_email", send_email); }
-    fd.append("receipt", archivo[0]);
+    if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
     objService.PostActivityOne(fd).then((result) => {
-      setResultado("Actividad registrada correctamente");
+      setResponse("Actividad registrada correctamente");
     }).catch(() => {
-      setResultado("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
+      setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
     });
-    setEmergenteEnviarBack(true);
+    setPopUpRequestPost(true);
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
@@ -220,12 +222,12 @@ const ActivityOneView = ({ className, ...rest }) => {
       <BreadCrumbs />
       <Container className={classes.container}>
         <Card className={classes.root}>
-          <form className={classes.form}>
+          <Grid className={classes.content}>
             <Typography className={classes.title} variant="h1" align="center" gutterBottom>
               Curso, dirección/revisión de proyectos
             </Typography>
             <Divider />
-            <Grid>
+            <form>
               <TextField className={classes.field} fullWidth label="Titulo" name="titulo" onChange={handleChange}
                 required variant="outlined"
               />
@@ -233,13 +235,13 @@ const ActivityOneView = ({ className, ...rest }) => {
               {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
 
               <TextField className={classes.field} fullWidth label="Descripcion" name="descripcion"
-                onChange={handleChange} required value={values.descripcion} variant="outlined" 
+                onChange={handleChange} required value={values.descripcion} variant="outlined"
               />
               {/* Validacion del campo */}
               {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
 
               <FormControl className={classes.field} fullWidth required variant="outlined">
-                <InputLabel>Programa</InputLabel>
+                <InputLabel> Programa </InputLabel>
                 <Select defaultValue={0} onChange={handleChange} label="Programa" name="programaSeleccionado">
                   <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
                   {statePrograms.programs.map(element => (
@@ -274,82 +276,32 @@ const ActivityOneView = ({ className, ...rest }) => {
               {/* Validacion del campo */}
               {errorHoras ? <Typography className={classes.validator}> {errorHoras} </Typography> : null}
 
-              <Grid container alignItems="center" className={classes.field}>
-                <Grid>
-                  <Button variant="contained" component="label" startIcon={<CloudUploadIcon />} >
-                    Justificante
-                    <Input type="file" name="file" inputProps={{ accept: '.pdf' }} style={{ display: "none" }}
-                      onChange={(e) => uploadFile(e.target.files)} 
-                    />
-                  </Button>
-                </Grid>
-                &nbsp;
-                <Grid id="text-file"> </Grid>
-              </Grid>
-            </Grid>
+              <PDFUpload uploadFile={uploadFile} />
+              {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
+            </form>
             <Divider className={classes.field} />
             <Grid container justify="flex-end">
-              {/* Onclick, lanzar la ventana emergente de confirmación cuando se pulsa sobre el botón*/}
-              <Button className={classes.options} onClick={handleClose} color="primary" variant="outlined">
-                Cancelar
-              </Button>
-              <Button className={classes.options} onClick={handleGuardar} color="primary" variant="contained"> 
-                Guardar 
-              </Button>
-              <Button className={classes.options} onClick={handleGuardarYEnviar} color="primary" variant="contained"> 
-                Guardar y Enviar 
-              </Button>
+              <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
+              <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
+              <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
             </Grid>
-          </form>
+          </Grid>
         </Card>
 
-        {/* Lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "Cancelar" */}
-        <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
-          <DialogTitle> Mensaje </DialogTitle>
-          <DialogContent> ¿Esta seguro que desea salir del registro? </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelarNo} color="primary" autoFocus> No </Button>
-            <RouterLink to="../">
-              <Button color="primary"> Si </Button>
-            </RouterLink>
-          </DialogActions>
-        </Dialog>
+        {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
+        <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
+          msg={'¿Esta seguro de que desea salir del registro?'} 
+        />
+        <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
+          msg={'¿Esta seguro de que desea guardar la actividad?'} 
+        />
+        <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
+          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'} 
+        />
 
-        {/* Lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "Guardar" */}
-        <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
-          <DialogTitle> Mensaje </DialogTitle>
-          <DialogContent> ¿Esta seguro que desea guardar la actividad? </DialogContent>
-          <DialogActions>
-            <Button onClick={handleGuardarNo} color="primary"> No </Button>
-            <Button color="primary" onClick={SaveActivity} autoFocus> Si </Button>
-          </DialogActions>
-        </Dialog>
+        {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
+        <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
 
-        {/* Lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "Guardar y Enviar" */}
-        <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
-          <DialogTitle> Mensaje </DialogTitle>
-          <DialogContent> ¿Esta seguro que desea guardar la actividad y enviar el correo a sus directores? </DialogContent>
-          <DialogActions>
-            <Button onClick={handleGuardarYEnviarNo} color="primary"> No </Button>
-            <Button color="primary" onClick={SaveActivity} autoFocus> Si </Button>
-          </DialogActions>
-        </Dialog>
-
-        {/* Muestra la respuesta del servidor */}
-        <Dialog open={emergenteEnviarBack} TransitionComponent={Transition} keepMounted onClose={handleEnviarBackAceptar}
-          aria-labelledby="alert-dialog-slide-title" aria-describedby="alert-dialog-slide-description"
-        >
-          <DialogTitle id="alert-dialog-slide-title"> Mensaje </DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-              {resultadoBack ? <Typography component={'span'} variant={'body2'}> {resultadoBack} </Typography> : null}
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleEnviarBackAceptar} color="primary"> Aceptar </Button>
-          </DialogActions>
-        </Dialog>
-        
       </Container>
     </Grid>
   );
