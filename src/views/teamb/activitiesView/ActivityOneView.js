@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
 import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider
 } from '@material-ui/core';
@@ -42,7 +41,7 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ActivityOneView = ({ className, ...rest }) => {
+const ActivityOneView = () => {
   const classes = useStyles();
   // Estado que controla los valores del formulario
   const [values, setValues] = useState({
@@ -62,7 +61,6 @@ const ActivityOneView = ({ className, ...rest }) => {
   };
 
   const [archivo, setArchivo] = useState(null);
-
   const uploadFile = e => {
     setArchivo(e);
     if (e.length > 0) { document.getElementById("text-file").textContent = e[0].name; }
@@ -73,14 +71,6 @@ const ActivityOneView = ({ className, ...rest }) => {
   const [emergenteCancelar, setEmergenteCancelar] = React.useState(false);
   const [emergenteGuardar, setEmergenteGuardar] = React.useState(false);
   const [emergenteGuardarYEnviar, setEmergenteGuardarYEnviar] = React.useState(false);
-
-  // Costantes para controlar las validaciones del formulario
-  const [errorTitulo, setErrorTitulo] = useState(null);
-  const [errorDescripcion, setErrorDescripcion] = useState(null);
-  const [errorPrograma, setErrorPrograma] = useState(null);
-  const [errorHoras, setErrorHoras] = useState(null);
-  const [errorFechas, setErrorFechas] = useState(null);
-  const [errorFile, setErrorFile] = useState(null);
 
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
@@ -93,7 +83,7 @@ const ActivityOneView = ({ className, ...rest }) => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if ( validar() ) { setEmergenteGuardar(true); }
+    if (validar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -102,12 +92,20 @@ const ActivityOneView = ({ className, ...rest }) => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if ( validar() ) { setEmergenteGuardarYEnviar(true); }
+    if (validar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
     setEmergenteGuardarYEnviar(false);
   };
+
+  // Costantes para controlar las validaciones del formulario
+  const [errorTitulo, setErrorTitulo] = useState(null);
+  const [errorDescripcion, setErrorDescripcion] = useState(null);
+  const [errorPrograma, setErrorPrograma] = useState(null);
+  const [errorHoras, setErrorHoras] = useState(null);
+  const [errorFechas, setErrorFechas] = useState(null);
+  const [errorFile, setErrorFile] = useState(null);
 
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
   const validar = () => {
@@ -170,8 +168,20 @@ const ActivityOneView = ({ className, ...rest }) => {
   };
 
   const handleBack = () => {
-    window.location.href='./';
+    window.location.href = './';
   };
+
+  const [currentAcadYear, setCurrentAcadYear] = useState(null);
+  useEffect(() => {
+    /* Dato quemado desde la tabla User: id_user */
+    objService.GetPeriodService(8).then((result) => {
+      var CurrentPeriod = result.data.period;
+      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+      setCurrentAcadYear(CurrentAcadYear);
+    }).catch(() => {
+      alert("Error, no hay registros para mostrar");
+    });
+  }, []);
 
   const SaveActivity = () => {
     var now = objUtil.GetCurretTimeDate();
@@ -185,15 +195,15 @@ const ActivityOneView = ({ className, ...rest }) => {
     fd.append("program", values.programaSeleccionado);
     fd.append("start_date", values.fechaInicio);
     fd.append("end_date", values.fechaFin);
-    fd.append("academic_year", "2020-21"); // Consultar año academico actual 
+    fd.append("academic_year", currentAcadYear);
     fd.append("assigned_hours", values.horasAsignadas);
     fd.append("type", 1);
     fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("date_record", now);
     fd.append("date_update", now);
     //fd.append("is_active", true);
-    if (send_email) { 
-      fd.append("send_email", send_email); 
+    if (send_email) {
+      fd.append("send_email", send_email);
       fd.append("state", 2);
     }
     else { fd.append("state", 1); }
@@ -274,13 +284,13 @@ const ActivityOneView = ({ className, ...rest }) => {
 
         {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
         <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
-          msg={'¿Esta seguro de que desea salir del registro?'} 
+          msg={'¿Esta seguro de que desea salir del registro?'}
         />
         <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad?'} 
+          msg={'¿Esta seguro de que desea guardar la actividad?'}
         />
         <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'} 
+          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
         />
 
         {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
@@ -289,8 +299,5 @@ const ActivityOneView = ({ className, ...rest }) => {
       </Container>
     </Grid>
   );
-};
-ActivityOneView.propTypes = {
-  className: PropTypes.string
 };
 export default ActivityOneView;
