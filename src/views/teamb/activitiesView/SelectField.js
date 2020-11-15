@@ -15,18 +15,26 @@ const useStyles = makeStyles(() => ({
 
 const SelectField = (props) => {
     const classes = useStyles();
-
+    
     const [stateSelect, setStateSelect] = useState({
         list: []
     })
 
     useEffect(() => {
-        if (props.label === "Programa") {
+        if (props.name === "programaSeleccionado") {
             objService.GetPrograms().then((result) => {
-                var dataPrograms = result.data;
-                setStateSelect({ list: dataPrograms });
+                var data = result.data;
+                setStateSelect({ list: data });
             }).catch(() => {
                 alert("No hay programas registrados");
+            });
+        }
+        if (props.name === "institucionSeleccionada") {
+            objService.GetInstitutions().then((result) => {
+                var data = result.data;
+                setStateSelect({ list: data });
+            }).catch(() => {
+                alert("No hay instituciones registradas");
             });
         }
     }, []);
@@ -37,7 +45,12 @@ const SelectField = (props) => {
             <Select defaultValue={0} onChange={props.handleChange} label={props.label} name={props.name}>
                 <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
                 {stateSelect.list.map(element => (
-                    <MenuItem key={element.id} value={element.id}> {element.name} </MenuItem>
+                    <MenuItem key={element.id} value={element.id}> 
+                        {
+                            props.name === "programaSeleccionado" ?  element.name :  
+                            props.name === "institucionSeleccionada" ?  element.name_inst : null
+                        } 
+                    </MenuItem>
                 ))}
             </Select>
         </FormControl>

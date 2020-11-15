@@ -24,6 +24,10 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     justifyContent: 'center'
   },
+  card: {
+    maxWidth: '50%',
+    margin: '10px'
+  },
   title: {
     margin: '20px'
   },
@@ -193,10 +197,10 @@ const ActivityOneView = () => {
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
     fd.append("program", values.programaSeleccionado);
+    fd.append("assigned_hours", values.horasAsignadas);
     fd.append("start_date", values.fechaInicio);
     fd.append("end_date", values.fechaFin);
     fd.append("academic_year", currentAcadYear);
-    fd.append("assigned_hours", values.horasAsignadas);
     fd.append("type", 1);
     fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("date_record", now);
@@ -223,7 +227,7 @@ const ActivityOneView = () => {
     <Grid className={classes.root}>
       <BreadCrumbs />
       <Container className={classes.container}>
-        <Card className={classes.root}>
+        <Card className={classes.card}>
           <Grid className={classes.content}>
             <Typography className={classes.title} variant="h1" align="center" gutterBottom>
               Curso, dirección/revisión de proyectos
@@ -236,8 +240,8 @@ const ActivityOneView = () => {
               {/* Validacion del campo */}
               {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Descripcion" name="descripcion"
-                onChange={handleChange} required value={values.descripcion} variant="outlined"
+              <TextField className={classes.field} fullWidth label="Descripcion general" name="descripcion"
+                onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
               {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
@@ -249,14 +253,14 @@ const ActivityOneView = () => {
               {/*justify="space-evenly"*/}
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaInicio" label="Fecha inicio" type="date"
+                  <TextField fullWidth className={classes.field} name="fechaInicio" label="Fecha de inicio" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
                   />
                   {/* Validacion del campo */}
                   {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha fin" type="date"
+                  <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de fin" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                   />
                   {/* Validacion del campo */}
@@ -264,7 +268,7 @@ const ActivityOneView = () => {
                 </Grid>
               </Grid>
 
-              <TextField className={classes.field} name="horasAsignadas" label="Horas asignadas" type="number"
+              <TextField className={classes.field} name="horasAsignadas" label="Nº de horas asignadas" type="number"
                 onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
