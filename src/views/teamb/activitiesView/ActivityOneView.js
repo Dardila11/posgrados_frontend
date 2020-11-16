@@ -154,7 +154,6 @@ const ActivityOneView = () => {
     }
     return result;
   }
-
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -200,6 +199,7 @@ const ActivityOneView = () => {
     fd.append("assigned_hours", values.horasAsignadas);
     fd.append("start_date", values.fechaInicio);
     fd.append("end_date", values.fechaFin);
+    // Datos adicionales
     fd.append("academic_year", currentAcadYear);
     fd.append("type", 1);
     fd.append("student", 36); // Consultar el id del estudiante actual

@@ -108,7 +108,7 @@ const ActivityTwoView = () => {
   const [errorNombreEvento, setErrorNombreEvento] = useState(null);
   const [errorLugar, setErrorLugar] = useState(null);
   const [errorInstitucion, setErrorInstitucion] = useState(null);
-  const [errorFechas, setErrorFechas] = useState(null);
+  const [errorFecha, setErrorFecha] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
@@ -140,9 +140,9 @@ const ActivityTwoView = () => {
       setErrorInstitucion("Seleccione una opción válida");
       result = false;
     }
-    if (values.fechaRealizacion.length) { setErrorFechas("") }
+    if (values.fechaRealizacion.length) { setErrorFecha("") }
     else {
-      setErrorFechas("Seleccióne una fecha");
+      setErrorFecha("Seleccióne una fecha");
       result = false;
     }
     var textFile = document.getElementById("text-file").textContent;
@@ -153,7 +153,6 @@ const ActivityTwoView = () => {
     }
     return result;
   }
-
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -199,6 +198,7 @@ const ActivityTwoView = () => {
     fd.append("place", values.lugarCelebracion);
     fd.append("institution", values.institucionSeleccionada);
     fd.append("start_date", values.fechaRealizacion);
+    // Datos adicionales
     fd.append("academic_year", currentAcadYear);
     fd.append("type", 2);
     fd.append("student", 36); // Consultar el id del estudiante actual
@@ -264,7 +264,7 @@ const ActivityTwoView = () => {
               <TextField className={classes.field} name="fechaRealizacion" label="Fecha de realización" type="date"
                 InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
               />
-              {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+              {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
 
               <PDFUpload uploadFile={uploadFile} />
               {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
