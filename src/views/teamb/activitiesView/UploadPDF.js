@@ -16,7 +16,7 @@ const UploadPDF = (props) => {
         <Grid container alignItems="center" className={classes.field}>
             <Grid>
                 <Button variant="contained" component="label" startIcon={<CloudUploadIcon />} >
-                    Justificante
+                    {props.name}
                     <Input type="file" name="file" inputProps={{ accept: '.pdf' }} style={{ display: "none" }}
                         onChange={(e) => props.uploadFile(e.target.files)}
                     />

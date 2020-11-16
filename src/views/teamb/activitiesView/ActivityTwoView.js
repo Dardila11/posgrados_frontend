@@ -63,7 +63,7 @@ const ActivityTwoView = () => {
       [event.target.name]: event.target.value
     });
   };
-  //Asignamos a "InstitucionSeleccionado"en  el valor de "event.target.value"
+
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
@@ -148,7 +148,7 @@ const ActivityTwoView = () => {
     var textFile = document.getElementById("text-file").textContent;
     if (textFile.length > 0) { setErrorFile(null) }
     else {
-      setErrorFile("Es necesario subir el justificante")
+      setErrorFile("Es necesario subir el archivo");
       result = false;
     }
     return result;
@@ -266,7 +266,7 @@ const ActivityTwoView = () => {
               />
               {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
 
-              <PDFUpload uploadFile={uploadFile} />
+              <PDFUpload uploadFile={uploadFile} name="Justificante" />
               {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
             </form>
             <Divider className={classes.field} />

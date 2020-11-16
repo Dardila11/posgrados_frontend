@@ -37,6 +37,22 @@ const SelectField = (props) => {
                 alert("No hay instituciones registradas");
             });
         }
+        if (props.name === "paisSeleccionado") {
+            objService.GetCountries().then((result) => {
+                var data = result.data;
+                setStateSelect({ list: data });
+            }).catch(() => {
+                alert("No hay paises registrados");
+            });
+        }
+        if (props.name === "ciudadSeleccionada") {
+            objService.GetCities().then((result) => {
+                var data = result.data;
+                setStateSelect({ list: data });
+            }).catch(() => {
+                alert("No hay ciudades registradas");
+            });
+        }
     }, []);
 
     return (
@@ -47,8 +63,7 @@ const SelectField = (props) => {
                 {stateSelect.list.map(element => (
                     <MenuItem key={element.id} value={element.id}> 
                         {
-                            props.name === "programaSeleccionado" ?  element.name :  
-                            props.name === "institucionSeleccionada" ?  element.name_inst : null
+                            props.name === "institucionSeleccionada" ?  element.name_inst : element.name
                         } 
                     </MenuItem>
                 ))}

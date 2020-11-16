@@ -149,7 +149,7 @@ const ActivityOneView = () => {
     var textFile = document.getElementById("text-file").textContent;
     if (textFile.length > 0) { setErrorFile(null) }
     else {
-      setErrorFile("Es necesario subir el justificante")
+      setErrorFile("Es necesario subir el archivo");
       result = false;
     }
     return result;
@@ -274,7 +274,7 @@ const ActivityOneView = () => {
               {/* Validacion del campo */}
               {errorHoras ? <Typography className={classes.validator}> {errorHoras} </Typography> : null}
 
-              <PDFUpload uploadFile={uploadFile} />
+              <PDFUpload uploadFile={uploadFile} name="Justificante" />
               {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
             </form>
             <Divider className={classes.field} />
