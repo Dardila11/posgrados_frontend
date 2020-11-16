@@ -1,14 +1,10 @@
 import { createStore, combineReducers } from 'redux'
-import periods from './reducers/periods'
+import filters from './reducers/filters'
 
 const reducer = combineReducers({
-  periods
+  filters
 })
 
-/**
- * Necesito que pueda obtener de varios reducers.
- * TODO combineReducers
- */
 const store = createStore(reducer)
 export default store
 

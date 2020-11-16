@@ -28,8 +28,9 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const DirectorListStudentsView = ({ period }) => {
+const DirectorListStudentsView = ({ period, program }) => {
   const [studentsList, setStudentsList] = useState([])
+  const [initialStudentsList, setInitialStudentsList] = useState([])
 
   const [loading, setLoading] = useState(true)
 
@@ -40,31 +41,33 @@ const DirectorListStudentsView = ({ period }) => {
   useEffect(() => {
     // Filtrar por periodo
     function periodFilter(period) {
-      console.log(period)
-      /*if (period != '') {
+      if (period != '-1') {
         // Filter list
-        const studentsListFiltered = studentsList.filter(
+        const studentsListFiltered = initialStudentsList.filter(
           student => student.period === period
         )
         setStudentsList(studentsListFiltered)
-      }*/
+      } else {
+        setStudentsList(initialStudentsList)
+      }
     }
     periodFilter(period)
-  }, [])
+  }, [period])
 
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorStudents(5).then(res => {
         setStudentsList(res.data.students)
+        setInitialStudentsList(res.data.students)
         setLoading(false)
       })
     }
     fetchData()
   }, [])
 
-  const periods = get_period(studentsList)
-  const status = get_status(studentsList)
-  const programs = get_programs(studentsList)
+  const periods = get_period(initialStudentsList)
+  const status = get_status(initialStudentsList)
+  const programs = get_programs(initialStudentsList)
   const classes = useStyles()
   return (
     <Page className={classes.root} title="Listado de estudiantes">
@@ -82,7 +85,8 @@ const DirectorListStudentsView = ({ period }) => {
       ) : (
         <>
           {/* <UploadFile /> */}
-          <h2> {period} </h2>
+          {/* <h2> {period} </h2>
+          <h2> {program} </h2> */}
           <List list={studentsList} option="Student" />
           <ListPagination />
         </>
@@ -91,9 +95,13 @@ const DirectorListStudentsView = ({ period }) => {
   )
 }
 
+const getPeriod = (list) => {
+  
+}
+
 function get_period(list) {
   let res = []
-  console.log(list)
+  //console.log(list)
   list.map(element =>
     !res.includes(element.period) ? res.push(element.period) : console.log('')
   )
@@ -102,7 +110,7 @@ function get_period(list) {
 
 function get_status(list) {
   let res = []
-  console.log(list)
+  //console.log(list)
   list.map(element =>
     !res.includes(element.state) ? res.push(element.state) : console.log('')
   )
@@ -111,7 +119,7 @@ function get_status(list) {
 
 function get_programs(list) {
   let res = []
-  console.log(list)
+  //console.log(list)
   list.map(element =>
     !res.includes(element.student.program.name)
       ? res.push(element.student.program.name)
@@ -125,7 +133,8 @@ function get_programs(list) {
  * @param {*} state from reducers
  */
 const mapStateToProps = state => ({
-  period: state.periods.period
+  period: state.filters.period,
+  program: state.filters.program
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)

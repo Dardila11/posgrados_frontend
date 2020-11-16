@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
-import changePeriod from 'src/redux/actions/changePeriods'
+import {changePeriod, changeProgram} from 'src/redux/actions/filters'
 
 /*
  * nos permite conectar el componente para que pueda tener acceso
@@ -39,14 +39,18 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const SearchBar = ({ className, context, periods, status, programs, changePeriod, ...rest }) => {
+const SearchBar = ({ className, context, periods, status, programs, ...rest }) => {
   const classes = useStyles()
 
-  const handleChange = e => {
-    let period = e.target.value
-    let va = changePeriod(period)
-    console.log(va)
 
+  const handleChange = e => {
+    var period = e.target.value
+    rest.changePeriod(period)
+  }
+
+  const handleChangeProgram = e => {
+    var program = e.target.value
+    rest.changeProgram(program)
   }
   return (
     <Container className={classes.Container}>
@@ -88,8 +92,8 @@ const SearchBar = ({ className, context, periods, status, programs, changePeriod
                     </InputLabel>
                     <Select 
                     id="Select-cohorte"
-                    value=""
                     onChange={handleChange}>
+                      <MenuItem value={"-1"} >---</MenuItem>  
                       {periods.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}
@@ -127,7 +131,11 @@ const SearchBar = ({ className, context, periods, status, programs, changePeriod
                     <InputLabel htmlFor="Select-cohorte">
                       Seleccionar programa
                     </InputLabel>
-                    <Select id="Select-cohorte">
+                    <Select 
+                    id="Select-cohorte"
+                    onChange={handleChangeProgram}
+                    >
+                    <MenuItem value={"-1"} >---</MenuItem> 
                       {programs.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}
@@ -149,7 +157,8 @@ const SearchBar = ({ className, context, periods, status, programs, changePeriod
 
 const mapDispatchToProps = dispatch => {
   return {
-    changePeriod: period => dispatch(changePeriod(period))
+    changePeriod: period => dispatch(changePeriod(period)),
+    changeProgram: program => dispatch(changeProgram(program))
   }
 }
 
