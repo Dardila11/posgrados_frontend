@@ -125,7 +125,7 @@ function get_programs(list) {
  * @param {*} state from reducers
  */
 const mapStateToProps = state => ({
-  period: state.period
+  period: state.periods.period
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)
