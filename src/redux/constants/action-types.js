@@ -1,0 +1,1 @@
+export const CHANGE_PERIOD = "CHANGE_PERIOD"
