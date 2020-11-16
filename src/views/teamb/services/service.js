@@ -28,6 +28,14 @@ export default class service {
         const url= `${API_URL}/api/country/`;
         return axios.get(url);
     }
+    GetInvestigadores(){
+        const url= `${API_URL}/api/investigator/`;
+        return axios.get(url);
+    }
+    GetInvestigationLine(){
+        const url= `${API_URL}/api/investigationline/`;
+        return axios.get(url);
+    }
     GetActivities(id, academic_year) {
         const url= `${API_URL}/api/activities/student/`+id+`/`+academic_year+`/`; 
         const result = axios.get(url);

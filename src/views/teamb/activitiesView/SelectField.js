@@ -53,6 +53,22 @@ const SelectField = (props) => {
                 alert("No hay ciudades registradas");
             });
         }
+        if (props.name === "investigadorSeleccionado") {
+            objService.GetInvestigadores().then((result) => {
+                var data = result.data;
+                setStateSelect({ list: data });
+            }).catch(() => {
+                alert("No hay investigadores registrados");
+            });
+        }
+        if (props.name === "lineaSeleccionada") {
+            objService.GetInvestigationLine().then((result) => {
+                var data = result.data;
+                setStateSelect({ list: data });
+            }).catch(() => {
+                alert("No hay lineas de investigacion registradas");
+            });
+        }
     }, []);
 
     return (
@@ -63,7 +79,8 @@ const SelectField = (props) => {
                 {stateSelect.list.map(element => (
                     <MenuItem key={element.id} value={element.id}> 
                         {
-                            props.name === "institucionSeleccionada" ?  element.name_inst : element.name
+                            props.name === "institucionSeleccionada" ?  element.name_inst : 
+                            props.name === "investigadorSeleccionado" ?  element.id : element.name
                         } 
                     </MenuItem>
                 ))}
