@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Card } from '@material-ui/core';
+import { Box, Container, Card,Typography} from '@material-ui/core';
 import Page from 'src/components/Page';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -20,7 +20,11 @@ function TabPanel(props) {
       aria-labelledby={`scrollable-auto-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
     </div>
   );
 }
@@ -38,25 +42,33 @@ function options(index) {
   };
 }
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   appbar: {
     marginLeft: '10px',
     marginRight: '10px',
     width: '100vh',
     boxShadow: 'none'
   },
+  root: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.paper,
+    display: 'flex',
+    height: 224,
+  },
   contenedor: {
     borderRadiusLeft: '10px',
     boxShadow: '0 5px 2px -2px gray',
     background: 'none',
     marginLeft: '10px'
-  }
+  },
+  tabs: {
+    borderRight: `1px solid ${theme.palette.divider}`,
+  },
 }));
 
 export const CreateOtherView = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -64,7 +76,8 @@ export const CreateOtherView = () => {
     <Page title="Create others">
       <Container maxWidth={false}>
         <Box mt={3}>
-          <Card>
+
+
             <AppBar
               className={classes.appbar}
               color="transparent"
@@ -82,14 +95,12 @@ export const CreateOtherView = () => {
                 <Tab label="Crear Linea de investigacion" {...options(1)} />
               </Tabs>
             </AppBar>
-
             <TabPanel value={value} index={0}>
-              <CreateKnowLedgeView />
+                <CreateKnowLedgeView />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <CreateLineResearchView />
             </TabPanel>
-          </Card>
         </Box>
       </Container>
     </Page>

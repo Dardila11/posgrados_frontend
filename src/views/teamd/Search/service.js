@@ -18,8 +18,8 @@ export const GetDeparmentIListService = () => {
 };
 
 export const GetGIforDeparment = idDeparment => {
-  const URL = `${API_URL}/api/1.0/consultar_gi_dep/`;
-  return axios.get(URL, idDeparment);
+  const URL = `${API_URL}/api/1.0/consultar_gi_dep/${idDeparment}`;
+  return axios.get(URL);
 };
 
 export const listCountriesService = () => {

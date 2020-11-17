@@ -1,6 +1,6 @@
 import { Card,CardContent,CardActions,Button, makeStyles, Typography } from '@material-ui/core'
 import React, { useState } from 'react'
-import {AssignDirector} from './AssignDirector'
+import {AssignDirectorView} from './AssignDirector'
 const useStyles = makeStyles({
     root: {
       borderRadius: 3,
@@ -57,7 +57,7 @@ export const Professor_card = ({profesor}) => {
                     </Typography>
                     )}
             </CardContent>
-           <AssignDirector state = {dialogState} setState = {getState} />
+           <AssignDirectorView state = {dialogState} setState = {getState} idProfessor = {id}/>
 
 
         </Card>

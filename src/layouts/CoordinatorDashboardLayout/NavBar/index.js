@@ -53,7 +53,7 @@ const items = [
   {
     href: '/coordinator/create-others',
     icon: AddIcon,
-    title: 'Crear otras cosas'
+    title: 'Administar ++'
   },
 
   // End Options Team D

@@ -1,10 +1,16 @@
 import { Autocomplete } from '@material-ui/lab'
-import React from 'react'
-
-export const SearchGI = ({listGI,callback}) => {
-
+import TextField from '@material-ui/core/TextField';
+import React, { useEffect, useState } from 'react'
+import {GetGIforDeparment} from './service'
+export const SearchGI = ({callback,departmentIID}) => {
+    const [listGi, setListGi] = useState([])
+    useEffect(() => {
+        GetGIforDeparment(departmentIID)
+        .then( (request) => setListGi(request.data.Groups))
+        .catch();
+    }, [departmentIID])
     const getIdGi = (name) =>{
-        let find = listGI.find(
+        let find = listGi.find(
             element => element.name === name
         );
         if (find === undefined){
@@ -16,8 +22,8 @@ export const SearchGI = ({listGI,callback}) => {
         <>
             <Autocomplete
                 id = "searchGI"
-                options = {listGI}
-                getOptionLabel = { option => listGI.name}
+                options = {listGi}
+                getOptionLabel = { option => option.name}
                 style={{ marginBottom: 10, marginTop: 10, widht: 300 }}
                 renderInput = {
                     params => (

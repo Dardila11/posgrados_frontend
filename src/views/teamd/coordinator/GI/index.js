@@ -68,6 +68,8 @@ const AdministerView = () => {
           
             <AppBar className={classes.appbar} position="relative">
               <Tabs
+
+               
                 textColor="primary"
                 indicatorColor="secondary"
                 value={value}

@@ -1,10 +1,15 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import {SearchDeparmentI} from '../../../Search/searchDepartmentI'
+import {SearchGI} from '../../../Search/searchGI'
+import {AssignDirector} from '../service'
 
-export const AssignDirector = ({state,setState,listContext}) => {
+
+export const AssignDirectorView = ({state,setState,idProfessor}) => {
  
     const [open, setOpen] = useState(true)
     const [idGi, setIdGi] = useState([])
+    const [departmentIId, setDepartmentIId] = useState('')
     useEffect(() => {
          setOpen(state)
     }, [state])
@@ -12,12 +17,24 @@ export const AssignDirector = ({state,setState,listContext}) => {
         setOpen(false);
         setState(false);
     };
-    const handleAssign = () => {
+    const handleAssign = (e) => {
+        e.preventDefault();
         setOpen(false)
         setState(false);
+        console.log("id Profesor",idProfessor)
+        AssignDirector({
+            inv_group: idGi,
+            professor: idProfessor,
+            direction_state: 1
+        }).then( (request)=> console.log (" ya ", request)).catch()
+
+
     }
     const getIdGi = (id) =>{
         setIdGi(id)
+    }
+    const getDepartmentIId  = (id) =>{
+        setDepartmentIId(id)
     }
     
     return (
@@ -29,7 +46,8 @@ export const AssignDirector = ({state,setState,listContext}) => {
                         Para asignar el director debes elejir
                         un grupo de investigación    
                     </DialogContentText>
-                 <SearchGI callback = {getIdGi} listGi = {listContext}/>
+                    <SearchDeparmentI callback = {getDepartmentIId}></SearchDeparmentI>
+                    <SearchGI callback = {getIdGi} departmentIID = {departmentIId}/>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleAssign} color="primary" variant="outlined">Asignar</Button>
