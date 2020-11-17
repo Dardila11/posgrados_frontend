@@ -28,13 +28,17 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const DirectorListStudentsView = ({ period, program }) => {
+const DirectorListStudentsView = ({ period, program, status }) => {
   const [studentsList, setStudentsList] = useState([])
   const [initialStudentsList, setInitialStudentsList] = useState([])
-
   const [loading, setLoading] = useState(true)
+  const periods = getPeriod(initialStudentsList)
+  const statuss = getStatus(initialStudentsList)
+  const programs = getPrograms(initialStudentsList)
+  const classes = useStyles()
 
   /**
+   * Filtra los estudiante segun el periodo
    * Se supone que este useEffect se corre cada vez que
    * la variabe state.period cambia.
    */
@@ -54,6 +58,46 @@ const DirectorListStudentsView = ({ period, program }) => {
     periodFilter(period)
   }, [period])
 
+  /**
+   * Filtra los estudiantes segun el programa
+   * al que pertenecen
+   */
+  useEffect(() => {
+    function programfilter(program) {
+      if (program != '-1') {
+        const studentListFilteredByProgram = initialStudentsList.filter(
+          student => student.student.program.name === program
+        )
+        setStudentsList(studentListFilteredByProgram)
+      } else {
+        setStudentsList(initialStudentsList)
+      }
+    }
+    programfilter(program)
+  }, [program])
+
+  /**
+   * Filtra los estudiantes segun el estado
+   * que tienen. 1. Activo, 2. Inactivo, etc
+   */
+  useEffect(() => {
+    function statusfilter(status) {
+      if (status != '-1') {
+        const studentListFilteredByStatus = initialStudentsList.filter(
+          student => getStatusNameById(student.state) === status
+        )
+        setStudentsList(studentListFilteredByStatus)
+      } else {
+        setStudentsList(initialStudentsList)
+      }
+    }
+    statusfilter(status)
+  }, [status])
+
+  /**
+   * Obtiene la lista de estudiantes asignados al
+   * director, se llama solo una vez.
+   */
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorStudents(5).then(res => {
@@ -65,10 +109,6 @@ const DirectorListStudentsView = ({ period, program }) => {
     fetchData()
   }, [])
 
-  const periods = get_period(initialStudentsList)
-  const status = get_status(initialStudentsList)
-  const programs = get_programs(initialStudentsList)
-  const classes = useStyles()
   return (
     <Page className={classes.root} title="Listado de estudiantes">
       <BreadCrumbs />
@@ -76,7 +116,7 @@ const DirectorListStudentsView = ({ period, program }) => {
         handleSearch={handleSearch}
         context="students"
         periods={periods}
-        status={status}
+        status={statuss}
         programs={programs}
       />
 
@@ -85,8 +125,6 @@ const DirectorListStudentsView = ({ period, program }) => {
       ) : (
         <>
           {/* <UploadFile /> */}
-          {/* <h2> {period} </h2>
-          <h2> {program} </h2> */}
           <List list={studentsList} option="Student" />
           <ListPagination />
         </>
@@ -95,37 +133,50 @@ const DirectorListStudentsView = ({ period, program }) => {
   )
 }
 
-const getPeriod = (list) => {
-  
+const getPeriod = studentsList => {
+  let periodList = []
+  studentsList.map(student => {
+    if (!periodList.includes(student.period)) {
+      periodList.push(student.period)
+    }
+  })
+  return periodList
 }
 
-function get_period(list) {
-  let res = []
-  //console.log(list)
-  list.map(element =>
-    !res.includes(element.period) ? res.push(element.period) : console.log('')
-  )
-  return res
+function getStatusNameById(statusId) {
+  switch (statusId) {
+    case 1:
+      return 'Activo'
+    case 2:
+      return 'Inactivo'
+    case 3:
+      return 'Graduado'
+    case 4:
+      return 'Balanceado'
+    case 5:
+      return 'Retirado'
+  }
 }
 
-function get_status(list) {
-  let res = []
-  //console.log(list)
-  list.map(element =>
-    !res.includes(element.state) ? res.push(element.state) : console.log('')
-  )
-  return res
+const getStatus = studentsList => {
+  let statusList = []
+  studentsList.map(student => {
+    let statusName = getStatusNameById(student.state)
+    if (!statusList.includes(statusName)) {
+      statusList.push(statusName)
+    }
+  })
+  return statusList
 }
 
-function get_programs(list) {
-  let res = []
-  //console.log(list)
-  list.map(element =>
-    !res.includes(element.student.program.name)
-      ? res.push(element.student.program.name)
-      : console.log('')
-  )
-  return res
+const getPrograms = studentsList => {
+  let programList = []
+  studentsList.map(student => {
+    if (!programList.includes(student.student.program.name)) {
+      programList.push(student.student.program.name)
+    }
+  })
+  return programList
 }
 
 /**
@@ -134,7 +185,8 @@ function get_programs(list) {
  */
 const mapStateToProps = state => ({
   period: state.filters.period,
-  program: state.filters.program
+  program: state.filters.program,
+  status: state.filters.status
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)

@@ -16,7 +16,7 @@ import {
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
-import {changePeriod, changeProgram} from 'src/redux/actions/filters'
+import {changePeriod, changeProgram, changeStatus} from 'src/redux/actions/filters'
 
 /*
  * nos permite conectar el componente para que pueda tener acceso
@@ -51,6 +51,11 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
   const handleChangeProgram = e => {
     var program = e.target.value
     rest.changeProgram(program)
+  }
+
+  const handleChangeStatus = e => {
+    var status = e.target.value
+    rest.changeStatus(status)
   }
   return (
     <Container className={classes.Container}>
@@ -110,9 +115,12 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
                     <InputLabel htmlFor="Select-cohorte">
-                      Seleccionar Tipo
+                      Seleccionar Estado
                     </InputLabel>
-                    <Select id="Select-cohorte">
+                    <Select 
+                    id="Select-cohorte"
+                    onChange={handleChangeStatus}>
+                      <MenuItem value={"-1"} >---</MenuItem> 
                       {status.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}
@@ -158,7 +166,8 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
 const mapDispatchToProps = dispatch => {
   return {
     changePeriod: period => dispatch(changePeriod(period)),
-    changeProgram: program => dispatch(changeProgram(program))
+    changeProgram: program => dispatch(changeProgram(program)),
+    changeStatus: status => dispatch(changeStatus(status))
   }
 }
 

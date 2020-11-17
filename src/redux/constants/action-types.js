@@ -1,2 +1,3 @@
 export const CHANGE_PERIOD = "CHANGE_PERIOD"
 export const CHANGE_PROGRAM = "CHANGE_PROGRAM"
+export const CHANGE_STATUS = "CHANGE_STATUS"

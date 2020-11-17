@@ -1,22 +1,29 @@
-import { CHANGE_PERIOD, CHANGE_PROGRAM } from '../constants/action-types'
+import {
+  CHANGE_PERIOD,
+  CHANGE_PROGRAM,
+  CHANGE_STATUS
+} from '../constants/action-types'
 
 const initialValue = {
   period: '',
-  program: ''
+  program: '',
+  status: ''
 }
 
 const filters = (state = initialValue, action) => {
   switch (action.type) {
     case CHANGE_PERIOD:
-      //state.year = action.payload  // shouldn't be like this
       return Object.assign({}, state, {
         period: action.payload
       })
     case CHANGE_PROGRAM:
-      return Object.assign({}, state,{
+      return Object.assign({}, state, {
         program: action.payload
-      }
-        )   
+      })
+    case CHANGE_STATUS:
+      return Object.assign({}, state, {
+        status: action.payload
+      })
     default:
       return state
   }
