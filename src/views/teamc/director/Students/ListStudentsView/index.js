@@ -3,7 +3,7 @@ import { Divider, LinearProgress, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page';
 import BreadCrumbs from './BreadCrumbs';
 import SearchBar from 'src/components/SearchBar';
-import UploadFile from 'src/components/UploadFile';
+/*import UploadFile from 'src/components/UploadFile';*/
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 import ListPagination from 'src/components/ListPagination';
@@ -82,10 +82,11 @@ export const reducer = (state, action) => {
 
 const DirectorListStudentsView = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  
   const [studentsList, setStudentsList] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const baseList = studentsList.slice();
+  console.log('Base list: '+baseList);
   /**
    * Se supone que este useEffect se corre cada vez que
    * la variabe state.period cambia.
@@ -95,10 +96,17 @@ const DirectorListStudentsView = () => {
     function periodFilter(period) {
       if (period != '') {
         // Filter list
-        const studentsListFiltered = studentsList.filter(
-          student => student.period === period
-        );
-        setStudentsList(studentsListFiltered);
+        if(period != 'Todos'){
+          const studentsListFiltered = studentsList.filter(
+            student => student.period === period
+          );
+          setStudentsList(studentsListFiltered);
+        }else{
+          setStudentsList(baseList);
+          console.log('Into all list');
+          console.log(studentsList);
+        }
+        
       }
     }
     periodFilter(state.period);
@@ -113,9 +121,9 @@ const DirectorListStudentsView = () => {
     };
     fetchData();
   }, []);
-  const periods = get_period(studentsList);
-  const status = get_status(studentsList);
-  const programs = get_programs(studentsList);
+  const periods = get_period(baseList);
+  const status = get_status(baseList);
+  const programs = get_programs(baseList);
   const classes = useStyles();
   return (
     <Page className={classes.root} title="Listado de estudiantes">
@@ -138,10 +146,7 @@ const DirectorListStudentsView = () => {
           <>
             {/* <UploadFile /> */}
             <List list={studentsList} option="Student" />
-            <ListPagination />
-            <h2>{state.studentName}</h2>
-            <h2>{state.period}</h2>
-            <h2>{state.type}</h2>
+            {/*<ListPagination />*/}
           </>
         )}
       </FilterContext.Provider>
@@ -160,7 +165,6 @@ function get_period(list) {
 
 function get_status(list) {
   let res = [];
-  console.log(list);
   list.map(element =>
     !res.includes(element.state) ? res.push(element.state) : console.log('')
   );
@@ -169,7 +173,6 @@ function get_status(list) {
 
 function get_programs(list) {
   let res = [];
-  console.log(list);
   list.map(element =>
     !res.includes(element.student.program.name)
       ? res.push(element.student.program.name)

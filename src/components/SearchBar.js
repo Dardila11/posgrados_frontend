@@ -82,7 +82,6 @@ const SearchBar = ({
                     value={getContextProps == null ? null : getContextProps.state.studentName}
                     onChange={e => changeName(e.target.value)}
                     fullWidth
-                    disabled
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -116,6 +115,8 @@ const SearchBar = ({
                       value={getContextProps == null ? null : getContextProps.state.period}
                       onChange={e => changePeriod(e.target.value)}
                     >
+                      <MenuItem key='all' value = 'all'>Todos</MenuItem>
+
                       {periods.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}

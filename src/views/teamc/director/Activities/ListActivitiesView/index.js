@@ -49,7 +49,7 @@ const DirectorListActivitiesView = () => {
       ):(
         <>
         <List list={activityList} option="Activity" context="/director/list-activities" />
-        <ListPagination />        
+        {/*<ListPagination />*/}        
         </>
       )}      
     </Page>
