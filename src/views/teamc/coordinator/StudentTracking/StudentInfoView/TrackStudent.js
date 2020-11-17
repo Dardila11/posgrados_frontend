@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+
 
 import {
   DialogContent,
@@ -10,7 +10,7 @@ import {
   DialogActions,
   Button
 } from '@material-ui/core';
-import { SentimentSatisfied } from '@material-ui/icons';
+
 import Api from 'src/views/teamc/services/Api';
 import { AlertView } from 'src/components/Alert';
 
@@ -30,7 +30,7 @@ const TrackStudent = props => {
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
   const [trackStudent, setTrackStudent] = useState({
-    state: 1,
+    status: 1,
     enrollment_date: null,
     graduation_date: null,
     num_folio: '',
@@ -52,12 +52,18 @@ const TrackStudent = props => {
   const postData = async () => {
     setOpen(false)
     console.log(trackStudent);
-    let res = await Api.postStudentTracking(trackStudent);
-    console.log(res)
-    // aqui debe ir la condicional del codigo de respuesta
+    Api.postStudentTracking(trackStudent).then(res => {
+      console.log(res.status)
       setOpen(true)
       setTypeAlert("success")
       setMessage("El estado del estudiante ha cambiado")
+    })
+    .catch(error => {
+      console.log(error)
+    });
+    
+    // aqui debe ir la condicional del codigo de respuesta
+      
     
   };
 
@@ -72,8 +78,8 @@ const TrackStudent = props => {
           variant="outlined"
           type="select"
           defaultValue={1}
-          name="state"
-          value={trackStudent.state}
+          name="status"
+          value={trackStudent.status}
           required
           onChange={handleChange}
         >
@@ -86,7 +92,7 @@ const TrackStudent = props => {
         {/* Si es Graduado, muestra los siguientes campos */}
         {/* Fecha de Grado* */} {/* Folio* */} {/* Numero de acta* */}
         {/* Resolución* */} {/* Premios* */}
-        {trackStudent.state === 3 ? (
+        {trackStudent.status === 3 ? (
           <>
             <TextField
               id="date"

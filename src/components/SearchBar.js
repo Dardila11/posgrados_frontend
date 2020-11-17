@@ -1,7 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react'
 
-//import { FilterContext } from 'src/views/teamc/context/FilterContext';
-import { FilterContext } from 'src/views/teamc/director/Students/ListStudentsView';
 import {
   Box,
   Card,
@@ -15,8 +13,16 @@ import {
   InputLabel,
   MenuItem,
   Grid
-} from '@material-ui/core';
-import SearchIcon from '@material-ui/icons/Search';
+} from '@material-ui/core'
+import SearchIcon from '@material-ui/icons/Search'
+
+import {changePeriod, changeProgram, changeStatus} from 'src/redux/actions/filters'
+
+/*
+ * nos permite conectar el componente para que pueda tener acceso
+ * al estado de los reducers
+ */
+import { connect } from 'react-redux'
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -31,45 +37,26 @@ const useStyles = makeStyles(() => ({
   Select: {
     alignItems: 'center'
   }
-}));
+}))
 
-function useFilterContext() {
-  
-  const props = useContext(FilterContext )
-  return props
-}
+const SearchBar = ({ className, context, periods, status, programs, ...rest }) => {
+  const classes = useStyles()
 
-const SearchBar = ({
-  className,
-  context,
-  periods,
-  status,
-  programs,
-  ...rest
-}) => {
-  const classes = useStyles();
 
-  //const { state, dispatch } = useContext(FilterContext);
-  const getContextProps = useFilterContext()
-  
-  // TODO esto deberia estar en una sola función, es que me dio pereza.
-  // función que actualiza el estado de period en el context
-  const changePeriod = newPeriod => {
-    getContextProps.dispatch({ type: 'UPDATE_PERIOD', data: newPeriod });
-  };
-  // función que actualiza el estado de studentName en el context
-  const changeName = newName => {
-    getContextProps.dispatch({ type: 'UPDATE_NAME', data: newName });
-  };
-  // función que actualiza el estado de period en el context
-  const changeType = newType => {
-    getContextProps.dispatch({ type: 'UPDATE_TYPE', data: newType });
-  };
-  // función que actualiza el estado de studentName en el context
-  const changeProgram = newProgram => {
-    getContextProps.dispatch({ type: 'UPDATE_PROGRAM', data: newProgram });
-  };
+  const handleChange = e => {
+    var period = e.target.value
+    rest.changePeriod(period)
+  }
 
+  const handleChangeProgram = e => {
+    var program = e.target.value
+    rest.changeProgram(program)
+  }
+
+  const handleChangeStatus = e => {
+    var status = e.target.value
+    rest.changeStatus(status)
+  }
   return (
     <Container className={classes.Container}>
       <Box mt={2}>
@@ -79,8 +66,6 @@ const SearchBar = ({
               <Grid item lg={5} md={5} xs={12}>
                 <Box maxWidth={500}>
                   <TextField
-                    value={getContextProps == null ? null : getContextProps.state.studentName}
-                    onChange={e => changeName(e.target.value)}
                     fullWidth
                     InputProps={{
                       startAdornment: (
@@ -103,20 +88,17 @@ const SearchBar = ({
                 </Box>
               </Grid>
               {periods == undefined ? (
-                console.log('No period parameter filter')
+                console.log('No period parameter filther')
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
-                    <InputLabel htmlFor="Select-period">
+                    <InputLabel htmlFor="Select-cohorte">
                       Seleccionar periodo
                     </InputLabel>
-                    <Select
-                      id="Select-period"
-                      value={getContextProps == null ? null : getContextProps.state.period}
-                      onChange={e => changePeriod(e.target.value)}
-                    >
-                      <MenuItem key='all' value = 'all'>Todos</MenuItem>
-
+                    <Select 
+                    id="Select-cohorte"
+                    onChange={handleChange}>
+                      <MenuItem value={"-1"} >---</MenuItem>  
                       {periods.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}
@@ -132,10 +114,13 @@ const SearchBar = ({
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
-                    <InputLabel htmlFor="Select-status">
-                      Seleccionar tipo
+                    <InputLabel htmlFor="Select-cohorte">
+                      Seleccionar Estado
                     </InputLabel>
-                    <Select id="Select-status">
+                    <Select 
+                    id="Select-cohorte"
+                    onChange={handleChangeStatus}>
+                      <MenuItem value={"-1"} >---</MenuItem> 
                       {status.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}
@@ -151,10 +136,14 @@ const SearchBar = ({
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
-                    <InputLabel htmlFor="Select-programs">
+                    <InputLabel htmlFor="Select-cohorte">
                       Seleccionar programa
                     </InputLabel>
-                    <Select id="Select-programs">
+                    <Select 
+                    id="Select-cohorte"
+                    onChange={handleChangeProgram}
+                    >
+                    <MenuItem value={"-1"} >---</MenuItem> 
                       {programs.map(element => (
                         <MenuItem key={element} value={element}>
                           {' '}
@@ -170,7 +159,16 @@ const SearchBar = ({
         </Card>
       </Box>
     </Container>
-  );
-};
+  )
 
-export default SearchBar;
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    changePeriod: period => dispatch(changePeriod(period)),
+    changeProgram: program => dispatch(changeProgram(program)),
+    changeStatus: status => dispatch(changeStatus(status))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(SearchBar)
