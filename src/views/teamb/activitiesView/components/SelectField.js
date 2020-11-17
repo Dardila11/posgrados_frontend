@@ -3,7 +3,7 @@ import {
     Select, MenuItem, InputLabel, FormControl, makeStyles
 } from '@material-ui/core';
 
-import service from '../services/service';
+import service from '../../services/service';
 
 const objService = new service();
 

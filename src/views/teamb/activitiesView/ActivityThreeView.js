@@ -3,11 +3,11 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider, InputLabel, Select, MenuItem, FormControl
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
-import PDFUpload from 'src/views/teamb/activitiesView/UploadPDF';
-import FormOption from 'src/views/teamb/activitiesView/FormOption';
-import ConfirmOption from 'src/views/teamb/activitiesView/ConfirmOption';
-import Response from 'src/views/teamb/activitiesView/Response';
+import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
+import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
+import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
+import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
+import Response from 'src/views/teamb/activitiesView/components/Response';
 
 import service from '../services/service';
 import util from '../services/util';
