@@ -7,12 +7,6 @@ import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 
-const handleSearch = event => {
-  console.log('Cadena de busqueda: ', event.target.value);
-  this.setState({
-    inputValue: event.target.value
-  });
-};
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -30,6 +24,10 @@ const useStyles = makeStyles(theme => ({
 const DirectorListActivitiesView = () => {
   const [activityList, setActivityList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const classes = useStyles();
+  const periods = get_period(activityList);
+  const status = get_status(activityList);
+    
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorActivities(5).then(res => {
@@ -40,20 +38,18 @@ const DirectorListActivitiesView = () => {
     };
     fetchData();
   }, []);
-  const classes = useStyles();
-  const periods = get_period(activityList);
-  const status = get_status(activityList);
+
   return (
     <Page className={classes.root} title="Listado de Actividades">
       <BreadCrumbs />
-      <SearchBar handleSearch={handleSearch} context="activities" periods = {periods} status = {status}/>
+      <SearchBar context="activities" periods = {periods} status = {status}/>
       {loading ? (
         
         <LinearProgress className={classes.progress}/>
       ):(
         <>
         <List list={activityList} option="Activity" context="/director/list-activities" />
-        <ListPagination />        
+        {/*<ListPagination />*/}        
         </>
       )}      
     </Page>
