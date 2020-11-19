@@ -7,6 +7,7 @@ import List from 'src/components/List'
 import api from 'src/views/teamc/services/Api'
 import ListPagination from 'src/components/ListPagination'
 import { connect } from 'react-redux'
+import search from 'src/redux/reducers/search'
 
 const handleSearch = event => {
   console.log('Cadena de busqueda: ', event.target.value)
@@ -36,6 +37,27 @@ const DirectorListStudentsView = ({ period, program, status }) => {
   const statuss = getStatus(initialStudentsList)
   const programs = getPrograms(initialStudentsList)
   const classes = useStyles()
+
+   /**
+   * Filtra los estudiante segun su nombre
+   * Se supone que este useEffect se corre cada vez que
+   * la variabe state.search cambia.
+   */
+  useEffect(() => {
+    // Filtrar por nombre
+    function nameSearch(search) {
+      if (search != '-1') {
+        // Filter list
+        const studentsListSearch = initialStudentsList.filter(
+          student => student.first_name.includes(search) || student.last_name.includes(search)
+        )
+        setStudentsList(studentsListSearch)
+      } else {
+        setStudentsList(initialStudentsList)
+      }
+    }
+    nameSearch(search)
+  }, [search])
 
   /**
    * Filtra los estudiante segun el periodo
@@ -186,7 +208,8 @@ const getPrograms = studentsList => {
 const mapStateToProps = state => ({
   period: state.filters.period,
   program: state.filters.program,
-  status: state.filters.status
+  status: state.filters.status,
+  search: state.search.search
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)
