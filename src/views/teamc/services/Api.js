@@ -25,7 +25,7 @@ const getDirectorActivities = id => {
 };
 
 const getDirectorEvaluations = id =>{  
-  return http.get('api/director/' + id + '/evaluation');
+  return http.get('/api/test_director');
 }
 
 /* End Director services */

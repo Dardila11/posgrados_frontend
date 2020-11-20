@@ -7,13 +7,6 @@ import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
 
-const handleSearch = event => {
-  console.log('Cadena de busqueda: ', event.target.value);
-  this.setState({
-    inputValue: event.target.value
-  });
-};
-
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -25,15 +18,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const DirectorListEvaluationsView = () => {
-  const [evaluationsList, setEvaluationsList] = useState([]);
-  const [serviceState, setServiceState] = useState(true);
-  const [loading, setLoading] = useState(true);
+  const [evaluationsList, setEvaluationsList] = useState([])
+  const [serviceState, setServiceState] = useState(true)
+  const [loading, setLoading] = useState(true)
+
   useEffect(() => {
     const fetchData = async () => {
-      await api.getDirectorEvaluations(5).then(res => {
-        setServiceState(false);
-        setEvaluationsList(res.data);
-        setLoading(false);
+      await api.getDirectorEvaluations().then(res => {
+        setServiceState(false)
+        setEvaluationsList(res.data)
+        setLoading(false)
+        console.log(res.data)
       });
       
     };
@@ -44,7 +39,7 @@ const DirectorListEvaluationsView = () => {
   return (
     <Page className={classes.root} title="Listado de Evaluaciones">
       <BreadCrumbs />
-      <SearchBar handleSearch={handleSearch} context="evaluations" />
+      <SearchBar context="evaluations" />
       {loading ? (
         <LinearProgress />
       ):(

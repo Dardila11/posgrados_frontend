@@ -96,14 +96,14 @@ const ActivityInfoView = () => {
                 <b>Tipo:</b> {activityInfo.type}
               </Typography>
             )}
-            {isUndefined(activityInfo.receipt) || activityInfo.receipt==null ?(console.log('')):(
+            {/*isUndefined(activityInfo.receipt) || activityInfo.receipt==null ?(console.log('')):(
               <Typography variant="body1" component="p" gutterBottom>
                 <b>Soporte: </b> 
                   <Link href={activityInfo.receipt}>
                       Descargar Soporte
                   </Link>
               </Typography>
-            )}
+            )*/}
         </CardContent>
         <CardActions>
           <Button variant="contained" color="primary" onClick={handleClickOpen}>

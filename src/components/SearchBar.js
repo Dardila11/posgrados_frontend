@@ -16,7 +16,8 @@ import {
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
-import {changePeriod, changeProgram, changeStatus, changeSearch} from 'src/redux/actions/filters'
+import {changePeriod, changeProgram, changeStatus} from 'src/redux/actions/filters'
+import {changeSearch} from 'src/redux/actions/search'
 
 /*
  * nos permite conectar el componente para que pueda tener acceso
@@ -41,7 +42,6 @@ const useStyles = makeStyles(() => ({
 
 const SearchBar = ({ className, context, periods, status, programs, ...rest }) => {
   const classes = useStyles()
-
 
   const handleChange = e => {
     var period = e.target.value
@@ -129,6 +129,7 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                       <MenuItem value={"-1"} >---</MenuItem> 
                       {status.map(element => (
                         <MenuItem key={element} value={element}>
+                          {console.log(element)}
                           {' '}
                           {element}
                         </MenuItem>

@@ -5,31 +5,24 @@ import {
   Typography,
   Box,
   makeStyles,
-  createMuiTheme,
-  colors,
   CardActionArea
 } from '@material-ui/core';
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { isUndefined } from 'lodash';
 
-/*const theme = createMuiTheme({
-  palette: {
-    primary: {
-      light: '#757ce8',
-      main: '#3f50b5',
-      dark: '#002884',
-      contrastText: '#fff',
-    },
-    secondary: colors.blue,  
-  },
-});*/
-
 const useStyles = makeStyles({
-  root: {},
+  root: {
+  },
   CardAction: {
     paddingTop: 5,
     paddingBottom: 5
+  },
+  favorableStatus:{
+    backgroundColor : '#b9f6ca'
+  },
+  unfavorableStatus:{
+    backgroundColor: '#f4ff81'
   }
 });
 
@@ -39,14 +32,26 @@ const useStyles = makeStyles({
  * @description las información de la actividad previamente obtenida desde backend
  */
 const ActivityCard = ({ className, activity, context, ...rest }) => {
-  const classes = useStyles();
   const link = context + '/activity/' + activity.id;
   let option = true;
+  const classes = useStyles();
+  let cardClass = ''
+  
+  switch (activity.state) {
+    case 1:
+      cardClass = classes.favorableStatus
+      break;
+    case 2:
+      cardClass= classes.unfavorableStatus
+      break;
+    default:
+      break;
+  }
   if(isUndefined(activity.title) || activity.title==null || activity.title=="") option=false;
   return (
     <RouterLink to={link}>
       <Box boxShadow={3}>
-        <Card className={clsx(classes.root, className)} {...rest}>
+        <Card className={clsx(cardClass, className)} {...rest}>
           <CardActionArea className={classes.CardAction}>
             <Box
               alignItems="center"
