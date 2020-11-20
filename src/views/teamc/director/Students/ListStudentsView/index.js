@@ -7,7 +7,6 @@ import List from 'src/components/List'
 import api from 'src/views/teamc/services/Api'
 import ListPagination from 'src/components/ListPagination'
 import { connect } from 'react-redux'
-import search from 'src/redux/reducers/search'
 
 const handleSearch = event => {
   console.log('Cadena de busqueda: ', event.target.value)
@@ -29,7 +28,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const DirectorListStudentsView = ({ period, program, status }) => {
+const DirectorListStudentsView = ({ period, program, status, search }) => {
   const [studentsList, setStudentsList] = useState([])
   const [initialStudentsList, setInitialStudentsList] = useState([])
   const [loading, setLoading] = useState(true)
@@ -46,15 +45,21 @@ const DirectorListStudentsView = ({ period, program, status }) => {
   useEffect(() => {
     // Filtrar por nombre
     function nameSearch(search) {
-      if (search != '-1') {
-        // Filter list
-        const studentsListSearch = initialStudentsList.filter(
-          student => student.first_name.includes(search) || student.last_name.includes(search)
-        )
+      let studentsListSearch = []
+      if(search!=""){
+        initialStudentsList.map(
+          student => 
+            {
+              if(student.student.user.first_name.toLowerCase().includes(search.toLowerCase())||
+              student.student.user.last_name.toLowerCase().includes(search.toLowerCase())){
+                studentsListSearch.push(student)
+              }
+            }
+          )
         setStudentsList(studentsListSearch)
-      } else {
+      }else{
         setStudentsList(initialStudentsList)
-      }
+      }          
     }
     nameSearch(search)
   }, [search])
@@ -209,7 +214,8 @@ const mapStateToProps = state => ({
   period: state.filters.period,
   program: state.filters.program,
   status: state.filters.status,
-  search: state.search.search
+  search: state.filters.search
+  /*search: state.search.search*/
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)

@@ -16,8 +16,7 @@ import {
 } from '@material-ui/core'
 import SearchIcon from '@material-ui/icons/Search'
 
-import {changePeriod, changeProgram, changeStatus} from 'src/redux/actions/filters'
-import {changeSearch} from 'src/redux/actions/search'
+import {changePeriod, changeProgram, changeStatus, changeSearch} from 'src/redux/actions/filters'
 
 /*
  * nos permite conectar el componente para que pueda tener acceso
