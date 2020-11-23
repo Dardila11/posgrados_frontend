@@ -53,6 +53,10 @@ const postStudentTracking = data => {
 const postDirectorEvaluations =  (directorId, data) => {
   return http.post(`/api/${directorId}`, data);
 }
+
+const postCoordinatorEvaluations = (coordinatorId, data) => {
+  return http.post(`/api/${coordinatorId}`, data);
+}
 /*End post Services*/
 
 export default {
@@ -66,5 +70,6 @@ export default {
   getStudent,
   getActivity,
   postStudentTracking,
-  postDirectorEvaluations
+  postDirectorEvaluations,
+  postCoordinatorEvaluations
 };
