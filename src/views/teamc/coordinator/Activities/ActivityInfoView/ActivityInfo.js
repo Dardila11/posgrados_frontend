@@ -18,6 +18,8 @@ import {
   Link
 } from '@material-ui/core';
 import { isUndefined } from 'lodash';
+import DialogForm from 'src/components/DialogForm';
+import CreateEvaluation from 'src/views/teamc/coordinator/Activities/ActivityInfoView/CreateEvaluation'
 
 const useStyles = makeStyles({
   root: {
@@ -41,12 +43,14 @@ const useStyles = makeStyles({
 const ActivityInfoView = () => {
   let { id } = useParams();
   const [activityInfo, setActivityInfo] = useState({});
+  const [activityPk, setActivityPk] = useState("");
   const [isBusy, setBusy] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       await api.getActivity(id).then(res => {
         setActivityInfo(res.data);
+        setActivityPk(res.data.id)
         setBusy(false);
       });      
     };
@@ -132,18 +136,13 @@ const ActivityInfoView = () => {
                 Evaluación de la actividad
               </DialogTitle>
 
-              <DialogActions>
-                <Button variant="contained" onClick={handleClose}>
-                  Cancelar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleClose}
-                >
-                  Guardar
-                </Button>
-              </DialogActions>
+              <DialogForm
+              title="Creación de evaluación"
+              open={open}
+              handleClose={handleClose}
+              handleOpen={handleClickOpen}
+              component={< CreateEvaluation activityId={activityPk} />}
+              />
             </Dialog>
           </CardActions>
         </Card>

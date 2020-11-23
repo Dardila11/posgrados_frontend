@@ -1,13 +1,15 @@
 import {
   CHANGE_PERIOD,
   CHANGE_PROGRAM,
-  CHANGE_STATUS
+  CHANGE_STATUS,
+  /*CHANGE_SEARCH*/
 } from '../constants/action-types'
 
 const initialValue = {
   period: '',
   program: '',
-  status: ''
+  status: '',
+  /*search: ''*/
 }
 
 const filters = (state = initialValue, action) => {
@@ -24,6 +26,10 @@ const filters = (state = initialValue, action) => {
       return Object.assign({}, state, {
         status: action.payload
       })
+    /*case CHANGE_SEARCH:
+      return Object.assign({}, state,{
+        search: action.payload
+      })*/
     default:
       return state
   }

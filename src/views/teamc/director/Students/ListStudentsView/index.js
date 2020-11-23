@@ -8,13 +8,6 @@ import api from 'src/views/teamc/services/Api'
 import ListPagination from 'src/components/ListPagination'
 import { connect } from 'react-redux'
 
-const handleSearch = event => {
-  console.log('Cadena de busqueda: ', event.target.value)
-  this.setState({
-    inputValue: event.target.value
-  })
-}
-
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -28,14 +21,41 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const DirectorListStudentsView = ({ period, program, status }) => {
+const DirectorListStudentsView = ({ period, program, status, search }) => {
   const [studentsList, setStudentsList] = useState([])
-  const [initialStudentsList, setInitialStudentsList] = useState([])
   const [loading, setLoading] = useState(true)
+  const [initialStudentsList, setInitialStudentsList] = useState([])
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
   const programs = getPrograms(initialStudentsList)
   const classes = useStyles()
+
+   /**
+   * Busca los estudiante segun su nombre
+   * Se supone que este useEffect se corre cada vez que
+   * la variabe state.search cambia.
+   */
+  useEffect(() => {
+    // Buscar por nombre
+    function nameSearch(search) {
+      let studentsListSearch = []
+      if(search!=""){
+        initialStudentsList.map(
+          student => 
+            {
+              if(student.student.user.first_name.toLowerCase().includes(search.toLowerCase())||
+              student.student.user.last_name.toLowerCase().includes(search.toLowerCase())){
+                studentsListSearch.push(student)
+              }
+            }
+          )
+        setStudentsList(studentsListSearch)
+      }else{
+        setStudentsList(initialStudentsList)
+      }          
+    }
+    nameSearch(search)
+  }, [search])
 
   /**
    * Filtra los estudiante segun el periodo
@@ -113,18 +133,14 @@ const DirectorListStudentsView = ({ period, program, status }) => {
     <Page className={classes.root} title="Listado de estudiantes">
       <BreadCrumbs />
       <SearchBar
-        handleSearch={handleSearch}
         context="students"
         periods={periods}
         status={statuss}
-        programs={programs}
-      />
-
+        programs={programs}/>
       {loading ? (
         <LinearProgress className={classes.progress} />
       ) : (
         <>
-          {/* <UploadFile /> */}
           <List list={studentsList} option="Student" />
           <ListPagination />
         </>
@@ -186,7 +202,8 @@ const getPrograms = studentsList => {
 const mapStateToProps = state => ({
   period: state.filters.period,
   program: state.filters.program,
-  status: state.filters.status
+  status: state.filters.status,
+  search: state.searches.search
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)

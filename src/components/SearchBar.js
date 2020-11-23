@@ -17,6 +17,7 @@ import {
 import SearchIcon from '@material-ui/icons/Search'
 
 import {changePeriod, changeProgram, changeStatus} from 'src/redux/actions/filters'
+import {changeSearch} from 'src/redux/actions/search'
 
 /*
  * nos permite conectar el componente para que pueda tener acceso
@@ -42,7 +43,6 @@ const useStyles = makeStyles(() => ({
 const SearchBar = ({ className, context, periods, status, programs, ...rest }) => {
   const classes = useStyles()
 
-
   const handleChange = e => {
     var period = e.target.value
     rest.changePeriod(period)
@@ -57,6 +57,11 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
     var status = e.target.value
     rest.changeStatus(status)
   }
+
+  const handleChangeSearch = e =>{
+    var search = e.target.value
+    rest.changeSearch(search)
+  }
   return (
     <Container className={classes.Container}>
       <Box mt={2}>
@@ -67,6 +72,7 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                 <Box maxWidth={500}>
                   <TextField
                     fullWidth
+                    onChange={handleChangeSearch}
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -123,6 +129,7 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                       <MenuItem value={"-1"} >---</MenuItem> 
                       {status.map(element => (
                         <MenuItem key={element} value={element}>
+                          {console.log(element)}
                           {' '}
                           {element}
                         </MenuItem>
@@ -167,7 +174,8 @@ const mapDispatchToProps = dispatch => {
   return {
     changePeriod: period => dispatch(changePeriod(period)),
     changeProgram: program => dispatch(changeProgram(program)),
-    changeStatus: status => dispatch(changeStatus(status))
+    changeStatus: status => dispatch(changeStatus(status)),
+    changeSearch: search => dispatch(changeSearch(search))
   }
 }
 

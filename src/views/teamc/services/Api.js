@@ -25,7 +25,7 @@ const getDirectorActivities = id => {
 };
 
 const getDirectorEvaluations = id =>{  
-  return http.get('api/director/' + id + '/evaluation');
+  return http.get('/api/test_director');
 }
 
 /* End Director services */
@@ -50,6 +50,13 @@ const postStudentTracking = data => {
   return http.post('/api/tracking/', data);
 };
 
+const postDirectorEvaluations =  (directorId, data) => {
+  return http.post(`/api/${directorId}`, data);
+}
+
+const postCoordinatorEvaluations = (coordinatorId, data) => {
+  return http.post(`/api/${coordinatorId}`, data);
+}
 /*End post Services*/
 
 export default {
@@ -62,5 +69,7 @@ export default {
   getStudents,
   getStudent,
   getActivity,
-  postStudentTracking
+  postStudentTracking,
+  postDirectorEvaluations,
+  postCoordinatorEvaluations
 };
