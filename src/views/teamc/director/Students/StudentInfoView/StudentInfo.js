@@ -15,7 +15,8 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  Container
+  Container,
+  LinearProgress
 } from '@material-ui/core';
 
 const useStyles = makeStyles({
@@ -35,6 +36,9 @@ const useStyles = makeStyles({
   },
   statusGraduate: {
     color: '#0277bd'
+  },
+  progress: {
+    marginTop: '30'
   }
 });
 
@@ -92,7 +96,7 @@ const StudentInfo = () => {
   return (
     <Container>
       {isBusy ? (
-        <h1>Cargando</h1>
+        <LinearProgress className={classes.progress}/>
       ) : (
         <Card className={classes.root}>
           <CardContent>

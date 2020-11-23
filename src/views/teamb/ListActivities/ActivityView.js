@@ -10,11 +10,13 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import service from 'src/views/teamb/services/service';
 import { Grid, Select, TextField, MenuItem, InputLabel } from '@material-ui/core';
-import BreadCrumbs from 'src/views/teamb/ListActivities/BreadCrumbs';
+
+import util from 'src/views/teamb/services/util';
+import service from 'src/views/teamb/services/service';
 
 const objService = new service();
+const objUtil = new util();
 
 const styles = (theme) => ({
   root: { margin: 0, padding: theme.spacing(2) },
@@ -47,21 +49,22 @@ const ActivityView = ({ className, ...rest }) => {
   const [emergenteCancelar, setEmergenteCancelar] = React.useState(false);
   //TODO: comentar
   const [EmergenteDatosDetalle, setEmergenteDatosDetalle] = React.useState(false);
-  const changeActivityType = (e) => { 
-    setActivity(e) 
+  const changeActivityType = (e) => {
+    setActivity(e)
   }
   //Agregamos el valor inicial a "descripcion"
-  const [values, setValues] = useState({descripcion:''});
+  const [values, setValues] = useState({ descripcion: '' });
   //Constante para definir el estdo de "errorActivity"
   const [errorActivity, setErrorActivity] = useState(null);
   //Constante para definir el estdo de "errorDescripcion"
   const [errorDescripcion, setErrorDescripcion] = useState(null);
+
   const handleClickOpen = () => {
-    objService.GetPeriodService().then((result) => { 
-      var CurrentPeriod = result.data[0].periodo_matricula;
-      var CurrentAcadYear = objService.GetCurrentYear(CurrentPeriod);
-      document.getElementById("CurrentAcadYear").textContent = "Año academico actual " + CurrentAcadYear;
-      
+    /* Dato quemado desde la tabla User: id_user */
+    objService.GetPeriodService(8).then((result) => {
+      var CurrentPeriod = result.data.period;
+      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+      document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
     }).catch(() => {
       alert("Error, no hay registros para mostrar");
     });
@@ -74,7 +77,7 @@ const ActivityView = ({ className, ...rest }) => {
 
   // "handleCancelarSi" controla cuando se da click en el botón "SI" de la ventana emergente
   const handleCancelarSi = () => {
-    setValues({descripcion:''});
+    setValues({ descripcion: '' });
     setActivity('');
     setErrorDescripcion('');
     setErrorActivity('');
@@ -93,49 +96,34 @@ const ActivityView = ({ className, ...rest }) => {
   };
   //"handleDatosDetalle" para que despliegue la ventana emergente que pide confirmar la creacion de la actividad
   const handleDatosDetalle = () => {
-     
     //Validamos que los campos tengan los datos correspondientes 
-    if(values.descripcion.length){
-      setErrorDescripcion(null)
-    }
-    else{
-      setErrorDescripcion("El campo es obligatorio")
-    }
-    if(activity.length){
-      setErrorActivity(null)
-    }
-    else{
-      setErrorActivity("Seleccione una opción válida")
-    }
 
-    if(values.descripcion.length && activity.length){
+    if (activity.length) { 
+      setErrorActivity("");
       setEmergenteDatosDetalle(true);
-    }   
+    }
+    else { setErrorActivity("Seleccione una opción válida") }
+
   };
 
- 
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleDatosDetalleNo = () => {
     setEmergenteDatosDetalle(false);
   };
 
-  const handleDetails = () => {
-    
-  }
-
   return (
     <div>
-      <BreadCrumbs />
       <Button variant="outlined" color="primary" onClick={handleClickOpen}> CREAR ACTIVIDAD </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
         <br></br>
         <h1 style={{ display: 'flex', justifyContent: 'center' }}>Crear actividad</h1>
         <br></br>
-        <InputLabel style={{ display: 'flex', justifyContent: 'center' }} id="CurrentAcadYear" title="periodo">  </InputLabel>
+        <InputLabel style={{ display: 'flex', justifyContent: 'center' }} id="CurrentAcadYear" title="periodo"> Año academico actual </InputLabel>
         <br></br>
         <DialogContent dividers>
           <Grid item xs={12} >
             <InputLabel>Tipo de actividad:</InputLabel>
+            <br></br>
             <Select fullWidth label="Tipo de actividad" id="activity-type" variant="outlined" type="select" defaultValue={""}
               onChange={e => changeActivityType(e.target.value)}>
               <MenuItem value={'activityone'}>Curso, dirección/revisión de proyectos</MenuItem>
@@ -146,55 +134,44 @@ const ActivityView = ({ className, ...rest }) => {
               <MenuItem value={'activitysix'}>Participación en proyectos de investigación</MenuItem>
             </Select>
             {/* Se verifica el estado de "errorDescripcion" y se muestra el mensaje en caso de que 
-              el usuario desee crear la actividad sin agregar la descripcion */} 
-            {errorActivity ? <p style={{ display: 'flex', color:'red' }}>{errorActivity}</p> : null}
+              el usuario desee crear la actividad sin agregar la descripcion */}
+            {errorActivity ? <p style={{ display: 'flex', color: 'red' }}>{errorActivity}</p> : null}
           </Grid>
           <br></br>
+          {/* 
           <Grid item xs={12}>
             <TextField fullWidth label="Descripción" name="descripcion" onChange={handleChange} required value={values.descripcion}
               variant="outlined" />
-              {/* Se verifica el estado de "errorDescripcion" y se muestra el mensaje en caso de que 
-              el usuario desee crear la actividad sin agregar la descripcion */} 
-            {errorDescripcion ? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p> : null} 
+            {errorDescripcion ? <p style={{ display: 'flex', color: 'red' }}>{errorDescripcion}</p> : null}
           </Grid>
+           */}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button>
+          <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button> &nbsp;  
           {/*Todo: comentar*/}
           <Button onClick={handleDatosDetalle} variant="contained" color="primary"> Datos de detalle</Button>
         </DialogActions>
-        </Dialog>
-        {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar 
+      </Dialog>
+      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar 
         en "Crear Actividad" */}
-        <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
-          <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-          <DialogContent>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelarSi} color="primary"> Si </Button>
-            <Button onClick={handleCancelarNo} color="primary" autoFocus> No </Button>
-          </DialogActions>
-        </Dialog>
-        {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "DATOS DE DETALLE" 
+      <Dialog open={emergenteCancelar} onClose={handleCancelarNo}>
+        <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleCancelarNo} color="primary" autoFocus> No </Button>
+          <Button onClick={handleCancelarSi} color="primary"> Si </Button>
+        </DialogActions>
+      </Dialog>
+      {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "DATOS DE DETALLE" 
         en "Crear Actividad" */}
-        <Dialog
-          open={EmergenteDatosDetalle}
-          onClose={handleDatosDetalleNo}
-        >
-          <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea crear la actividad?"}</DialogTitle>
-          <DialogContent>
-          </DialogContent>
-          <DialogActions>
+      <Dialog open={EmergenteDatosDetalle} onClose={handleDatosDetalleNo}>
+        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea crear una nueva actividad?"}</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDatosDetalleNo} color="primary" autoFocus> No </Button>
           <RouterLink to={activity}>
-              <Button color="primary">
-                Si
-              </Button>
+            <Button color="primary"> Si </Button>
           </RouterLink>
-            <Button onClick={handleDatosDetalleNo} color="primary" autoFocus>
-              No
-            </Button>
-          </DialogActions>
-        </Dialog>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

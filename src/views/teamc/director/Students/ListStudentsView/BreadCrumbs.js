@@ -20,7 +20,7 @@ const BreadCrumbs = () => {
         <RouterLink color="inherit" to="/director">
           Director
         </RouterLink>
-        <Typography color="textPrimary">Lista Actividades</Typography>
+        <Typography color="textPrimary">Lista Estudiantes</Typography>
       </Breadcrumbs>
     </div>
   );

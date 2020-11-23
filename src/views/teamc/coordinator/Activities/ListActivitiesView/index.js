@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { makeStyles, Typography } from '@material-ui/core';
+import { LinearProgress, makeStyles, Typography } from '@material-ui/core';
 import Page from 'src/components/Page';
 import ListPagination from 'src/components/ListPagination';
 import BreadCrumbs from './BreadCrumbs';
 import SearchBar from 'src/components/SearchBar';
 import List from 'src/components/List';
 import api from 'src/views/teamc/services/Api';
+import { Pagination } from '@material-ui/lab';
 
 const handleSearch = event => {
   console.log('Cadena de busqueda: ', event.target.value);
@@ -31,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 const CoordinatorListActivitiesView = () => {
   const [activityList, setActivityList] = useState([]);
   const [state, setState] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +42,9 @@ const CoordinatorListActivitiesView = () => {
           setState(false);
         }else{
           setActivityList(res.data.activities);
+
         }
+        setLoading(false);
         });
     };
     fetchData();
@@ -54,7 +58,14 @@ const CoordinatorListActivitiesView = () => {
       {!state ? (
         <Typography className={classes.title} variant='h3'> No se encontraron Actividades </Typography>
       ):(
-        <List list={activityList} option="Activity" context="/coordinator/list-activities"/>
+        loading ? (
+          <LinearProgress />
+        ):(
+          <>
+            <List list={activityList} option="Activity" context="/coordinator/list-activities"/>
+            <ListPagination />
+          </>
+        )
       )}
       
     </Page>

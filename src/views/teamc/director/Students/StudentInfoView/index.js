@@ -48,7 +48,6 @@ const DirectorStudentView = () => {
     };
     fetchData();
   }, []);
-  const breadcrumb = [['Coordinador','/coordinator'],['Listado de estudiantes', '/coordinator/list-students'] ,['Listado de estudiantes']];
   return (
     <>
     <Page className={classes.root} title="Estudiante">

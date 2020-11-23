@@ -12,11 +12,10 @@ import {
   Button,
   Typography,
   makeStyles,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   Container
 } from '@material-ui/core';
+
+import DialogForm from 'src/components/DialogForm';
 
 const useStyles = makeStyles({
   root: {
@@ -42,6 +41,7 @@ const StudentInfo = () => {
   let { id } = useParams();
   const [studentInfo, setStudentInfo] = useState({});
   const [isBusy, setBusy] = useState(true);
+  const [pk, setPk] = useState("");
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -58,6 +58,7 @@ const StudentInfo = () => {
     const fetchData = async () => {
       await api.getStudent(id).then(res => {
         setStudentInfo(res.data.student);
+        setPk(res.data.student.student.id)
         setBusy(false);
       });
     };
@@ -94,7 +95,7 @@ const StudentInfo = () => {
   return (
     <Container>
       {isBusy ? (
-        <h1>Cargando</h1>
+        console.log('Loading student')
       ) : (
         <Card className={classes.root}>
           <CardContent>
@@ -128,24 +129,21 @@ const StudentInfo = () => {
             >
               Realizar seguimiento
             </Button>
-            <Dialog open={open} onClose={handleClose}>
+
+            {/* <Dialog open={open} onClose={handleClose}>
               <DialogTitle variant="h2" onClose={handleClose}>
                 Seguimiento de estudiante
               </DialogTitle>
               <TrackStudent />
-              <DialogActions>
-                <Button variant="contained" onClick={handleClose}>
-                  Cancelar
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleClose}
-                >
-                  Guardar
-                </Button>
-              </DialogActions>
-            </Dialog>
+            </Dialog> */}
+
+            <DialogForm
+              title="Seguimiento de estudiante"
+              open={open}
+              handleClose={handleClose}
+              handleOpen={handleClickOpen}
+              component={<TrackStudent studentId={pk} />}
+            />
           </CardActions>
         </Card>
       )}
