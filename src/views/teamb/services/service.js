@@ -45,6 +45,10 @@ export default class service {
         const url= `${API_URL}/api/activity/`+id+`/`; 
         return axios.get(url);
     }
+    GetActivityByType(id, type) {
+        const url= `${API_URL}/api/`+type+`/`+id+`/`; 
+        return axios.get(url);
+    }
 
     PostActivityOne(activity){
         const url= `${API_URL}/api/projectCourse/`;
@@ -69,5 +73,10 @@ export default class service {
     PostActivitySix(activity){
         const url= `${API_URL}/api/participationProjects/`;
         return axios.post(url,activity);
+    }
+
+    DeleteActivity(id) {
+        const url= `${API_URL}/api/activity/`+id+`/`;  
+        return axios.delete(url);
     }
 }
