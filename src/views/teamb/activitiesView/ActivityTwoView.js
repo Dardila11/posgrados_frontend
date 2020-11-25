@@ -87,7 +87,7 @@ const ActivityTwoView = () => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validar()) { setEmergenteGuardar(true); }
+    if (validarGuardar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -96,7 +96,7 @@ const ActivityTwoView = () => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -111,8 +111,18 @@ const ActivityTwoView = () => {
   const [errorFecha, setErrorFecha] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
+  const  resetError = () => {
+    setErrorTitulo(null);
+    setErrorDescripcion(null);
+    setErrorNombreEvento(null);
+    setErrorLugar(null);
+    setErrorInstitucion(null);
+    setErrorFecha(null);
+    setErrorFile(null);
+  }
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar = () => {
+  const validarGuardarYEnviar = () => {
+    resetError();
     var result = true;
 
     if (values.titulo.length) { setErrorTitulo(null) }
@@ -153,6 +163,28 @@ const ActivityTwoView = () => {
     }
     return result;
   }
+    // Permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+    const validarGuardar = () => {
+      resetError();
+      var result = true;
+  
+      if (values.titulo.length) { setErrorTitulo(null) }
+      else {
+        setErrorTitulo("El campo es obligatorio");
+        result = false;
+      }
+      if (values.descripcion.length) { setErrorDescripcion(null) }
+      else {
+        setErrorDescripcion("El campo es obligatorio");
+        result = false;
+      }
+      if (values.nombreEvento.length) { setErrorNombreEvento(null) }
+      else {
+        setErrorNombreEvento("El campo es obligatorio");
+        result = false;
+      }
+      return result;
+    }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);

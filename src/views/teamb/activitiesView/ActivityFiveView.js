@@ -89,7 +89,7 @@ const ActivityFiveView = () => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validar()) { setEmergenteGuardar(true); }
+    if (validarGuardar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -98,7 +98,7 @@ const ActivityFiveView = () => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -111,11 +111,24 @@ const ActivityFiveView = () => {
   const [errorCiudad, setErrorCiudad] = useState(null);
   const [errorInstitucion, setErrorInstitucion] = useState(null);
   const [errorNombreResponsable, setErrorNombreResponsable] = useState(null);
-  const [errorFechas, setErrorFechas] = useState(null);
+  const [errorStartDate, setErrorStartDate] = useState(null);
+  const [errorEndDate, setErrorEndDate] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
+  const  resetError = () => {
+    setErrorProposito(null);
+    setErrorDescripcion(null);
+    setErrorCiudad(null);
+    setErrorInstitucion(null);
+    setErrorNombreResponsable(null);
+    setErrorStartDate(null);
+    setErrorEndDate(null);
+    setErrorFile(null);
+  }
+
   //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar = () => {
+  const validarGuardarYEnviar = () => {
+    resetError();
     var result = true;
 
     if (values.proposito.length) { setErrorProposito(null) }
@@ -148,16 +161,23 @@ const ActivityFiveView = () => {
       setErrorNombreResponsable("El campo es obligatorio");
       result = false;
     }
-    if (values.fechaInicio.length && values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorFechas("") }
-      else {
-        setErrorFechas("La fecha de finalización de la estancia debe ser después de la fecha inicio de estancia");
-        result = false;
+    if (values.fechaInicio.length ) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
+     result = false;
+    }
+    if (values.fechaFin.length) {
+     if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+     else {
+      setErrorEndDate("La fecha de finalización de la estancia debe ser después de la fecha inicio de estancia")
+      result = false;
       }
     }
     else {
-      setErrorFechas("Seleccióne una fecha inicio de estancia y fin de estancia válidas");
-      result = false;
+    setErrorEndDate("Seleccióne una fecha fin de estancia válida")
+    result = false;
     }
     var textFile = document.getElementById("text-file").textContent;
     if (textFile.length > 0) { setErrorFile(null) }
@@ -165,6 +185,30 @@ const ActivityFiveView = () => {
       setErrorFile("Es necesario subir el archivo");
       result = false;
     }
+    return result
+  }
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en guardar
+  const validarGuardar = () => {
+    resetError();
+    var result = true;
+
+    if (values.proposito.length) { setErrorProposito(null) }
+    else {
+      setErrorProposito("El campo es obligatorio");
+      result = false;
+    }
+    if (values.descripcion.length) { setErrorDescripcion(null) }
+    else {
+      setErrorDescripcion("El campo es obligatorio");
+      result = false;
+    }
+    if (values.fechaInicio.length) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
+      result = false;
+    }  
     return result
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -280,14 +324,14 @@ const ActivityFiveView = () => {
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
                   />
                   {/* Validacion del campo */}
-                  {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+                  {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
                   <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de finalización" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                   />
                   {/* Validacion del campo */}
-                  {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+                  {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
                 </Grid>
               </Grid>
 

@@ -86,7 +86,7 @@ const ActivityFourView = () => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validar()) { setEmergenteGuardar(true); }
+    if (validarGuardar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -95,7 +95,7 @@ const ActivityFourView = () => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -110,8 +110,19 @@ const ActivityFourView = () => {
   const [errorFecha, setErrorFecha] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
+  const  resetError = () => {
+    setErrorDescripcion(null);
+    setErrorLugar(null);
+    setErrorNombreEvento(null);
+    setErrorModalidad(null);
+    setErrorDuracion(null);
+    setErrorFecha(null);
+    setErrorFile(null);
+  }
+
   //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar = () => {
+  const validarGuardarYEnviar = () => {
+    resetError();
     var result = true;
 
     if (values.descripcion.length) { setErrorDescripcion(null) }
@@ -150,6 +161,35 @@ const ActivityFourView = () => {
     if (textFile.length > 0) { setErrorFile(null) }
     else {
       setErrorFile("Es necesario subir el archivo");
+      result = false;
+    }
+    return result;
+  }
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en guardar
+  const validarGuardar = () => {
+    resetError();
+    var result = true;
+
+    if (values.descripcion.length) { setErrorDescripcion(null) }
+    else {
+      setErrorDescripcion("El campo es obligatorio");
+      result = false;
+    }
+    if (values.lugar.length) { setErrorLugar(null) }
+    else {
+      setErrorLugar("El campo es obligatorio");
+      result = false;
+    }
+    if (values.modalidad.length) { setErrorModalidad(null) }
+    else {
+      setErrorModalidad("El campo es obligatorio");
+      result = false;
+    }    
+    if (values.duracionSeleccionada.length == null || values.duracionSeleccionada > 0) {
+      setErrorDuracion(null)
+    }
+    else {
+      setErrorDuracion("Seleccione un número de horas valido");
       result = false;
     }
     return result;

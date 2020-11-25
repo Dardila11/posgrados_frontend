@@ -95,7 +95,7 @@ const ActivityThreeView = () => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validar()) { setEmergenteGuardar(true); }
+    if (validarGuardar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -104,7 +104,7 @@ const ActivityThreeView = () => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -117,11 +117,25 @@ const ActivityThreeView = () => {
   const [errorAutores, setErrorAutores] = useState(null);
   const [errorEditorial, setErrorEditorial] = useState(null);
   const [errorDatosGenerales, setErrorDatosGenerales] = useState(null);
-  const [errorFechas, setErrorFechas] = useState(null);
+  const [errorStartDate, setErrorStartDate] = useState(null);
+  const [errorEndDate, setErrorEndDate] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
+  const  resetError = () => {
+    setErrorTitulo(null);
+    setErrorTipo(null);
+    setErrorNombre(null);
+    setErrorAutores(null);
+    setErrorEditorial(null);
+    setErrorDatosGenerales(null);
+    setErrorStartDate(null);
+    setErrorEndDate(null);
+    setErrorFile(null);
+  }
+
   //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar = () => {
+  const validarGuardarYEnviar = () => {
+    resetError();
     var result = true;
 
     if (values.titulo.length) { setErrorTitulo(null) }
@@ -154,23 +168,59 @@ const ActivityThreeView = () => {
       setErrorDatosGenerales("El campo es obligatorio");
       result = false;
     }
-    if (values.fechaInicio.length && values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorFechas("") }
+    if (values.fechaInicio.length ) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
+      result = false;
+    }
+    if (values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
-        setErrorFechas("La fecha de publicación debe ser después de la fecha de envió");
+        setErrorEndDate("La fecha de publicación debe ser después de la fecha de envió")
         result = false;
       }
     }
     else {
-      setErrorFechas("Seleccióne una fecha de envió publicación y fecha de publicación válidas");
+      setErrorEndDate("Seleccióne una fecha de publicación válida")
       result = false;
-    }
+    }    
     var textFile = document.getElementById("text-file").textContent;
     if (textFile.length > 0) { setErrorFile(null) }
     else {
       setErrorFile("Es necesario subir el archivo");
       result = false;
     }
+    return result;
+  }
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+  const validarGuardar = () => {
+    resetError();
+    var result = true;
+
+    if (values.titulo.length) { setErrorTitulo(null) }
+    else {
+      setErrorTitulo("El campo es obligatorio");
+      result = false;
+    }
+    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
+    else {
+      setErrorTipo("Seleccione una opción válida");
+      result = false;
+    }
+    if (values.nombre.length) { setErrorNombre(null) }
+    else {
+      setErrorNombre("El campo es obligatorio");
+      result = false;
+    }
+    if (values.fechaInicio.length) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
+      result = false;
+    }  
     return result;
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -304,14 +354,14 @@ const ActivityThreeView = () => {
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
                   />
                   {/* Validacion del campo */}
-                  {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+                  {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
                   <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de publicación" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                   />
                   {/* Validacion del campo */}
-                  {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+                  {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
                 </Grid>
               </Grid>
 

@@ -87,7 +87,7 @@ const ActivityOneView = () => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validar()) { setEmergenteGuardar(true); }
+    if (validarGuardar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
@@ -96,7 +96,7 @@ const ActivityOneView = () => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -104,46 +104,64 @@ const ActivityOneView = () => {
   };
 
   // Costantes para controlar las validaciones del formulario
-  const [errorTitulo, setErrorTitulo] = useState(null);
-  const [errorDescripcion, setErrorDescripcion] = useState(null);
-  const [errorPrograma, setErrorPrograma] = useState(null);
-  const [errorHoras, setErrorHoras] = useState(null);
-  const [errorFechas, setErrorFechas] = useState(null);
+  const [errorTitle, setErrorTitle] = useState(null);
+  const [errorDescription, setErrorDescription] = useState(null);
+  const [errorProgram, setErrorProgram] = useState(null);
+  const [errorHour, setErrorHour] = useState(null);
+  const [errorStartDate, setErrorStartDate] = useState(null);
+  const [errorEndDate, setErrorEndDate] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
-
+  
+  const  resetError = () => {
+    setErrorTitle(null);
+    setErrorDescription(null);
+    setErrorProgram(null);
+    setErrorHour(null);
+    setErrorStartDate(null);
+    setErrorEndDate(null);
+    setErrorFile(null);
+  }
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar = () => {
+  const validarGuardarYEnviar = () => {
+    resetError();
     var result = true;
 
-    if (values.titulo.length) { setErrorTitulo(null) }
+    if (values.titulo.length) { setErrorTitle(null) }
     else {
-      setErrorTitulo("El campo es obligatorio")
+      setErrorTitle("El campo es obligatorio")
       result = false;
     }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
+    if (values.descripcion.length) { setErrorDescription(null) }
     else {
-      setErrorDescripcion("El campo es obligatorio")
+      setErrorDescription("El campo es obligatorio")
       result = false;
     }
-    if (values.programaSeleccionado != "") { setErrorPrograma(null) }
+    if (values.programaSeleccionado != "") { setErrorProgram(null) }
     else {
-      setErrorPrograma("Seleccione una opción válida")
+      setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.horasAsignadas.length && values.horasAsignadas > 0) { setErrorHoras(null) }
+    if (values.horasAsignadas.length && values.horasAsignadas > 0) { setErrorHour(null) }
     else {
-      setErrorHoras("Seleccione un número de horas valido")
+      setErrorHour("Seleccione un número de horas valido")
       result = false;
     }
-    if (values.fechaInicio.length && values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorFechas("") }
+    if (values.fechaInicio.length ) {
+        setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha inicial válida")
+      result = false;
+    }
+    if (values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
-        setErrorFechas("La fecha de finalización debe ser después de la fecha de inicio")
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
         result = false;
       }
     }
     else {
-      setErrorFechas("Seleccióne una fecha inicial y una fecha final válidas")
+      setErrorEndDate("Seleccióne una fecha final válida")
       result = false;
     }
     var textFile = document.getElementById("text-file").textContent;
@@ -152,6 +170,40 @@ const ActivityOneView = () => {
       setErrorFile("Es necesario subir el archivo");
       result = false;
     }
+    return result;
+  }
+  // Permite verificar que todos los campos requeridos se encuentren diligenciados al guardar
+  const validarGuardar = () => {
+    resetError();
+    var result = true;
+
+    if (values.titulo.length) { setErrorTitle(null) }
+    else {
+      setErrorTitle("El campo es obligatorio")
+      result = false;
+    }
+    if (values.descripcion.length) { setErrorDescription(null) }
+    else {
+      setErrorDescription("El campo es obligatorio")
+      result = false;
+    }
+    if (values.programaSeleccionado != "") { setErrorProgram(null) }
+    else {
+      setErrorProgram("Seleccione una opción válida")
+      result = false;
+    }
+    if (values.horasAsignadas.length == null || values.horasAsignadas > 0) { setErrorHour(null) }
+    else {
+      setErrorHour("Seleccione un número de horas valido")
+      result = false;
+    }
+    if (values.fechaInicio.length) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha inicial válida")
+      result = false;
+    }  
     return result;
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -238,17 +290,17 @@ const ActivityOneView = () => {
                 required variant="outlined"
               />
               {/* Validacion del campo */}
-              {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
+              {errorTitle ? <Typography className={classes.validator}> {errorTitle} </Typography> : null}
 
               <TextField className={classes.field} fullWidth label="Descripcion general" name="descripcion"
                 onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
-              {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
+              {errorDescription ? <Typography className={classes.validator}> {errorDescription} </Typography> : null}
 
               <SelectField name="programaSeleccionado" label="Programa" handleChange={handleChange} />
               {/* Validacion del campo */}
-              {errorPrograma ? <Typography className={classes.validator}> {errorPrograma} </Typography> : null}
+              {errorProgram ? <Typography className={classes.validator}> {errorProgram} </Typography> : null}
 
               {/*justify="space-evenly"*/}
               <Grid container spacing={2}>
@@ -257,14 +309,14 @@ const ActivityOneView = () => {
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
                   />
                   {/* Validacion del campo */}
-                  {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+                  {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
                   <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de fin" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                   />
                   {/* Validacion del campo */}
-                  {errorFechas ? <Typography className={classes.validator}> {errorFechas} </Typography> : null}
+                  {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
                 </Grid>
               </Grid>
 
@@ -272,7 +324,7 @@ const ActivityOneView = () => {
                 onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
-              {errorHoras ? <Typography className={classes.validator}> {errorHoras} </Typography> : null}
+              {errorHour ? <Typography className={classes.validator}> {errorHour} </Typography> : null}
 
               <PDFUpload uploadFile={uploadFile} name="Justificante" />
               {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
