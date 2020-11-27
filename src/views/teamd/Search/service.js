@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://mdquilindo.pythonanywhere.com';
+const API_URL = 'http://localhost:8000';
 
 export const GetKnowLedgeListService = () => {
   const URL = `${API_URL}/api/1.0/consultar_area_conocimiento/`;
