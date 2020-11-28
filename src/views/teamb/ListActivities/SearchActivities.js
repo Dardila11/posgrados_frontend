@@ -54,12 +54,15 @@ const SearchBar = ({ className, context, ...rest }) => {
 
     const changeList = () => {
         /* Dato quemado desde la tabla User: id_user*/
-        objService.GetActivities(8, academicYear).then((result) => {
-            var dataActivities = result.data;
-            setActivities(dataActivities.list_activities);
-        }).catch(() => {
-            alert("Error");
-        });
+        if (academicYear === "") { alert("En necesario seleccionar un año academico para realizar la consulta"); }
+        else {
+            objService.GetActivities(8, academicYear).then((result) => {
+                var dataActivities = result.data;
+                setActivities(dataActivities.list_activities);
+            }).catch(() => {
+                alert("Error, no fue posible realizar la consulta");
+            });
+        }
     };
 
     return (

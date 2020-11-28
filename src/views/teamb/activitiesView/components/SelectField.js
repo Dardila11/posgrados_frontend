@@ -80,7 +80,9 @@ const SelectField = (props) => {
                     <MenuItem key={element.id} value={element.id}> 
                         {
                             props.name === "institucionSeleccionada" ?  element.name_inst : 
-                            props.name === "investigadorSeleccionado" ?  element.id : element.name
+                            props.name === "investigadorSeleccionado" ?  element.id
+                            // props.name === "investigadorSeleccionado" ?  element.user.first_name + " " +  element.user.last_name
+                            : element.name
                         } 
                     </MenuItem>
                 ))}

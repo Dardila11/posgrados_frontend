@@ -76,7 +76,14 @@ const ActivitySixView = () => {
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
-    if (e.length > 0) { document.getElementById("text-file").textContent = e[0].name; }
+    if (e.length > 0) { 
+      var name = e[0].name;
+      var nameSplit = name.split(".");
+      var ext = nameSplit[nameSplit.length - 1];
+      
+      if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
+      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+    }
     else { document.getElementById("text-file").textContent = ""; }
   }
   // Costantes para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre una de las 
