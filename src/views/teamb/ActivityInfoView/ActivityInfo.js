@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { Card, CardContent, Button, Box, Typography, makeStyles, Container, IconButton, Grid } from '@material-ui/core';
+import { DialogTitle, DialogContent, Dialog, Card, CardContent, Button, Box, Typography, makeStyles, Container, IconButton, Grid } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
-import service from 'src/views/teamb/services/service';
-import util from 'src/views/teamb/services/util';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
 import Prize from 'src/views/teamb/ActivityInfoView/Prize';
 import DirEvaluation from 'src/views/teamb/ActivityInfoView/DirEvaluation';
@@ -15,6 +13,16 @@ import Institution from 'src/views/teamb/ActivityInfoView/components/Institution
 import City from 'src/views/teamb/ActivityInfoView/components/City';
 import Investigator from 'src/views/teamb/ActivityInfoView/components/Investigator';
 import InvestigationLine from 'src/views/teamb/ActivityInfoView/components/InvestigationLine';
+
+import ActivityOneEdit from '../ActivityInfoView/EditActivity/ActivityOneEdit';
+import ActivityTwoEdit from '../ActivityInfoView/EditActivity/ActivityTwoEdit';
+import ActivityThreeEdit from '../ActivityInfoView/EditActivity/ActivityThreeEdit';
+import ActivityFourEdit from '../ActivityInfoView/EditActivity/ActivityFourEdit';
+import ActivityFiveEdit from '../ActivityInfoView/EditActivity/ActivityFiveEdit';
+import ActivitySixEdit from '../ActivityInfoView/EditActivity/ActivitySixEdit';
+
+import service from 'src/views/teamb/services/service';
+import util from 'src/views/teamb/services/util';
 
 const objService = new service();
 const objUtil = new util();
@@ -43,6 +51,7 @@ const ActivityInfoView = () => {
   const classes = useStyles();
   let { id } = useParams();
 
+  const [open, setOpen] = React.useState(false);
   const [emergenteEliminar, setEmergenteEliminar] = React.useState(false);
   const [activity, setActivity] = useState('');
   useEffect(() => {
@@ -50,7 +59,6 @@ const ActivityInfoView = () => {
       var data = result.data;
       switch (data.type) {
         case "Curso, dirección/revisión de proyecto":
-          //case 1:
           objService.GetActivityByType(id, "projectCourse").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -59,7 +67,6 @@ const ActivityInfoView = () => {
           });
           break;
         case "Ponencia en congresos, simposios y/o jornadas":
-          //case 2:
           objService.GetActivityByType(id, "lecture").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -68,7 +75,6 @@ const ActivityInfoView = () => {
           });
           break;
         case "Publicación":
-          //case 3:
           objService.GetActivityByType(id, "publication").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -77,7 +83,6 @@ const ActivityInfoView = () => {
           });
           break;
         case "Exposición de resultados parciales de investigación":
-          //case 4:
           objService.GetActivityByType(id, "presentationResults").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -86,7 +91,6 @@ const ActivityInfoView = () => {
           });
           break;
         case "Estancia de investigación en otra institucion":
-          //case 5:
           objService.GetActivityByType(id, "researchStays").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -95,7 +99,6 @@ const ActivityInfoView = () => {
           });
           break;
         case "Participación en proyecto de investigación":
-          //case 6:
           objService.GetActivityByType(id, "participationProjects").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -109,14 +112,19 @@ const ActivityInfoView = () => {
     });
   }, []);
 
+  const handleEditar = () => {
+    setOpen(true);
+  }
+  const setOpenDialog = (state) => {
+    setOpen(state);
+  }
+
   const handleEliminar = () => {
     setEmergenteEliminar(true);
   };
-
   const handleEliminarNo = () => {
     setEmergenteEliminar(false);
   };
-
   const handleEliminarSi = () => {
     objService.DeleteActivity(activity.id).then((result) => {
       var dataActivity = result;
@@ -354,6 +362,29 @@ const ActivityInfoView = () => {
     }
   }
 
+  function editActivities() {
+    switch (activity.type) {
+      case 1:
+        return <ActivityOneEdit state={activity} callbackDialogOpen={setOpen} />
+        break;
+      case 2:
+        return <ActivityTwoEdit state={activity} callbackDialogOpen={setOpen} />
+        break;
+      case 3:
+        return <ActivityThreeEdit state={activity} callbackDialogOpen={setOpen} />
+        break;
+      case 4:
+        return <ActivityFourEdit state={activity} callbackDialogOpen={setOpen} />
+        break;
+      case 5:
+        return <ActivityFiveEdit state={activity} callbackDialogOpen={setOpen} />
+        break;
+      case 6:
+        return <ActivitySixEdit state={activity} callbackDialogOpen={setOpen} />
+        break;
+    }
+  }
+
   return (
     <Container>
       <Card>
@@ -379,11 +410,18 @@ const ActivityInfoView = () => {
             </IconButton>
             : null
           }
-          <IconButton color="secondary" aria-label="add an edit">
+          <IconButton color="secondary" aria-label="add an edit" onClick={handleEditar}>
             <EditIcon />
           </IconButton>
         </Box>
       </Card>
+
+      <Dialog aria-labelledby="customized-dialog-title" open={open}>
+        <DialogTitle>Editar Actividad</DialogTitle>
+        <DialogContent dividers>
+          {editActivities()}
+        </DialogContent>
+      </Dialog>
 
       <ConfirmOption open={emergenteEliminar} onClose={handleEliminarNo} onClickPositive={handleEliminarSi}
         msg={'¿Esta seguro de que desea eliminar la actividad?'}

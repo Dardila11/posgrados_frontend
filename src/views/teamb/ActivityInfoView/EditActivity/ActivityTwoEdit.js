@@ -10,8 +10,8 @@ import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOpti
 import Response from 'src/views/teamb/activitiesView/components/Response';
 import SelectField from 'src/views/teamb/activitiesView/components/SelectField';
 
-import service from '../services/service';
-import util from '../services/util';
+import service from '../../services/service';
+import util from '../../services/util';
 
 const objService = new service();
 const objUtil = new util();
@@ -45,36 +45,29 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ActivityOneView = () => {
+export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
   const classes = useStyles();
   // Estado que controla los valores del formulario
   const [values, setValues] = useState({
-    titulo: '',
-    descripcion: '',
-    programaSeleccionado: 0,
-    horasAsignadas: 0,
-    fechaInicio: '',
-    fechaFin: '',
+    titulo: state.title,
+    descripcion: state.descripcion,
+    nombreEvento: state.name,
+    lugarCelebracion: state.place,
+    institucionSeleccionada: state.institution,
+    fechaRealizacion: state.start_date,
   });
 
+  console.log(state);
   const handleChange = (event) => {
     setValues({
       ...values,
       [event.target.name]: event.target.value
     });
   };
-
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
-    if (e.length > 0) { 
-      var name = e[0].name;
-      var nameSplit = name.split(".");
-      var ext = nameSplit[nameSplit.length - 1];
-      
-      if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
-      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
-    }
+    if (e.length > 0) { document.getElementById("text-file").textContent = e[0].name; }
     else { document.getElementById("text-file").textContent = ""; }
   }
   // Costantes para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre una de las 
@@ -94,8 +87,23 @@ const ActivityOneView = () => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if (validarGuardar()) { setEmergenteGuardar(true); }
-  };
+    objService.PutActivityTwoEdit({
+      title:values.titulo, 
+      id:state.id, 
+      description:values.descripcion,
+      /*receipt:"http://mdquilindo.pythonanywhere.com/media/b_activities_app/archivos/PDF_ejemplo.pdf", */
+      start_date:values.fechaInicio, 
+      end_date:values.fechaFin,
+      place:values.lugarCelebracion, 
+      academic_year:2018,
+      institution:values.institucionSeleccionada,
+      date_record:"2020-11-08T12:15:55-05:00",
+      date_update:"2020-11-08T12:15:56-05:00",
+      name:values.nombreEvento,
+      }).then((request)=>console.log("Actividad editada")).catch(()=>console.log("No se guardo"))
+  callbackDialogOpen(false);
+  if (validar()) { setEmergenteGuardar(true); }
+};
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
@@ -103,72 +111,63 @@ const ActivityOneView = () => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
+    if (validar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
     setEmergenteGuardarYEnviar(false);
   };
 
-  // Costantes para controlar las validaciones del formulario
-  const [errorTitle, setErrorTitle] = useState(null);
-  const [errorDescription, setErrorDescription] = useState(null);
-  const [errorProgram, setErrorProgram] = useState(null);
-  const [errorHour, setErrorHour] = useState(null);
-  const [errorStartDate, setErrorStartDate] = useState(null);
-  const [errorEndDate, setErrorEndDate] = useState(null);
+  const [errorTitulo, setErrorTitulo] = useState(null);
+  const [errorDescripcion, setErrorDescripcion] = useState(null);
+  const [errorNombreEvento, setErrorNombreEvento] = useState(null);
+  const [errorLugar, setErrorLugar] = useState(null);
+  const [errorInstitucion, setErrorInstitucion] = useState(null);
+  const [errorFecha, setErrorFecha] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
-  
+
   const  resetError = () => {
-    setErrorTitle(null);
-    setErrorDescription(null);
-    setErrorProgram(null);
-    setErrorHour(null);
-    setErrorStartDate(null);
-    setErrorEndDate(null);
+    setErrorTitulo(null);
+    setErrorDescripcion(null);
+    setErrorNombreEvento(null);
+    setErrorLugar(null);
+    setErrorInstitucion(null);
+    setErrorFecha(null);
     setErrorFile(null);
   }
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validarGuardarYEnviar = () => {
+  const validar = () => {
     resetError();
     var result = true;
 
-    if (values.titulo.length) { setErrorTitle(null) }
+    if (values.titulo.length) { setErrorTitulo(null) }
     else {
-      setErrorTitle("El campo es obligatorio")
+      setErrorTitulo("El campo es obligatorio");
       result = false;
     }
-    if (values.descripcion.length) { setErrorDescription(null) }
+    if (values.descripcion.length) { setErrorDescripcion(null) }
     else {
-      setErrorDescription("El campo es obligatorio")
+      setErrorDescripcion("El campo es obligatorio");
       result = false;
     }
-    if (values.programaSeleccionado != "") { setErrorProgram(null) }
+    if (values.nombreEvento.length) { setErrorNombreEvento(null) }
     else {
-      setErrorProgram("Seleccione una opción válida")
+      setErrorNombreEvento("El campo es obligatorio");
       result = false;
     }
-    if (values.horasAsignadas.length && values.horasAsignadas > 0) { setErrorHour(null) }
+    if (values.lugarCelebracion.length) { setErrorLugar(null) }
     else {
-      setErrorHour("Seleccione un número de horas valido")
+      setErrorLugar("El campo es obligatorio");
       result = false;
     }
-    if (values.fechaInicio.length ) {
-        setErrorStartDate("") 
-    }
+    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
     else {
-      setErrorStartDate("Seleccióne una fecha inicial válida")
+      setErrorInstitucion("Seleccione una opción válida");
       result = false;
     }
-    if (values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
-      else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
-        result = false;
-      }
-    }
+    if (values.fechaRealizacion.length) { setErrorFecha("") }
     else {
-      setErrorEndDate("Seleccióne una fecha final válida")
+      setErrorFecha("Seleccióne una fecha");
       result = false;
     }
     var textFile = document.getElementById("text-file").textContent;
@@ -179,40 +178,28 @@ const ActivityOneView = () => {
     }
     return result;
   }
-  // Permite verificar que todos los campos requeridos se encuentren diligenciados al guardar
-  const validarGuardar = () => {
-    resetError();
-    var result = true;
-
-    if (values.titulo.length) { setErrorTitle(null) }
-    else {
-      setErrorTitle("El campo es obligatorio")
-      result = false;
+    // Permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+    const validarGuardar = () => {
+      resetError();
+      var result = true;
+  
+      if (values.titulo.length) { setErrorTitulo(null) }
+      else {
+        setErrorTitulo("El campo es obligatorio");
+        result = false;
+      }
+      if (values.descripcion.length) { setErrorDescripcion(null) }
+      else {
+        setErrorDescripcion("El campo es obligatorio");
+        result = false;
+      }
+      if (values.nombreEvento.length) { setErrorNombreEvento(null) }
+      else {
+        setErrorNombreEvento("El campo es obligatorio");
+        result = false;
+      }
+      return result;
     }
-    if (values.descripcion.length) { setErrorDescription(null) }
-    else {
-      setErrorDescription("El campo es obligatorio")
-      result = false;
-    }
-    if (values.programaSeleccionado != "") { setErrorProgram(null) }
-    else {
-      setErrorProgram("Seleccione una opción válida")
-      result = false;
-    }
-    if (values.horasAsignadas.length == null || values.horasAsignadas > 0) { setErrorHour(null) }
-    else {
-      setErrorHour("Seleccione un número de horas valido")
-      result = false;
-    }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("") 
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha inicial válida")
-      result = false;
-    }  
-    return result;
-  }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -254,13 +241,13 @@ const ActivityOneView = () => {
     const fd = new FormData();
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
-    fd.append("program", values.programaSeleccionado);
-    fd.append("assigned_hours", values.horasAsignadas);
-    fd.append("start_date", values.fechaInicio);
-    fd.append("end_date", values.fechaFin);
+    fd.append("name", values.nombreEvento);
+    fd.append("place", values.lugarCelebracion);
+    fd.append("institution", values.institucionSeleccionada);
+    fd.append("start_date", values.fechaRealizacion);
     // Datos adicionales
     fd.append("academic_year", currentAcadYear);
-    fd.append("type", 1);
+    fd.append("type", 2);
     fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("date_record", now);
     fd.append("date_update", now);
@@ -272,7 +259,7 @@ const ActivityOneView = () => {
     else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
-    objService.PostActivityOne(fd).then((result) => {
+    objService.PostActivityTwo(fd).then((result) => {
       setResponse("Actividad registrada correctamente");
     }).catch(() => {
       setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
@@ -284,54 +271,46 @@ const ActivityOneView = () => {
 
   return (
     <Grid className={classes.root}>
-      <BreadCrumbs />
-      <Container className={classes.container}>
-        <Card className={classes.card}>
-          <Grid className={classes.content}>
-            <Typography className={classes.title} variant="h1" align="center" gutterBottom>
-              Curso, dirección/revisión de proyectos
+      <Container >
+        <Card >
+          <Grid >
+            <Typography variant="h1" align="center" gutterBottom>
+              Ponencias en congreso, simposios y/o jornadas
             </Typography>
             <Divider />
             <form>
-              <TextField className={classes.field} fullWidth label="Titulo" name="titulo" onChange={handleChange}
-                required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorTitle ? <Typography className={classes.validator}> {errorTitle} </Typography> : null}
-
-              <TextField className={classes.field} fullWidth label="Descripcion general" name="descripcion"
+              <TextField className={classes.field} fullWidth label="Titulo de la contribución" value={values.titulo} name="titulo"
                 onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
-              {errorDescription ? <Typography className={classes.validator}> {errorDescription} </Typography> : null}
+              {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
 
-              <SelectField name="programaSeleccionado"  Selected={values.programaSeleccionado} label="Programa" handleChange={handleChange} />
-              {/* Validacion del campo */}
-              {errorProgram ? <Typography className={classes.validator}> {errorProgram} </Typography> : null}
-
-              {/*justify="space-evenly"*/}
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaInicio" label="Fecha de inicio" type="date"
-                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
-                  />
-                  {/* Validacion del campo */}
-                  {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de fin" type="date"
-                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
-                  />
-                  {/* Validacion del campo */}
-                  {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
-                </Grid>
-              </Grid>
-
-              <TextField className={classes.field} name="horasAsignadas" label="Nº de horas asignadas" type="number"
+              <TextField className={classes.field} fullWidth label="Descripcion general" value={values.descripcion} name="descripcion"
                 onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
-              {errorHour ? <Typography className={classes.validator}> {errorHour} </Typography> : null}
+              {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
+
+              <TextField className={classes.field} fullWidth label="Nombre del evento" value={values.nombreEvento} name="nombreEvento"
+                onChange={handleChange} required variant="outlined"
+              />
+              {/* Validacion del campo */}
+              {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
+
+              <SelectField name="institucionSeleccionada" label="Entidad organizadora" value={values.institucionSeleccionada} handleChange={handleChange} />
+              {/* Validacion del campo */}
+              {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
+
+              <TextField className={classes.field} fullWidth label="Lugar de celebracion" value={values.lugarCelebracion} name="lugarCelebracion"
+                onChange={handleChange} required variant="outlined"
+              />
+              {/* Validacion del campo */}
+              {errorLugar ? <Typography className={classes.validator}> {errorLugar} </Typography> : null}
+
+              <TextField className={classes.field} x name="fechaRealizacion" value={values.fechaRealizacion} label="Fecha de realización" type="date"
+                InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
+              />
+              {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
 
               <PDFUpload uploadFile={uploadFile} name="Justificante" />
               {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
@@ -363,4 +342,4 @@ const ActivityOneView = () => {
     </Grid>
   );
 };
-export default ActivityOneView;
+export default ActivityTwoEdit;

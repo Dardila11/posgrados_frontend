@@ -1,6 +1,6 @@
 import axios from 'axios';
-//const API_URL = 'http://mdquilindo.pythonanywhere.com';
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://mdquilindo.pythonanywhere.com';
+//const API_URL = 'http://localhost:8000';
 
 export default class service {
 
@@ -109,6 +109,15 @@ export default class service {
     PostPrize(prize) {
         const url= `${API_URL}/api/prize/`;
         return axios.post(url,prize);
+    }
+
+    PutActivityOneEdit(activity){
+        const url= `${API_URL}/api/projectCourse/${activity.id}/`;
+        return axios.put(url, activity);
+    }
+    PutActivityTwoEdit(activity){
+        const url= `${API_URL}/api/lecture/${activity.id}/`;
+        return axios.put(url, activity);
     }
 
     DeleteActivity(id) {
