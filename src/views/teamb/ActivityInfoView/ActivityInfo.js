@@ -115,6 +115,9 @@ const ActivityInfoView = () => {
   const handleEditar = () => {
     setOpen(true);
   }
+  const handleEditarClose = () => {
+    setOpen(false);
+  }
   const setOpenDialog = (state) => {
     setOpen(state);
   }
@@ -416,7 +419,7 @@ const ActivityInfoView = () => {
         </Box>
       </Card>
 
-      <Dialog aria-labelledby="customized-dialog-title" open={open}>
+      <Dialog aria-labelledby="customized-dialog-title" open={open} onClose={handleEditarClose}>
         <DialogTitle>Editar Actividad</DialogTitle>
         <DialogContent dividers>
           {editActivities()}

@@ -67,11 +67,11 @@ const ActivityOneView = () => {
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
-    if (e.length > 0) { 
+    if (e.length > 0) {
       var name = e[0].name;
       var nameSplit = name.split(".");
       var ext = nameSplit[nameSplit.length - 1];
-      
+
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
       else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
     }
@@ -118,8 +118,8 @@ const ActivityOneView = () => {
   const [errorStartDate, setErrorStartDate] = useState(null);
   const [errorEndDate, setErrorEndDate] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
-  
-  const  resetError = () => {
+
+  const resetError = () => {
     setErrorTitle(null);
     setErrorDescription(null);
     setErrorProgram(null);
@@ -148,13 +148,13 @@ const ActivityOneView = () => {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.horasAsignadas.length && values.horasAsignadas > 0) { setErrorHour(null) }
+    if (values.horasAsignadas > 0) { setErrorHour(null) }
     else {
       setErrorHour("Seleccione un número de horas valido")
       result = false;
     }
-    if (values.fechaInicio.length ) {
-        setErrorStartDate("") 
+    if (values.fechaInicio.length) {
+      setErrorStartDate("")
     }
     else {
       setErrorStartDate("Seleccióne una fecha inicial válida")
@@ -199,18 +199,25 @@ const ActivityOneView = () => {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.horasAsignadas.length == null || values.horasAsignadas > 0) { setErrorHour(null) }
-    else {
-      setErrorHour("Seleccione un número de horas valido")
-      result = false;
-    }
     if (values.fechaInicio.length) {
-      setErrorStartDate("") 
+      setErrorStartDate("")
     }
     else {
       setErrorStartDate("Seleccióne una fecha inicial válida")
       result = false;
-    }  
+    }
+    if (values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+      else {
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
+      }
+    }
+    if (values.horasAsignadas >= 0) { setErrorHour(null) }
+    else {
+      setErrorHour("Seleccione un número de horas valido")
+      result = false;
+    }
     return result;
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -271,7 +278,7 @@ const ActivityOneView = () => {
     }
     else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
-
+    
     objService.PostActivityOne(fd).then((result) => {
       setResponse("Actividad registrada correctamente");
     }).catch(() => {
@@ -305,7 +312,7 @@ const ActivityOneView = () => {
               {/* Validacion del campo */}
               {errorDescription ? <Typography className={classes.validator}> {errorDescription} </Typography> : null}
 
-              <SelectField name="programaSeleccionado"  Selected={values.programaSeleccionado} label="Programa" handleChange={handleChange} />
+              <SelectField name="programaSeleccionado" Selected={values.programaSeleccionado} label="Programa" handleChange={handleChange} />
               {/* Validacion del campo */}
               {errorProgram ? <Typography className={classes.validator}> {errorProgram} </Typography> : null}
 

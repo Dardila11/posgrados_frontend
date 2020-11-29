@@ -111,12 +111,8 @@ export default class service {
         return axios.post(url,prize);
     }
 
-    PutActivityOneEdit(activity){
-        const url= `${API_URL}/api/projectCourse/${activity.id}/`;
-        return axios.put(url, activity);
-    }
-    PutActivityTwoEdit(activity){
-        const url= `${API_URL}/api/lecture/${activity.id}/`;
+    PutActivityOneEdit(activity, id){
+        const url= `${API_URL}/api/projectCourse/`+id+`/`;
         return axios.put(url, activity);
     }
 
