@@ -54,7 +54,7 @@ const SelectField = (props) => {
             });
         }
         if (props.name === "investigadorSeleccionado") {
-            objService.GetInvestigadores().then((result) => {
+            objService.GetInvestigators().then((result) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
@@ -62,7 +62,7 @@ const SelectField = (props) => {
             });
         }
         if (props.name === "lineaSeleccionada") {
-            objService.GetInvestigationLine().then((result) => {
+            objService.GetInvestigationLines().then((result) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
@@ -80,9 +80,9 @@ const SelectField = (props) => {
                     <MenuItem key={element.id} value={element.id}> 
                         {
                             props.name === "institucionSeleccionada" ?  element.name_inst : 
-                            props.name === "investigadorSeleccionado" ?  element.id
+                            props.name === "investigadorSeleccionado" ?  element.id :
                             // props.name === "investigadorSeleccionado" ?  element.user.first_name + " " +  element.user.last_name
-                            : element.name
+                            element.name
                         } 
                     </MenuItem>
                 ))}

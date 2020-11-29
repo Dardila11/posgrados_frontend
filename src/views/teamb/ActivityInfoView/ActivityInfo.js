@@ -1,13 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
-import { Card, CardContent, Button, Box, Typography, makeStyles, Container, IconButton } from '@material-ui/core';
+import { Card, CardContent, Button, Box, Typography, makeStyles, Container, IconButton, Grid } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 import service from 'src/views/teamb/services/service';
+import util from 'src/views/teamb/services/util';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
+import Prize from 'src/views/teamb/ActivityInfoView/Prize';
+import DirEvaluation from 'src/views/teamb/ActivityInfoView/DirEvaluation';
+import CoordEvaluation from 'src/views/teamb/ActivityInfoView/CoordEvaluation';
+import Program from 'src/views/teamb/ActivityInfoView/components/Program';
+import Institution from 'src/views/teamb/ActivityInfoView/components/Institution';
+import City from 'src/views/teamb/ActivityInfoView/components/City';
+import Investigator from 'src/views/teamb/ActivityInfoView/components/Investigator';
+import InvestigationLine from 'src/views/teamb/ActivityInfoView/components/InvestigationLine';
 
 const objService = new service();
+const objUtil = new util();
 
 const useStyles = makeStyles({
   root: {
@@ -39,8 +49,8 @@ const ActivityInfoView = () => {
     objService.GetActivity(id).then((result) => {
       var data = result.data;
       switch (data.type) {
-        //case "Curso, dirección/revisión de proyecto":
-        case 1:
+        case "Curso, dirección/revisión de proyecto":
+          //case 1:
           objService.GetActivityByType(id, "projectCourse").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -48,8 +58,8 @@ const ActivityInfoView = () => {
             alert("Error, no hay registros para mostrar");
           });
           break;
-        //case "Ponencia en congresos, simposios y/o jornadas":
-        case 2:
+        case "Ponencia en congresos, simposios y/o jornadas":
+          //case 2:
           objService.GetActivityByType(id, "lecture").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -57,8 +67,8 @@ const ActivityInfoView = () => {
             alert("Error, no hay registros para mostrar");
           });
           break;
-        //case "Publicación":
-        case 3:
+        case "Publicación":
+          //case 3:
           objService.GetActivityByType(id, "publication").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -66,8 +76,8 @@ const ActivityInfoView = () => {
             alert("Error, no hay registros para mostrar");
           });
           break;
-        //case "Exposición de resultados parciales de investigación":
-        case 4:
+        case "Exposición de resultados parciales de investigación":
+          //case 4:
           objService.GetActivityByType(id, "presentationResults").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -75,8 +85,8 @@ const ActivityInfoView = () => {
             alert("Error, no hay registros para mostrar");
           });
           break;
-        //case "Estancia de investigación en otra institucion":
-        case 5:
+        case "Estancia de investigación en otra institucion":
+          //case 5:
           objService.GetActivityByType(id, "researchStays").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -84,8 +94,8 @@ const ActivityInfoView = () => {
             alert("Error, no hay registros para  mostrar");
           });
           break;
-        //case "Participación en proyecto de investigación":
-        case 6:
+        case "Participación en proyecto de investigación":
+          //case 6:
           objService.GetActivityByType(id, "participationProjects").then((result) => {
             var dataActivity = result.data;
             setActivity(dataActivity);
@@ -119,217 +129,211 @@ const ActivityInfoView = () => {
 
   function activityOne() {
     return (
-      <Card>
-        <CardContent>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Codigo de actividad:</b> {activity.id}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Titulo:</b> {activity.title}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Descripción:</b> {activity.description}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Programa:</b> {activity.program}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha Inicio:</b> {activity.start_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha Fin:</b> {activity.end_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Horas asignadas:</b> {activity.assigned_hours}
-          </Typography>
-          <Button variant="contained" color="primary" href={activity.receipt}>
-            <b>Justificante</b>
-          </Button>
-        </CardContent>
-      </Card>
+      <Grid>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Codigo de actividad:</b> {activity.id}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Titulo:</b> {activity.title}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Descripción:</b> {activity.description}
+        </Typography>
+        <Program id={activity.program}></Program>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha Inicio:</b> {activity.start_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha Fin:</b> {activity.end_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Horas asignadas:</b> {activity.assigned_hours}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Estado: </b> {objUtil.GetState(activity.state)}
+        </Typography>
+        <Button variant="contained" color="primary" href={activity.receipt}>
+          <b>Justificante</b>
+        </Button>
+      </Grid>
     );
   }
 
   function activityTwo() {
     return (
-      <Card>
-        <CardContent>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Código de actividad:</b> {activity.id}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Titulo:</b> {activity.title}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Descripción:</b> {activity.description}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Nombre del evento:</b> {activity.name}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Entidad organizadora:</b> {activity.institution}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Lugar de celebración:</b> {activity.place}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha de realización:</b> {activity.start_date}
-          </Typography>
-          <Button variant="contained" color="primary" href={activity.receipt}>
-            <b>Justificante</b>
-          </Button>
-        </CardContent>
-      </Card>
+      <Grid>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Código de actividad:</b> {activity.id}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Titulo:</b> {activity.title}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Descripción:</b> {activity.description}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Nombre del evento:</b> {activity.name}
+        </Typography>
+        <Institution msg="Entidad organizadora: " id={activity.institution}></Institution>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Lugar de celebración:</b> {activity.place}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha de realización:</b> {activity.start_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Estado: </b> {objUtil.GetState(activity.state)}
+        </Typography>
+        <Button variant="contained" color="primary" href={activity.receipt}>
+          <b>Justificante</b>
+        </Button>
+      </Grid>
     );
   }
 
   function activityThree() {
     return (
-      <Card >
-        <CardContent>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Id:</b> {activity.id}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Título:</b> {activity.title}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Tipo de publicacion:</b> {activity.type_publication}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Nombre:</b> {activity.name}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Autores:</b> {activity.authors}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Nombre editorial:</b> {activity.editorial}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Datos generales:</b> {activity.general_data}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Envio publicación:</b> {activity.start_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha publicación:</b> {activity.end_date}
-          </Typography>
-          <Button variant="contained" color="primary" href={activity.receipt}>
-            <b>Justificante</b>
-          </Button>
-        </CardContent>
-      </Card>
+      <Grid>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Id:</b> {activity.id}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Título:</b> {activity.title}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Tipo de publicacion:</b> {activity.type_publication}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Nombre:</b> {activity.name}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Autores:</b> {activity.authors}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Nombre editorial:</b> {activity.editorial}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Datos generales:</b> {activity.general_data}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Envio publicación:</b> {activity.start_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha publicación:</b> {activity.end_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Estado: </b> {objUtil.GetState(activity.state)}
+        </Typography>
+        <Button variant="contained" color="primary" href={activity.receipt}>
+          <b>Justificante</b>
+        </Button>
+      </Grid>
     );
   }
 
   function activityFour() {
     return (
-      <Card>
-        <CardContent>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Código de actividad:</b> {activity.id}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Descripción:</b> {activity.description}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha de exposición:</b> {activity.start_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Lugar de exposición:</b> {activity.place}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Nombre del evento:</b> {activity.name}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Modalidad de presentación:</b> {activity.modality}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Duración en horas:</b> {activity.duration_hours}
-          </Typography>
-          <Button variant="contained" color="primary" href={activity.receipt}>
-            <b>Certificado</b>
-          </Button>
-        </CardContent>
-      </Card>
+      <Grid>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Código de actividad:</b> {activity.id}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Descripción:</b> {activity.description}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha de exposición:</b> {activity.start_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Lugar de exposición:</b> {activity.place}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Nombre del evento:</b> {activity.name}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Modalidad de presentación:</b> {activity.modality}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Duración en horas:</b> {activity.duration_hours}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Estado: </b> {objUtil.GetState(activity.state)}
+        </Typography>
+        <Button variant="contained" color="primary" href={activity.receipt}>
+          <b>Certificado</b>
+        </Button>
+      </Grid>
     );
   }
 
   function activityFive() {
     return (
-      <Card>
-        <CardContent>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Código de actividad:</b> {activity.id}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Proposito de la estancia:</b> {activity.purpose}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Descripción:</b> {activity.description}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Ciudad:</b> {activity.city}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Institución:</b> {activity.institution}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha Inicio:</b> {activity.start_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha Fin:</b> {activity.end_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Nombre del responsable:</b> {activity.responsible}
-          </Typography>
-          <Button variant="contained" color="primary" href={activity.receipt}>
-            <b>Justificante</b>
-          </Button>
-        </CardContent>
-
-      </Card>);
+      <Grid>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Código de actividad:</b> {activity.id}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Proposito de la estancia:</b> {activity.purpose}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Descripción:</b> {activity.description}
+        </Typography>
+        <City id={activity.city}></City>
+        <Institution msg="Institución: " id={activity.institution}></Institution>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha Inicio:</b> {activity.start_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha Fin:</b> {activity.end_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Nombre del responsable:</b> {activity.responsible}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Estado: </b> {objUtil.GetState(activity.state)}
+        </Typography>
+        <Button variant="contained" color="primary" href={activity.receipt}>
+          <b>Justificante</b>
+        </Button>
+      </Grid>
+    );
   }
 
   function activitySix() {
     return (
-      <Card>
-        <CardContent>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Código de actividad:</b> {activity.id}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Nombre del proyecto:</b> {activity.name}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Investigador:</b> {activity.investigator}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Lugar de trabajo:</b> {activity.place}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Descripción de actividad:</b> {activity.description}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Linea de investigación:</b> {activity.investigation_line}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Codigo VRI:</b> {activity.code_VRI}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Tipo de convocatoria:</b> {activity.type_convocation}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha Inicio:</b> {activity.start_date}
-          </Typography>
-          <Typography variant="body1" component="p" gutterBottom>
-            <b>Fecha Fin:</b> {activity.end_date}
-          </Typography>
-          <Button variant="contained" color="primary" href={activity.receipt}>
-            <b>Justificante</b>
-          </Button>
-        </CardContent>
-      </Card>
+      <Grid>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Código de actividad:</b> {activity.id}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Nombre del proyecto:</b> {activity.name}
+        </Typography>
+        <Investigator id={activity.investigator}></Investigator>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Lugar de trabajo:</b> {activity.place}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Descripción de actividad:</b> {activity.description}
+        </Typography>
+        <InvestigationLine id={activity.investigation_line}></InvestigationLine>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Codigo VRI:</b> {activity.code_VRI}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Tipo de convocatoria:</b> {activity.type_convocation}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha Inicio:</b> {activity.start_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Fecha Fin:</b> {activity.end_date}
+        </Typography>
+        <Typography variant="body1" component="p" gutterBottom>
+          <b>Estado: </b> {objUtil.GetState(activity.state)}
+        </Typography>
+        <Button variant="contained" color="primary" href={activity.receipt}>
+          <b>Justificante</b>
+        </Button>
+      </Grid>
     );
   }
 
@@ -337,22 +341,16 @@ const ActivityInfoView = () => {
     switch (activity.type) {
       case 1:
         return activityOne();
-        break;
       case 2:
         return activityTwo();
-        break;
       case 3:
         return activityThree();
-        break;
       case 4:
         return activityFour();
-        break;
       case 5:
         return activityFive();
-        break;
       case 6:
         return activitySix();
-        break;
     }
   }
 
@@ -365,12 +363,22 @@ const ActivityInfoView = () => {
           </Typography>
         </CardContent>
 
-        {Greeting()}
+        <Card>
+          <CardContent>
+            {Greeting()}
+            {activity.type == 2 || activity.type == 3 ? <Prize id={activity.id}></Prize> : null}
+            {activity != '' ? <DirEvaluation id={activity.id}></DirEvaluation> : null}
+            {activity != '' ? <CoordEvaluation id={activity.id}></CoordEvaluation> : null}
+          </CardContent>
+        </Card>
 
         <Box display="flex" justifyContent="flex-end" p={2}>
-          <IconButton onClick={handleEliminar} aria-label="delete" >
-            <DeleteIcon />
-          </IconButton>
+          {activity.state <= 2 ?
+            <IconButton onClick={handleEliminar} aria-label="delete" >
+              <DeleteIcon />
+            </IconButton>
+            : null
+          }
           <IconButton color="secondary" aria-label="add an edit">
             <EditIcon />
           </IconButton>
