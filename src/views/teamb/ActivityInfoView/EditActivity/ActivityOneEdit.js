@@ -88,21 +88,6 @@ export const ActivityOneEdit = ({state, callbackDialogOpen}) => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    objService.PutActivityOneEdit({
-        title:values.titulo, 
-        id: state.id, 
-        description:values.descripcion,
-        //receipt: archivo, 
-        program:values.programaSeleccionado, 
-        start_date:values.fechaInicio, 
-        end_date:values.fechaFin,
-        assigned_hours:values.horasAsignadas, 
-        academic_year:state.academic_year,
-        date_record:"2020-11-08T12:15:55-05:00",
-        date_update:"2020-11-08T12:15:56-05:00",
-        
-        }).then((request)=>console.log("Actividad editada")).catch(()=>console.log("No se guardo"))
-    callbackDialogOpen(false);
     if (validar()) { setEmergenteGuardar(true); }
   };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
@@ -178,6 +163,7 @@ export const ActivityOneEdit = ({state, callbackDialogOpen}) => {
     if (response == "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
+    callbackDialogOpen(false);
     setPopUpRequestPost(false);
     setResponse(null);
   };
@@ -199,39 +185,57 @@ export const ActivityOneEdit = ({state, callbackDialogOpen}) => {
   }, []);
 
   const SaveActivity = () => {
-    var now = objUtil.GetCurretTimeDate();
-    /* Se captura el valor booleano de "emergenteGuardarYEnviar", para saber si se enviara en el
-    documento JSON, la validacion para el correo */
-    var send_email = emergenteGuardarYEnviar;
+    objService.PutActivityOneEdit({
+      title:values.titulo, 
+      id: state.id, 
+      description:values.descripcion,
+      //receipt: archivo, 
+      program:values.programaSeleccionado, 
+      start_date:values.fechaInicio, 
+      end_date:values.fechaFin,
+      assigned_hours:values.horasAsignadas, 
+      academic_year:state.academic_year,
+      date_record:"2020-11-08T12:15:55-05:00",
+      date_update:"2020-11-08T12:15:56-05:00",
+      
+      }).then((request)=> {
+        setResponse("Actividad registrada correctamente");
+      }).catch(()=>{
+        setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
+      });
+    // var now = objUtil.GetCurretTimeDate();
+    // /* Se captura el valor booleano de "emergenteGuardarYEnviar", para saber si se enviara en el
+    // documento JSON, la validacion para el correo */
+    // var send_email = emergenteGuardarYEnviar;
 
-    const fd = new FormData();
-    fd.append("id", values.id);
-    fd.append("title", values.titulo);
-    fd.append("description", values.descripcion);
-    fd.append("program", values.programaSeleccionado);
-    fd.append("assigned_hours", values.horasAsignadas);
-    fd.append("start_date", values.fechaInicio);
-    fd.append("end_date", values.fechaFin);
-    // Datos adicionales
-    fd.append("academic_year", currentAcadYear);
-    fd.append("type", 1);
-    fd.append("student", 36); // Consultar el id del estudiante actual
-    fd.append("date_record", now);
-    fd.append("date_update", now);
+    // const fd = new FormData();
+    // fd.append("id", values.id);
+    // fd.append("title", values.titulo);
+    // fd.append("description", values.descripcion);
+    // fd.append("program", values.programaSeleccionado);
+    // fd.append("assigned_hours", values.horasAsignadas);
+    // fd.append("start_date", values.fechaInicio);
+    // fd.append("end_date", values.fechaFin);
+    // // Datos adicionales
+    // fd.append("academic_year", currentAcadYear);
+    // fd.append("type", 1);
+    // fd.append("student", 36); // Consultar el id del estudiante actual
+    // fd.append("date_record", now);
+    // fd.append("date_update", now);
     
-    //fd.append("is_active", true);
-    if (send_email) {
-      fd.append("send_email", send_email);
-      fd.append("state", 2);
-    }
-    else { fd.append("state", 1); }
-    if (archivo !== null) { fd.append("receipt", archivo[0]); }
+    // //fd.append("is_active", true);
+    // if (send_email) {
+    //   fd.append("send_email", send_email);
+    //   fd.append("state", 2);
+    // }
+    // else { fd.append("state", 1); }
+    // if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
-    objService.PutActivityOneEdit(fd).then((result) => {
-      setResponse("Actividad registrada correctamente");
-    }).catch(() => {
-      setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
-    });
+    // objService.PutActivityOneEdit(fd).then((result) => {
+    //   setResponse("Actividad registrada correctamente");
+    // }).catch(() => {
+    //   setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
+    // });
     setPopUpRequestPost(true);
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
