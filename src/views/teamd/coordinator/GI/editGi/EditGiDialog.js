@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import {ConsultGi} from '../service'
 
+import {AlertView} from '../../../../../components/Alert'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailRoundedIcon from '@material-ui/icons/MailRounded';
@@ -20,6 +21,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const EditGiDialog = ({state,setState,gi}) => {
+
+    //alerta
+    const [openAlert, setOpenAlert] = useState(false)
+    const [typeAlert, setTypeAlert] = useState('success')
+    const [message, setMessage] = useState('')
+    // end alerta
+
+
     const clases=useStyles();
     const { id,name,email,foundation_date,category,deparment} = gi;
     const [nameGi, setNameGi] = useState(name)
@@ -35,6 +44,7 @@ export const EditGiDialog = ({state,setState,gi}) => {
         setState(false);
     };
     const handleEdit = (e) => {
+      setOpenAlert(false)
         e.preventDefault();
         ConsultGi({
           id:gi.id,
@@ -43,7 +53,15 @@ export const EditGiDialog = ({state,setState,gi}) => {
           foundation_date: foundationDateGi,
           category: categoryGi,
           department: deparment
-        }).then().catch()
+        }).then( () => {
+        setOpenAlert(true)
+        setTypeAlert('success')
+        setMessage('Grupo editado correctamente')}
+        ).catch(() => {
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos')
+        })
         setOpen(false)
         setState(false);
     }
@@ -166,6 +184,7 @@ export const EditGiDialog = ({state,setState,gi}) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
         </>
     )
 }

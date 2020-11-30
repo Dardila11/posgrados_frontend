@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react'
 import {SearchUser} from '../../../teamd/Search/searchUser'
 import {SearchDeparmentI} from '../../../teamd/Search/searchDepartmentI'
 import {SearchInstitution} from '../../../teamd/Search/searchInstitution'
-import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import {ConsultarProfesor} from './service'
+import {AlertView} from 'src/components/Alert'
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -19,6 +19,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 export const EditProfesorDialog = ({state,setState,Professor}) => {
+    //alert
+    const [openAlert, setOpenAlert] = useState(false)
+    const [typeAlert, setTypeAlert] = useState('success')
+    const [message, setMessage] = useState('')
+    //end
     const clases=useStyles();
     const { id,user, is_director_student , is_director_gi, is_internal,institution,department} = Professor;
     const [open, setOpen] = useState(true)
@@ -44,6 +49,16 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
             "institution": newIdInstitution,
             "department": newIdDeparmentI
         })
+        .then(() => {
+          setOpenAlert(true)
+          setTypeAlert('success')
+          setMessage('Profesor editado correctamente')
+        })
+        .catch(() => {
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos')
+        });
         setOpen(false)
         setState(false);
     }
@@ -121,6 +136,7 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
           </Button>
         </DialogActions>
       </Dialog>
+      <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
         </>
     )
 }

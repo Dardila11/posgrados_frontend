@@ -93,7 +93,7 @@ const AdministerView = () => {
                 <Tab
                   label={
                     <>
-                      Editar Grupo Investigación
+                      Grupos de investigacion registrados
                     </>
                   }
                   {...options(2)}

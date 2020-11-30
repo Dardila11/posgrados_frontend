@@ -11,7 +11,7 @@ import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import TitleRoundedIcon from '@material-ui/icons/TitleRounded';
 import {EditarKnowLedge} from '../service'
 import {ConsultarLineResearch} from '../service'
-
+import {AlertView} from 'src/components/Alert'
 import {EditKnowLedge} from './EditKnowLedge'
 import {EditarLineReseach} from '../service'
 const useStyles = makeStyles({
@@ -31,6 +31,11 @@ const useStyles = makeStyles({
   });
 
 export const EditLineResearch = () => {
+      //alert
+      const [openAlert, setOpenAlert] = useState(false)
+      const [typeAlert, setTypeAlert] = useState('success')
+      const [message, setMessage] = useState('')
+      //end
     const clases = useStyles();
     const [IdKnowLedge, setIdKnowLedge] = useState('')
     const [name, setName] = useState('')
@@ -55,7 +60,16 @@ export const EditLineResearch = () => {
             name: name,
             description: description,
             knowLedge: IdKnowLedge
-        }).then( request => console.log("se edito ",request))
+        }).then(() => {
+          setOpenAlert(true)
+          setTypeAlert('success')
+          setMessage('Area editada correctamente')
+        })
+        .catch(() => {
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos')
+        });
         e.preventDefault();
     }
     const getIdLineResearch = async (id)=>{
@@ -128,6 +142,7 @@ export const EditLineResearch = () => {
                     Editar
                   </Button>
               </form>
+              <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
         </>
     )
 }
