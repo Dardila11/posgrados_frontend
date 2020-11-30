@@ -71,11 +71,11 @@ const SearchBar = ({ className, context, ...rest }) => {
                 <Box mt={2}>
                     <Card className={classes.SearchBar}>
                         <CardContent>
-                            <Grid style={{ display: 'flex', justifyContent: 'center' }} container spacing={3}  >
-                                <Grid item lg={2} md={2} xs={1} style={{ display: 'flex', alignItems: 'center' }}>
+                            <Grid style={{ display: 'flex', justifyContent: 'center' }} container>
+                                <Grid item xs={4} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                     <InputLabel>Año academico</InputLabel>
                                 </Grid>
-                                <Grid item lg={5} md={5} xs={12}>
+                                <Grid item xs={4}>
                                     <Box maxWidth={500}>
                                         <Select fullWidth label="año academico" id="activity-type" type="select" defaultValue
                                             variant="outlined" onChange={handleChange}
@@ -86,7 +86,7 @@ const SearchBar = ({ className, context, ...rest }) => {
                                         </Select>
                                     </Box>
                                 </Grid>
-                                <Grid item lg={2} style={{ display: 'flex', alignItems: 'center' }}>
+                                <Grid item xs={4} style={{ display: 'flex', alignItems: 'center' }}>
                                     <Button onClick={changeList}>Consultar</Button>
                                 </Grid>
                             </Grid>
