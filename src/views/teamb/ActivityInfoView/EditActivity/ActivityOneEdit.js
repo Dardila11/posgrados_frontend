@@ -48,7 +48,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
 
   useEffect(() => {
     if(state.receipt !== null) {
-      document.getElementById("text-file").textContent = "";
+      document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
     }
   }, []);
 
@@ -264,10 +264,10 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     fd.append("program", values.programaSeleccionado);
     fd.append("assigned_hours", values.horasAsignadas);
     fd.append("start_date", values.fechaInicio);
-    console.log(values.fechaFin);
     if (values.fechaFin === null) { values.fechaFin = ''; }
     fd.append("end_date", values.fechaFin);
     fd.append("academic_year", state.academic_year);
+    fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
     if (send_email) {
