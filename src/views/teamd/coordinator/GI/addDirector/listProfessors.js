@@ -1,124 +1,74 @@
+import { Container,Grid, makeStyles} from '@material-ui/core';
 import React, { useState } from 'react';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import {
-  Box,
-  Card,
-  Table,
-  TableBody,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  Button,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography
-} from '@material-ui/core';
+import { Professor_card } from './professor_card';
 
-export const ListProfessors = ({ professors, filterBy }) => {
-  const [open, setOpen] = useState(false);
-  const handleAssing = () => {
-    setOpen(true);
-  };
-  const handleAssingClose = () => {
-    setOpen(false);
-  };
-  const handleAdd = isDirector => {
-    if (!isDirector) {
-      return <button onClick={handleAssing}>Asignar</button>;
-    } else {
-      return <button disabled>Asignar</button>;
-    }
-  };
-  const list = () => {
-    if (filterBy !== ' ') {
-      return professors.map(i => {
-        if (i.name.toLowerCase().search(filterBy.toLowerCase()) > -1) {
-          return (
-            <TableRow hover key={i.id}>
-              <TableCell>
-                <Box alignItems="center" display="flex">
-                  <Typography color="textPrimary" variant="body1">
-                    {i.name}
-                  </Typography>
-                </Box>
-              </TableCell>
-              <TableCell>{i.email}</TableCell>
-              <TableCell>{i.edad}</TableCell>
-              <TableCell>{handleAdd(i.isDirector)}</TableCell>
-            </TableRow>
-          );
-        } else {
-          return 1;
-        }
-      });
-    } else {
-      return professors.map(i => {
-        return (
-          <TableRow hover key={i.id}>
-            <TableCell>
-              <Box alignItems="center" display="flex">
-                <Typography color="textPrimary" variant="body1">
-                  {i.name}
-                </Typography>
-              </Box>
-            </TableCell>
-            <TableCell>{i.email}</TableCell>
-            <TableCell>{i.edad}</TableCell>
-            <TableCell>{handleAdd(i.isDirector)}</TableCell>
-          </TableRow>
-        );
-      });
-    }
-  };
+const useStyles = makeStyles({
+  root: {
+    marginTop: "30px",
+    background: 'white',
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    padding: '50px'
+  },
+  inputs: {
+    margin: '10px'
+  }
+});
 
+export const ListProfessors = () => {
+
+  const [listProfessors] = useState([
+    {
+      id: 1233,
+      name: 'juan carlos',
+      email: 'juanCarlos@gmail.com',
+      edad: 20,
+      isDirector: true
+    },
+    {
+      id: 1234,
+      name: 'Roberto',
+      email: 'icardi@gmail.com',
+      edad: 24,
+      isDirector: false
+    },
+    {
+      id: 1255,
+      name: 'Ricardo Rodriguez',
+      email: 'Machote@gmail.com',
+      edad: 24,
+      isDirector: false
+    },
+    {
+      id: 1266,
+      name: 'Susana Stivens',
+      email: 'Sexy22@gmail.com',
+      edad: 27,
+      isDirector: true
+    },
+    {
+      id: 1277,
+      name: 'Rosa',
+      email: 'Roscon@gmail.com',
+      edad: 26,
+      isDirector: false
+    }
+  ]);
+
+
+
+  const classes = useStyles();
   return (
-    <>
-      <Card>
-        <PerfectScrollbar>
-          <Box minWidth={1050}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nombre</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Edad</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>{list()}</TableBody>
-            </Table>
-          </Box>
-        </PerfectScrollbar>
-      </Card>
-
-      <Dialog
-        open={open}
-        onClose={handleAssingClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">Asignar</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Grupo de investigación"
-            type="text"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleAssingClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleAssingClose} color="primary">
-            Asignar
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <Container className = {classes.root}>
+      <Grid container spacing={3}>
+        {listProfessors.map(element => (
+          <Grid item lg={3} md={6} xs={12} key={element.id}>
+            <Professor_card profesor={element}/>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };
 

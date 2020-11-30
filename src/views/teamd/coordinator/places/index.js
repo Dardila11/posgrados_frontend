@@ -10,6 +10,7 @@ import CreateCountryView from './createCountryView';
 import CreateDepartmentView from './createDepartmentView';
 import CreateCityView from './createCityView';
 import CreateInstitutionView from './createInstitutionView';
+import EditCountryView from './EditPlaces/editCountryView';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -68,18 +69,21 @@ const AdministerPlacesView = () => {
       <Container maxWidth={false}>
         {' '}
         {/* TODOPagina lenta por peticiones innecesarias*/}
-        <Box mt={3}>
+        <Box mt={4}>
           <AppBar className={classes.appbar} position="relative">
             <Tabs
               textColor="primary"
               indicatorColor="secondary"
               value={value}
               onChange={handleChange}
+              variant="scrollable"
+              scrollButtons="on"
             >
               <Tab label="Crear pais" {...options(0)} />
               <Tab label="Crear departamento" {...options(1)} />
               <Tab label="Crear ciudad" {...options(2)} />
               <Tab label="Crear institucion" {...options(3)} />
+              <Tab label="Editar Pais" {...options(4)} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -93,6 +97,9 @@ const AdministerPlacesView = () => {
           </TabPanel>
           <TabPanel value={value} index={3}>
             <CreateInstitutionView />
+          </TabPanel>
+          <TabPanel value={value} index={4}>
+            <EditCountryView />
           </TabPanel>
         </Box>
       </Container>
