@@ -3,7 +3,6 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
 import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
@@ -44,11 +43,11 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
+const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    if(state.receipt !== null) {
+    if (state.receipt !== null) {
       document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
     }
   }, []);
@@ -76,11 +75,11 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
-    if (e.length > 0) { 
+    if (e.length > 0) {
       var name = e[0].name;
       var nameSplit = name.split(".");
       var ext = nameSplit[nameSplit.length - 1];
-      
+
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
       else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
     }
@@ -129,7 +128,7 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
   const [errorEndDate, setErrorEndDate] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
-  const  resetError = () => {
+  const resetError = () => {
     setErrorProposito(null);
     setErrorDescripcion(null);
     setErrorCiudad(null);
@@ -175,23 +174,23 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
       setErrorNombreResponsable("El campo es obligatorio");
       result = false;
     }
-    if (values.fechaInicio.length ) {
-      setErrorStartDate("") 
+    if (values.fechaInicio.length) {
+      setErrorStartDate("")
     }
     else {
       setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
-     result = false;
-    }
-    if (values.fechaFin.length) {
-     if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
-     else {
-      setErrorEndDate("La fecha de finalización de la estancia debe ser después de la fecha inicio de estancia")
       result = false;
+    }
+    if (values.fechaFin != null) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+      else {
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
       }
     }
     else {
-    setErrorEndDate("Seleccióne una fecha fin de estancia válida")
-    result = false;
+      setErrorEndDate("Seleccióne una fecha final válida")
+      result = false;
     }
     var textFile = document.getElementById("text-file").textContent;
     if (textFile.length > 0) { setErrorFile(null) }
@@ -216,13 +215,37 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
       setErrorDescripcion("El campo es obligatorio");
       result = false;
     }
+    if (values.ciudadSeleccionada != "") { setErrorCiudad(null) }
+    else {
+      setErrorCiudad("Seleccione una opción válida");
+      result = false;
+    }
+    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
+    else {
+      setErrorInstitucion("Seleccione una opción válida");
+      result = false;
+    }
+    if (values.nombreResponsable.length) { setErrorNombreResponsable(null) }
+    else {
+      setErrorNombreResponsable("El campo es obligatorio");
+      result = false;
+    }
     if (values.fechaInicio.length) {
-      setErrorStartDate("") 
+      setErrorStartDate("")
     }
     else {
       setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
       result = false;
-    }  
+    }
+    if (values.fechaFin != null) {
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+          result = false;
+        }
+      }
+    }
     return result
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -265,7 +288,6 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
     fd.append("institution", values.institucionSeleccionada);
     // Datos adicionales
     fd.append("academic_year", state.academic_year);
-    fd.append("type", 5);
     fd.append("student", 36); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
@@ -274,7 +296,6 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
       fd.append("send_email", send_email);
       fd.append("state", 2);
     }
-    else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
     objService.PutActivityFiveEdit(fd, values.id).then((request) => {
@@ -286,89 +307,87 @@ const ActivityFiveEdit = ({state, callbackDialogOpen}) => {
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
-  
-  return (
-    
-    <Container className={classes.container}>
-        <Card className={classes.card}>
-          <Grid className={classes.content}>
-            <form>
-              <TextField className={classes.field} fullWidth value={values.proposito} label="Proposito general de la estancia" name="proposito" 
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorProposito ? <Typography className={classes.validator}> {errorProposito} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth value={values.descripcion} label="Descripcion de las actividades desarrolladas" 
-                name="descripcion" onChange={handleChange} required variant="outlined" 
-              />
-              {/* Validacion del campo */}
-              {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
-              {/*
+  return (
+    <Container className={classes.container}>
+      <Card className={classes.card}>
+        <Grid className={classes.content}>
+          <form>
+            <TextField className={classes.field} fullWidth value={values.proposito} label="Proposito general de la estancia" name="proposito"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorProposito ? <Typography className={classes.validator}> {errorProposito} </Typography> : null}
+
+            <TextField className={classes.field} fullWidth value={values.descripcion} label="Descripcion de las actividades desarrolladas"
+              name="descripcion" onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
+            {/*
               <SelectField name="paisSeleccionado" label="Pais" handleChange={handleChange} />
                Validacion del campo 
               {errorPais ? <Typography className={classes.validator}> {errorPais} </Typography> : null}
               */}
-              <SelectField name="ciudadSeleccionada" Selected={values.ciudadSeleccionada} label="Ciudad" handleChange={handleChange} />
-              {/* Validacion del campo */}
-              {errorCiudad ? <Typography className={classes.validator}> {errorCiudad} </Typography> : null}
-              
-              <SelectField name="institucionSeleccionada" Selected={values.institucionSeleccionada} label="Institución" handleChange={handleChange} />
-              {/* Validacion del campo */}
-              {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
-              
-              {/*justify="space-evenly"*/}
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaInicio" value={values.fechaInicio} label="Fecha de inicio" type="date"
-                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
-                  />
-                  {/* Validacion del campo */}
-                  {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaFin" value={values.fechaFin} label="Fecha de finalización" type="date"
-                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
-                  />
-                  {/* Validacion del campo */}
-                  {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
-                </Grid>
+            <SelectField name="ciudadSeleccionada" Selected={values.ciudadSeleccionada} label="Ciudad" handleChange={handleChange} />
+            {/* Validacion del campo */}
+            {errorCiudad ? <Typography className={classes.validator}> {errorCiudad} </Typography> : null}
+
+            <SelectField name="institucionSeleccionada" Selected={values.institucionSeleccionada} label="Institución" handleChange={handleChange} />
+            {/* Validacion del campo */}
+            {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
+
+            {/*justify="space-evenly"*/}
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField fullWidth className={classes.field} name="fechaInicio" value={values.fechaInicio} label="Fecha de inicio" type="date"
+                  InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
+                />
+                {/* Validacion del campo */}
+                {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
               </Grid>
-
-              <TextField className={classes.field} fullWidth value={values.nombreResponsable} label="Nombre del responsable" name="nombreResponsable" 
-                onChange={handleChange} required variant="outlined" 
-              />
-              {/* Validacion del campo */}
-              {errorNombreResponsable ? <Typography className={classes.validator}> {errorNombreResponsable} </Typography> : null}
-
-              <PDFUpload uploadFile={uploadFile} name="Justificante" />
-              {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
-            </form>
-            <Divider className={classes.field} />
-            <Grid container justify="flex-end">
-              <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
-              <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
-              <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
+              <Grid item xs={6}>
+                <TextField fullWidth className={classes.field} name="fechaFin" value={values.fechaFin} label="Fecha de finalización" type="date"
+                  InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
+                />
+                {/* Validacion del campo */}
+                {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
+              </Grid>
             </Grid>
+
+            <TextField className={classes.field} fullWidth value={values.nombreResponsable} label="Nombre del responsable" name="nombreResponsable"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorNombreResponsable ? <Typography className={classes.validator}> {errorNombreResponsable} </Typography> : null}
+
+            <PDFUpload uploadFile={uploadFile} name="Justificante" />
+            {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
+          </form>
+          <Divider className={classes.field} />
+          <Grid container justify="flex-end">
+            <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
+            <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
+            <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
           </Grid>
-        </Card>
+        </Grid>
+      </Card>
 
-        {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
-        <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
-          msg={'¿Esta seguro de que desea salir del registro?'}
-        />
-        <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad?'}
-        />
-        <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
-        />
+      {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
+      <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
+        msg={'¿Esta seguro de que desea salir del registro?'}
+      />
+      <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
+        msg={'¿Esta seguro de que desea guardar la actividad?'}
+      />
+      <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
+        msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
+      />
 
-        {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
-        <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
+      {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
+      <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
 
     </Container>
-    
   );
 };
 export default ActivityFiveEdit;

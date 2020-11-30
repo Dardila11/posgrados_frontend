@@ -115,17 +115,18 @@ export default class service {
         const url= `${API_URL}/api/projectCourse/`+id+`/`;
         return axios.put(url, activity);
     }
-
+    PutActivityTwoEdit(activity, id){
+        const url= `${API_URL}/api/lecture/`+id+`/`;
+        return axios.put(url, activity);
+    }
     PutActivityThreeEdit(activity, id){
         const url= `${API_URL}/api/publication/`+id+`/`;
         return axios.put(url, activity);
     }
-    
     PutActivityFourEdit(activity, id){
         const url= `${API_URL}/api/presentationResults/`+id+`/`;
         return axios.put(url, activity);
     }
-
     PutActivityFiveEdit(activity, id){
         const url= `${API_URL}/api/researchStays/`+id+`/`;
         return axios.put(url, activity);
