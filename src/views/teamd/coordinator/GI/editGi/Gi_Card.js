@@ -1,10 +1,9 @@
 import { Card,CardContent,CardActions,Button, makeStyles, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import {AssignDirectorView} from './AssignDirector'
-import {ConsultUser} from '../service'
-import {ConsultInstitution,ConsultDeparment} from '../service'
 import Box from '@material-ui/core/Box';
 import { Link as RouterLink } from 'react-router-dom';
+import {EditGiDialog} from './EditGiDialog'
+
 const useStyles = makeStyles({
     root: {
       borderRadius: 3,
@@ -14,14 +13,10 @@ const useStyles = makeStyles({
     },
   });
 
-export const Professor_card = ({profesor}) => {
-    
-    const { id,user, is_director_student , is_director_gi, is_internal,institution,department} = profesor;
+export const Gi_Card = ({gi}) => {
+    const { id,name,email,foundation_date,category,deparment} = gi;
     const classes = useStyles();
-    const [usuario, setUsuario] = useState([])
     const [dialogState, setDialogState] = useState(false)
-    const [nameDeparment, setNameDeparment] = useState('')
-    const [nameInstitution, setNameInstitution] = useState('')
     //const link = 'profesor/'+user
     const setStateVentana = (state) =>{
         setDialogState(state)
@@ -29,15 +24,6 @@ export const Professor_card = ({profesor}) => {
     const handleAssign = () =>{
         setDialogState(true)
     }
-    useEffect(() => {
-        ConsultUser(user).then( request => setUsuario(request.data.Users[0])).catch() 
-    }, [profesor])
-    useEffect(() => {
-        ConsultInstitution(institution).then( request => setNameInstitution(request.data.Institution[0].name_inst))
-    }, [usuario])
-    useEffect(() => {
-        ConsultDeparment(department).then( request => setNameDeparment(request.data.Department[0].name))
-    }, [usuario])
     return (
         // <RouterLink to={link}>
         <Card className="border border-dark rounded mb-0">
@@ -45,10 +31,16 @@ export const Professor_card = ({profesor}) => {
             <Box alignItems="center" display="flex" flexDirection="column">
                 
                 <Typography color="textSecondary" gutterBottom>
-                    Nombre: {usuario.first_name} {usuario.last_name}
+                    Nombre: {name}
                 </Typography>
                 <Typography color="textSecondary" gutterBottom>
-                    Departamento: {nameDeparment}
+                    Email: {email}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                    Fecha fundacion: {foundation_date}
+                </Typography>
+                <Typography color="textSecondary" gutterBottom>
+                    Categoria: {category}
                 </Typography>
                 {/* <Typography color="textSecondary" gutterBottom>
                     Email: {usuario.email}
@@ -59,14 +51,6 @@ export const Professor_card = ({profesor}) => {
                 <Typography color="textSecondary" gutterBottom>
                     Departamento: {nameDeparment}
                 </Typography> */}
-                {is_director_gi === true ?(
-                    <>
-                    <CardActions>
-                        <Button variant="outlined" size="small" disabled>Eliminar Director</Button>
-                    </CardActions>
-                    </>  
-                    ) : is_director_gi == false ? (
-                    <>
                     <CardActions>
                         <Button 
                             variant="outlined" 
@@ -74,16 +58,10 @@ export const Professor_card = ({profesor}) => {
                             className = {classes.button}
                             onClick = {handleAssign}
                             >
-                                Asignar Director
+                                Editar Grupo de investigacion
                         </Button>
                     </CardActions>
-                    </>    
-                    ) : (
-                    <Typography color="textSecondary" gutterBottom>
-                        Not Found
-                    </Typography>
-                    )}
-                    <AssignDirectorView state={dialogState} setState={setStateVentana}idProfessor={id}/>
+                    <EditGiDialog state={dialogState} setState={setDialogState} gi={gi}/>
             </Box>
             </CardContent>
         </Card>

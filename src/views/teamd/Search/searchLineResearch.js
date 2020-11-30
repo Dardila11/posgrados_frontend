@@ -13,7 +13,7 @@ export const SearchLineLedge = ({ callback, idKnowLedge }) => {
         setLineResearchList(request.data.Lines);
       })
       .catch(() => console.log('no encontró nada con id ', idKnowLedge)); //TODO
-  }, []);
+  }, [idKnowLedge]);
 
   const getIdLineResearch = name => {
     let find = lineResearchList.find(line => line.name === name);

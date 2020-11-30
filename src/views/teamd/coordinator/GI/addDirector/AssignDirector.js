@@ -3,13 +3,16 @@ import React, { useEffect, useState } from 'react'
 import {SearchDeparmentI} from '../../../Search/searchDepartmentI'
 import {SearchGI} from '../../../Search/searchGI'
 import {AssignDirector} from '../service'
-
+import { AlertView } from '../../../../../components/Alert'
 
 export const AssignDirectorView = ({state,setState,idProfessor}) => {
  
     const [open, setOpen] = useState(true)
-    const [idGi, setIdGi] = useState([])
+    const [idGi, setIdGi] = useState()
     const [departmentIId, setDepartmentIId] = useState('')
+    const [openAlert, setOpenAlert] = useState(false)
+    const [typeAlert, setTypeAlert] = useState('error')
+    const [message, setMessage] = useState('')
     useEffect(() => {
          setOpen(state)
     }, [state])
@@ -18,19 +21,22 @@ export const AssignDirectorView = ({state,setState,idProfessor}) => {
         setState(false);
     };
     const handleAssign = (e) => {
+        setOpenAlert(false)
         e.preventDefault();
         setOpen(false)
         setState(false);
-        console.log("id Profesor",idProfessor)
         AssignDirector({
+            direction_state: true,
             inv_group: idGi,
-            professor: idProfessor,
-            direction_state: 1
-        }).then( (request)=> console.log (" ya ", request)).catch()
+            professor: idProfessor
+            
+        }).then( (request)=> {setOpenAlert(true);setTypeAlert('success');setMessage('Se asigno el director correctamente')})
+        .catch( ()=> {setOpenAlert(true);setTypeAlert('error');setMessage('no se pudo asignar el director correctamente')})
 
 
     }
     const getIdGi = (id) =>{
+        console.log("imprimiendo id GI", id)
         setIdGi(id)
     }
     const getDepartmentIId  = (id) =>{
@@ -53,6 +59,7 @@ export const AssignDirectorView = ({state,setState,idProfessor}) => {
                     <Button onClick={handleAssign} color="primary" variant="outlined">Asignar</Button>
                 </DialogActions>
             </Dialog>
+            <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
         </>
     )
 }

@@ -9,6 +9,9 @@ import Tab from '@material-ui/core/Tab';
 import { CreateLineResearchView } from './CreateLineResearch';
 import { CreateKnowLedgeView } from './CreateKnowLedge';
 
+import { EditKnowLedge } from './Edit/EditKnowLedge'
+import { EditLineResearch } from './Edit/EditLineResearch'
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -93,6 +96,8 @@ export const CreateOtherView = () => {
               >
                 <Tab label="Crear Area de conocimiento" {...options(0)} />
                 <Tab label="Crear Linea de investigacion" {...options(1)} />
+                <Tab label="Editar Area de Conocimient" {...options(3)} />
+                <Tab label="Editar Linea de investigacion" {...options(4)} />
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -100,6 +105,12 @@ export const CreateOtherView = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               <CreateLineResearchView />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <EditKnowLedge />
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <EditLineResearch />
             </TabPanel>
         </Box>
       </Container>

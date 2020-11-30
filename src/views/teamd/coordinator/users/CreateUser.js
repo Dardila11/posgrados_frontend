@@ -129,7 +129,7 @@ export const CreateUserView = () => {
 
 
 
-
+  const [imagen, setImagen] = useState(new FormData())
   const handleChangeRole = event => {
     setRole(event.target.value);
     if (role === '1'){
@@ -144,15 +144,15 @@ export const CreateUserView = () => {
   const handleChangeFirstName = event => {
     setFirstName(event.target.value);
   };
-
-  const handleCreateUser = e => {
+  const archivo = async ()=>{
+    // const form_data = new FormData();
+    imagen.append('image_file',fileImage,fileImage.name);
+    imagen.append('title', 'image');
+    imagen.append('content', fileImage.content);
+  }
+  const handleCreateUser = async (e) => {
     e.preventDefault();
-
-    console.log(fileImage)
-    const form_data = new FormData();
-    form_data.append('image_file',fileImage,fileImage.name);
-    form_data.append('title', 'image');
-    form_data.append('content', fileImage.content);
+    await archivo();
     console.log(firstName);
     console.log(lastName);
     console.log(username);
@@ -161,13 +161,13 @@ export const CreateUserView = () => {
     console.log(typeId);
     console.log(personal_id);
     console.log(personal_code);
-    console.log(form_data);
+    console.log(imagen);
     console.log(telephone);
     console.log(address);
     console.log(is_proffessor);
 
     
-    CreateUserService({
+    await CreateUserService({
       first_name: firstName,
       last_name: lastName,
       username: username,
@@ -176,13 +176,13 @@ export const CreateUserView = () => {
       type_id: typeId,
       personal_id: personal_id,
       personal_code: personal_code,
-      photo: null,
+      //photo: imagen,
       telephone: telephone,
       address: address,
       is_proffessor: is_proffessor,
       is_student: is_student
     })
-      .then( () => {
+      .then( (request) => {
         setOpen(true)
         setTypeAlert('success')
         setMessage('Usuario creado correctamente')
@@ -472,7 +472,7 @@ export const CreateUserView = () => {
                     type="file"
                     className="custom-file-input"
                     id="img-file"
-                    onChange={(e) => {setFileImage(e.target.files[0]);}}
+                    onChange={async (e) => setFileImage(e.target.files[0])}
                     required
                   />
                   <label className="custom-file-label">

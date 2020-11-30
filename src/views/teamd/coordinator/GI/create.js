@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   }
 });
 
-const CreateView = () => {
+export const CreateView = () => {
   const [open, setOpen] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')

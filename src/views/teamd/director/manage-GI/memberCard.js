@@ -1,10 +1,8 @@
 import { Card,CardContent,CardActions,Button, makeStyles, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import {AssignDirectorView} from './AssignDirector'
-import {ConsultUser} from '../service'
-import {ConsultInstitution,ConsultDeparment} from '../service'
+import {ConsultInstitution,ConsultDeparment,ConsultUser} from '../GI/service'
 import Box from '@material-ui/core/Box';
-import { Link as RouterLink } from 'react-router-dom';
+import {EditProfesorDialog} from './editProfesorDialog'
 const useStyles = makeStyles({
     root: {
       borderRadius: 3,
@@ -14,14 +12,13 @@ const useStyles = makeStyles({
     },
   });
 
-export const Professor_card = ({profesor}) => {
-    
-    const { id,user, is_director_student , is_director_gi, is_internal,institution,department} = profesor;
+
+  //TODO
+export const MemberCard = ({member}) => {
+    const { user, is_director_student , is_director_gi, is_internal,institution,department} = member; //TODO
     const classes = useStyles();
     const [usuario, setUsuario] = useState([])
     const [dialogState, setDialogState] = useState(false)
-    const [nameDeparment, setNameDeparment] = useState('')
-    const [nameInstitution, setNameInstitution] = useState('')
     //const link = 'profesor/'+user
     const setStateVentana = (state) =>{
         setDialogState(state)
@@ -59,14 +56,6 @@ export const Professor_card = ({profesor}) => {
                 <Typography color="textSecondary" gutterBottom>
                     Departamento: {nameDeparment}
                 </Typography> */}
-                {is_director_gi === true ?(
-                    <>
-                    <CardActions>
-                        <Button variant="outlined" size="small" disabled>Eliminar Director</Button>
-                    </CardActions>
-                    </>  
-                    ) : is_director_gi == false ? (
-                    <>
                     <CardActions>
                         <Button 
                             variant="outlined" 
@@ -74,16 +63,10 @@ export const Professor_card = ({profesor}) => {
                             className = {classes.button}
                             onClick = {handleAssign}
                             >
-                                Asignar Director
+                                Eliminar miembro
                         </Button>
                     </CardActions>
-                    </>    
-                    ) : (
-                    <Typography color="textSecondary" gutterBottom>
-                        Not Found
-                    </Typography>
-                    )}
-                    <AssignDirectorView state={dialogState} setState={setStateVentana}idProfessor={id}/>
+                    {/* <EditProfesorDialog state={dialogState} setState={setDialogState} Member={member}/> */}
             </Box>
             </CardContent>
         </Card>

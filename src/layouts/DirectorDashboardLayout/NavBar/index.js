@@ -40,6 +40,11 @@ const items = [
     href: '/director/list-evaluations',
     icon: EyeIcon,
     title: 'Evaluaciones'
+  },
+  {
+    href: '/director/manage-gi',
+    icon: EyeIcon,
+    title: 'Grupo de investigación'
   }
 ];
 

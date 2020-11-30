@@ -11,6 +11,9 @@ import CreateDepartmentView from './createDepartmentView';
 import CreateCityView from './createCityView';
 import CreateInstitutionView from './createInstitutionView';
 import EditCountryView from './EditPlaces/editCountryView';
+import EditDepartmentView from './EditPlaces/editDepartmentView';
+import EditCityView from './EditPlaces/editCityView';
+import EditInstitutionView from './EditPlaces/editInstitutionView'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -84,6 +87,9 @@ const AdministerPlacesView = () => {
               <Tab label="Crear ciudad" {...options(2)} />
               <Tab label="Crear institucion" {...options(3)} />
               <Tab label="Editar Pais" {...options(4)} />
+              <Tab label="Editar Departamento" {...options(5)} />
+              <Tab label="Editar Ciudad " {...options(6)} />
+              <Tab label="Editar Institución " {...options(7)} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -100,6 +106,15 @@ const AdministerPlacesView = () => {
           </TabPanel>
           <TabPanel value={value} index={4}>
             <EditCountryView />
+          </TabPanel>
+          <TabPanel value={value} index={5}>
+            <EditDepartmentView />
+          </TabPanel>
+          <TabPanel value={value} index={6}>
+            <EditCityView />
+          </TabPanel>
+          <TabPanel value={value} index={7}>
+            <EditInstitutionView />
           </TabPanel>
         </Box>
       </Container>

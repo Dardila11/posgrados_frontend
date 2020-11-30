@@ -9,6 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import CreateView from './create';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ListProfessors from './addDirector/listProfessors';
+import {ListGi} from '../GI/editGi/listGi'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -68,8 +69,6 @@ const AdministerView = () => {
           
             <AppBar className={classes.appbar} position="relative">
               <Tabs
-
-               
                 textColor="primary"
                 indicatorColor="secondary"
                 value={value}
@@ -91,6 +90,14 @@ const AdministerView = () => {
                   }
                   {...options(1)}
                 />
+                <Tab
+                  label={
+                    <>
+                      Editar Grupo Investigación
+                    </>
+                  }
+                  {...options(2)}
+                />
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={0}>
@@ -98,6 +105,9 @@ const AdministerView = () => {
             </TabPanel>
             <TabPanel value={value} index={1}>
               <ListProfessors />
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+              <ListGi />
             </TabPanel>
           
         </Box>

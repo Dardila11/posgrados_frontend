@@ -8,7 +8,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-
+import {ListProfesor} from './ListProfesor'
 
 
 function TabPanel(props) {
@@ -55,28 +55,6 @@ const useStyles = makeStyles(() => ({
     marginLeft: '10px'
   }
 }));
-const currencies = [
-  {
-    value: 'USD',
-    label: '$',
-  },
-  {
-    value: 'EUR',
-    label: '€',
-  },
-  {
-    value: 'BTC',
-    label: '฿',
-  },
-  {
-    value: 'JPY',
-    label: '¥',
-  },
-];
-
-
-
-
 const AdministerProfessorsView = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -84,7 +62,6 @@ const AdministerProfessorsView = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [currency, setCurrency] = React.useState('EUR');
   return (
     <Page title="Professors">
       <Container maxWidth={false}>
@@ -119,7 +96,7 @@ const AdministerProfessorsView = () => {
             <CreateProfessorView />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            {/* <ListProfessors /> */}
+            {<ListProfesor />}
           </TabPanel>
         
       </Box>

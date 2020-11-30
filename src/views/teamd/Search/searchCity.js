@@ -18,7 +18,7 @@ export const SearchCity = ({ idDepartment, callback }) => {
     // eslint-disable-next-line no-lone-blocks
     {
       listCitiesService(idDepartment)
-        .then(result => setListCities(result.data.Citys))
+        .then(result => setListCities(result.data.Cities))
         .catch(setListCities([]));
     }
   }, [idDepartment]);

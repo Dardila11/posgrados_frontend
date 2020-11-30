@@ -34,16 +34,25 @@ const useStyles = makeStyles({
   }
 });
 const EditCountryView = () => {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false)  
   const [openAlert, setOpenAlert] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
   const clases = useStyles();
   const [name, setname] = useState(' ');
   const [Country, setidCountry] = useState('');
+  const [namecountry,setNameCountry] = useState('');
   const handleClickOpenEditCountry = () => {
-    setOpen(true);
- 
+    const namecountry = document.getElementById("searchCountries").value;
+    if (namecountry == ""){
+        setOpenAlert(true)
+        setTypeAlert('error')
+        setMessage('Error, campos vacios !')        
+    }else{
+        console.log("valor: "+ namecountry)
+        setOpen(true);
+    }
+     
 };
   const handleEdit = () => {
       //setOpen(true)
@@ -79,6 +88,7 @@ const EditCountryView = () => {
 };
   const handleOnchangeName = e => {
     setname(e.target.value);
+    console.log(setname);
   };
   const getCountry = id => {    
     setidCountry(id);
@@ -117,7 +127,7 @@ const EditCountryView = () => {
                   Editar Pais
                 </Typography>
                 <Box mb={3}>
-                <SearchCountry name="name" callback={getCountry} />
+                <SearchCountry  callback={getCountry} />
                 
                   <Box my={2}>
                     <Button
@@ -140,7 +150,8 @@ const EditCountryView = () => {
                                         fullWidth
                                         label="Nombre"
                                         margin="normal"
-                                        name="name"                                        
+                                        name="name" 
+                                        
                                         onChange={e => {
                                         handleOnchangeName(e);
                                         }}
@@ -157,13 +168,13 @@ const EditCountryView = () => {
                                     Editar
                                 </Button>
                                 </DialogActions>
-                                <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
+                                
                         </Dialog>
 
                   </Box>
                 </Box>
               </form>
-              
+              <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
             </Box>
           </>
         )}

@@ -10,8 +10,10 @@ export const SearchGI = ({callback,departmentIID}) => {
         .catch();
     }, [departmentIID])
     const getIdGi = (name) =>{
+        let namee = name.name
+        console.log("NOMBRE ", namee)
         let find = listGi.find(
-            element => element.name === name
+            element => element.name === namee
         );
         if (find === undefined){
         }else{
@@ -24,7 +26,6 @@ export const SearchGI = ({callback,departmentIID}) => {
                 id = "searchGI"
                 options = {listGi}
                 getOptionLabel = { option => option.name}
-                style={{ marginBottom: 10, marginTop: 10, widht: 300 }}
                 renderInput = {
                     params => (
                         <TextField
@@ -33,6 +34,7 @@ export const SearchGI = ({callback,departmentIID}) => {
                          label = "Ingresar Gi"
                          variant = 'outlined'
                          required
+                         style={{ marginBottom: 10, marginTop: 10, width: 300 }}
                         >
                         </TextField>
                     )

@@ -1,7 +1,11 @@
-import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link as RouterLink, useNavigate, Redirect} from 'react-router-dom';
+
+import { login } from '../auth/auth';
+
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import { AlertView } from '../../components/Alert'
 import {
   Box,
   Button,
@@ -15,6 +19,7 @@ import {
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
+import { loginService } from './service';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,11 +30,44 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const LoginView = () => {
+ const LoginView = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [open, setOpen] = useState('');
+  const [typeAlert, setTypeAlert] = useState('');
+  const [message, setMessage] = useState('');
+  const [username,setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const [token, setToken] = useState(null)
+  const [user, setUser] = useState(null)
+  const handleChangePassword = (e) =>{
+    setPassword(e.target.value);
+  };
+  const HandleChangeName = (e) =>{
+    setUserName(e.target.value);
+  };
+  const handleLogin = () => {
+    setOpen(false)
+    loginService({
+      username: username,
+      password: password
+            
+    }).then((request) => {
+        console.log("respuesta login ",request)
+        setToken(request.data.token)
+        setUser(request.data.user)
+        navigate('/app/dashboard', { replace: true }); //Todo
+      }).catch(() => {
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Error, verifica los datos!')
+        navigate('/login', { replace: true }); //Todo
 
+      });
+  };
+  
   return (
+    
     <Page
       className={classes.root}
       title="Login"
@@ -43,27 +81,24 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              username: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+              username: Yup.string().max(255).required('Username is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
             onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
             }}
           >
             {({
               errors,
               handleBlur,
               handleChange,
-              handleSubmit,
-              isSubmitting,
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <form>
                 <Box mb={3}>
                   <Typography
                     color="textPrimary"
@@ -71,73 +106,35 @@ const LoginView = () => {
                   >
                     Sign in
                   </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Sign in on the internal platform
-                  </Typography>
+                  
                 </Box>
                 <Grid
                   container
                   spacing={3}
                 >
+                  
                   <Grid
                     item
                     xs={12}
                     md={6}
                   >
-                    <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      fullWidth
-                      startIcon={<GoogleIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Google
-                    </Button>
+                    
                   </Grid>
                 </Grid>
-                <Box
-                  mt={3}
-                  mb={1}
-                >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
-                  </Typography>
-                </Box>
+                
                 <TextField
-                  error={Boolean(touched.email && errors.email)}
+                  error={Boolean(touched.username && errors.username)}
                   fullWidth
-                  helperText={touched.email && errors.email}
-                  label="Email Address"
+                  helperText={touched.username && errors.username}
+                  label="username "
                   margin="normal"
-                  name="email"
+                  name="username"
                   onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="email"
-                  value={values.email}
+                  onChange={(e)=>{
+                    handleChange(e);
+                    HandleChangeName(e);
+                  }}
+                  type="username"                  
                   variant="outlined"
                 />
                 <TextField
@@ -148,7 +145,10 @@ const LoginView = () => {
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e)=>{
+                    handleChange(e);
+                    handleChangePassword(e);
+                  }}
                   type="password"
                   value={values.password}
                   variant="outlined"
@@ -156,11 +156,11 @@ const LoginView = () => {
                 <Box my={2}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
+                    onClick={handleLogin}
                   >
                     Sign in now
                   </Button>
@@ -179,13 +179,17 @@ const LoginView = () => {
                     Sign up
                   </Link>
                 </Typography>
+                <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
               </form>
+              
             )}
+            
           </Formik>
         </Container>
       </Box>
     </Page>
   );
 };
+
 
 export default LoginView;
