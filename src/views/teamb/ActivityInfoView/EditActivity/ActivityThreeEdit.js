@@ -3,7 +3,6 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider, InputLabel, Select, MenuItem, FormControl
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
 import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
@@ -53,7 +52,6 @@ const tipo = [
 export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
   const classes = useStyles();
 
-  
   useEffect(() => {
     if(state.receipt !== null) {
       document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
@@ -190,10 +188,10 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
       setErrorStartDate("Seleccióne una fecha de envió publicación válida")
       result = false;
     }
-    if (values.fechaFin.length) {
+    if (values.fechaFin != null) {
       if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
-        setErrorEndDate("La fecha de publicación debe ser después de la fecha de envió")
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
         result = false;
       }
     }
@@ -229,13 +227,38 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
       setErrorNombre("El campo es obligatorio");
       result = false;
     }
+    if (values.autores.length) { setErrorAutores(null) }
+    else {
+      setErrorAutores("El campo es obligatorio");
+      result = false;
+    }
+    if (values.editorial.length) { setErrorEditorial(null) }
+    else {
+      setErrorEditorial("El campo es obligatorio");
+      result = false;
+    }
+    if (values.datosGenerales.length) { setErrorDatosGenerales(null) }
+    else {
+      setErrorDatosGenerales("El campo es obligatorio");
+      result = false;
+    }
     if (values.fechaInicio.length) {
       setErrorStartDate("") 
     }
     else {
       setErrorStartDate("Seleccióne una fecha de envió publicación válida")
       result = false;
-    }  
+    } 
+    if (values.fechaFin != null) {
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+          result = false;
+        }
+      }
+    }
+     
     return result;
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -259,7 +282,7 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
     setEmergenteCancelar(false);
     callbackDialogOpen(false);
   };
-   
+
   const SaveActivity = () => {
     var now = objUtil.GetCurretTimeDate();
     //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 

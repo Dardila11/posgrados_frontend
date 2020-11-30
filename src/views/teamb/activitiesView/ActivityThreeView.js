@@ -221,6 +221,28 @@ const ActivityThreeView = () => {
       setErrorNombre("El campo es obligatorio");
       result = false;
     }
+    if (values.autores.length) { setErrorAutores(null) }
+    else {
+      setErrorAutores("El campo es obligatorio");
+      result = false;
+    }
+    if (values.editorial.length) { setErrorEditorial(null) }
+    else {
+      setErrorEditorial("El campo es obligatorio");
+      result = false;
+    }
+    if (values.datosGenerales.length) { setErrorDatosGenerales(null) }
+    else {
+      setErrorDatosGenerales("El campo es obligatorio");
+      result = false;
+    }
+    if (values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+      else {
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
+      }
+    }
     if (values.fechaInicio.length) {
       setErrorStartDate("") 
     }
