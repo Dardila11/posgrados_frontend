@@ -120,6 +120,11 @@ export default class service {
         const url= `${API_URL}/api/publication/`+id+`/`;
         return axios.put(url, activity);
     }
+    
+    PutActivityFourEdit(activity, id){
+        const url= `${API_URL}/api/presentationResults/`+id+`/`;
+        return axios.put(url, activity);
+    }
 
     DeleteActivity(id) {
         const url= `${API_URL}/api/activity/`+id+`/`;  
