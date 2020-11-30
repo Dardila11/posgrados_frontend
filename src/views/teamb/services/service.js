@@ -126,6 +126,11 @@ export default class service {
         return axios.put(url, activity);
     }
 
+    PutActivityFiveEdit(activity, id){
+        const url= `${API_URL}/api/researchStays/`+id+`/`;
+        return axios.put(url, activity);
+    }
+
     DeleteActivity(id) {
         const url= `${API_URL}/api/activity/`+id+`/`;  
         return axios.delete(url);
