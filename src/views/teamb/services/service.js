@@ -116,6 +116,11 @@ export default class service {
         return axios.put(url, activity);
     }
 
+    PutActivityThreeEdit(activity, id){
+        const url= `${API_URL}/api/publication/`+id+`/`;
+        return axios.put(url, activity);
+    }
+
     DeleteActivity(id) {
         const url= `${API_URL}/api/activity/`+id+`/`;  
         return axios.delete(url);
