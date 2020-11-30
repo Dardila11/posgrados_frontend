@@ -148,7 +148,13 @@ const ActivityOneView = () => {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.horasAsignadas > 0) { setErrorHour(null) }
+    if (values.horasAsignadas !== "") {
+      if (values.horasAsignadas > 0) { setErrorHour(null) }
+      else {
+        setErrorHour("Seleccione un número de horas valido")
+        result = false;
+      }
+    }
     else {
       setErrorHour("Seleccione un número de horas valido")
       result = false;
@@ -199,6 +205,11 @@ const ActivityOneView = () => {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
+    if (values.horasAsignadas >= 0 && values.horasAsignadas !== "") { setErrorHour(null) }
+    else {
+      setErrorHour("Seleccione un número de horas valido")
+      result = false;
+    }
     if (values.fechaInicio.length) {
       setErrorStartDate("")
     }
@@ -212,11 +223,6 @@ const ActivityOneView = () => {
         setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
         result = false;
       }
-    }
-    if (values.horasAsignadas >= 0) { setErrorHour(null) }
-    else {
-      setErrorHour("Seleccione un número de horas valido")
-      result = false;
     }
     return result;
   }
@@ -334,8 +340,8 @@ const ActivityOneView = () => {
                 </Grid>
               </Grid>
 
-              <TextField className={classes.field} name="horasAsignadas" label="Nº de horas asignadas" type="number"
-                onChange={handleChange} required variant="outlined"
+              <TextField className={classes.field} name="horasAsignadas" value={values.horasAsignadas} label="Nº de horas asignadas" 
+                type="number" onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
               {errorHour ? <Typography className={classes.validator}> {errorHour} </Typography> : null}

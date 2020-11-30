@@ -3,7 +3,6 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
 import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
@@ -11,7 +10,6 @@ import Response from 'src/views/teamb/activitiesView/components/Response';
 
 import service from '../../services/service';
 import util from '../../services/util';
-
 
 const objService = new service();
 const objUtil = new util();
@@ -44,11 +42,11 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export const ActivityFourEdit = ({state, callbackDialogOpen}) => {
+export const ActivityFourEdit = ({ state, callbackDialogOpen }) => {
   const classes = useStyles();
 
   useEffect(() => {
-    if(state.receipt !== null) {
+    if (state.receipt !== null) {
       document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
     }
   }, []);
@@ -74,11 +72,11 @@ export const ActivityFourEdit = ({state, callbackDialogOpen}) => {
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
-    if (e.length > 0) { 
+    if (e.length > 0) {
       var name = e[0].name;
       var nameSplit = name.split(".");
       var ext = nameSplit[nameSplit.length - 1];
-      
+
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
       else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
     }
@@ -125,7 +123,7 @@ export const ActivityFourEdit = ({state, callbackDialogOpen}) => {
   const [errorFecha, setErrorFecha] = useState(null);
   const [errorFile, setErrorFile] = useState(null);
 
-  const  resetError = () => {
+  const resetError = () => {
     setErrorDescripcion(null);
     setErrorLugar(null);
     setErrorNombreEvento(null);
@@ -160,8 +158,12 @@ export const ActivityFourEdit = ({state, callbackDialogOpen}) => {
       setErrorModalidad("El campo es obligatorio");
       result = false;
     }
-    if (values.duracionSeleccionada.length && values.duracionSeleccionada > 0) {
-      setErrorDuracion(null)
+    if (values.duracionSeleccionada !== "") {
+      if (values.duracionSeleccionada > 0) { setErrorDuracion(null) }
+      else {
+        setErrorDuracion("Seleccione un número de horas valido")
+        result = false;
+      }
     }
     else {
       setErrorDuracion("Seleccione un número de horas valido");
@@ -199,12 +201,15 @@ export const ActivityFourEdit = ({state, callbackDialogOpen}) => {
     else {
       setErrorModalidad("El campo es obligatorio");
       result = false;
-    }    
-    if (values.duracionSeleccionada.length == null || values.duracionSeleccionada > 0) {
-      setErrorDuracion(null)
     }
+    if (values.duracionSeleccionada >= 0 && values.duracionSeleccionada !== "") { setErrorDuracion(null) }
     else {
-      setErrorDuracion("Seleccione un número de horas valido");
+      setErrorDuracion("Seleccione un número de horas valido")
+      result = false;
+    }
+    if (values.fechaExposicion.length) { setErrorFecha("") }
+    else {
+      setErrorFecha("Seleccióne una fecha");
       result = false;
     }
     return result;
@@ -267,75 +272,72 @@ export const ActivityFourEdit = ({state, callbackDialogOpen}) => {
   }
 
   return (
-    
-     <Container className={classes.container}>
-        <Card className={classes.card}>
-          <Grid className={classes.content}>
-            <form>
-              <TextField className={classes.field} fullWidth value={values.descripcion} label="Descripción" name="descripcion" 
-                onChange={handleChange} required variant="outlined" 
-              />
-              {/* Validacion del campo */}
-              {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
-              
-              <TextField className={classes.field} name="fechaExposicion" value={values.fechaExposicion} label="Fecha de exposición" type="date"
-                InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
-              />
-              {/* Validacion del campo */}
-              {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
+    <Container className={classes.container}>
+      <Card className={classes.card}>
+        <Grid className={classes.content}>
+          <form>
+            <TextField className={classes.field} fullWidth value={values.descripcion} label="Descripción" name="descripcion"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth value={values.lugar} label="Lugar de la exposición" name="lugar" 
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorLugar ? <Typography className={classes.validator}> {errorLugar} </Typography> : null}
+            <TextField className={classes.field} name="fechaExposicion" value={values.fechaExposicion} label="Fecha de exposición" type="date"
+              InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
+            />
+            {/* Validacion del campo */}
+            {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth value={values.nombreEvento} label="Nombre del evento"  name="nombreEvento" 
-                onChange={handleChange} required variant="outlined" 
-              />
-              {/* Validacion del campo */}
-              {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
+            <TextField className={classes.field} fullWidth value={values.lugar} label="Lugar de la exposición" name="lugar"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorLugar ? <Typography className={classes.validator}> {errorLugar} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth value={values.modalidad} label="Modalidad de presentación" name="modalidad" 
-                onChange={handleChange} required variant="outlined" 
-              />
-              {/* TODO: Comentar */}
-              {errorModalidad ? <Typography className={classes.validator}> {errorModalidad} </Typography> : null}
+            <TextField className={classes.field} fullWidth value={values.nombreEvento} label="Nombre del evento" name="nombreEvento"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
 
-              <TextField className={classes.field} name="duracionSeleccionada" value={values.duracionSeleccionada} label="Duración en horas" type="number"
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorDuracion ? <Typography className={classes.validator}> {errorDuracion} </Typography> : null}
+            <TextField className={classes.field} fullWidth value={values.modalidad} label="Modalidad de presentación" name="modalidad"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* TODO: Comentar */}
+            {errorModalidad ? <Typography className={classes.validator}> {errorModalidad} </Typography> : null}
 
-              <PDFUpload uploadFile={uploadFile} name="Certificado" />
-              {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
-            </form>
-            <Divider className={classes.field} />
-            <Grid container justify="flex-end">
-              <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
-              <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
-              <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
-            </Grid>
+            <TextField className={classes.field} name="duracionSeleccionada" value={values.duracionSeleccionada} label="Duración en horas" type="number"
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorDuracion ? <Typography className={classes.validator}> {errorDuracion} </Typography> : null}
+
+            <PDFUpload uploadFile={uploadFile} name="Certificado" />
+            {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
+          </form>
+          <Divider className={classes.field} />
+          <Grid container justify="flex-end">
+            <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
+            <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
+            <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
           </Grid>
-        </Card>
+        </Grid>
+      </Card>
 
-        {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
-        <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
-          msg={'¿Esta seguro de que desea salir del registro?'}
-        />
-        <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad?'}
-        />
-        <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
-        />
+      {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
+      <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
+        msg={'¿Esta seguro de que desea salir del registro?'}
+      />
+      <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
+        msg={'¿Esta seguro de que desea guardar la actividad?'}
+      />
+      <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
+        msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
+      />
 
-        {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
-        <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
-
+      {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
+      <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
     </Container>
-    
   );
 };
 export default ActivityFourEdit;

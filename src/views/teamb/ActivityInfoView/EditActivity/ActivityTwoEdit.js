@@ -12,7 +12,6 @@ import SelectField from 'src/views/teamb/activitiesView/components/SelectField';
 
 import service from '../../services/service';
 import util from '../../services/util';
-
 const objService = new service();
 const objUtil = new util();
 
@@ -25,7 +24,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center'
   },
   card: {
-    maxWidth: '50%',
     margin: '10px'
   },
   title: {
@@ -47,27 +45,42 @@ const useStyles = makeStyles(() => ({
 
 export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    if(state.receipt !== null) {
+      document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
+    }
+  }, []);
+
   // Estado que controla los valores del formulario
   const [values, setValues] = useState({
+    id: state.id,
     titulo: state.title,
-    descripcion: state.descripcion,
+    descripcion: state.description,
     nombreEvento: state.name,
     lugarCelebracion: state.place,
     institucionSeleccionada: state.institution,
-    fechaRealizacion: state.start_date,
+    fechaRealizacion: state.start_date
   });
 
-  console.log(state);
   const handleChange = (event) => {
     setValues({
       ...values,
       [event.target.name]: event.target.value
     });
   };
+
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
     setArchivo(e);
-    if (e.length > 0) { document.getElementById("text-file").textContent = e[0].name; }
+    if (e.length > 0) { 
+      var name = e[0].name;
+      var nameSplit = name.split(".");
+      var ext = nameSplit[nameSplit.length - 1];
+      
+      if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
+      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+    }
     else { document.getElementById("text-file").textContent = ""; }
   }
   // Costantes para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre una de las 
@@ -87,23 +100,8 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
 
   // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    objService.PutActivityTwoEdit({
-      title:values.titulo, 
-      id:state.id, 
-      description:values.descripcion,
-      /*receipt:"http://mdquilindo.pythonanywhere.com/media/b_activities_app/archivos/PDF_ejemplo.pdf", */
-      start_date:values.fechaInicio, 
-      end_date:values.fechaFin,
-      place:values.lugarCelebracion, 
-      academic_year:2018,
-      institution:values.institucionSeleccionada,
-      date_record:"2020-11-08T12:15:55-05:00",
-      date_update:"2020-11-08T12:15:56-05:00",
-      name:values.nombreEvento,
-      }).then((request)=>console.log("Actividad editada")).catch(()=>console.log("No se guardo"))
-  callbackDialogOpen(false);
-  if (validar()) { setEmergenteGuardar(true); }
-};
+    if (validarGuardar()) { setEmergenteGuardar(true); }
+  };
   // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
@@ -111,7 +109,7 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
 
   // Valida los datos y lanza la ventana emergente
   const handleGuardarYEnviar = () => {
-    if (validar()) { setEmergenteGuardarYEnviar(true); }
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
   };
   // Controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarYEnviarNo = () => {
@@ -136,7 +134,7 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
     setErrorFile(null);
   }
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar = () => {
+  const validarGuardarYEnviar = () => {
     resetError();
     var result = true;
 
@@ -184,20 +182,35 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
       var result = true;
   
       if (values.titulo.length) { setErrorTitulo(null) }
-      else {
-        setErrorTitulo("El campo es obligatorio");
-        result = false;
-      }
-      if (values.descripcion.length) { setErrorDescripcion(null) }
-      else {
-        setErrorDescripcion("El campo es obligatorio");
-        result = false;
-      }
-      if (values.nombreEvento.length) { setErrorNombreEvento(null) }
-      else {
-        setErrorNombreEvento("El campo es obligatorio");
-        result = false;
-      }
+    else {
+      setErrorTitulo("El campo es obligatorio");
+      result = false;
+    }
+    if (values.descripcion.length) { setErrorDescripcion(null) }
+    else {
+      setErrorDescripcion("El campo es obligatorio");
+      result = false;
+    }
+    if (values.nombreEvento.length) { setErrorNombreEvento(null) }
+    else {
+      setErrorNombreEvento("El campo es obligatorio");
+      result = false;
+    }
+    if (values.lugarCelebracion.length) { setErrorLugar(null) }
+    else {
+      setErrorLugar("El campo es obligatorio");
+      result = false;
+    }
+    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
+    else {
+      setErrorInstitucion("Seleccione una opción válida");
+      result = false;
+    }
+    if (values.fechaRealizacion.length) { setErrorFecha("") }
+    else {
+      setErrorFecha("Seleccióne una fecha");
+      result = false;
+    }
       return result;
     }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -209,29 +222,20 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad registrada correctamente") {
+    if (response == "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
+    callbackDialogOpen(false);
     setPopUpRequestPost(false);
     setResponse(null);
   };
 
   const handleBack = () => {
-    window.location.href = './';
+    setEmergenteCancelar(false);
+    callbackDialogOpen(false);
   };
 
-  const [currentAcadYear, setCurrentAcadYear] = useState(null);
-  useEffect(() => {
-    /* Dato quemado desde la tabla User: id_user */
-    objService.GetPeriodService(8).then((result) => {
-      var CurrentPeriod = result.data.period;
-      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-      setCurrentAcadYear(CurrentAcadYear);
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
-  }, []);
-
+ 
   const SaveActivity = () => {
     var now = objUtil.GetCurretTimeDate();
     /* Se captura el valor booleano de "emergenteGuardarYEnviar", para saber si se enviara en el
@@ -239,30 +243,30 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
     var send_email = emergenteGuardarYEnviar;
 
     const fd = new FormData();
+    fd.append("id", values.id);
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
     fd.append("name", values.nombreEvento);
     fd.append("place", values.lugarCelebracion);
     fd.append("institution", values.institucionSeleccionada);
+    //if (values.fechaFin === null) { values.fechaFin = ''; }
     fd.append("start_date", values.fechaRealizacion);
     // Datos adicionales
-    fd.append("academic_year", currentAcadYear);
-    fd.append("type", 2);
+    fd.append("academic_year", state.academic_year);
     fd.append("student", 36); // Consultar el id del estudiante actual
-    fd.append("date_record", now);
+    fd.append("date_record", state.date_record);
     fd.append("date_update", now);
     //fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);
     }
-    else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
-    objService.PostActivityTwo(fd).then((result) => {
-      setResponse("Actividad registrada correctamente");
+    objService.PutActivityTwoEdit(fd, values.id).then((result) => {
+      setResponse("Actividad editada correctamente");
     }).catch(() => {
-      setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
+      setResponse("Ups! Ha ocurrido un error al editar la actividad, intentelo mas tarde o contacte con el administrador");
     });
     setPopUpRequestPost(true);
     setEmergenteGuardar(false);
@@ -270,76 +274,70 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
   }
 
   return (
-    <Grid className={classes.root}>
-      <Container >
-        <Card >
-          <Grid >
-            <Typography variant="h1" align="center" gutterBottom>
-              Ponencias en congreso, simposios y/o jornadas
-            </Typography>
-            <Divider />
-            <form>
-              <TextField className={classes.field} fullWidth label="Titulo de la contribución" value={values.titulo} name="titulo"
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
+    <Container className={classes.container}>
+      <Card className={classes.card}>
+        <Grid className={classes.content}>
+          <form>
+            <TextField className={classes.field} fullWidth label="Titulo de la contribución" name="titulo" value={values.titulo}
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Descripcion general" value={values.descripcion} name="descripcion"
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
+            <TextField className={classes.field} fullWidth label="Descripcion general" name="descripcion" value={values.descripcion}
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Nombre del evento" value={values.nombreEvento} name="nombreEvento"
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
+            <TextField className={classes.field} fullWidth label="Nombre del evento" name="nombreEvento" value={values.nombreEvento}
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
 
-              <SelectField name="institucionSeleccionada" label="Entidad organizadora" value={values.institucionSeleccionada} handleChange={handleChange} />
-              {/* Validacion del campo */}
-              {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
+            <SelectField name="institucionSeleccionada" label="Entidad organizadora" handleChange={handleChange} Selected={values.institucionSeleccionada} />
+            {/* Validacion del campo */}
+            {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Lugar de celebracion" value={values.lugarCelebracion} name="lugarCelebracion"
-                onChange={handleChange} required variant="outlined"
-              />
-              {/* Validacion del campo */}
-              {errorLugar ? <Typography className={classes.validator}> {errorLugar} </Typography> : null}
+            <TextField className={classes.field} fullWidth label="Lugar de celebracion" name="lugarCelebracion" value={values.lugarCelebracion}
+              onChange={handleChange} required variant="outlined"
+            />
+            {/* Validacion del campo */}
+            {errorLugar ? <Typography className={classes.validator}> {errorLugar} </Typography> : null}
 
-              <TextField className={classes.field} x name="fechaRealizacion" value={values.fechaRealizacion} label="Fecha de realización" type="date"
-                InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
-              />
-              {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
+            <TextField className={classes.field} name="fechaRealizacion" label="Fecha de realización" type="date"
+              InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required value={values.fechaRealizacion}
+            />
+            {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
 
-              <PDFUpload uploadFile={uploadFile} name="Justificante" />
-              {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
-            </form>
-            <Divider className={classes.field} />
-            <Grid container justify="flex-end">
-              <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
-              <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
-              <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
-            </Grid>
+            <PDFUpload uploadFile={uploadFile} name="Justificante" />
+            {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
+          </form>
+          <Divider className={classes.field} />
+          <Grid container justify="flex-end">
+            <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
+            <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
+            <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
           </Grid>
-        </Card>
+        </Grid>
+      </Card>
 
-        {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
-        <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
-          msg={'¿Esta seguro de que desea salir del registro?'}
-        />
-        <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad?'}
-        />
-        <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
-          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
-        />
+      {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
+      <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
+        msg={'¿Esta seguro de que desea salir del registro?'}
+      />
+      <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
+        msg={'¿Esta seguro de que desea guardar la actividad?'}
+      />
+      <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
+        msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
+      />
 
-        {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
-        <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
+      {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
+      <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
 
-      </Container>
-    </Grid>
+    </Container>
   );
 };
 export default ActivityTwoEdit;

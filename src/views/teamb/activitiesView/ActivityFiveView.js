@@ -52,8 +52,8 @@ const ActivityFiveView = () => {
     proposito: '',
     descripcion: '',
     //paisSeleccionado: '',
-    ciudadSeleccionada: '',
-    institucionSeleccionada: '',
+    ciudadSeleccionada: 0,
+    institucionSeleccionada: 0,
     nombreResponsable: '',
     fechaInicio: '',
     fechaFin: ''
@@ -209,13 +209,35 @@ const ActivityFiveView = () => {
       setErrorDescripcion("El campo es obligatorio");
       result = false;
     }
+    if (values.ciudadSeleccionada != "") { setErrorCiudad(null) }
+    else {
+      setErrorCiudad("Seleccione una opción válida");
+      result = false;
+    }
+    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
+    else {
+      setErrorInstitucion("Seleccione una opción válida");
+      result = false;
+    }
+    if (values.nombreResponsable.length) { setErrorNombreResponsable(null) }
+    else {
+      setErrorNombreResponsable("El campo es obligatorio");
+      result = false;
+    }
     if (values.fechaInicio.length) {
       setErrorStartDate("") 
     }
     else {
       setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
       result = false;
-    }  
+    }
+    if (values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+      else {
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
+      }
+    }
     return result
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -316,11 +338,11 @@ const ActivityFiveView = () => {
                Validacion del campo 
               {errorPais ? <Typography className={classes.validator}> {errorPais} </Typography> : null}
               */}
-              <SelectField name="ciudadSeleccionada" label="Ciudad" handleChange={handleChange} />
+              <SelectField name="ciudadSeleccionada" Selected={values.programaSeleccionado} label="Ciudad" handleChange={handleChange} />
               {/* Validacion del campo */}
               {errorCiudad ? <Typography className={classes.validator}> {errorCiudad} </Typography> : null}
               
-              <SelectField name="institucionSeleccionada" label="Institución" handleChange={handleChange} />
+              <SelectField name="institucionSeleccionada" Selected={values.programaSeleccionado} label="Institución" handleChange={handleChange} />
               {/* Validacion del campo */}
               {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
               

@@ -53,7 +53,7 @@ const ActivityTwoView = () => {
     descripcion: '',
     nombreEvento: '',
     lugarCelebracion: '',
-    institucionSeleccionada: '',
+    institucionSeleccionada: 0,
     fechaRealizacion: ''
   });
 
@@ -190,6 +190,21 @@ const ActivityTwoView = () => {
         setErrorNombreEvento("El campo es obligatorio");
         result = false;
       }
+      if (values.lugarCelebracion.length) { setErrorLugar(null) }
+      else {
+        setErrorLugar("El campo es obligatorio");
+        result = false;
+      }
+      if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
+      else {
+        setErrorInstitucion("Seleccione una opción válida");
+        result = false;
+      }
+      if (values.fechaRealizacion.length) { setErrorFecha("") }
+      else {
+        setErrorFecha("Seleccióne una fecha");
+        result = false;
+      }
       return result;
     }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -290,7 +305,7 @@ const ActivityTwoView = () => {
               {/* Validacion del campo */}
               {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
 
-              <SelectField name="institucionSeleccionada" label="Entidad organizadora" handleChange={handleChange} />
+              <SelectField name="institucionSeleccionada" Select={values.institucionSeleccionada} label="Entidad organizadora" handleChange={handleChange} />
               {/* Validacion del campo */}
               {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
 

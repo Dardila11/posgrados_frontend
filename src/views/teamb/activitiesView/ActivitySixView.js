@@ -175,9 +175,9 @@ const ActivitySixView = () => {
       setErrorLinea("Seleccione una opción válida");
       result = false;
     }
-    if (values.codigoVRI.length && values.codigoVRI > 0) { setErrorCodigoVRI(null) }
+    if (values.codigoVRI > 0 && values.codigoVRI !== "") { setErrorCodigoVRI(null) }
     else {
-      setErrorCodigoVRI("Código invalido");
+      setErrorCodigoVRI("Código invalido")
       result = false;
     }
     if (values.convocatoria.length) { setErrorConvocatoria(null) }
@@ -231,6 +231,11 @@ const ActivitySixView = () => {
       setErrorNombreInvestigador("Seleccione una opción válida");
       result = false;
     }
+    if (values.lugarTrabajo.length) { setErrorLugarTrabajo(null) }
+    else {
+      setErrorLugarTrabajo("El campo es obligatorio");
+      result = false;
+    }
     if (values.descripcion.length) { setErrorDescripcion(null) }
     else {
       setErrorDescripcion("El campo es obligatorio");
@@ -241,9 +246,19 @@ const ActivitySixView = () => {
       setErrorLinea("Seleccione una opción válida");
       result = false;
     }
-    if (values.codigoVRI.length == null || values.codigoVRI > 0) { setErrorCodigoVRI(null) }
+    if (values.codigoVRI > 0 && values.codigoVRI !== "") { setErrorCodigoVRI(null) }
     else {
-      setErrorCodigoVRI("Código invalido");
+      setErrorCodigoVRI("Código invalido")
+      result = false;
+    }
+    if (values.convocatoria.length) { setErrorConvocatoria(null) }
+    else {
+      setErrorConvocatoria("El campo es obligatorio");
+      result = false;
+    }
+    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
+    else {
+      setErrorTipo("Seleccione una opción válida");
       result = false;
     }
     if (values.fechaInicio.length) {
@@ -252,7 +267,14 @@ const ActivitySixView = () => {
     else {
       setErrorStartDate("Seleccióne fecha de inicio del proyecto válida")
       result = false;
-    }  
+    }
+    if (values.fechaFin.length) {
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+      else {
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
+      }
+    }
     return result
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -365,7 +387,7 @@ const ActivitySixView = () => {
               {/* Validacion del campo */}
               {errorLinea ? <Typography className={classes.validator}> {errorLinea} </Typography> : null}
 
-              <TextField className={classes.field} name="codigoVRI" label="Codigo VRI" type="number"
+              <TextField className={classes.field} name="codigoVRI" label="Codigo VRI" type="number" value={values.codigoVRI}
                 onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}

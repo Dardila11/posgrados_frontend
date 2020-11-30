@@ -236,6 +236,13 @@ const ActivityThreeView = () => {
       setErrorDatosGenerales("El campo es obligatorio");
       result = false;
     }
+    if (values.fechaInicio.length) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
+      result = false;
+    }
     if (values.fechaFin.length) {
       if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
@@ -243,13 +250,6 @@ const ActivityThreeView = () => {
         result = false;
       }
     }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("") 
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
-      result = false;
-    }  
     return result;
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 

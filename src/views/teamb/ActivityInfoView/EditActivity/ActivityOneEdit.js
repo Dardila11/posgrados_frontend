@@ -206,7 +206,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.fechaInicio != null) {
+    if (values.fechaInicio != "") {
       setErrorStartDate("")
     }
     else {

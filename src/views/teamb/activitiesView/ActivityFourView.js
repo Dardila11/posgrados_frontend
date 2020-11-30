@@ -152,11 +152,15 @@ const ActivityFourView = () => {
       setErrorModalidad("El campo es obligatorio");
       result = false;
     }
-    if (values.duracionSeleccionada.length && values.duracionSeleccionada > 0) {
-      setErrorDuracion(null)
+    if (values.duracionSeleccionada !== "") {
+      if (values.duracionSeleccionada > 0) { setErrorDuracion(null) }
+      else {
+        setErrorDuracion("Seleccione un número de horas valido")
+        result = false;
+      }
     }
     else {
-      setErrorDuracion("Seleccione un número de horas valido");
+      setErrorDuracion("Seleccione un número de horas valido")
       result = false;
     }
     if (values.fechaExposicion.length) { setErrorFecha("") }
@@ -191,12 +195,15 @@ const ActivityFourView = () => {
     else {
       setErrorModalidad("El campo es obligatorio");
       result = false;
-    }    
-    if (values.duracionSeleccionada.length == null || values.duracionSeleccionada > 0) {
-      setErrorDuracion(null)
     }
+    if (values.duracionSeleccionada >= 0 && values.duracionSeleccionada !== "") { setErrorDuracion(null) }
     else {
-      setErrorDuracion("Seleccione un número de horas valido");
+      setErrorDuracion("Seleccione un número de horas valido")
+      result = false;
+    }
+    if (values.fechaExposicion.length) { setErrorFecha("") }
+    else {
+      setErrorFecha("Seleccióne una fecha");
       result = false;
     }
     return result;
@@ -312,7 +319,7 @@ const ActivityFourView = () => {
               {errorModalidad ? <Typography className={classes.validator}> {errorModalidad} </Typography> : null}
 
               <TextField className={classes.field} name="duracionSeleccionada" label="Duración en horas" type="number"
-                onChange={handleChange} required variant="outlined"
+                onChange={handleChange} required variant="outlined" value={values.duracionSeleccionada}
               />
               {/* Validacion del campo */}
               {errorDuracion ? <Typography className={classes.validator}> {errorDuracion} </Typography> : null}
