@@ -106,6 +106,8 @@ const ActivityInfoView = () => {
             alert("Error, no hay registros para mostrar");
           });
           break;
+        default:
+          alert("Error, no hay registros para mostrar");
       }
     }).catch(() => {
       alert("Error, no hay registros para mostrar");
@@ -118,10 +120,7 @@ const ActivityInfoView = () => {
   const handleEditarClose = () => {
     setOpen(false);
   }
-  const setOpenDialog = (state) => {
-    setOpen(state);
-  }
-
+  
   const handleEliminar = () => {
     setEmergenteEliminar(true);
   };
@@ -130,7 +129,6 @@ const ActivityInfoView = () => {
   };
   const handleEliminarSi = () => {
     objService.DeleteActivity(activity.id).then((result) => {
-      var dataActivity = result;
       window.location.href = '../';
     }).catch(() => {
       alert("Error, no hay registros para  mostrar");
@@ -362,6 +360,7 @@ const ActivityInfoView = () => {
         return activityFive();
       case 6:
         return activitySix();
+      default:        
     }
   }
 
@@ -369,22 +368,17 @@ const ActivityInfoView = () => {
     switch (activity.type) {
       case 1:
         return <ActivityOneEdit state={activity} callbackDialogOpen={setOpen} />
-        break;
       case 2:
         return <ActivityTwoEdit state={activity} callbackDialogOpen={setOpen} />
-        break;
       case 3:
         return <ActivityThreeEdit state={activity} callbackDialogOpen={setOpen} />
-        break;
       case 4:
         return <ActivityFourEdit state={activity} callbackDialogOpen={setOpen} />
-        break;
       case 5:
         return <ActivityFiveEdit state={activity} callbackDialogOpen={setOpen} />
-        break;
       case 6:
         return <ActivitySixEdit state={activity} callbackDialogOpen={setOpen} />
-        break;
+      default:
     }
   }
 
@@ -400,14 +394,14 @@ const ActivityInfoView = () => {
         <Card>
           <CardContent>
             {Greeting()}
-            {activity.type == 2 || activity.type == 3 ? <Prize id={activity.id}></Prize> : null}
-            {activity != '' ? <DirEvaluation id={activity.id}></DirEvaluation> : null}
-            {activity != '' ? <CoordEvaluation id={activity.id}></CoordEvaluation> : null}
+            {activity.type === 2 || activity.type === 3 ? <Prize id={activity.id}></Prize> : null}
+            {activity !== '' ? <DirEvaluation id={activity.id}></DirEvaluation> : null}
+            {activity !== '' ? <CoordEvaluation id={activity.id}></CoordEvaluation> : null}
           </CardContent>
         </Card>
 
         <Box display="flex" justifyContent="flex-end" p={2}>
-          {activity.state <= 2 ?
+          {activity.state < 2 ?
             <IconButton onClick={handleEliminar} aria-label="delete" >
               <DeleteIcon />
             </IconButton>

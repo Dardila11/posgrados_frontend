@@ -55,13 +55,13 @@ const ActivitySixView = () => {
   // Estado que controla los valores del formulario
   const [values, setValues] = useState({
     nombreProyecto: '',
-    investigadorSeleccionado: '',
+    investigadorSeleccionado: 0,
     lugarTrabajo: '',
     descripcion: '',
-    lineaSeleccionada: '',
+    lineaSeleccionada: 0,
     codigoVRI: 0,
     convocatoria: '',
-    tipoSeleccionado: '',
+    tipoSeleccionado: 0,
     fechaInicio: '',
     fechaFin: ''
   });
@@ -149,54 +149,8 @@ const ActivitySixView = () => {
   const validarGuardarYEnviar = () => {
     resetError();
     var result = true;
-
-    if (values.nombreProyecto.length) { setErrorNombreProyecto(null) }
-    else {
-      setErrorNombreProyecto("El campo es obligatorio");
-      result = false;
-    }
-    if (values.investigadorSeleccionado != "") { setErrorNombreInvestigador(null) }
-    else {
-      setErrorNombreInvestigador("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.lugarTrabajo.length) { setErrorLugarTrabajo(null) }
-    else {
-      setErrorLugarTrabajo("El campo es obligatorio");
-      result = false;
-    }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
-    else {
-      setErrorDescripcion("El campo es obligatorio");
-      result = false;
-    }
-    if (values.lineaSeleccionada != "") { setErrorLinea(null) }
-    else {
-      setErrorLinea("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.codigoVRI > 0 && values.codigoVRI !== "") { setErrorCodigoVRI(null) }
-    else {
-      setErrorCodigoVRI("Código invalido")
-      result = false;
-    }
-    if (values.convocatoria.length) { setErrorConvocatoria(null) }
-    else {
-      setErrorConvocatoria("El campo es obligatorio");
-      result = false;
-    }
-    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
-    else {
-      setErrorTipo("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.fechaInicio.length ) {
-      setErrorStartDate("") 
-    }
-    else {
-     setErrorStartDate("Seleccióne fecha de inicio del proyecto válida")
-     result = false;
-    }
+    result = validarGuardar();
+    
     if (values.fechaFin.length) {
       if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
@@ -221,42 +175,73 @@ const ActivitySixView = () => {
     resetError();
     var result = true;
 
-    if (values.nombreProyecto.length) { setErrorNombreProyecto(null) }
+    if (values.nombreProyecto !== '') { 
+      if(values.nombreProyecto.length < 61) {setErrorNombreProyecto(null)}
+      else{
+        setErrorNombreProyecto("El campo debe tener máximo 60 caracteres");
+        result = false;
+      }
+    }
     else {
       setErrorNombreProyecto("El campo es obligatorio");
       result = false;
     }
-    if (values.investigadorSeleccionado != "") { setErrorNombreInvestigador(null) }
+    if (values.investigadorSeleccionado !== 0) { setErrorNombreInvestigador(null) }
     else {
       setErrorNombreInvestigador("Seleccione una opción válida");
       result = false;
     }
-    if (values.lugarTrabajo.length) { setErrorLugarTrabajo(null) }
+    if (values.lugarTrabajo !== '') { 
+      
+      if(values.lugarTrabajo.length < 41){setErrorLugarTrabajo(null)}
+      else{
+        setErrorLugarTrabajo("El campo debe tener máximo 40 caracteres");
+        result = false;
+      }
+    }
     else {
       setErrorLugarTrabajo("El campo es obligatorio");
       result = false;
     }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
+    if(values.descripcion !== ''){
+      if (values.descripcion.length < 149){ setErrorDescripcion(null) }
+      else{
+        setErrorDescripcion("El campo debe tener máximo 148 caracteres");
+        result = false;
+      }
+    }
     else {
       setErrorDescripcion("El campo es obligatorio");
       result = false;
     }
-    if (values.lineaSeleccionada != "") { setErrorLinea(null) }
+    if (values.lineaSeleccionada !== 0) { setErrorLinea(null) }
     else {
       setErrorLinea("Seleccione una opción válida");
       result = false;
     }
-    if (values.codigoVRI > 0 && values.codigoVRI !== "") { setErrorCodigoVRI(null) }
+    if (values.codigoVRI > 0 && values.codigoVRI !== "") { 
+      if(values.codigoVRI <= 10000000000000000 ){setErrorCodigoVRI(null) }
+      else{
+        setErrorCodigoVRI("Código demaciado extenso")
+        result = false;
+      }
+    }
     else {
       setErrorCodigoVRI("Código invalido")
       result = false;
     }
-    if (values.convocatoria.length) { setErrorConvocatoria(null) }
-    else {
+    if(values.convocatoria !== ''){
+      if (values.convocatoria.length < 148) { setErrorConvocatoria(null) }
+      else{
+        setErrorConvocatoria("El campo debe tener máximo 148 caracteres");
+        result = false;
+      }
+    }
+    else { 
       setErrorConvocatoria("El campo es obligatorio");
       result = false;
     }
-    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
+    if (values.tipoSeleccionado !== 0) { setErrorTipo(null) }
     else {
       setErrorTipo("Seleccione una opción válida");
       result = false;
@@ -286,7 +271,7 @@ const ActivitySixView = () => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad registrada correctamente") {
+    if (response === "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
     setPopUpRequestPost(false);
@@ -367,7 +352,7 @@ const ActivitySixView = () => {
               {/* Validacion del campo */}
               {errorNombreProyecto ? <Typography className={classes.validator}> {errorNombreProyecto} </Typography> : null}
 
-              <SelectField name="investigadorSeleccionado" label="Investigador" handleChange={handleChange} />
+              <SelectField name="investigadorSeleccionado" label="Investigador" handleChange={handleChange} Selected={values.investigadorSeleccionado} />
               {/* Validacion del campo */}
               {errorNombreInvestigador ? <Typography className={classes.validator}> {errorNombreInvestigador} </Typography> : null}
 
@@ -383,7 +368,7 @@ const ActivitySixView = () => {
               {/* Validacion del campo */}
               {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
 
-              <SelectField name="lineaSeleccionada" label="Linea de investigación" handleChange={handleChange} />
+              <SelectField name="lineaSeleccionada" label="Linea de investigación" handleChange={handleChange} Selected={values.lineaSeleccionada}/>
               {/* Validacion del campo */}
               {errorLinea ? <Typography className={classes.validator}> {errorLinea} </Typography> : null}
 
@@ -401,13 +386,14 @@ const ActivitySixView = () => {
 
               <FormControl className={classes.field} fullWidth required variant="outlined">
                 <InputLabel> Tipo de convocatoria </InputLabel>
-                <Select defaultValue={0} onChange={handleChange} label="Tipo de convocatoria" name="tipoSeleccionado">
+                <Select defaultValue={0} onChange={handleChange} label="Tipo de convocatoria" name="tipoSeleccionado" > 
                   <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
                   {tipo.map(element => (
                     <MenuItem key={element.value} value={element.label}> { element.label} </MenuItem>
                   ))}
                 </Select>
               </FormControl>
+
               {/* Validacion del campo */}
               {errorTipo ? <Typography className={classes.validator}> {errorTipo} </Typography> : null}
 

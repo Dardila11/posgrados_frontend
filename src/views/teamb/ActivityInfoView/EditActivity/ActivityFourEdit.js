@@ -133,87 +133,104 @@ export const ActivityFourEdit = ({ state, callbackDialogOpen }) => {
     setErrorFile(null);
   }
 
-  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validarGuardarYEnviar = () => {
-    resetError();
-    var result = true;
+ //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+ const validarGuardarYEnviar = () => {
+  resetError();
+  var result = validarGuardar();
 
-    if (values.descripcion.length) { setErrorDescripcion(null) }
+  if(values.nombreEvento !== ''){
+    if (values.nombreEvento.length < 61) { setErrorNombreEvento(null) }
     else {
-      setErrorDescripcion("El campo es obligatorio");
+      setErrorNombreEvento("El campo debe tener máximo 60 caracteres")
       result = false;
     }
-    if (values.lugar.length) { setErrorLugar(null) }
-    else {
-      setErrorLugar("El campo es obligatorio");
-      result = false;
-    }
-    if (values.nombreEvento.length) { setErrorNombreEvento(null) }
-    else {
-      setErrorNombreEvento("El campo es obligatorio");
-      result = false;
-    }
-    if (values.modalidad.length) { setErrorModalidad(null) }
-    else {
-      setErrorModalidad("El campo es obligatorio");
-      result = false;
-    }
-    if (values.duracionSeleccionada !== "") {
-      if (values.duracionSeleccionada > 0) { setErrorDuracion(null) }
-      else {
-        setErrorDuracion("Seleccione un número de horas valido")
-        result = false;
-      }
-    }
-    else {
-      setErrorDuracion("Seleccione un número de horas valido");
-      result = false;
-    }
-    if (values.fechaExposicion.length) { setErrorFecha("") }
-    else {
-      setErrorFecha("Seleccióne una fecha");
-      result = false;
-    }
-    var textFile = document.getElementById("text-file").textContent;
-    if (textFile.length > 0) { setErrorFile(null) }
-    else {
-      setErrorFile("Es necesario subir el archivo");
-      result = false;
-    }
-    return result;
   }
-  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en guardar
-  const validarGuardar = () => {
-    resetError();
-    var result = true;
+  else{
+    setErrorNombreEvento("El campo es obligatorio");
+      result = false;
+  }
+  
+  if (values.duracionSeleccionada > 0 && values.duracionSeleccionada !== ""){ 
+    if(values.duracionSeleccionada < 10000) {setErrorDuracion(null) }
+    else {
+      setErrorDuracion("El numero de horas asignadas debe ser menor a 10000")
+      result = false;
+    }
+  }
+  else {
+    setErrorDuracion("Seleccione un número de horas valido")
+    result = false;
+  }
+  var textFile = document.getElementById("text-file").textContent;
+  if (textFile.length > 0) { setErrorFile(null) }
+  else {
+    setErrorFile("Es necesario subir el archivo");
+    result = false;
+  }
+  return result;
+}
+//"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en guardar
+const validarGuardar = () => {
+  resetError();
+  var result = true;
 
-    if (values.descripcion.length) { setErrorDescripcion(null) }
+  if(values.descripcion !== ''){
+    if (values.descripcion.length < 149) { setErrorDescripcion(null) }
     else {
-      setErrorDescripcion("El campo es obligatorio");
+      setErrorDescripcion("El campo debe tener máximo 148 caracteres")
       result = false;
     }
-    if (values.lugar.length) { setErrorLugar(null) }
-    else {
-      setErrorLugar("El campo es obligatorio");
-      result = false;
-    }
-    if (values.modalidad.length) { setErrorModalidad(null) }
-    else {
-      setErrorModalidad("El campo es obligatorio");
-      result = false;
-    }
-    if (values.duracionSeleccionada >= 0 && values.duracionSeleccionada !== "") { setErrorDuracion(null) }
-    else {
-      setErrorDuracion("Seleccione un número de horas valido")
-      result = false;
-    }
-    if (values.fechaExposicion.length) { setErrorFecha("") }
-    else {
-      setErrorFecha("Seleccióne una fecha");
-      result = false;
-    }
-    return result;
   }
+  else {
+    setErrorDescripcion("El campo es obligatorio")
+    result = false;
+  }
+  if (values.fechaExposicion.length) { setErrorFecha("") }
+  else {
+    setErrorFecha("Seleccióne una fecha");
+    result = false;
+  }
+  if(values.lugar !== ''){
+    if (values.lugar.length < 41) { setErrorLugar(null) }
+    else {
+      setErrorLugar("El campo debe tener máximo 40 caracteres")
+      result = false;
+    }
+  }
+  else{
+    setErrorLugar("El campo es obligatorio");
+      result = false;
+  }
+  if (values.nombreEvento.length < 61) { setErrorNombreEvento(null)}
+  else {
+    setErrorNombreEvento("El campo debe tener máximo 60 caracteres")
+    result = false;
+  }
+  if(values.modalidad !== ''){
+    if (values.modalidad.length <41) { setErrorModalidad(null) }
+    else {
+      setErrorModalidad("El campo debe tener máximo 40 caracteres")
+      result = false;
+    }
+  }
+  else{
+    setErrorModalidad("El campo es obligatorio");
+      result = false;
+  }
+  if (values.duracionSeleccionada >= 0 && values.duracionSeleccionada !== "") { 
+    if(values.duracionSeleccionada < 10000) {setErrorDuracion(null) }
+    else {
+      setErrorDuracion("El numero de horas asignadas debe ser menor a 10000")
+      result = false;
+    }
+  }
+  else{
+    setErrorDuracion("Seleccione un número de horas valido")
+    result = false;
+  } 
+  
+  return result;
+}
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -223,7 +240,7 @@ export const ActivityFourEdit = ({ state, callbackDialogOpen }) => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad editada correctamente") {
+    if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
     callbackDialogOpen(false);
@@ -281,7 +298,7 @@ export const ActivityFourEdit = ({ state, callbackDialogOpen }) => {
             />
             {/* Validacion del campo */}
             {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
-
+            
             <TextField className={classes.field} name="fechaExposicion" value={values.fechaExposicion} label="Fecha de exposición" type="date"
               InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
             />

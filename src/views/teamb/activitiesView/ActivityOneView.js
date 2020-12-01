@@ -131,39 +131,18 @@ const ActivityOneView = () => {
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
   const validarGuardarYEnviar = () => {
     resetError();
-    var result = true;
+    var result = validarGuardar();
 
-    if (values.titulo.length) { setErrorTitle(null) }
-    else {
-      setErrorTitle("El campo es obligatorio")
-      result = false;
-    }
-    if (values.descripcion.length) { setErrorDescription(null) }
-    else {
-      setErrorDescription("El campo es obligatorio")
-      result = false;
-    }
-    if (values.programaSeleccionado != "") { setErrorProgram(null) }
-    else {
-      setErrorProgram("Seleccione una opción válida")
-      result = false;
-    }
-    if (values.horasAsignadas !== "") {
-      if (values.horasAsignadas > 0) { setErrorHour(null) }
-      else {
-        setErrorHour("Seleccione un número de horas valido")
+    
+    if (values.horasAsignadas > 0 && values.horasAsignadas !== "") {
+      if( values.horasAsignadas < 10000) {setErrorHour(null) }
+      else{
+        setErrorHour("El numero de horas asignadas debe ser menor a 10000")
         result = false;
       }
     }
     else {
       setErrorHour("Seleccione un número de horas valido")
-      result = false;
-    }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("")
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha inicial válida")
       result = false;
     }
     if (values.fechaFin.length) {
@@ -190,39 +169,55 @@ const ActivityOneView = () => {
     resetError();
     var result = true;
 
-    if (values.titulo.length) { setErrorTitle(null) }
+    if(values.titulo !== ''){
+      if (values.titulo.length < 61) { setErrorTitle(null) }
+      else {
+        setErrorTitle("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
+    }
     else {
       setErrorTitle("El campo es obligatorio")
       result = false;
     }
-    if (values.descripcion.length) { setErrorDescription(null) }
+    if(values.descripcion !== ''){
+      if (values.descripcion.length < 149) { setErrorDescription(null) }
+      else {
+        setErrorDescription("El campo debe tener máximo 148 caracteres")
+        result = false;
+      }
+    }
     else {
       setErrorDescription("El campo es obligatorio")
       result = false;
     }
-    if (values.programaSeleccionado != "") { setErrorProgram(null) }
+    if (values.programaSeleccionado !== 0) { setErrorProgram(null) }
     else {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.horasAsignadas >= 0 && values.horasAsignadas !== "") { setErrorHour(null) }
+    if (values.horasAsignadas >= 0 && values.horasAsignadas !== "") {
+      if( values.horasAsignadas < 10000) {setErrorHour(null) }
+      else{
+        setErrorHour("El numero de horas asignadas debe ser menor a 10000")
+        result = false;
+      }
+    }
     else {
-      setErrorHour("Seleccione un número de horas valido")
+      setErrorHour("Seleccione un número de horas valido.(Mayor o igual a 0)")
       result = false;
     }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("")
-    }
+    if (values.fechaInicio.length) {setErrorStartDate("")}
     else {
       setErrorStartDate("Seleccióne una fecha inicial válida")
       result = false;
     }
     if (values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
-      else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
-        result = false;
-      }
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+          result = false;
+        }
     }
     return result;
   }
@@ -235,7 +230,7 @@ const ActivityOneView = () => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad registrada correctamente") {
+    if (response === "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
     setPopUpRequestPost(false);

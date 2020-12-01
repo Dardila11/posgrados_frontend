@@ -57,7 +57,6 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
     id: state.id,
     proposito: state.purpose,
     descripcion: state.description,
-    //paisSeleccionado: '',
     ciudadSeleccionada: state.city,
     institucionSeleccionada: state.institution,
     nombreResponsable: state.responsible,
@@ -142,54 +141,23 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
   //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
   const validarGuardarYEnviar = () => {
     resetError();
-    var result = true;
+    var result =validarGuardar();
 
-    if (values.proposito.length) { setErrorProposito(null) }
-    else {
-      setErrorProposito("El campo es obligatorio");
-      result = false;
-    }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
-    else {
-      setErrorDescripcion("El campo es obligatorio");
-      result = false;
-    }
-    /*if (values.paisSeleccionado != "") { setErrorPais(null) }
-    else {
-      setErrorPais("Seleccione una opción válida");
-      result = false;
-    }*/
-    if (values.ciudadSeleccionada != "") { setErrorCiudad(null) }
-    else {
-      setErrorCiudad("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
-    else {
-      setErrorInstitucion("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.nombreResponsable.length) { setErrorNombreResponsable(null) }
-    else {
-      setErrorNombreResponsable("El campo es obligatorio");
-      result = false;
-    }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("")
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
-      result = false;
-    }
-    if (values.fechaFin != null) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+    if(values.fechaFin !== null){  
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de finalización de la estancia debe ser después de la fecha inicio de estancia")
+          result = false;
+        }
+      }
       else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
-        result = false;
+      setErrorEndDate("Seleccióne una fecha fin de estancia válida")
+      result = false;
       }
     }
     else {
-      setErrorEndDate("Seleccióne una fecha final válida")
+      setErrorEndDate("Seleccióne una fecha fin de estancia válida")
       result = false;
     }
     var textFile = document.getElementById("text-file").textContent;
@@ -205,39 +173,58 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
     resetError();
     var result = true;
 
-    if (values.proposito.length) { setErrorProposito(null) }
-    else {
+    if(values.proposito !== ''){
+      if (values.proposito.length < 101) { setErrorProposito(null) }
+      else {
+        setErrorProposito("El campo debe tener máximo 100 caracteres")
+        result = false;
+      }
+    }
+    else{
       setErrorProposito("El campo es obligatorio");
-      result = false;
+        result = false;
+    }   
+    if(values.descripcion !== ''){
+      if (values.descripcion.length < 149) { setErrorDescripcion(null) }
+      else {
+        setErrorDescripcion("El campo debe tener máximo 148 caracteres")
+        result = false;
+      }
     }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
     else {
-      setErrorDescripcion("El campo es obligatorio");
+      setErrorDescripcion("El campo es obligatorio")
       result = false;
-    }
-    if (values.ciudadSeleccionada != "") { setErrorCiudad(null) }
+    } 
+    if (values.ciudadSeleccionada !== 0) { setErrorCiudad(null) }
     else {
       setErrorCiudad("Seleccione una opción válida");
       result = false;
     }
-    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
+    if (values.institucionSeleccionada !== 0) { setErrorInstitucion(null) }
     else {
       setErrorInstitucion("Seleccione una opción válida");
       result = false;
     }
-    if (values.nombreResponsable.length) { setErrorNombreResponsable(null) }
-    else {
-      setErrorNombreResponsable("El campo es obligatorio");
-      result = false;
+    if(values.nombreResponsable !== ''){
+      if (values.nombreResponsable.length < 61) { setErrorNombreResponsable(null) }
+      else {
+        setErrorNombreResponsable("El campo debe tener máximo 60 caracteres")
+        result = false;
+      }
     }
+    else{
+      setErrorNombreResponsable("El campo es obligatorio");
+        result = false;
+    } 
     if (values.fechaInicio.length) {
-      setErrorStartDate("")
+      setErrorStartDate("") 
     }
     else {
       setErrorStartDate("Seleccióne una fecha inicio de estancia válida")
       result = false;
     }
-    if (values.fechaFin != null) {
+    
+    if(values.fechaFin !== null){  
       if (values.fechaFin.length) {
         if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
         else {
@@ -246,6 +233,7 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
         }
       }
     }
+    
     return result
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -257,7 +245,7 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad editada correctamente") {
+    if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
     callbackDialogOpen(false);
@@ -324,11 +312,6 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
             />
             {/* Validacion del campo */}
             {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
-            {/*
-              <SelectField name="paisSeleccionado" label="Pais" handleChange={handleChange} />
-               Validacion del campo 
-              {errorPais ? <Typography className={classes.validator}> {errorPais} </Typography> : null}
-              */}
             <SelectField name="ciudadSeleccionada" Selected={values.ciudadSeleccionada} label="Ciudad" handleChange={handleChange} />
             {/* Validacion del campo */}
             {errorCiudad ? <Typography className={classes.validator}> {errorCiudad} </Typography> : null}
@@ -347,6 +330,7 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
                 {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
               </Grid>
               <Grid item xs={6}>
+                {values.fechaFin == null ? values.fechaFin = '' : null}
                 <TextField fullWidth className={classes.field} name="fechaFin" value={values.fechaFin} label="Fecha de finalización" type="date"
                   InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                 />

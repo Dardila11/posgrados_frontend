@@ -149,56 +149,25 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
   //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
   const validarGuardarYEnviar = () => {
     resetError();
-    var result = true;
-
-    if (values.titulo.length) { setErrorTitulo(null) }
-    else {
-      setErrorTitulo("El campo es obligatorio");
-      result = false;
-    }
-    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
-    else {
-      setErrorTipo("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.nombre.length) { setErrorNombre(null) }
-    else {
-      setErrorNombre("El campo es obligatorio");
-      result = false;
-    }
-    if (values.autores.length) { setErrorAutores(null) }
-    else {
-      setErrorAutores("El campo es obligatorio");
-      result = false;
-    }
-    if (values.editorial.length) { setErrorEditorial(null) }
-    else {
-      setErrorEditorial("El campo es obligatorio");
-      result = false;
-    }
-    if (values.datosGenerales.length) { setErrorDatosGenerales(null) }
-    else {
-      setErrorDatosGenerales("El campo es obligatorio");
-      result = false;
-    }
-    if (values.fechaInicio.length ) {
-      setErrorStartDate("") 
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
-      result = false;
-    }
-    if (values.fechaFin != null) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+    var result = validarGuardar();
+    
+    if(values.fechaFin !== null){
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de publicación debe ser después de la fecha de envió")
+          result = false;
+        }
+      }
       else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        setErrorEndDate("Seleccióne una fecha de publicación válida")
         result = false;
       }
-    }
+    }  
     else {
       setErrorEndDate("Seleccióne una fecha de publicación válida")
       result = false;
-    }    
+    }  
     var textFile = document.getElementById("text-file").textContent;
     if (textFile.length > 0) { setErrorFile(null) }
     else {
@@ -211,34 +180,65 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
   const validarGuardar = () => {
     resetError();
     var result = true;
-
-    if (values.titulo.length) { setErrorTitulo(null) }
+    
+    if(values.titulo !== ''){
+      if (values.titulo.length < 61) { setErrorTitulo(null) }
+      else {
+        setErrorTitulo("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
+    }
     else {
-      setErrorTitulo("El campo es obligatorio");
+      setErrorTitulo("El campo es obligatorio")
       result = false;
     }
-    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
+    if (values.tipoSeleccionado !== "") { setErrorTipo(null) }
     else {
       setErrorTipo("Seleccione una opción válida");
       result = false;
     }
-    if (values.nombre.length) { setErrorNombre(null) }
-    else {
+    if(values.nombre !== ''){
+      if (values.nombre.length < 61) { setErrorNombre(null) }
+      else {
+        setErrorNombre("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
+    }
+    else{
       setErrorNombre("El campo es obligatorio");
-      result = false;
+       result = false;
+    } 
+
+    if(values.autores !== ''){
+      if (values.autores.length < 81) { setErrorAutores(null) }
+      else {
+        setErrorAutores("El campo debe tener máximo 80 carateres")
+        result = false;
+      }
     }
-    if (values.autores.length) { setErrorAutores(null) }
-    else {
+    else{
       setErrorAutores("El campo es obligatorio");
-      result = false;
+       result = false;
     }
-    if (values.editorial.length) { setErrorEditorial(null) }
-    else {
+    if(values.editorial !== ''){
+      if (values.editorial.length < 101) { setErrorEditorial(null) }
+      else {
+        setErrorEditorial("El campo debe tener máximo 100 carateres")
+        result = false;
+      }
+    }
+    else{
       setErrorEditorial("El campo es obligatorio");
-      result = false;
+       result = false;
+    } 
+    if(values.datosGenerales !== ''){
+      if (values.datosGenerales.length < 149) { setErrorDatosGenerales(null) }
+      else {
+        setErrorDatosGenerales("El campo debe tener máximo 148 carateres")
+        result = false;
+      }
     }
-    if (values.datosGenerales.length) { setErrorDatosGenerales(null) }
-    else {
+    else{
       setErrorDatosGenerales("El campo es obligatorio");
       result = false;
     }
@@ -248,8 +248,8 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
     else {
       setErrorStartDate("Seleccióne una fecha de envió publicación válida")
       result = false;
-    } 
-    if (values.fechaFin != null) {
+    }
+    if(values.fechaFin !== null){
       if (values.fechaFin.length) {
         if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
         else {
@@ -258,7 +258,6 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
         }
       }
     }
-     
     return result;
   }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
@@ -270,7 +269,7 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad editada correctamente") {
+    if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
     callbackDialogOpen(false);
@@ -379,6 +378,7 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
                   {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
+                  {values.fechaFin == null ? values.fechaFin = '' : null}
                   <TextField fullWidth className={classes.field} name="fechaFin" value={values.fechaFin} label="Fecha de publicación" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                   />

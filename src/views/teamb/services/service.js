@@ -111,24 +111,28 @@ export default class service {
         return axios.post(url,prize);
     }
 
-    PutActivityOneEdit(activity, id){
+    PutActivityOneEdit(activity, id) {
         const url= `${API_URL}/api/projectCourse/`+id+`/`;
         return axios.put(url, activity);
     }
-    PutActivityTwoEdit(activity, id){
+    PutActivityTwoEdit(activity, id) {
         const url= `${API_URL}/api/lecture/`+id+`/`;
         return axios.put(url, activity);
     }
-    PutActivityThreeEdit(activity, id){
+    PutActivityThreeEdit(activity, id) {
         const url= `${API_URL}/api/publication/`+id+`/`;
         return axios.put(url, activity);
     }
-    PutActivityFourEdit(activity, id){
+    PutActivityFourEdit(activity, id) {
         const url= `${API_URL}/api/presentationResults/`+id+`/`;
         return axios.put(url, activity);
     }
-    PutActivityFiveEdit(activity, id){
+    PutActivityFiveEdit(activity, id) {
         const url= `${API_URL}/api/researchStays/`+id+`/`;
+        return axios.put(url, activity);
+    }
+    PutActivitySixEdit(activity, id) {
+        const url= `${API_URL}/api/participationProjects/`+id+`/`;
         return axios.put(url, activity);
     }
 

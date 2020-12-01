@@ -5,11 +5,9 @@ import {
 } from '@material-ui/core';
 
 import service from 'src/views/teamb/services/service';
-import util from 'src/views/teamb/services/util';
 
 const CoordEvaluation = (props) => {
     const objService = new service();
-    const objUtil = new util();
 
     const [evaluationCoordinator, setEvaluationCoordinator] = useState('');
      

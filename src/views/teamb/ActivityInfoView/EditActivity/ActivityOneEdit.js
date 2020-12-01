@@ -135,42 +135,32 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     setErrorFile(null);
   }
 
-  // Permite verificar que todos los campos requeridos se encuentren diligenciados 
   const validarGuardarYEnviar = () => {
     resetError();
-    var result = true;
+    var result = validarGuardar();
 
-    if (values.titulo.length) { setErrorTitle(null) }
-    else {
-      setErrorTitle("El campo es obligatorio")
-      result = false;
+    
+    if (values.horasAsignadas > 0 && values.horasAsignadas !== "") {
+      if( values.horasAsignadas < 10000) {setErrorHour(null) }
+      else{
+        setErrorHour("El numero de horas asignadas debe ser menor a 10000")
+        result = false;
+      }
     }
-    if (values.descripcion.length) { setErrorDescription(null) }
-    else {
-      setErrorDescription("El campo es obligatorio")
-      result = false;
-    }
-    if (values.programaSeleccionado != "") { setErrorProgram(null) }
-    else {
-      setErrorProgram("Seleccione una opción válida")
-      result = false;
-    }
-    if (values.horasAsignadas > 0) { setErrorHour(null) }
     else {
       setErrorHour("Seleccione un número de horas valido")
       result = false;
     }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("")
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha inicial válida")
-      result = false;
-    }
-    if (values.fechaFin != null) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+    if(values.fechaFin != null){
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+          result = false;
+        }
+      }
       else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        setErrorEndDate("Seleccióne una fecha final válida")
         result = false;
       }
     }
@@ -186,34 +176,55 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     }
     return result;
   }
-
+  // Permite verificar que todos los campos requeridos se encuentren diligenciados al guardar
   const validarGuardar = () => {
     resetError();
     var result = true;
 
-    if (values.titulo.length) { setErrorTitle(null) }
+    if(values.titulo !== ''){
+      if (values.titulo.length < 61) { setErrorTitle(null) }
+      else {
+        setErrorTitle("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
+    }
     else {
       setErrorTitle("El campo es obligatorio")
       result = false;
     }
-    if (values.descripcion.length) { setErrorDescription(null) }
+    if(values.descripcion !== ''){
+      if (values.descripcion.length < 149) { setErrorDescription(null) }
+      else {
+        setErrorDescription("El campo debe tener máximo 148 caracteres")
+        result = false;
+      }
+    }
     else {
       setErrorDescription("El campo es obligatorio")
       result = false;
     }
-    if (values.programaSeleccionado != "") { setErrorProgram(null) }
+    if (values.programaSeleccionado !== 0) { setErrorProgram(null) }
     else {
       setErrorProgram("Seleccione una opción válida")
       result = false;
     }
-    if (values.fechaInicio != "") {
-      setErrorStartDate("")
+    if (values.horasAsignadas >= 0 && values.horasAsignadas !== "") {
+      if( values.horasAsignadas < 10000) {setErrorHour(null) }
+      else{
+        setErrorHour("El numero de horas asignadas debe ser menor a 10000")
+        result = false;
+      }
     }
+    else {
+      setErrorHour("Seleccione un número de horas valido.(Mayor o igual a 0)")
+      result = false;
+    }
+    if (values.fechaInicio.length) {setErrorStartDate("")}
     else {
       setErrorStartDate("Seleccióne una fecha inicial válida")
       result = false;
     }
-    if (values.fechaFin != null) {
+    if(values.fechaFin != null){
       if (values.fechaFin.length) {
         if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
         else {
@@ -221,11 +232,6 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
           result = false;
         }
       }
-    }
-    if (values.horasAsignadas >= 0) { setErrorHour(null) }
-    else {
-      setErrorHour("Seleccione un número de horas valido")
-      result = false;
     }
     return result;
   }
@@ -238,7 +244,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad editada correctamente") {
+    if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
     callbackDialogOpen(false);
@@ -317,6 +323,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
                 {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
               </Grid>
               <Grid item xs={6}>
+                {values.fechaFin == null ? values.fechaFin = '' : null}
                 <TextField fullWidth className={classes.field} name="fechaFin" value={values.fechaFin} label="Fecha de fin" type="date"
                   InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                 />

@@ -3,7 +3,6 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
 import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
@@ -134,31 +133,68 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
     setErrorFile(null);
   }
   // Permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validarGuardarYEnviar = () => {
+ const validarGuardarYEnviar = () => {
+  resetError();
+  var result = validarGuardar();
+ 
+  var textFile = document.getElementById("text-file").textContent;
+  if (textFile.length > 0) { setErrorFile(null) }
+  else {
+    setErrorFile("Es necesario subir el archivo");
+    result = false;
+  }
+  return result;
+}
+  // Permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+  const validarGuardar = () => {
     resetError();
     var result = true;
-
-    if (values.titulo.length) { setErrorTitulo(null) }
+     
+    if(values.titulo !== ''){
+      if (values.titulo.length < 61) { setErrorTitulo(null) }
+      else {
+        setErrorTitulo("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
+    }
     else {
-      setErrorTitulo("El campo es obligatorio");
+      setErrorTitulo("El campo es obligatorio")
       result = false;
     }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
-    else {
-      setErrorDescripcion("El campo es obligatorio");
-      result = false;
+    if(values.descripcion !== ''){
+      if (values.descripcion.length < 149) { setErrorDescripcion(null) }
+      else {
+        setErrorDescripcion("El campo debe tener máximo 148 caracteres")
+        result = false;
+      }
     }
-    if (values.nombreEvento.length) { setErrorNombreEvento(null) }
     else {
+      setErrorDescripcion("El campo es obligatorio")
+      result = false;
+    }    
+    if(values.nombreEvento !== ''){  
+      if (values.nombreEvento.length < 61) { setErrorNombreEvento(null) }
+      else {
+        setErrorNombreEvento("El campo debe tener máximo 60 caracteres")
+        result = false;
+      }
+    }
+    else{
       setErrorNombreEvento("El campo es obligatorio");
       result = false;
     }
-    if (values.lugarCelebracion.length) { setErrorLugar(null) }
-    else {
+    if(values.lugarCelebracion !== ''){
+      if (values.lugarCelebracion.length < 41) { setErrorLugar(null) }
+      else {
+        setErrorLugar("El campo debe tener máximo 40 caracteres")
+        result = false;
+      }
+    }
+    else{
       setErrorLugar("El campo es obligatorio");
       result = false;
     }
-    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
+    if (values.institucionSeleccionada !== 0) { setErrorInstitucion(null) }
     else {
       setErrorInstitucion("Seleccione una opción válida");
       result = false;
@@ -166,53 +202,10 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
     if (values.fechaRealizacion.length) { setErrorFecha("") }
     else {
       setErrorFecha("Seleccióne una fecha");
-      result = false;
-    }
-    var textFile = document.getElementById("text-file").textContent;
-    if (textFile.length > 0) { setErrorFile(null) }
-    else {
-      setErrorFile("Es necesario subir el archivo");
       result = false;
     }
     return result;
   }
-    // Permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
-    const validarGuardar = () => {
-      resetError();
-      var result = true;
-  
-      if (values.titulo.length) { setErrorTitulo(null) }
-    else {
-      setErrorTitulo("El campo es obligatorio");
-      result = false;
-    }
-    if (values.descripcion.length) { setErrorDescripcion(null) }
-    else {
-      setErrorDescripcion("El campo es obligatorio");
-      result = false;
-    }
-    if (values.nombreEvento.length) { setErrorNombreEvento(null) }
-    else {
-      setErrorNombreEvento("El campo es obligatorio");
-      result = false;
-    }
-    if (values.lugarCelebracion.length) { setErrorLugar(null) }
-    else {
-      setErrorLugar("El campo es obligatorio");
-      result = false;
-    }
-    if (values.institucionSeleccionada != "") { setErrorInstitucion(null) }
-    else {
-      setErrorInstitucion("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.fechaRealizacion.length) { setErrorFecha("") }
-    else {
-      setErrorFecha("Seleccióne una fecha");
-      result = false;
-    }
-      return result;
-    }
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -222,7 +215,7 @@ export const ActivityTwoEdit = ({state, callbackDialogOpen}) => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad editada correctamente") {
+    if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
     callbackDialogOpen(false);

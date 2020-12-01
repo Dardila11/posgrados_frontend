@@ -140,48 +140,12 @@ const ActivityThreeView = () => {
     setErrorFile(null);
   }
 
-  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validarGuardarYEnviar = () => {
-    resetError();
-    var result = true;
-
-    if (values.titulo.length) { setErrorTitulo(null) }
-    else {
-      setErrorTitulo("El campo es obligatorio");
-      result = false;
-    }
-    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
-    else {
-      setErrorTipo("Seleccione una opción válida");
-      result = false;
-    }
-    if (values.nombre.length) { setErrorNombre(null) }
-    else {
-      setErrorNombre("El campo es obligatorio");
-      result = false;
-    }
-    if (values.autores.length) { setErrorAutores(null) }
-    else {
-      setErrorAutores("El campo es obligatorio");
-      result = false;
-    }
-    if (values.editorial.length) { setErrorEditorial(null) }
-    else {
-      setErrorEditorial("El campo es obligatorio");
-      result = false;
-    }
-    if (values.datosGenerales.length) { setErrorDatosGenerales(null) }
-    else {
-      setErrorDatosGenerales("El campo es obligatorio");
-      result = false;
-    }
-    if (values.fechaInicio.length ) {
-      setErrorStartDate("") 
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
-      result = false;
-    }
+ //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+ const validarGuardarYEnviar = () => {
+  resetError();
+  var result = validarGuardar();
+  
+  if(values.fechaFin != null){
     if (values.fechaFin.length) {
       if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
@@ -192,57 +156,94 @@ const ActivityThreeView = () => {
     else {
       setErrorEndDate("Seleccióne una fecha de publicación válida")
       result = false;
-    }    
-    var textFile = document.getElementById("text-file").textContent;
-    if (textFile.length > 0) { setErrorFile(null) }
-    else {
-      setErrorFile("Es necesario subir el archivo");
-      result = false;
     }
-    return result;
+  }  
+  else {
+    setErrorEndDate("Seleccióne una fecha de publicación válida")
+    result = false;
+  }  
+  var textFile = document.getElementById("text-file").textContent;
+  if (textFile.length > 0) { setErrorFile(null) }
+  else {
+    setErrorFile("Es necesario subir el archivo");
+    result = false;
   }
-  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
-  const validarGuardar = () => {
-    resetError();
-    var result = true;
+  return result;
+}
+//"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+const validarGuardar = () => {
+  resetError();
+  var result = true;
+  
+  if(values.titulo !== ''){
+    if (values.titulo.length < 61) { setErrorTitulo(null) }
+    else {
+      setErrorTitulo("El campo debe tener máximo 60 carateres")
+      result = false;
+    }
+  }
+  else {
+    setErrorTitulo("El campo es obligatorio")
+    result = false;
+  }
+  if (values.tipoSeleccionado !== "") { setErrorTipo(null) }
+  else {
+    setErrorTipo("Seleccione una opción válida");
+    result = false;
+  }
+  if(values.nombre !== ''){
+    if (values.nombre.length < 61) { setErrorNombre(null) }
+    else {
+      setErrorNombre("El campo debe tener máximo 60 carateres")
+      result = false;
+    }
+  }
+  else{
+    setErrorNombre("El campo es obligatorio");
+     result = false;
+  } 
 
-    if (values.titulo.length) { setErrorTitulo(null) }
+  if(values.autores !== ''){
+    if (values.autores.length < 81) { setErrorAutores(null) }
     else {
-      setErrorTitulo("El campo es obligatorio");
+      setErrorAutores("El campo debe tener máximo 80 carateres")
       result = false;
     }
-    if (values.tipoSeleccionado != "") { setErrorTipo(null) }
+  }
+  else{
+    setErrorAutores("El campo es obligatorio");
+     result = false;
+  }
+  if(values.editorial !== ''){
+    if (values.editorial.length < 101) { setErrorEditorial(null) }
     else {
-      setErrorTipo("Seleccione una opción válida");
+      setErrorEditorial("El campo debe tener máximo 100 carateres")
       result = false;
     }
-    if (values.nombre.length) { setErrorNombre(null) }
+  }
+  else{
+    setErrorEditorial("El campo es obligatorio");
+     result = false;
+  } 
+  if(values.datosGenerales !== ''){
+    if (values.datosGenerales.length < 149) { setErrorDatosGenerales(null) }
     else {
-      setErrorNombre("El campo es obligatorio");
+      setErrorDatosGenerales("El campo debe tener máximo 148 carateres")
       result = false;
     }
-    if (values.autores.length) { setErrorAutores(null) }
-    else {
-      setErrorAutores("El campo es obligatorio");
-      result = false;
-    }
-    if (values.editorial.length) { setErrorEditorial(null) }
-    else {
-      setErrorEditorial("El campo es obligatorio");
-      result = false;
-    }
-    if (values.datosGenerales.length) { setErrorDatosGenerales(null) }
-    else {
-      setErrorDatosGenerales("El campo es obligatorio");
-      result = false;
-    }
-    if (values.fechaInicio.length) {
-      setErrorStartDate("") 
-    }
-    else {
-      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
-      result = false;
-    }
+  }
+  else{
+    setErrorDatosGenerales("El campo es obligatorio");
+    result = false;
+  }
+  if (values.fechaInicio.length) {
+    setErrorStartDate("") 
+  }
+  else {
+    setErrorStartDate("Seleccióne una fecha de envió publicación válida")
+    result = false;
+  }
+  if(values.fechaFin != null){
     if (values.fechaFin.length) {
       if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
       else {
@@ -250,8 +251,9 @@ const ActivityThreeView = () => {
         result = false;
       }
     }
-    return result;
   }
+  return result;
+}
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -261,7 +263,7 @@ const ActivityThreeView = () => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response == "Actividad registrada correctamente") {
+    if (response === "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
     setPopUpRequestPost(false);
