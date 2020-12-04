@@ -15,9 +15,10 @@ const BreadCrumbs = () => {
   const classes = useStyles();
   return (
     <div className={classes.root}>
-      <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+      <Breadcrumbs maxItems={3} aria-label="breadcrumb">
         <RouterLink color="inherit" to="/student"> Estudiante </RouterLink>
-        <Typography color="textPrimary"> Actividades </Typography>
+        <RouterLink color="inherit" to="/student/list-activities"> Actividades </RouterLink>
+        <Typography color="textPrimary"> Crear actividad </Typography> 
       </Breadcrumbs>
     </div>
   );
