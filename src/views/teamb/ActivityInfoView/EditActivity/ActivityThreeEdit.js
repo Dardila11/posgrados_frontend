@@ -3,14 +3,13 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider, InputLabel, Select, MenuItem, FormControl
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
 import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
 import Response from 'src/views/teamb/activitiesView/components/Response';
 
-import service from '../services/service';
-import util from '../services/util';
+import service from '../../services/service';
+import util from '../../services/util';
 
 const objService = new service();
 const objUtil = new util();
@@ -24,7 +23,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center'
   },
   card: {
-    maxWidth: '50%',
     margin: '10px'
   },
   title: {
@@ -51,18 +49,26 @@ const tipo = [
   { value: 'T4', label: 'Otras publicaciones' }
 ];
 
-const ActivityThreeView = () => {
+export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    if(state.receipt !== null) {
+      document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
+    }
+  }, []);
+
   // Estado que controla los valores del formulario
   const [values, setValues] = useState({
-    titulo: '',
-    tipoSeleccionado: '',
-    nombre: '',
-    autores: '',
-    editorial: '',
-    datosGenerales: '',
-    fechaInicio: '',
-    fechaFin: ''
+    id:state.id,
+    titulo: state.title,
+    tipoSeleccionado: state.type_publication,
+    nombre: state.name,
+    autores: state.authors,
+    editorial: state.editorial,
+    datosGenerales: state.general_data,
+    fechaInicio: state.start_date,
+    fechaFin: state.end_date,
   });
 
   const handleChange = (event) => {
@@ -140,120 +146,120 @@ const ActivityThreeView = () => {
     setErrorFile(null);
   }
 
- //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
- const validarGuardarYEnviar = () => {
-  resetError();
-  var result = validarGuardar();
-  
-  if(values.fechaFin != null){
-    if (values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
+  const validarGuardarYEnviar = () => {
+    resetError();
+    var result = validarGuardar();
+    
+    if(values.fechaFin !== null){
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de publicación debe ser después de la fecha de envió")
+          result = false;
+        }
+      }
       else {
-        setErrorEndDate("La fecha de publicación debe ser después de la fecha de envió")
+        setErrorEndDate("Seleccióne una fecha de publicación válida")
         result = false;
       }
-    }
+    }  
     else {
       setErrorEndDate("Seleccióne una fecha de publicación válida")
       result = false;
-    }
-  }  
-  else {
-    setErrorEndDate("Seleccióne una fecha de publicación válida")
-    result = false;
-  }  
-  var textFile = document.getElementById("text-file").textContent;
-  if (textFile.length > 0) { setErrorFile(null) }
-  else {
-    setErrorFile("Es necesario subir el archivo");
-    result = false;
-  }
-  return result;
-}
-//"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
-const validarGuardar = () => {
-  resetError();
-  var result = true;
-  
-  if(values.titulo !== ''){
-    if (values.titulo.length < 61) { setErrorTitulo(null) }
+    }  
+    var textFile = document.getElementById("text-file").textContent;
+    if (textFile.length > 0) { setErrorFile(null) }
     else {
-      setErrorTitulo("El campo debe tener máximo 60 carateres")
+      setErrorFile("Es necesario subir el archivo");
       result = false;
     }
+    return result;
   }
-  else {
-    setErrorTitulo("El campo es obligatorio")
-    result = false;
-  }
-  if (values.tipoSeleccionado !== "") { setErrorTipo(null) }
-  else {
-    setErrorTipo("Seleccione una opción válida");
-    result = false;
-  }
-  if(values.nombre !== ''){
-    if (values.nombre.length < 61) { setErrorNombre(null) }
-    else {
-      setErrorNombre("El campo debe tener máximo 60 carateres")
-      result = false;
-    }
-  }
-  else{
-    setErrorNombre("El campo es obligatorio");
-     result = false;
-  } 
-
-  if(values.autores !== ''){
-    if (values.autores.length < 81) { setErrorAutores(null) }
-    else {
-      setErrorAutores("El campo debe tener máximo 80 carateres")
-      result = false;
-    }
-  }
-  else{
-    setErrorAutores("El campo es obligatorio");
-     result = false;
-  }
-  if(values.editorial !== ''){
-    if (values.editorial.length < 101) { setErrorEditorial(null) }
-    else {
-      setErrorEditorial("El campo debe tener máximo 100 carateres")
-      result = false;
-    }
-  }
-  else{
-    setErrorEditorial("El campo es obligatorio");
-     result = false;
-  } 
-  if(values.datosGenerales !== ''){
-    if (values.datosGenerales.length < 149) { setErrorDatosGenerales(null) }
-    else {
-      setErrorDatosGenerales("El campo debe tener máximo 148 carateres")
-      result = false;
-    }
-  }
-  else{
-    setErrorDatosGenerales("El campo es obligatorio");
-    result = false;
-  }
-  if (values.fechaInicio.length) {
-    setErrorStartDate("") 
-  }
-  else {
-    setErrorStartDate("Seleccióne una fecha de envió publicación válida")
-    result = false;
-  }
-  if(values.fechaFin != null){
-    if (values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+  const validarGuardar = () => {
+    resetError();
+    var result = true;
+    
+    if(values.titulo !== ''){
+      if (values.titulo.length < 61) { setErrorTitulo(null) }
       else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        setErrorTitulo("El campo debe tener máximo 60 carateres")
         result = false;
       }
     }
+    else {
+      setErrorTitulo("El campo es obligatorio")
+      result = false;
+    }
+    if (values.tipoSeleccionado !== "") { setErrorTipo(null) }
+    else {
+      setErrorTipo("Seleccione una opción válida");
+      result = false;
+    }
+    if(values.nombre !== ''){
+      if (values.nombre.length < 61) { setErrorNombre(null) }
+      else {
+        setErrorNombre("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
+    }
+    else{
+      setErrorNombre("El campo es obligatorio");
+       result = false;
+    } 
+
+    if(values.autores !== ''){
+      if (values.autores.length < 81) { setErrorAutores(null) }
+      else {
+        setErrorAutores("El campo debe tener máximo 80 carateres")
+        result = false;
+      }
+    }
+    else{
+      setErrorAutores("El campo es obligatorio");
+       result = false;
+    }
+    if(values.editorial !== ''){
+      if (values.editorial.length < 101) { setErrorEditorial(null) }
+      else {
+        setErrorEditorial("El campo debe tener máximo 100 carateres")
+        result = false;
+      }
+    }
+    else{
+      setErrorEditorial("El campo es obligatorio");
+       result = false;
+    } 
+    if(values.datosGenerales !== ''){
+      if (values.datosGenerales.length < 149) { setErrorDatosGenerales(null) }
+      else {
+        setErrorDatosGenerales("El campo debe tener máximo 148 carateres")
+        result = false;
+      }
+    }
+    else{
+      setErrorDatosGenerales("El campo es obligatorio");
+      result = false;
+    }
+    if (values.fechaInicio.length) {
+      setErrorStartDate("") 
+    }
+    else {
+      setErrorStartDate("Seleccióne una fecha de envió publicación válida")
+      result = false;
+    }
+    if(values.fechaFin !== null){
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+          result = false;
+        }
+      }
+    }
+    return result;
   }
-  return result;
-}
   // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
   // formulario al backend
   const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
@@ -263,28 +269,18 @@ const validarGuardar = () => {
   const [response, setResponse] = useState(null);
 
   const handleResponseAccept = () => {
-    if (response === "Actividad registrada correctamente") {
+    if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
     }
+    callbackDialogOpen(false);
     setPopUpRequestPost(false);
     setResponse(null);
   };
 
   const handleBack = () => {
-    window.location.href = './';
+    setEmergenteCancelar(false);
+    callbackDialogOpen(false);
   };
-
-  const [currentAcadYear, setCurrentAcadYear] = useState(null);
-  useEffect(() => {
-    /* Dato quemado desde la tabla User: id_user */
-    objService.GetPeriodService(8).then((result) => {
-      var CurrentPeriod = result.data.period;
-      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-      setCurrentAcadYear(CurrentAcadYear);
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
-  }, []);
 
   const SaveActivity = () => {
     var now = objUtil.GetCurretTimeDate();
@@ -300,25 +296,25 @@ const validarGuardar = () => {
     fd.append("editorial", values.editorial);
     fd.append("general_data", values.datosGenerales);
     fd.append("start_date", values.fechaInicio);
+    if (values.fechaFin === null) { values.fechaFin = ''; }
     fd.append("end_date", values.fechaFin);
     // Datos adicionales
-    fd.append("academic_year", currentAcadYear);
+    fd.append("academic_year", state.academic_year);
     fd.append("type", 3);
     fd.append("student", 36); // Consultar el id del estudiante actual
-    fd.append("date_record", now);
+    fd.append("date_record", state.date_record);
     fd.append("date_update", now);
     //fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);
     }
-    else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
-    objService.PostActivityThree(fd).then((result) => {
-      setResponse("Actividad registrada correctamente");
+    objService.PutActivityThreeEdit(fd, values.id).then((request) => {
+      setResponse("Actividad editada correctamente");
     }).catch(() => {
-      setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
+      setResponse("Ups! Ha ocurrido un error al editar la actividad, intentelo mas tarde o contacte con el administrador");
     });
     setPopUpRequestPost(true);
     setEmergenteGuardar(false);
@@ -326,17 +322,11 @@ const validarGuardar = () => {
   }
 
   return (
-    <Grid className={classes.root}>
-      <BreadCrumbs />
-      <Container className={classes.container}>
+    <Container className={classes.container}>
         <Card className={classes.card}>
           <Grid className={classes.content}>
-            <Typography className={classes.title} variant="h1" align="center" gutterBottom>
-              Publicaciones
-            </Typography>
-            <Divider />
             <form>
-              <TextField className={classes.field} fullWidth label="Titulo del articulo, capitulo, libro, monografia..."
+              <TextField className={classes.field} fullWidth value={values.titulo} label="Titulo del articulo, capitulo, libro, monografia..."
                 name="titulo" onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
@@ -344,7 +334,7 @@ const validarGuardar = () => {
 
               <FormControl className={classes.field} fullWidth required variant="outlined">
                 <InputLabel> Tipo de publicación </InputLabel>
-                <Select defaultValue={0} onChange={handleChange} label="Tipo de publicación" name="tipoSeleccionado">
+                <Select defaultValue={0} onChange={handleChange} value={values.tipoSeleccionado} label="Tipo de publicación" name="tipoSeleccionado">
                   <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
                   {tipo.map(element => (
                     <MenuItem key={element.value} value={element.label}> { element.label} </MenuItem>
@@ -354,25 +344,25 @@ const validarGuardar = () => {
               {/* Validacion del campo */}
               {errorTipo ? <Typography className={classes.validator}> {errorTipo} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Nombre de la publicación o titulo del libro" 
+              <TextField className={classes.field} fullWidth value={values.nombre} label="Nombre de la publicación o titulo del libro" 
                 name="nombre" onChange={handleChange} required variant="outlined" 
               />
               {/* Validacion del campo */}
               {errorNombre ? <Typography className={classes.validator}> {errorNombre} </Typography> : null}
               
-              <TextField className={classes.field} fullWidth label="Autores" name="autores" onChange={handleChange} 
+              <TextField className={classes.field} fullWidth value={values.autores} label="Autores" name="autores" onChange={handleChange} 
                 required variant="outlined" 
               />
               {/* Validacion del campo */}
               {errorAutores ? <Typography className={classes.validator}> {errorAutores} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Nombre de la editorial" name="editorial" 
+              <TextField className={classes.field} fullWidth value={values.editorial} label="Nombre de la editorial" name="editorial" 
                 onChange={handleChange} required variant="outlined" 
               />
               {/* Validacion del campo */}
               {errorEditorial ? <Typography className={classes.validator}> {errorEditorial} </Typography> : null}
 
-              <TextField className={classes.field} fullWidth label="Datos generales del tipo de publicación" 
+              <TextField className={classes.field} fullWidth value={values.datosGenerales} label="Datos generales del tipo de publicación" 
                 name="datosGenerales" onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}
@@ -381,14 +371,15 @@ const validarGuardar = () => {
               {/*justify="space-evenly"*/}
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaInicio" label="Envío publicación" type="date"
+                  <TextField fullWidth className={classes.field} name="fechaInicio" value={values.fechaInicio} label="Envío publicación" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
                   />
                   {/* Validacion del campo */}
                   {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de publicación" type="date"
+                  {values.fechaFin == null ? values.fechaFin = '' : null}
+                  <TextField fullWidth className={classes.field} name="fechaFin" value={values.fechaFin} label="Fecha de publicación" type="date"
                     InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
                   />
                   {/* Validacion del campo */}
@@ -423,7 +414,6 @@ const validarGuardar = () => {
         <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
 
       </Container>
-    </Grid>
-  );
+    );
 };
-export default ActivityThreeView;
+export default ActivityThreeEdit;

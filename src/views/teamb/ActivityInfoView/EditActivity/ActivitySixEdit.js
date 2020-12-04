@@ -3,15 +3,14 @@ import {
   Card, Grid, TextField, makeStyles, Container, Typography, Divider, InputLabel, Select, MenuItem, FormControl
 } from '@material-ui/core';
 
-import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
 import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
 import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
 import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
 import Response from 'src/views/teamb/activitiesView/components/Response';
 import SelectField from 'src/views/teamb/activitiesView/components/SelectField';
 
-import service from '../services/service';
-import util from '../services/util';
+import service from '../../services/service';
+import util from '../../services/util';
 
 const objService = new service();
 const objUtil = new util();
@@ -25,7 +24,6 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center'
   },
   card: {
-    maxWidth: '50%',
     margin: '10px'
   },
   title: {
@@ -50,20 +48,28 @@ const tipo = [
   { value: 'T2', label: 'Externa' },
 ];
 
-const ActivitySixView = () => {
+export const ActivitySixEdit = ({ state, callbackDialogOpen }) => {
   const classes = useStyles();
+
+    useEffect(() => {
+        if(state.receipt !== null) {
+          document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
+        }
+      }, []);
+
   // Estado que controla los valores del formulario
   const [values, setValues] = useState({
-    nombreProyecto: '',
-    investigadorSeleccionado: 0,
-    lugarTrabajo: '',
-    descripcion: '',
-    lineaSeleccionada: 0,
-    codigoVRI: 0,
-    convocatoria: '',
-    tipoSeleccionado: 0,
-    fechaInicio: '',
-    fechaFin: ''
+    id: state.id,
+    nombreProyecto: state.name,
+    investigadorSeleccionado: state.investigator,
+    lugarTrabajo: state.place,
+    descripcion: state.description,
+    lineaSeleccionada: state.investigation_line,
+    codigoVRI: state.code_VRI,
+    convocatoria: state.convocation,
+    tipoSeleccionado: state.type_convocation,
+    fechaInicio: state.start_date,
+    fechaFin: state.end_date
   });
 
   const handleChange = (event) => {
@@ -151,10 +157,16 @@ const ActivitySixView = () => {
     var result = true;
     result = validarGuardar();
     
-    if (values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+    if(values.fechaFin !== null){
+      if (values.fechaFin.length) {
+        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+        else {
+          setErrorEndDate("La fecha Fin del proyecto debe ser después de la fecha de inicio del proyecto")
+          result = false;
+        }
+      }
       else {
-        setErrorEndDate("La fecha Fin del proyecto debe ser después de la fecha de inicio del proyecto")
+        setErrorEndDate("Seleccióne fecha fin del proyecto válida")
         result = false;
       }
     }
@@ -253,12 +265,14 @@ const ActivitySixView = () => {
       setErrorStartDate("Seleccióne fecha de inicio del proyecto válida")
       result = false;
     }
-    if (values.fechaFin.length) {
-      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
-      else {
-        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
-        result = false;
-      }
+    if(values.fechaFin !== null){
+        if (values.fechaFin.length) {
+            if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+            else {
+                setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+                result = false;
+            }
+        }
     }
     return result
   }
@@ -274,25 +288,15 @@ const ActivitySixView = () => {
     if (response === "Actividad registrada correctamente") {
       window.location.href = window.location.href;
     }
+    callbackDialogOpen(false);
     setPopUpRequestPost(false);
     setResponse(null);
   };
 
   const handleBack = () => {
-    window.location.href = './';
+    setEmergenteCancelar(false);
+    callbackDialogOpen(false);
   };
-
-  const [currentAcadYear, setCurrentAcadYear] = useState(null);
-  useEffect(() => {
-    /* Dato quemado desde la tabla User: id_user */
-    objService.GetPeriodService(8).then((result) => {
-      var CurrentPeriod = result.data.period;
-      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-      setCurrentAcadYear(CurrentAcadYear);
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
-  }, []);
 
   const SaveActivity = () => {
     var now = objUtil.GetCurretTimeDate();
@@ -301,9 +305,11 @@ const ActivitySixView = () => {
     var send_email = emergenteGuardarYEnviar;
 
     const fd = new FormData();
+    fd.append("id", values.id);
     fd.append("name", values.nombreProyecto);
     fd.append("description", values.descripcion);
     fd.append("start_date", values.fechaInicio);
+    if (values.fechaFin === null) { values.fechaFin = ''; }
     fd.append("end_date", values.fechaFin);
     fd.append("place", values.lugarTrabajo);
     fd.append("code_VRI", values.codigoVRI);
@@ -312,20 +318,18 @@ const ActivitySixView = () => {
     fd.append("investigation_line", values.lineaSeleccionada);
     fd.append("investigator", values.investigadorSeleccionado);
     // Datos adicionales
-    fd.append("academic_year", currentAcadYear);
-    fd.append("type", 6);
+    fd.append("academic_year", state.academic_year);
     fd.append("student", 36); // Consultar el id del estudiante actual
-    fd.append("date_record", now);
+    fd.append("date_record", state.date_record);
     fd.append("date_update", now);
     //fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);
     }
-    else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
-    objService.PostActivitySix(fd).then((result) => {
+    objService.PutActivitySixEdit(fd, values.id).then((result) => {
       setResponse("Actividad registrada correctamente");
     }).catch(() => {
       setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
@@ -336,18 +340,12 @@ const ActivitySixView = () => {
   }
 
   return (
-    <Grid className={classes.root}>
-      <BreadCrumbs />
       <Container className={classes.container}>
         <Card className={classes.card}>
           <Grid className={classes.content}>
-            <Typography className={classes.title} variant="h1" align="center" gutterBottom>
-              Participación en proyectos de investigación
-            </Typography>
-            <Divider />
             <form>
               <TextField className={classes.field} fullWidth label="Nombre del proyecto" name="nombreProyecto" 
-                onChange={handleChange} required variant="outlined" 
+                onChange={handleChange} required variant="outlined" value={values.nombreProyecto}
               />
               {/* Validacion del campo */}
               {errorNombreProyecto ? <Typography className={classes.validator}> {errorNombreProyecto} </Typography> : null}
@@ -357,13 +355,13 @@ const ActivitySixView = () => {
               {errorNombreInvestigador ? <Typography className={classes.validator}> {errorNombreInvestigador} </Typography> : null}
 
               <TextField className={classes.field} fullWidth label="Lugar de trabajo" name="lugarTrabajo" onChange={handleChange} 
-                required variant="outlined" 
+                required variant="outlined" value={values.lugarTrabajo}
               />
               {/* Validacion del campo */}
               {errorLugarTrabajo ? <Typography className={classes.validator}> {errorLugarTrabajo} </Typography> : null}
 
               <TextField className={classes.field} fullWidth label="Descripción de actividad" name="descripcion" 
-                onChange={handleChange} required variant="outlined" 
+                onChange={handleChange} required variant="outlined" value={values.descripcion}
               />
               {/* Validacion del campo */}
               {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
@@ -379,36 +377,36 @@ const ActivitySixView = () => {
               {errorCodigoVRI ? <Typography className={classes.validator}> {errorCodigoVRI} </Typography> : null}
 
               <TextField className={classes.field} fullWidth label="Convocatoria" name="convocatoria" 
-                onChange={handleChange} required variant="outlined"
+                onChange={handleChange} required variant="outlined" value={values.convocatoria}
               />
               {/* Validacion del campo */}
               {errorConvocatoria ? <Typography className={classes.validator}> {errorConvocatoria} </Typography> : null}
 
               <FormControl className={classes.field} fullWidth required variant="outlined">
                 <InputLabel> Tipo de convocatoria </InputLabel>
-                <Select defaultValue={0} onChange={handleChange} label="Tipo de convocatoria" name="tipoSeleccionado" > 
+                <Select defaultValue={0} onChange={handleChange} value={values.tipoSeleccionado} label="Tipo de convocatoria" name="tipoSeleccionado">
                   <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
                   {tipo.map(element => (
                     <MenuItem key={element.value} value={element.label}> { element.label} </MenuItem>
                   ))}
                 </Select>
               </FormControl>
-
               {/* Validacion del campo */}
               {errorTipo ? <Typography className={classes.validator}> {errorTipo} </Typography> : null}
 
               {/*justify="space-evenly"*/}
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <TextField fullWidth className={classes.field} name="fechaInicio" label="Fecha de inicio" type="date"
-                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
+                  <TextField fullWidth className={classes.field} name="fechaInicio" label="Fecha de inicio" type="date" 
+                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required value={values.fechaInicio}
                   />
                   {/* Validacion del campo */}
                   {errorStartDate ? <Typography className={classes.validator}> {errorStartDate} </Typography> : null}
                 </Grid>
                 <Grid item xs={6}>
+                  {values.fechaFin == null ? values.fechaFin = '' : null}
                   <TextField fullWidth className={classes.field} name="fechaFin" label="Fecha de fin" type="date"
-                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined"
+                    InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" value={values.fechaFin}
                   />
                   {/* Validacion del campo */}
                   {errorEndDate ? <Typography className={classes.validator}> {errorEndDate} </Typography> : null}
@@ -442,7 +440,6 @@ const ActivitySixView = () => {
         <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
 
       </Container>
-    </Grid>
   );
 };
-export default ActivitySixView;
+export default ActivitySixEdit;

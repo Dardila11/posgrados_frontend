@@ -42,4 +42,22 @@ export default class util {
         var now = currentDate + " " + currentTime;
         return now;
     }
+
+    GetState(state){
+        switch(state){
+            case 1 : return "Registrado";
+            case 2 : return "En revision";
+            case 3 : return "Revisada";
+            case 4 : return "Aceptada";
+            default: return "Estado no identificado."
+        }
+    }
+
+    GetEvaluation(state){
+        switch(state){
+            case 1 : return "Favorable";
+            case 2 : return "No favorable";
+            default: return "Evaluación no identificada."
+        }
+    }
 }
