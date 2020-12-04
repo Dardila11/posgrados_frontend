@@ -22,12 +22,11 @@ const useStyles = makeStyles((theme) => ({
 
 
 const ListPagination = ({pages, ...rest}) => {   
-  const nPages = pages.length
-  console.log(pages)
+  const nPages = pages.length 
   const classes = useStyles()
 
-  const handlePage = e => {
-    var page = e.target.value
+  const handlePage = (event, value) => {
+    var page = value
     rest.changuePage(page)
   }
 
@@ -35,8 +34,7 @@ const ListPagination = ({pages, ...rest}) => {
       <Container className = {classes.Container} >
           <Pagination count={nPages} color='primary' onChange={handlePage}/>          
       </Container>            
-  );
-    
+  );    
 
 }
 
