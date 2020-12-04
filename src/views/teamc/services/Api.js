@@ -1,86 +1,75 @@
 import http from './ApiConfig';
-import studentData from './local_data/students-info.json';
-import activitiesData from './local_data/student_activities.json';
-import directorEvaluations from './local_data/director_evaluations.json';
 
-/* COORDINATOR*/
+/* Coordinator services*/
 const getStudents = () => {
-  let content = http.get('/api/student');
-  console.log('Api get: Students');
-  return content;
+  return http.get('/api/student');
 };
 
 const getCoordinatorActivities = id =>{
-  let content = http.get('/api/coordinator/' + id + '/activity');
-  console.log('Api get: Coordinator activities');
-  console.log(content);
-  return content;
+  return http.get('/api/coordinator/' + id + '/activity');
 }
 
-const getDirectorStudents = id => {
-  let content = http.get('/api/director/' + id + '/student');
-  console.log('Api get: Director students');
-  console.log(content);
-  return content;
-};
+const getCoordinatorEvaluations = id =>{
+  return http.get('api/coordinator/' + id + '/evaluation');  
+}
+/* End Coordinator */
 
-const getStudent = id => {
-  let content = http.get('/api/student/' + id);
-  console.log('Api get: Student ' + id);
-  return content;
+/* Director services */
+
+const getDirectorStudents = id => {
+  return http.get('/api/director/' + id + '/student');
 };
 
 const getDirectorActivities = id => {
   return http.get('/api/director/' + id + '/activity');
 };
 
-const getStudentActivities = id => {
-  let content = http.get('/api/student/' + id + '/activity');
-  console.log('Api get: Student activities '+id);
-  console.log(content);
-  return content;
-};
+const getDirectorEvaluations = id =>{  
+  return http.get('/api/test_director');
+}
 
-const getStudentActivitiesLocal = () => {
-  return activitiesData;
-};
+/* End Director services */
 
-const getStudentsInfo = () => {
-  return http.get('/students-info.json');
-};
-
-const getStudentsInfoLocal = () => {
-  return studentData;
-};
-
-const getStudentsInfoDirectorLocal = directorID => {
-  //TODO: GET STUDENTS OF A DIRECTOR
-  return studentData;
-};
-
-const getStudentLocal = id => {
-  return studentData.find(student => student.id == id);
-};
-
+/* Get services */
 const getActivity = id => {
-  return activitiesData.find(activity => activity.id == id);
+  return http.get('/api/activity/'+id);
 };
 
-const getEvaluationsDirectorLocal = () => {
-  return directorEvaluations;
+const getStudent = id => {
+  return http.get('/api/student/' + id);
 };
+
+const getStudentActivities = id => {
+  return http.get('/api/student/' + id + '/activity');
+};
+
+/*End get Services*/
+
+/*Post Services*/
+const postStudentTracking = data => {
+  return http.post('/api/tracking/', data);
+};
+
+const postDirectorEvaluations =  (directorId, data) => {
+  return http.post(`/api/${directorId}`, data);
+}
+
+const postCoordinatorEvaluations = (coordinatorId, data) => {
+  return http.post(`/api/${coordinatorId}`, data);
+}
+/*End post Services*/
 
 export default {
   getDirectorActivities,
   getDirectorStudents,
+  getDirectorEvaluations,
   getCoordinatorActivities,
-  getEvaluationsDirectorLocal,
-  getStudentActivitiesLocal,
+  getCoordinatorEvaluations,
   getStudentActivities,
-  getStudentsInfoLocal,
-  getStudentsInfoDirectorLocal,
-  getStudentsInfo,
   getStudents,
   getStudent,
-  getActivity
+  getActivity,
+  postStudentTracking,
+  postDirectorEvaluations,
+  postCoordinatorEvaluations
 };
