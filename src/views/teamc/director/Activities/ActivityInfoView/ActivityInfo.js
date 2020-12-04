@@ -133,7 +133,7 @@ const ActivityInfoView = () => {
               open={open}
               handleClose={handleClose}
               handleOpen={handleClickOpen}
-              component={<CreateEvaluation activityId={activityPk} />}
+              component={<CreateEvaluation activityId={activityPk} directorId={5} />}
             />
           </CardActions>
         </Card>
