@@ -76,7 +76,7 @@ const ActivityInfoView = () => {
   id: 1
   is_active: true
   name: "revision tecnica formal"
-  receipt: "http://mdquilindo.pythonanywhere.com/media/b_activities_app/archivos/14719904672.pdf"
+  receipt: "https://mdquilindo.pythonanywhere.com/media/b_activities_app/archivos/14719904672.pdf"
   start_date: "2020-11-02"
   state: 1
   student: 1

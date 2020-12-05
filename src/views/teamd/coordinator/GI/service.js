@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://mdquilindo.pythonanywhere.com';
+const API_URL = 'https://mdquilindo.pythonanywhere.com';
 
 export const CreateGIApi = GI => {
   const url = `${API_URL}/api/1.0/crear_grupo_investigacion/`;

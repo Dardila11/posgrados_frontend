@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://mdquilindo.pythonanywhere.com';
+const API_URL = 'https://mdquilindo.pythonanywhere.com';
 
 export const CreateUserService = user => {
   const url = `${API_URL}/api/auth/create_user`;
