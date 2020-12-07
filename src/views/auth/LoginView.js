@@ -20,6 +20,7 @@ import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
 import { loginService } from './service';
+import { perfilService } from './service';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -38,8 +39,7 @@ const useStyles = makeStyles((theme) => ({
   const [message, setMessage] = useState('');
   const [username,setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState(null)
-  const [user, setUser] = useState(null)
+
   const handleChangePassword = (e) =>{
     setPassword(e.target.value);
   };
@@ -50,18 +50,48 @@ const useStyles = makeStyles((theme) => ({
     setOpen(false)
     loginService({
       username: username,
-      password: password
-            
-    }).then((request) => {
-        console.log("respuesta login ",request)
-        setToken(request.data.token)
-        setUser(request.data.user)
-        navigate('/app/dashboard', { replace: true }); //Todo
-      }).catch(() => {
+      password: password              
+    })
+      .then((data) => {
+        //enviar a la url del perfil correspondiente
+        let datesComplet = data.data
+        console.log(datesComplet)
+        localStorage.setItem('id',JSON.stringify(data.data.user.id))
+        //traer datos,manejar el token
+        localStorage.setItem('token',JSON.stringify(data.data.token))
+        localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
+        perfilService(
+          data.data.user
+        )
+        .then((data) =>{
+          localStorage.setItem('rol',JSON.stringify(data.data))
+          let rol=data.data
+          console.log('rol: '+ rol)
+          switch(rol){
+            case 'profesor':
+                navigate('/director', { replace: true });
+              break;
+            case 'director':
+              break;
+            default:
+              navigate('/student', { replace: true });
+
+          }
+          /*if(rol == "profesor"){
+            navigate('/director', { replace: true });
+
+          }else{
+            navigate('/student', { replace: true });
+          }*/
+        })
+        
+
+        
+      })
+      .catch(() => {
         setOpen(true)
         setTypeAlert('error')
         setMessage('Error, verifica los datos!')
-        navigate('/login', { replace: true }); //Todo
 
       });
   };
@@ -89,16 +119,19 @@ const useStyles = makeStyles((theme) => ({
               password: Yup.string().max(255).required('Password is required')
             })}
             onSubmit={() => {
+//              navigate('/app/dashboard', { replace: true });
             }}
           >
             {({
               errors,
               handleBlur,
               handleChange,
+              handleSubmit,
+              isSubmitting,
               touched,
               values
             }) => (
-              <form>
+              <form onSubmit={handleSubmit}>
                 <Box mb={3}>
                   <Typography
                     color="textPrimary"
@@ -126,7 +159,7 @@ const useStyles = makeStyles((theme) => ({
                   error={Boolean(touched.username && errors.username)}
                   fullWidth
                   helperText={touched.username && errors.username}
-                  label="username "
+                  label="username"
                   margin="normal"
                   name="username"
                   onBlur={handleBlur}
@@ -156,6 +189,7 @@ const useStyles = makeStyles((theme) => ({
                 <Box my={2}>
                   <Button
                     color="primary"
+                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"

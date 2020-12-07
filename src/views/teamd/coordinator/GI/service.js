@@ -1,5 +1,5 @@
 import axios from 'axios';
-//const API_URL = 'http://mdquilindo.pythonanywhere.com';
+//const API_URL = 'https://mdquilindo.pythonanywhere.com';
 const API_URL = 'http://localhost:8000'
 
 export const CreateGIApi = GI => {
@@ -35,5 +35,9 @@ export const ConsultGi = (gi)=>{
   const url = `${API_URL}/api/1.0/consultar_gi_id/${gi.id}`
     return axios.put(url,gi);
 }
+export const ConsultProfesorService = () => {
+  const url = `${API_URL}/api/1.0/consultar_profesor/`;
+  return axios.get(url);
+};
 
 

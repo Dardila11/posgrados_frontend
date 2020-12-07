@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,6 +7,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import { SearchDeparmentI } from 'src/views/teamd/Search/searchDepartmentI';
 import { AlertView } from '../../../../components/Alert'
+import {ConsultUserService} from 'src/views/teamd/Search/service'
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {AssignDirector} from '../GI/service'
+import {ConsultProfesorService} from './service'
 import {
   Box,
   Button,
@@ -41,6 +45,11 @@ export const CreateView = () => {
   const [departmentI, setDepartmentI] = useState('');
   const [dateFoundation, setDateFoundation] = useState('');
   const [category, setCategory] = useState('A');
+  const [professorsList, setProfessorsList] = useState([])
+  const [listProfessors, setlistProfessors] = useState([])
+  const [profesorSelect, setProfesorSelect] = useState("")
+  const [requestCreate, setRequestCreate] = useState("")
+  const [userList, setuserList] = useState([])
   const handleChangeName = event => {
     setName(event.target.value);
   };
@@ -56,19 +65,52 @@ export const CreateView = () => {
   const handleChangeDateFoundation = e => {
     setDateFoundation(e.target.value);
   };
-  const handleCreate = () => {
+  const getIdProfessor = input =>{
+    let find = listProfessors.find(profesor => profesor.username === input);
+    console.log("Profesor seleccionado",find)
+    if (find === undefined) {
+    } else {
+      let find2 = userList.find (professor => professor.user === find.id)
+      setProfesorSelect(find2.id);
+    }
+
+  }
+
+  useEffect(() => {
+    ConsultUserService()
+      .then(request => {
+        console.log("Consultar usuarios ",request.data.Users)
+        let lista = listProfessors
+        request.data.Users.map( (usuario)=>{
+          if (usuario.is_proffessor === true){ // Todo arreglar setListProfessor
+            lista.push(usuario)
+          }
+        })
+        setlistProfessors(lista)
+        
+      })
+      .catch(console.log("nada"));
+      ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
+  }, []);
+  const handleCreate = async () => {
     setOpen(false)
-    CreateGIApi({
+    await CreateGIApi({
       name: name,
       category: category,
       email: email,
       foundation_date: dateFoundation,
       department: departmentI
     })
-      .then(() => {
-        setOpen(true)
+      .then((request) => {
+        AssignDirector({
+          direction_state: true,
+          inv_group: request.data.id,
+          professor: profesorSelect
+          
+      }).then( (request)=> {setOpen(true)
         setTypeAlert('success')
-        setMessage('Institucion creada correctamente')
+        setMessage('Grupo de investigacion creado correctamente')})
+      .catch( ()=> {setOpen(true);setTypeAlert('error');setMessage('Error! Verifica los datos')})
       })
       .catch(() => {
         setOpen(true)
@@ -76,6 +118,7 @@ export const CreateView = () => {
         setMessage('Error, Verifica los datos')
       });
   };
+
   const handleSubmit = event => {
     handleCreate();
     event.preventDefault();
@@ -220,6 +263,25 @@ export const CreateView = () => {
                       }}
                       onInputCapture={handleChangeDateFoundation}
                     />
+                  </FormGroup>
+                  <FormGroup>
+                      <Autocomplete
+                        id="searchProffesor"
+                        options={listProfessors}
+                        getOptionLabel={option => option.username}
+                        style={{ marginBottom: 10, marginTop: 10 }}
+                        renderInput={params => (
+                          <TextField
+                            id="inputOption"
+                            {...params}
+                            label='Director'
+                            variant='outlined'
+                            required
+                          />
+                        )}
+                        onInputChange={(e, input) => getIdProfessor(input)}
+                        onChange={(e, input) => getIdProfessor(input)}
+                      />
                   </FormGroup>
                   <Box my={2}>
                     <Button

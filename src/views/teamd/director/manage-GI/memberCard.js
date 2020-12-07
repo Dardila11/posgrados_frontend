@@ -1,8 +1,8 @@
 import { Card,CardContent,CardActions,Button, makeStyles, Typography } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import {ConsultInstitution,ConsultDeparment,ConsultUser} from '../GI/service'
 import Box from '@material-ui/core/Box';
-import {EditProfesorDialog} from './editProfesorDialog'
+import {ConsultUser} from './service'
+import {ConsultProfesor} from './service'
 const useStyles = makeStyles({
     root: {
       borderRadius: 3,
@@ -15,10 +15,11 @@ const useStyles = makeStyles({
 
   //TODO
 export const MemberCard = ({member}) => {
-    const { user, is_director_student , is_director_gi, is_internal,institution,department} = member; //TODO
+
     const classes = useStyles();
     const [usuario, setUsuario] = useState([])
     const [dialogState, setDialogState] = useState(false)
+    const {id, member_status, professor, inv_group}= member
     //const link = 'profesor/'+user
     const setStateVentana = (state) =>{
         setDialogState(state)
@@ -27,14 +28,11 @@ export const MemberCard = ({member}) => {
         setDialogState(true)
     }
     useEffect(() => {
-        ConsultUser(user).then( request => setUsuario(request.data.Users[0])).catch() 
-    }, [profesor])
-    useEffect(() => {
-        ConsultInstitution(institution).then( request => setNameInstitution(request.data.Institution[0].name_inst))
-    }, [usuario])
-    useEffect(() => {
-        ConsultDeparment(department).then( request => setNameDeparment(request.data.Department[0].name))
-    }, [usuario])
+        ConsultProfesor(professor).then(request => ConsultUser(request.data.Professor[0].user).then(request => setUsuario(request.data.Users[0]))).catch()
+
+    }, [member])
+
+
     return (
         // <RouterLink to={link}>
         <Card className="border border-dark rounded mb-0">
@@ -45,7 +43,7 @@ export const MemberCard = ({member}) => {
                     Nombre: {usuario.first_name} {usuario.last_name}
                 </Typography>
                 <Typography color="textSecondary" gutterBottom>
-                    Departamento: {nameDeparment}
+                    Departamento: {usuario.first_name}
                 </Typography>
                 {/* <Typography color="textSecondary" gutterBottom>
                     Email: {usuario.email}

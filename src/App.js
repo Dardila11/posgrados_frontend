@@ -6,6 +6,7 @@ import GlobalStyles from 'src/components/GlobalStyles';
 import 'src/mixins/chartjs';
 import theme from 'src/theme';
 import routes from 'src/routes';
+// import PrivateRoute from 'src/components/Common/PrivateRoute';
 
 import { Provider } from 'react-redux'
 import store from 'src/redux/store'
@@ -18,6 +19,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <GlobalStyles />
         {routing}
+        {/* {<PrivateRoute exact path='director' component={Dashboard} />} */}
       </ThemeProvider>
     </Provider>
   );

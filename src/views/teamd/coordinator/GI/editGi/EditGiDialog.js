@@ -4,11 +4,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import {ConsultGi} from '../service'
-
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import {AlertView} from '../../../../../components/Alert'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailRoundedIcon from '@material-ui/icons/MailRounded';
+import {ConsultUserService} from 'src/views/teamd/Search/service'
+import {ConsultProfesorService} from '../service'
+import {AssignDirector} from '../../GI/service'
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -26,9 +29,10 @@ export const EditGiDialog = ({state,setState,gi}) => {
     const [openAlert, setOpenAlert] = useState(false)
     const [typeAlert, setTypeAlert] = useState('success')
     const [message, setMessage] = useState('')
+    const [listProfessors, setlistProfessors] = useState([])
     // end alerta
-
-
+    const [profesorSelect, setProfesorSelect] = useState("")
+    const [userList, setuserList] = useState([])
     const clases=useStyles();
     const { id,name,email,foundation_date,category,deparment} = gi;
     const [nameGi, setNameGi] = useState(name)
@@ -43,6 +47,23 @@ export const EditGiDialog = ({state,setState,gi}) => {
         setOpen(false);
         setState(false);
     };
+
+    useEffect(() => {
+      ConsultUserService()
+        .then(request => {
+          console.log("Consultar usuarios ",request.data.Users)
+          let lista = listProfessors
+          request.data.Users.map( (usuario)=>{
+            if (usuario.is_proffessor === true){ // Todo arreglar setListProfessor
+              lista.push(usuario)
+            }
+          })
+          setlistProfessors(lista)
+          
+        })
+        .catch(console.log("nada"));
+        ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
+    }, []);
     const handleEdit = (e) => {
       setOpenAlert(false)
         e.preventDefault();
@@ -53,7 +74,13 @@ export const EditGiDialog = ({state,setState,gi}) => {
           foundation_date: foundationDateGi,
           category: categoryGi,
           department: deparment
-        }).then( () => {
+        }).then( (request) => {
+        AssignDirector({
+            direction_state: true,
+            inv_group: request.data.id,
+            professor: profesorSelect
+            
+        })
         setOpenAlert(true)
         setTypeAlert('success')
         setMessage('Grupo editado correctamente')}
@@ -77,6 +104,16 @@ export const EditGiDialog = ({state,setState,gi}) => {
     const handleChangeDateFoundation = e => {
       setFoundationDateGi(e.target.value);
     };
+    const getIdProfessor = input =>{
+      let find = listProfessors.find(profesor => profesor.username === input);
+      console.log("Profesor seleccionado",find)
+      if (find === undefined) {
+      } else {
+        let find2 = userList.find (professor => professor.user === find.id)
+        setProfesorSelect(find2.id);
+      }
+  
+    }
 
 
 
@@ -173,6 +210,26 @@ export const EditGiDialog = ({state,setState,gi}) => {
                       }}
                       onInputCapture={handleChangeDateFoundation}
                     />
+        </DialogContent>
+
+        <DialogContent>
+        <Autocomplete
+                        id="searchProffesor"
+                        options={listProfessors}
+                        getOptionLabel={option => option.username}
+                        style={{ marginBottom: 10, marginTop: 10 }}
+                        renderInput={params => (
+                          <TextField
+                            id="inputOption"
+                            {...params}
+                            label='Director'
+                            variant='outlined'
+                            required
+                          />
+                        )}
+                        onInputChange={(e, input) => getIdProfessor(input)}
+                        onChange={(e, input) => getIdProfessor(input)}
+                      />
         </DialogContent>
         <DialogActions>
 

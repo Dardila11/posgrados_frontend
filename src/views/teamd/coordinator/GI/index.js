@@ -85,18 +85,10 @@ const AdministerView = () => {
                 <Tab
                   label={
                     <>
-                      <PersonAddIcon fontSize="inherit" /> Asignar director
-                    </>
-                  }
-                  {...options(1)}
-                />
-                <Tab
-                  label={
-                    <>
                       Grupos de investigacion registrados
                     </>
                   }
-                  {...options(2)}
+                  {...options(1)}
                 />
               </Tabs>
             </AppBar>
@@ -104,9 +96,6 @@ const AdministerView = () => {
               <CreateView />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <ListProfessors />
-            </TabPanel>
-            <TabPanel value={value} index={2}>
               <ListGi />
             </TabPanel>
           

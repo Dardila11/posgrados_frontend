@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8000/';
-
+//const API_URL = 'https://mdquilindo.pythonanywhere.com';
+const API_URL = 'http://localhost:8000'
 export const CreateCountryService = Country => {
   const url = `${API_URL}api/1.0/crear_pais/`;
   return axios.post(url, Country);

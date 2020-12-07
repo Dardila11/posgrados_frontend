@@ -1,7 +1,12 @@
-import { Container,Grid, makeStyles} from '@material-ui/core';
+import { Container,Grid, makeStyles,Button,Typography} from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import {ListMembersApi} from './service'
-import {MemberCard} from './MemberCard'
+import {MemberCard} from './memberCard'
+import {addMemberService} from './service'
+import {DialogAddMember} from './dialogAddMember'
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import {ConsultUserService} from 'src/views/teamd/Search/service'
+import {ConsultProfesorService} from '../../coordinator/GI/service'
 const useStyles = makeStyles({
     root: {
       marginTop: "30px",
@@ -17,14 +22,28 @@ const useStyles = makeStyles({
   });
 
 export const ListMembers = () => {
+    const [openDialog, setOpenDialog] = useState(false)
     const classes = useStyles();
     const [ListMembers, setListMembers] = useState([])
-    useEffect(() => {
-      const data = async () => {ListMembersApi().then((request)=> {setListMembers(request.data.Members)})}
-      data();
-    }, [])
+    const [listProfessors, setlistProfessors] = useState([])
+    const [userList, setuserList] = useState([])
+    useEffect(() => {ListMembersApi(1).then((request)=> {setListMembers(request.data.Members)})}, [])
+    const addMember = ()=>{
+      setOpenDialog(true);
+    }
     return (
-      <Container className = {classes.root}>
+      <Container>
+        <Grid item lg={12} md={12} xs={12} key={1231233}>
+              <Button 
+                  size="small"
+                  onClick={addMember}
+                  >
+                  <Typography color="textSecondary" gutterBottom>
+                      Agregar <AddCircleIcon/>
+                  </Typography>
+                  
+            </Button>
+          </Grid>
         <Grid container spacing={3}>
           {ListMembers && ListMembers.map(element => (
             <Grid item lg={3} md={6} xs={12} key={element.id}>
@@ -33,6 +52,7 @@ export const ListMembers = () => {
           ))} 
   
         </Grid>
+        <DialogAddMember listProfessors={listProfessors} state={openDialog} setState={setOpenDialog}/>
       </Container>
     );
 }

@@ -7,7 +7,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import AddKnowLedgeView from './addKnowLedge';
-
+import {ListMembers} from "./listMembers"
+import {InfoGi} from './infoGi'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -85,10 +86,10 @@ export const ManageView = () => {
             </AppBar>
 
             <TabPanel value={value} index={0}>
-              <div>TODO</div>
+              <InfoGi/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <div>TODO</div>
+             <ListMembers /> 
             </TabPanel>
             <TabPanel value={value} index={2}>
               <AddKnowLedgeView />

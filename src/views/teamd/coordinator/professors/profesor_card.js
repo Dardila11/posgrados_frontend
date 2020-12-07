@@ -2,7 +2,10 @@ import { Card,CardContent,CardActions,Button, makeStyles, Typography } from '@ma
 import React, { useEffect, useState } from 'react'
 import {ConsultInstitution,ConsultDeparment,ConsultUser} from '../GI/service'
 import Box from '@material-ui/core/Box';
+import {ConsultarProfesor} from "./service"
 import {EditProfesorDialog} from './editProfesorDialog'
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 const useStyles = makeStyles({
     root: {
       borderRadius: 3,
@@ -11,9 +14,8 @@ const useStyles = makeStyles({
 
     },
   });
-
 export const Profesor_card = ({profesor}) => {
-    const { user, is_director_student , is_director_gi, is_internal,institution,department} = profesor;
+    const { id,user, is_director_student , is_director_gi, is_internal,institution,department} = profesor;
     const classes = useStyles();
     const [usuario, setUsuario] = useState([])
     const [dialogState, setDialogState] = useState(false)
@@ -35,21 +37,25 @@ export const Profesor_card = ({profesor}) => {
     useEffect(() => {
         ConsultDeparment(department).then( request => setNameDeparment(request.data.Department[0].name))
     }, [usuario])
+
+    const handleTrash =()=>{
+        console.log(id)
+        ConsultarProfesor({
+             id: id,
+             status: false
+        }).then( ()=> alert("se elminio "))
+
+    }
     return (
         // <RouterLink to={link}>
         <Card className="border border-dark rounded mb-0">
             <CardContent>
-            <Box alignItems="center" display="flex" flexDirection="column">
-                
-                <Typography color="textSecondary" gutterBottom>
-                    Nombre: {usuario.first_name} {usuario.last_name}
-                </Typography>
-                <Typography color="textSecondary" gutterBottom>
-                    Institución: {nameInstitution}
-                </Typography>
-                <Typography color="textSecondary" gutterBottom>
-                    Departamento: {nameDeparment}
-                </Typography>
+            <Typography color="textPrimary" variant="h4">Información Profesor</Typography>
+            <Box alignItems="start" display="flex" flexDirection="column">
+            <Typography color="textPrimary" variant="h5">Nombre <Typography color="textPrimary" variant="caption">{usuario.first_name} {usuario.last_name}</Typography></Typography>
+            <Typography color="textPrimary" variant="h5">Institución <Typography color="textPrimary" variant="caption">{nameInstitution}</Typography></Typography>
+            <Typography color="textPrimary" variant="h5">Departamento <Typography color="textPrimary" variant="caption">{nameDeparment}</Typography></Typography>
+            </Box>
                 {/* <Typography color="textSecondary" gutterBottom>
                     Email: {usuario.email}
                 </Typography>
@@ -59,18 +65,24 @@ export const Profesor_card = ({profesor}) => {
                 <Typography color="textSecondary" gutterBottom>
                     Departamento: {nameDeparment}
                 </Typography> */}
+                    <Box display="flex" justifyContent="flex-end">
                     <CardActions>
-                        <Button 
-                            variant="outlined" 
-                            color="primary" size="small" 
-                            className = {classes.button}
-                            onClick = {handleAssign}
-                            >
-                                Editar profesor
-                        </Button>
+                            <Button 
+                                size="small"
+                                onClick={handleAssign}
+                                >
+                                    <EditIcon />
+                            </Button>
+                            <Button 
+                                size="small"
+                                onClick={handleTrash}
+                                >
+                                    <DeleteIcon />
+                            </Button>
                     </CardActions>
+                    </Box>
                     <EditProfesorDialog state={dialogState} setState={setDialogState} Professor={profesor}/>
-            </Box>
+            
             </CardContent>
         </Card>
         

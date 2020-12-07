@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { stopSubmit } from 'react';
 
 import {
     USER_LOADING,
@@ -20,7 +21,7 @@ export const loadUser = () => async (dispatch, getState) => {
     dispatch({ type: USER_LOADING });
   
     try {
-      const res = await axios.get('/api/auth/user', TokenConfig(getState));
+      const res = await axios.get('/api/auth/user', tokenConfig(getState));
       dispatch({
         type: USER_LOADED,
         payload: res.data
@@ -44,7 +45,7 @@ export const login = ({ username, password }) => async dispatch => {
 const body = JSON.stringify({ username, password });
 
 try {
-  const res = await axios.post('http://localhost:8000/api/auth/login', body, config);
+  const res = await axios.post('/api/auth/login', body, config);
   dispatch({
     type: LOGIN_SUCCESS,
     payload: res.data
@@ -53,12 +54,14 @@ try {
   dispatch({
     type: LOGIN_FAIL
   });
-  // dispatch(stopSubmit('login', err.response.data));
+  dispatch(stopSubmit('login', err.response.data));
 }
 };
 // helper function
-export const TokenConfig = token => {
-
+export const tokenConfig = getState => {
+    // Get token
+    const token = getState().auth.token;
+  
     // Headers
     const config = {
       headers: {
@@ -75,7 +78,7 @@ export const TokenConfig = token => {
   
   // LOGOUT USER
 export const logout = () => async (dispatch, getState) => {
-    await axios.post('/api/auth/logout', null, TokenConfig(getState));
+    await axios.post('/api/auth/logout', null, tokenConfig(getState));
     dispatch({
       type: LOGOUT_SUCCESS
     });

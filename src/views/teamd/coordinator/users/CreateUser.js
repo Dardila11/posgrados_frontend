@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateUserService } from './service';
 import { AlertView } from '../../../../components/Alert'
 //ICONS
@@ -129,7 +129,7 @@ export const CreateUserView = () => {
 
 
 
-  const [imagen, setImagen] = useState(new FormData())
+  const [imagen, setImagen] = useState([])
   const handleChangeRole = event => {
     setRole(event.target.value);
     if (role === '1'){
@@ -144,15 +144,8 @@ export const CreateUserView = () => {
   const handleChangeFirstName = event => {
     setFirstName(event.target.value);
   };
-  const archivo = async ()=>{
-    // const form_data = new FormData();
-    imagen.append('image_file',fileImage,fileImage.name);
-    imagen.append('title', 'image');
-    imagen.append('content', fileImage.content);
-  }
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    await archivo();
     console.log(firstName);
     console.log(lastName);
     console.log(username);
@@ -161,12 +154,9 @@ export const CreateUserView = () => {
     console.log(typeId);
     console.log(personal_id);
     console.log(personal_code);
-    console.log(imagen);
     console.log(telephone);
     console.log(address);
     console.log(is_proffessor);
-
-    
     await CreateUserService({
       first_name: firstName,
       last_name: lastName,
@@ -176,11 +166,12 @@ export const CreateUserView = () => {
       type_id: typeId,
       personal_id: personal_id,
       personal_code: personal_code,
-      //photo: imagen,
+      photo: imagen[0],
       telephone: telephone,
       address: address,
       is_proffessor: is_proffessor,
-      is_student: is_student
+      is_student: is_student,
+      headers: {'Content-Type':'multipart/form-data'}
     })
       .then( (request) => {
         setOpen(true)
@@ -472,7 +463,7 @@ export const CreateUserView = () => {
                     type="file"
                     className="custom-file-input"
                     id="img-file"
-                    onChange={async (e) => setFileImage(e.target.files[0])}
+                    onChange={async (e) => setImagen(e.target.files)}
                     required
                   />
                   <label className="custom-file-label">

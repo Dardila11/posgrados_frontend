@@ -9,6 +9,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import {CreateView} from '../../../coordinator/GI/create'
+import {AssignDirector} from '../../GI/service'
 const useStyles =makeStyles({
     contenedor:{
 
@@ -39,7 +40,7 @@ export const EditGi = () => {
     const handleEditGi=()=>{
 
     }
-
+    
     return (
         <div >
             <form onSubmit={handleEdit}>

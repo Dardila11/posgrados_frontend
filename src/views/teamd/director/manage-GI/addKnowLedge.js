@@ -12,7 +12,7 @@ export const AddKnowLedgeView = ({idGi}) => {
   const handleCreate = () => {
     AddKnowLedgeService({
       study_status: true,
-      inv_group: idGi,
+      inv_group: 1, //Todo
       know_area: IdKnowLedge
 
     })
@@ -38,18 +38,19 @@ export const AddKnowLedgeView = ({idGi}) => {
             <form onSubmit={handleSubmit}>
               <Box mb={3}>
                   <SearchKnowLedge callback={getIdKnowLedge}/>
-                <Box my={2}>
-                  <Button
+              </Box>
+              <Button
                     color="primary"
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
-                  >
-                    Agregar
-                  </Button>
-                </Box>
-              </Box>
+                    
+                    
+              >
+                Agregar
+              </Button>
+              
             </form>
           </Box>
     </Container>
