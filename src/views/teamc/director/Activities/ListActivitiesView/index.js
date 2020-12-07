@@ -22,10 +22,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const DirectorListActivitiesView = ({search, status}) => {
+const DirectorListActivitiesView = ({search, status, page}) => {
   const [activityList, setActivityList] = useState([])
   const [initialActivityList, setInitialActivityList] = useState([])
   const [loading, setLoading] = useState(true);
+  const itemsByPage = 8
+  const pages = getPages(initialActivityList,itemsByPage)
   const classes = useStyles();
   const state = get_status(initialActivityList);
   
@@ -39,19 +41,20 @@ const DirectorListActivitiesView = ({search, status}) => {
     function nameSearch(search) {
       let activitiesListSearch = []
       if(search.search!=""){
-        activityList.map(
+        initialActivityList.map(
           activity => 
           
             {
-              if(activity.title.toLowerCase().includes(search.search.toLowerCase())||
-              activity.description.toLowerCase().includes(search.search.toLowerCase())){
+              if(activity.title.toLowerCase().includes(search.toLowerCase())||
+              activity.description.toLowerCase().includes(search.toLowerCase())){
                 activitiesListSearch.push(activity)
               }
             }
           )
         setActivityList(activitiesListSearch)
       }else{
-        setActivityList(initialActivityList)
+        if(page == '')setActivityList(pages[0])
+        else setActivityList(pages[page-1])
       }          
     }
     nameSearch(search)
@@ -69,18 +72,28 @@ const DirectorListActivitiesView = ({search, status}) => {
         )
         setActivityList(activityListFilteredByStatus)
       } else {
-        setActivityList(initialActivityList)
+        if(page == '')setActivityList(pages[0])
+        else setActivityList(pages[page-1])
       }
     }
     statusfilter(status)
   }, [status])
+  /**
+   * Pagination event
+   */
+  useEffect(()=>{
+    function pageSelect(page){
+      setActivityList(pages[page-1])      
+    }
+    pageSelect(page)
+  },[page]);
   /**
    * Obtiene la lista de actividades
    */
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorActivities(5).then(res => {
-        setActivityList(res.data.activities);
+        setActivityList(getPages(res.data.activities,itemsByPage)[0])
         setInitialActivityList(res.data.activities);
         setLoading(false);
       });
@@ -99,12 +112,32 @@ const DirectorListActivitiesView = ({search, status}) => {
       ):(
         <>
         <List list={activityList} option="Activity" context="/director/list-activities" />
-        {/*<ListPagination />*/}        
+        <ListPagination pages = {pages}/>        
         </>
       )}      
     </Page>
   );
 };
+
+const getPages = (activityList, npages) => {
+  let pages = []
+  let indexv = 0
+  let br = true
+  while (br) {
+    let page = []
+    for (let index = 1; index <= npages; index++) {
+      if(indexv>=activityList.length) {
+        index = npages+1
+      }else{
+        page.push(activityList[indexv])
+        indexv++
+      }      
+    }
+    pages.push(page)
+    if(indexv>=activityList.length) br=false
+  }
+  return pages
+}
 
 function getStatusNameById(statusId) {
   switch (statusId) {
@@ -145,6 +178,7 @@ function get_status (list){
 const mapStateToProps = state => ({
   search: state.searches.search,
   status: state.filters.status,
+  page: state.paginations.page
 })
 
 export default connect(mapStateToProps) (DirectorListActivitiesView)

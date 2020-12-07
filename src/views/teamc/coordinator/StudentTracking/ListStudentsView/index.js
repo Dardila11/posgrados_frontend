@@ -19,15 +19,18 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 
-const CoordinatorListStudentsView = ({ period, program, status, search }) => {
+const CoordinatorListStudentsView = ({ period, program, status, search, page }) => {
 
   const [studentsList, setStudentsList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [initialStudentsList, setInitialStudentsList] = useState([])
+  const itemsByPage = 8
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
   const programs = getPrograms(initialStudentsList)
+  const pages = getPages(initialStudentsList,itemsByPage)
   const classes = useStyles();
+
   /**
    * Busca los estudiante segun su nombre
    * Se supone que este useEffect se corre cada vez que
@@ -49,7 +52,8 @@ const CoordinatorListStudentsView = ({ period, program, status, search }) => {
           )
         setStudentsList(studentsListSearch)
       }else{
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }          
     }
     nameSearch(search)
@@ -70,7 +74,8 @@ const CoordinatorListStudentsView = ({ period, program, status, search }) => {
         )
         setStudentsList(studentsListFiltered)
       } else {
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }
     }
     periodFilter(period)
@@ -88,7 +93,8 @@ const CoordinatorListStudentsView = ({ period, program, status, search }) => {
         )
         setStudentsList(studentListFilteredByProgram)
       } else {
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }
     }
     programfilter(program)
@@ -106,16 +112,27 @@ const CoordinatorListStudentsView = ({ period, program, status, search }) => {
         )
         setStudentsList(studentListFilteredByStatus)
       } else {
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }
     }
     statusfilter(status)
   }, [status])
+  /**
+   * Pagination event
+   */
+  useEffect(()=>{
+    function pageSelect(page){
+      setStudentsList(pages[page-1])
+      console.log("page selected in component: "+page)
+    }
+    pageSelect(page)
+  },[page]);
 
   useEffect(() => {
     const fetchData = async () => {
       await api.getStudents().then(res => {
-        setStudentsList(res.data.students)
+        setStudentsList(getPages(res.data.students,itemsByPage)[0])
         setInitialStudentsList(res.data.students)
         setLoading(false)
       });
@@ -136,7 +153,7 @@ const CoordinatorListStudentsView = ({ period, program, status, search }) => {
             ):(
               <>
                 <List list = {studentsList} option= 'Student'/>
-                <ListPagination/>
+                <ListPagination pages = {pages}/>
               </>
             )}
         </Page>  
@@ -168,6 +185,26 @@ function getStatusNameById(statusId) {
   }
 }
 
+const getPages = (studentsList, npages) => {
+  let pages = []
+  let indexv = 0
+  let br = true
+  while (br) {
+    let page = []
+    for (let index = 1; index <= npages; index++) {
+      if(indexv>=studentsList.length) {
+        index = npages+1
+      }else{
+        page.push(studentsList[indexv])
+        indexv++
+      }      
+    }
+    pages.push(page)
+    if(indexv>=studentsList.length) br=false
+  }
+  return pages
+}
+
 const getStatus = studentsList => {
   let statusList = []
   studentsList.map(student => {
@@ -197,7 +234,8 @@ const mapStateToProps = state => ({
   period: state.filters.period,
   program: state.filters.program,
   status: state.filters.status,
-  search: state.searches.search
+  search: state.searches.search,
+  page: state.paginations.page
 })
 
 export default connect(mapStateToProps)(CoordinatorListStudentsView)
