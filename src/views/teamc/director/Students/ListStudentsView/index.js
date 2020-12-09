@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { LinearProgress, makeStyles } from '@material-ui/core'
+import { LinearProgress, Typography, makeStyles } from '@material-ui/core'
 import Page from 'src/components/Page'
 import BreadCrumbs from './BreadCrumbs'
 import SearchBar from 'src/components/SearchBar'
@@ -25,6 +25,7 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
   const [studentsList, setStudentsList] = useState([])
   const [loading, setLoading] = useState(true)
   const [initialStudentsList, setInitialStudentsList] = useState([])
+  const [serviceState, setServiceState] = useState(true)
   const itemsByPage = 8
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
@@ -140,6 +141,7 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
       await api.getDirectorStudents(5).then(res => {
         setStudentsList(getPages(res.data.students,itemsByPage)[0])
         setInitialStudentsList(res.data.students)
+        setServiceState(false)
         setLoading(false)
       })
     }
@@ -156,11 +158,14 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
         programs={programs}/>
       {loading ? (
         <LinearProgress className={classes.progress} />
-      ) : (
+      ) : ( serviceState ? (
         <>
-          <List list={studentsList} option="Student" />
-          <ListPagination pages = {pages}/>
-        </>
+        <List list={studentsList} option="Student" />
+        <ListPagination pages = {pages}/>
+      </>
+      ) : (
+        <Typography variant='h3'>No se obtuvieron resultados</Typography>
+      ) 
       )}
     </Page>
   )

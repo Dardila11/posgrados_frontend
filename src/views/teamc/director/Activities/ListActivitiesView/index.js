@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CircularProgress, LinearProgress, makeStyles } from '@material-ui/core';
+import { Typography, LinearProgress, makeStyles } from '@material-ui/core';
 import Page from 'src/components/Page'
 import ListPagination from 'src/components/ListPagination'
 import BreadCrumbs from './BreadCrumbs'
@@ -26,6 +26,7 @@ const DirectorListActivitiesView = ({search, status, page}) => {
   const [activityList, setActivityList] = useState([])
   const [initialActivityList, setInitialActivityList] = useState([])
   const [loading, setLoading] = useState(true);
+  const [serviceState, setServiceState] = useState(true)
   const itemsByPage = 8
   const pages = getPages(initialActivityList,itemsByPage)
   const classes = useStyles();
@@ -95,6 +96,7 @@ const DirectorListActivitiesView = ({search, status, page}) => {
       await api.getDirectorActivities(5).then(res => {
         setActivityList(getPages(res.data.activities,itemsByPage)[0])
         setInitialActivityList(res.data.activities);
+        setServiceState(false)
         setLoading(false);
       });
       
@@ -109,11 +111,15 @@ const DirectorListActivitiesView = ({search, status, page}) => {
       {loading ? (
         
         <LinearProgress className={classes.progress}/>
-      ):(
+      ):( serviceState ? (
         <>
         <List list={activityList} option="Activity" context="/director/list-activities" />
         <ListPagination pages = {pages}/>        
         </>
+      ) : (
+        <Typography variant='h3'>No se obtuvieron resultados</Typography>
+      )
+        
       )}      
     </Page>
   );
