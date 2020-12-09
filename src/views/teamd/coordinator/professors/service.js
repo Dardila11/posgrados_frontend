@@ -21,5 +21,5 @@ export const CreateFormation = professor => {
   let sinComillas = token.slice(1,-1)
   console.log(sinComillas)
   
-  return axios.post(url, professor,{ headers: {"Authorization" : `token ${sinComillas}`}});
+  return axios.post(url, professor,{ headers: {'X-Requested-With': 'XMLHttpRequest','Authorization' : `token ${token}`}});
 }

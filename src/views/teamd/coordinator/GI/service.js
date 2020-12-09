@@ -4,7 +4,7 @@ const API_URL = 'http://localhost:8000'
 
 export const CreateGIApi = GI => {
   const url = `${API_URL}/api/1.0/crear_grupo_investigacion/`;
-  return axios.post(url, GI);
+  return axios.post(url, GI,{ headers: {'Authorization' : `token ${localStorage.getItem('token')}`}});
 };
 //TODO en back no esta
 export const ListProfessorApi = () => {
@@ -15,6 +15,15 @@ export const AssignDirector = (director) => {
   const url = `${API_URL}/api/1.0/crear_dirige/`
   return axios.post(url, director);
 }
+export const EditDirector = (director) => {
+  const url = `${API_URL}/api/1.0/consultar_dirige/${director.id}/${director.gi}`
+  return axios.put(url, director);
+}
+export const GetDirige =(gi) => {
+  const url = `${API_URL}/api/1.0/consultar_dirige_gi/${gi}`
+  return axios.get(url,);
+}
+
 export const ConsultUser = (idUser) => {
   const url = `${API_URL}/api/auth/consult_user_id/${idUser}`
   return axios.get(url);

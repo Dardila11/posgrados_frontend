@@ -12,6 +12,8 @@ import MailRoundedIcon from '@material-ui/icons/MailRounded';
 import {ConsultUserService} from 'src/views/teamd/Search/service'
 import {ConsultProfesorService} from '../service'
 import {AssignDirector} from '../../GI/service'
+import {EditDirector} from '../../GI/service'
+import {GetDirige} from '../../GI/service' 
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -40,6 +42,7 @@ export const EditGiDialog = ({state,setState,gi}) => {
     const [open, setOpen] = useState(true)
     const [categoryGi, setCategoryGi] = useState(category)
     const [foundationDateGi, setFoundationDateGi] = useState(foundation_date)
+    const [profesorViejo, setProfesorViejo] = useState()
     useEffect(() => {
          setOpen(state)
     }, [state])
@@ -51,7 +54,6 @@ export const EditGiDialog = ({state,setState,gi}) => {
     useEffect(() => {
       ConsultUserService()
         .then(request => {
-          console.log("Consultar usuarios ",request.data.Users)
           let lista = listProfessors
           request.data.Users.map( (usuario)=>{
             if (usuario.is_proffessor === true){ // Todo arreglar setListProfessor
@@ -61,30 +63,31 @@ export const EditGiDialog = ({state,setState,gi}) => {
           setlistProfessors(lista)
           
         })
-        .catch(console.log("nada"));
+        .catch();
         ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
+        
     }, []);
     const handleEdit = (e) => {
       setOpenAlert(false)
         e.preventDefault();
         ConsultGi({
-          id:gi.id,
+          id: gi.id,
           name: nameGi,
           email: emailGi,
           foundation_date: foundationDateGi,
           category: categoryGi,
           department: deparment
         }).then( (request) => {
-        AssignDirector({
-            direction_state: true,
-            inv_group: request.data.id,
-            professor: profesorSelect
-            
-        })
-        setOpenAlert(true)
-        setTypeAlert('success')
-        setMessage('Grupo editado correctamente')}
-        ).catch(() => {
+          GetDirige(id).then(result => {
+
+            EditDirector({
+              id:result.data.Manage[0].professor,
+              professor: profesorSelect,
+              gi:gi.id
+          })
+          }
+            ).catch()
+        }).catch(() => {
           setOpenAlert(true)
           setTypeAlert('error')
           setMessage('Error, Verifica los datos')

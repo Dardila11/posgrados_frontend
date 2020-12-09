@@ -81,6 +81,7 @@ export const CreateUserView = () => {
   const [is_proffessor, setIs_proffessor] = useState(0);
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({})
+  const [is_coordinator, setIs_coordinator] = useState(0)
   const handleChangeUsername = e => {
     setUsername(e.target.value);
   };
@@ -132,13 +133,21 @@ export const CreateUserView = () => {
   const [imagen, setImagen] = useState([])
   const handleChangeRole = event => {
     setRole(event.target.value);
-    if (role === '1'){
+    if (event.target.value === '1'){
       setIs_student(1)
       setIs_proffessor(0)
+      setIs_coordinator(0)
 
-    }else{
+    }
+    if(event.target.value === '2'){
       setIs_proffessor(1)
       setIs_student(0)
+      setIs_coordinator(0)
+    }
+    if(event.target.value === '3'){
+      setIs_coordinator(1)
+      setIs_student(0)
+      setIs_proffessor(0)
     }
   };
   const handleChangeFirstName = event => {
@@ -157,6 +166,7 @@ export const CreateUserView = () => {
     console.log(telephone);
     console.log(address);
     console.log(is_proffessor);
+    console.log("Es coordinador",is_coordinator)
     await CreateUserService({
       first_name: firstName,
       last_name: lastName,
@@ -166,12 +176,13 @@ export const CreateUserView = () => {
       type_id: typeId,
       personal_id: personal_id,
       personal_code: personal_code,
-      photo: imagen[0],
+      // photo: null,
       telephone: telephone,
       address: address,
       is_proffessor: is_proffessor,
       is_student: is_student,
-      headers: {'Content-Type':'multipart/form-data'}
+      is_coordinator: is_coordinator
+      // headers: {'Content-Type':'multipart/form-data'}
     })
       .then( (request) => {
         setOpen(true)
@@ -539,6 +550,9 @@ export const CreateUserView = () => {
                   </MenuItem>
                   <MenuItem key="isProffessor2" value="2">
                     Es profesor
+                  </MenuItem>
+                  <MenuItem key="isProffessor3" value="3">
+                    Es coordinator
                   </MenuItem>
                 </TextField>
               </Box>

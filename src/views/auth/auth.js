@@ -16,6 +16,9 @@ import {
     user: null,
     token: localStorage.getItem('token')
   };
+
+//const API_URL = 'https://mdquilindo.pythonanywhere.com';
+const API_URL = 'http://localhost:8000' 
   // LOAD USER
 export const loadUser = () => async (dispatch, getState) => {
     dispatch({ type: USER_LOADING });
@@ -77,11 +80,9 @@ export const tokenConfig = getState => {
   };
   
   // LOGOUT USER
-export const logout = () => async (dispatch, getState) => {
-    await axios.post('/api/auth/logout', null, tokenConfig(getState));
-    dispatch({
-      type: LOGOUT_SUCCESS
-    });
+export const Logout = async(token) =>{
+    const URL = `${API_URL}/api/auth/logout`;
+    return await axios.post(URL,token,{ headers: {'X-Requested-With': 'XMLHttpRequest','Authorization' : `token ${token}`}});
   };
 
   export default function(state = initialState, action) {

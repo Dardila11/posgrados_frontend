@@ -6,21 +6,14 @@ import {ConsultarProfesor} from "./service"
 import {EditProfesorDialog} from './editProfesorDialog'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-const useStyles = makeStyles({
-    root: {
-      borderRadius: 3,
-      minWidth: '200px',
-      
 
-    },
-  });
 export const Profesor_card = ({profesor}) => {
     const { id,user, is_director_student , is_director_gi, is_internal,institution,department} = profesor;
-    const classes = useStyles();
     const [usuario, setUsuario] = useState([])
     const [dialogState, setDialogState] = useState(false)
     const [nameDeparment, setNameDeparment] = useState('')
     const [nameInstitution, setNameInstitution] = useState('')
+    const [agreeState, setAgreeState] = useState(false)
     //const link = 'profesor/'+user
     const setStateVentana = (state) =>{
         setDialogState(state)
@@ -39,15 +32,17 @@ export const Profesor_card = ({profesor}) => {
     }, [usuario])
 
     const handleTrash =()=>{
-        console.log(id)
         ConsultarProfesor({
              id: id,
              status: false
         }).then( ()=> alert("se elminio "))
 
     }
+    const agree = () =>{
+        setAgreeState(true)
+    }
     return (
-        // <RouterLink to={link}>
+        <>
         <Card className="border border-dark rounded mb-0">
             <CardContent>
             <Typography color="textPrimary" variant="h4">Información Profesor</Typography>
@@ -85,8 +80,8 @@ export const Profesor_card = ({profesor}) => {
             
             </CardContent>
         </Card>
-        
-        // </RouterLink>
+        </>
+
 
 
     )

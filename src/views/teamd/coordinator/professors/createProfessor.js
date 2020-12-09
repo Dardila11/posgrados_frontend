@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { CreateProfessorApi } from './service';
@@ -59,34 +59,49 @@ const CreateProfessorView = () => {
       setisInternal(true);
     }
   };
-
   const handleCreate = () => {
     setOpen(false)
     if (isInternal === true) {
-      setInstitution(null)
-      setInstitution(1)
-    } else {
-      setdepartmentI(null)
-    }
-    CreateProfessorApi({
-      is_director_student: false,
-      is_director_gi: false,
-      is_internal: isInternal,
-      user: user,
-      institution: Institution,
-      department: departmentI
-    })
-      .then((request) => {
-        setOpen(true)
-        setTypeAlert('success')
-        setMessage('Profesor creado correctamente')
+      CreateProfessorApi({
+        is_director_student: false,
+        is_director_gi: false,
+        is_internal: isInternal,
+        user: user,
+        institution: 1,
+        department: departmentI
       })
-      .catch((request) => {
-        console.log(request)
-        setOpen(true)
-        setTypeAlert('error')
-        setMessage('Error, Verifica los datos!')
-      });
+        .then((request) => {
+          setOpen(true)
+          setTypeAlert('success')
+          setMessage('Profesor creado correctamente')
+        })
+        .catch((request) => {
+          setOpen(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos!')
+        });
+    } else {
+      CreateProfessorApi({
+        is_director_student: false,
+        is_director_gi: false,
+        is_internal: isInternal,
+        user: user,
+        institution: Institution,
+        department: departmentI
+      })
+        .then((request) => {
+          setOpen(true)
+          setTypeAlert('success')
+          setMessage('Profesor creado correctamente')
+        })
+        .catch((request) => {
+          console.log(request)
+          setOpen(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos!')
+        });
+    }
+
   };
   const handleSubmit = event => {
     handleCreate();

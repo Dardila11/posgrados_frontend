@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate, Redirect} from 'react-router-dom';
-
-import { login } from '../auth/auth';
-
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { AlertView } from '../../components/Alert'
+import {getUserInfoService} from './service'
 import {
   Box,
   Button,
@@ -16,8 +15,6 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-import FacebookIcon from 'src/icons/Facebook';
-import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
 import { loginService } from './service';
 import { perfilService } from './service';
@@ -26,10 +23,16 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     height: '100%',
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    padding: '50px'
+  },
+  inputs: {
+    margin: '10px'
   }
 }));
+
 
  const LoginView = (props) => {
   const classes = useStyles();
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
   const [message, setMessage] = useState('');
   const [username,setUserName] = useState('');
   const [password, setPassword] = useState('');
-
+  const auth = useAuth();
   const handleChangePassword = (e) =>{
     setPassword(e.target.value);
   };
@@ -47,51 +50,85 @@ const useStyles = makeStyles((theme) => ({
     setUserName(e.target.value);
   };
   const handleLogin = () => {
+
+    // auth.login({
+    //   username: username,
+    //   password: password              
+    // }).then().then((data) => {
+    //     enviar a la url del perfil correspondiente
+    //     let datesComplet = data.data
+    //     
+    //     localStorage.setItem('id',JSON.stringify(data.data.user.id))
+    //     traer datos,manejar el token
+    //     localStorage.setItem('token',data.data.token)
+    //     localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
+    //     getUserInfoService(data.data.user.id).then(request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
+
+
+    //     perfilService(
+    //       data.data.user
+    //     )
+    //     .then((data) =>{
+    //       if (JSON.parse(localStorage.getItem('userInfo')).is_coordinator) {
+    //         navigate('/coordinator', { replace: true });
+    //       }
+    //       else if (JSON.parse(localStorage.getItem('userInfo')).is_professor){
+    //         navigate('/director', { replace: true });
+    //       }
+    //       else if (JSON.parse(localStorage.getItem('userInfo')).is_student){
+    //         navigate('/student', { replace: true });
+    //       }
+          
+    //     })
+  
+    //   })
+    //   .catch(() => {
+    //     setOpen(true)
+    //     setTypeAlert('error')
+    //     setMessage('Error, verifica los datos!')
+
+    //   });
     setOpen(false)
     loginService({
       username: username,
       password: password              
     })
-      .then((data) => {
-        //enviar a la url del perfil correspondiente
+      .then(async (data) => {
         let datesComplet = data.data
-        console.log(datesComplet)
         localStorage.setItem('id',JSON.stringify(data.data.user.id))
-        //traer datos,manejar el token
-        localStorage.setItem('token',JSON.stringify(data.data.token))
+        localStorage.setItem('token',data.data.token)
         localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
+        auth.setUser(data.data.user)
+        getUserInfoService(data.data.user.id).then(request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
+
+
         perfilService(
           data.data.user
         )
-        .then((data) =>{
-          localStorage.setItem('rol',JSON.stringify(data.data))
-          let rol=data.data
-          console.log('rol: '+ rol)
-          switch(rol){
-            case 'profesor':
-                navigate('/director', { replace: true });
-              break;
-            case 'director':
-              break;
-            default:
+        .then(async (data) =>{
+
+            console.log("rol ",data)
+            localStorage.setItem("rol",data.data)
+            if (data.data === "coordinador") {
+              navigate('/coordinator', { replace: true });
+            }
+            else if (data.data === "profesor"){
+              navigate('/director', { replace: true });
+            }
+            else if (data.data === "estudiante"){
               navigate('/student', { replace: true });
+            }
 
           }
-          /*if(rol == "profesor"){
-            navigate('/director', { replace: true });
 
-          }else{
-            navigate('/student', { replace: true });
-          }*/
-        })
-        
-
-        
+          
+        )
+  
       })
       .catch(() => {
         setOpen(true)
         setTypeAlert('error')
-        setMessage('Error, verifica los datos!')
+        setMessage('Usuario o contraseña incorrectos!')
 
       });
   };
@@ -99,8 +136,8 @@ const useStyles = makeStyles((theme) => ({
   return (
     
     <Page
+      title="Autenticación"
       className={classes.root}
-      title="Login"
     >
       <Box
         display="flex"
@@ -115,8 +152,8 @@ const useStyles = makeStyles((theme) => ({
               password: ''
             }}
             validationSchema={Yup.object().shape({
-              username: Yup.string().max(255).required('Username is required'),
-              password: Yup.string().max(255).required('Password is required')
+              username: Yup.string().max(255).required('Debes ingresar un usuario!'),
+              password: Yup.string().max(255).required('Debes indicar tu contraseña!')
             })}
             onSubmit={() => {
 //              navigate('/app/dashboard', { replace: true });
@@ -127,17 +164,16 @@ const useStyles = makeStyles((theme) => ({
               handleBlur,
               handleChange,
               handleSubmit,
-              isSubmitting,
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className={classes.root}>
                 <Box mb={3}>
                   <Typography
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Iniciar Sesión
                   </Typography>
                   
                 </Box>
@@ -159,7 +195,7 @@ const useStyles = makeStyles((theme) => ({
                   error={Boolean(touched.username && errors.username)}
                   fullWidth
                   helperText={touched.username && errors.username}
-                  label="username"
+                  label="Nombre de usuario"
                   margin="normal"
                   name="username"
                   onBlur={handleBlur}
@@ -174,7 +210,7 @@ const useStyles = makeStyles((theme) => ({
                   error={Boolean(touched.password && errors.password)}
                   fullWidth
                   helperText={touched.password && errors.password}
-                  label="Password"
+                  label="Contraseña"
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
@@ -189,30 +225,15 @@ const useStyles = makeStyles((theme) => ({
                 <Box my={2}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
                     onClick={handleLogin}
                   >
-                    Sign in now
+                    Entrar 
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography>
                 <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
               </form>
               

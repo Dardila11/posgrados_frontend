@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-
+import React, { useEffect, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -11,19 +10,13 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 import {
   Users as UsersIcon,
   Eye as EyeIcon
 } from 'react-feather';
 
 import NavItem from './NavItem';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_7.png',
-  jobTitle: 'Director',
-  name: 'John Doe'
-};
 
 const items = [
   {
@@ -65,9 +58,26 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
+  const auth = useAuth();  
+  const [user, setUser] = useState({
+    avatar: 'dads',
+    jobTitle: 'Director',
+    name: 'dasd'
+  })
   const classes = useStyles();
   const location = useLocation();
-
+  useEffect(() => {
+    if(auth.user===null){
+      }else{
+      let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo //TODO CAMBIAR IMAGEN CON SERVIDOR 
+      setUser(
+        {
+        avatar: photo,
+        jobTitle: 'Director',
+        name: JSON.parse(localStorage.getItem("userInfo")).first_name + " " + JSON.parse(localStorage.getItem("userInfo")).last_name
+        })
+    }
+  }, [])
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
