@@ -158,7 +158,7 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
         programs={programs}/>
       {loading ? (
         <LinearProgress className={classes.progress} />
-      ) : ( serviceState ? (
+      ) : ( initialStudentsList.length > 0 ? (
         <>
         <List list={studentsList} option="Student" />
         <ListPagination pages = {pages}/>

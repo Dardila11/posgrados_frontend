@@ -48,7 +48,7 @@ const CoordinatorListEvaluationsView = () => {
       {loading ? (
         <LinearProgress />
       ):(
-        serviceState ? (
+        evaluationsList.length > 0 ? (
           <>
           <List list={evaluationsList} option="Evaluation" context="/coordinator/list-evaluations"/>
           <ListPagination />

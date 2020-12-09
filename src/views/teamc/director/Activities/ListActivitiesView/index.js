@@ -111,7 +111,7 @@ const DirectorListActivitiesView = ({search, status, page}) => {
       {loading ? (
         
         <LinearProgress className={classes.progress}/>
-      ):( serviceState ? (
+      ):( activityList.length > 0 ? (
         <>
         <List list={activityList} option="Activity" context="/director/list-activities" />
         <ListPagination pages = {pages}/>        

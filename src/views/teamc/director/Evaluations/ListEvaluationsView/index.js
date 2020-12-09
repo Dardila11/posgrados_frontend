@@ -43,7 +43,7 @@ const DirectorListEvaluationsView = () => {
       {loading ? (
         <LinearProgress />
       ):(
-        serviceState ? (
+        !evaluationsList.length > 0 ? (
           <>
           <List list={evaluationsList} option="Evaluation" context="/director/list-evaluations"/>
           <ListPagination />

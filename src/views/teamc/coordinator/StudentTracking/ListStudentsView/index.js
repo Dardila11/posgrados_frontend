@@ -1,35 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import { LinearProgress, makeStyles } from '@material-ui/core';
-import Page from 'src/components/Page';
-import SearchBar from 'src/components/SearchBar';
-import List from 'src/components/List';
-import api from 'src/views/teamc/services/Api';
-import ListPagination from 'src/components/ListPagination';
-import BreadCrumbs from './BreadCrumbs';
+import React, { useState, useEffect } from 'react'
+import { LinearProgress, Typography, makeStyles } from '@material-ui/core'
+import Page from 'src/components/Page'
+import SearchBar from 'src/components/SearchBar'
+import List from 'src/components/List'
+import api from 'src/views/teamc/services/Api'
+import ListPagination from 'src/components/ListPagination'
+import BreadCrumbs from './BreadCrumbs'
 import { connect } from 'react-redux'
 
-const useStyles = makeStyles((theme) => ({
-    root: {
-      backgroundColor: theme.palette.background.dark,
-      minHeight: '100%',
-      paddingBottom: theme.spacing(3),
-      paddingTop: theme.spacing(1),
-      paddingLeft: theme.spacing(1)      
-    }
-  }));
+const useStyles = makeStyles(theme => ({
+  root: {
+    backgroundColor: theme.palette.background.dark,
+    minHeight: '100%',
+    paddingBottom: theme.spacing(3),
+    paddingTop: theme.spacing(1),
+    paddingLeft: theme.spacing(1)
+  }
+}))
 
-
-const CoordinatorListStudentsView = ({ period, program, status, search, page }) => {
-
-  const [studentsList, setStudentsList] = useState([]);
-  const [loading, setLoading] = useState(true);
+const CoordinatorListStudentsView = ({
+  period,
+  program,
+  status,
+  search,
+  page
+}) => {
+  const [studentsList, setStudentsList] = useState([])
+  const [loading, setLoading] = useState(true)
   const [initialStudentsList, setInitialStudentsList] = useState([])
+  const [serviceState, setServiceState] = useState(true)
   const itemsByPage = 8
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
   const programs = getPrograms(initialStudentsList)
-  const pages = getPages(initialStudentsList,itemsByPage)
-  const classes = useStyles();
+  const pages = getPages(initialStudentsList, itemsByPage)
+  const classes = useStyles()
 
   /**
    * Busca los estudiante segun su nombre
@@ -40,21 +45,24 @@ const CoordinatorListStudentsView = ({ period, program, status, search, page }) 
     // Buscar por nombre
     function nameSearch(search) {
       let studentsListSearch = []
-      if(search!=""){
-        initialStudentsList.map(
-          student => 
-            {
-              if(student.student.user.first_name.toLowerCase().includes(search.toLowerCase())||
-              student.student.user.last_name.toLowerCase().includes(search.toLowerCase())){
-                studentsListSearch.push(student)
-              }
-            }
-          )
+      if (search != '') {
+        initialStudentsList.map(student => {
+          if (
+            student.student.user.first_name
+              .toLowerCase()
+              .includes(search.toLowerCase()) ||
+            student.student.user.last_name
+              .toLowerCase()
+              .includes(search.toLowerCase())
+          ) {
+            studentsListSearch.push(student)
+          }
+        })
         setStudentsList(studentsListSearch)
-      }else{
-        if(page == '')setStudentsList(pages[0])
-        else setStudentsList(pages[page-1])
-      }          
+      } else {
+        if (page == '') setStudentsList(pages[0])
+        else setStudentsList(pages[page - 1])
+      }
     }
     nameSearch(search)
   }, [search])
@@ -74,8 +82,8 @@ const CoordinatorListStudentsView = ({ period, program, status, search, page }) 
         )
         setStudentsList(studentsListFiltered)
       } else {
-        if(page == '')setStudentsList(pages[0])
-        else setStudentsList(pages[page-1])
+        if (page == '') setStudentsList(pages[0])
+        else setStudentsList(pages[page - 1])
       }
     }
     periodFilter(period)
@@ -93,8 +101,8 @@ const CoordinatorListStudentsView = ({ period, program, status, search, page }) 
         )
         setStudentsList(studentListFilteredByProgram)
       } else {
-        if(page == '')setStudentsList(pages[0])
-        else setStudentsList(pages[page-1])
+        if (page == '') setStudentsList(pages[0])
+        else setStudentsList(pages[page - 1])
       }
     }
     programfilter(program)
@@ -112,8 +120,8 @@ const CoordinatorListStudentsView = ({ period, program, status, search, page }) 
         )
         setStudentsList(studentListFilteredByStatus)
       } else {
-        if(page == '')setStudentsList(pages[0])
-        else setStudentsList(pages[page-1])
+        if (page == '') setStudentsList(pages[0])
+        else setStudentsList(pages[page - 1])
       }
     }
     statusfilter(status)
@@ -121,44 +129,47 @@ const CoordinatorListStudentsView = ({ period, program, status, search, page }) 
   /**
    * Pagination event
    */
-  useEffect(()=>{
-    function pageSelect(page){
-      setStudentsList(pages[page-1])
-      console.log("page selected in component: "+page)
+  useEffect(() => {
+    function pageSelect(page) {
+      setStudentsList(pages[page - 1])
+      console.log('page selected in component: ' + page)
     }
     pageSelect(page)
-  },[page]);
+  }, [page])
 
   useEffect(() => {
     const fetchData = async () => {
       await api.getStudents().then(res => {
-        setStudentsList(getPages(res.data.students,itemsByPage)[0])
+        setStudentsList(getPages(res.data.students, itemsByPage)[0])
         setInitialStudentsList(res.data.students)
         setLoading(false)
-      });
-      
-    };
-    fetchData();
-  }, []);        
-    return (
-        <Page className={classes.root} title="Listado de estudiantes">      
-            <BreadCrumbs />
-            <SearchBar 
-            context='students'
-            periods={periods}
-            status={statuss}
-            programs={programs}/>
-            {loading ? (
-              <LinearProgress />
-            ):(
-              <>
-                <List list = {studentsList} option= 'Student'/>
-                <ListPagination pages = {pages}/>
-              </>
-            )}
-        </Page>  
-      ); 
-};
+        setServiceState(false)
+      })
+    }
+    fetchData()
+  }, [])
+  return (
+    <Page className={classes.root} title="Listado de estudiantes">
+      <BreadCrumbs />
+      <SearchBar
+        context="students"
+        periods={periods}
+        status={statuss}
+        programs={programs}
+      />
+      {loading ? (
+        <LinearProgress />
+      ) : studentsList.length > 0 ? (
+        <>
+          <List list={studentsList} option="Student" />
+          <ListPagination pages={pages} />
+        </>
+      ) : (
+        <Typography variant="h3">No se obtuvieron resultados</Typography>
+      )}
+    </Page>
+  )
+}
 
 const getPeriod = studentsList => {
   let periodList = []
@@ -192,15 +203,15 @@ const getPages = (studentsList, npages) => {
   while (br) {
     let page = []
     for (let index = 1; index <= npages; index++) {
-      if(indexv>=studentsList.length) {
-        index = npages+1
-      }else{
+      if (indexv >= studentsList.length) {
+        index = npages + 1
+      } else {
         page.push(studentsList[indexv])
         indexv++
-      }      
+      }
     }
     pages.push(page)
-    if(indexv>=studentsList.length) br=false
+    if (indexv >= studentsList.length) br = false
   }
   return pages
 }

@@ -60,11 +60,15 @@ const CoordinatorListActivitiesView = () => {
       ):(
         loading ? (
           <LinearProgress />
-        ):(
+        ):( activityList.length > 0 ? (
           <>
             <List list={activityList} option="Activity" context="/coordinator/list-activities"/>
             <ListPagination />
           </>
+        ) : (
+          <Typography variant='h3'>No se obtuvieron resultados</Typography>
+        )
+          
         )
       )}
       
