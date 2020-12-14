@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import TopBar from './TopBar';
 import NavBar from './NavBar';
-
+import { Link as RouterLink, useNavigate, Redirect} from 'react-router-dom';
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -34,28 +35,37 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CoordinatorDashboardLayout = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-
+  const auth = useAuth();
   return (
     <div className={classes.root}>
-      {/*  TopBar  */}
-      <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
-      {/*  NavBar  */}
-      <NavBar
-        onMobileClose={() => setMobileNavOpen(false)}
-        openMobile={isMobileNavOpen}
-      />
-      {/*  El contenido  */}
-      <div className={classes.wrapper}>
-        <div className={classes.contentContainer}>
-          <div className={classes.content}>
-            <Outlet />
-          </div>
-        </div>
-      </div>
+
+    {auth.user ? (
+      <>
+                  <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+                  <NavBar
+                  onMobileClose={() => setMobileNavOpen(false)}
+                  openMobile={isMobileNavOpen}
+                  />                  
+                <div className={classes.wrapper}>
+                  <div className={classes.contentContainer}>
+                    <div className={classes.content}>
+                      <Outlet />
+                    </div>
+                  </div>
+                </div>  
+      </> 
+    ) : (
+      navigate('/login', { replace: false })
+    )}
+
     </div>
-  );
+    )
+
+  
+  
 };
 
 export default CoordinatorDashboardLayout;

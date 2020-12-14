@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import {
   Avatar,
@@ -15,12 +15,8 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { Users as UsersIcon, Eye as EyeIcon } from 'react-feather';
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
 import NavItem from './NavItem';
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 
-const user = {
-  avatar: '/static/images/avatars/avatar_7.png',
-  jobTitle: 'Coordinador',
-  name: 'John Doe'
-};
 
 const items = [
   {
@@ -53,7 +49,7 @@ const items = [
   {
     href: '/coordinator/create-others',
     icon: AddIcon,
-    title: 'Crear otras cosas'
+    title: 'Administar ++'
   },
 
   // End Options Team D
@@ -91,9 +87,28 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
+  const [user, setUser] = useState({
+    avatar: 'dads',
+    jobTitle: 'Coordinador',
+    name: 'dasd'
+  })
+  const auth = useAuth();  
   const classes = useStyles();
   const location = useLocation();
-
+  
+  useEffect(() => {
+    if(auth.user===null){
+      console.log("es nulo")
+      }else{
+      let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo
+      setUser(
+        {
+        avatar: photo,
+        jobTitle: 'Coordinador',
+        name: JSON.parse(localStorage.getItem("userInfo")).first_name + " " + JSON.parse(localStorage.getItem("userInfo")).last_name
+        })
+    }
+  }, [])
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();

@@ -6,9 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import AddLineResearchView from './addLineResearch';
 import AddKnowLedgeView from './addKnowLedge';
-
+import {ListMembers} from "./listMembers"
+import {InfoGi} from './infoGi'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,7 +53,7 @@ const useStyles = makeStyles(()=> ({
   }
 }));
 
-const ManageView = () => {
+export const ManageView = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -78,25 +78,25 @@ const ManageView = () => {
                 variant="scrollable"
                 scrollButtons="on"
               >
-                <Tab label="Agregar miembros" {...options(0)} />
-                <Tab label="Consultar miembros" {...options(1)} />
-                <Tab label="Agregar area de conocimiento" {...options(2)} />
-                <Tab label="Agregar linea de investigacion" {...options(3)} />
+                <Tab label="Información Gi" {...options(0)} />
+                <Tab label="Miembros" {...options(1)} />
+                <Tab label="Agregar area de estudio" {...options(2)} />
+                {/* <Tab label="Agregar linea de investigacion" {...options(3)} /> */} {/*Todo */}
               </Tabs>
             </AppBar>
 
             <TabPanel value={value} index={0}>
-              <div>TODO</div>
+              <InfoGi/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <div>TODO</div>
+             <ListMembers /> 
             </TabPanel>
             <TabPanel value={value} index={2}>
               <AddKnowLedgeView />
             </TabPanel>
-            <TabPanel value={value} index={3}>
+            {/* <TabPanel value={value} index={3}>
               <AddLineResearchView />
-            </TabPanel>
+            </TabPanel> */}
           </Card>
         </Box>
       </Container>

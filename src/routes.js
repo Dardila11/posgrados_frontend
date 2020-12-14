@@ -59,6 +59,7 @@ import DirectorStudentView from 'src/views/teamc/director/Students/StudentInfoVi
 import DirectorListActivitiesView from 'src/views/teamc/director/Activities/ListActivitiesView';
 import DirectorActivityView from 'src/views/teamc/director/Activities/ActivityInfoView';
 import DirectorListEvaluationsView from 'src/views/teamc/director/Evaluations/ListEvaluationsView';
+import {ManageView} from 'src/views/teamd/director/manage-GI/index'
 /* End Director imports */
 
 const routes = [
@@ -75,7 +76,8 @@ const routes = [
         element: <DirectorActivityView />
       },
       { path: 'list-evaluations', element: <DirectorListEvaluationsView /> },
-      { path: '*', element: <Navigate to="/404" /> }
+      { path: '*', element: <Navigate to="/404" /> },
+      { path: 'manage-gi', element: <ManageView /> }
     ]
   },
   /* Coordinator routes */
@@ -142,7 +144,7 @@ const routes = [
       { path: 'login', element: <LoginView /> },
       { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '/', element: <Navigate to="/login" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }

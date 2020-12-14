@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CreateUserService } from './service';
 import { AlertView } from '../../../../components/Alert'
 //ICONS
@@ -81,6 +81,7 @@ export const CreateUserView = () => {
   const [is_proffessor, setIs_proffessor] = useState(0);
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({})
+  const [is_coordinator, setIs_coordinator] = useState(0)
   const handleChangeUsername = e => {
     setUsername(e.target.value);
   };
@@ -129,30 +130,31 @@ export const CreateUserView = () => {
 
 
 
-
+  const [imagen, setImagen] = useState([])
   const handleChangeRole = event => {
     setRole(event.target.value);
-    if (role === '1'){
+    if (event.target.value === '1'){
       setIs_student(1)
       setIs_proffessor(0)
+      setIs_coordinator(0)
 
-    }else{
+    }
+    if(event.target.value === '2'){
       setIs_proffessor(1)
       setIs_student(0)
+      setIs_coordinator(0)
+    }
+    if(event.target.value === '3'){
+      setIs_coordinator(1)
+      setIs_student(0)
+      setIs_proffessor(0)
     }
   };
   const handleChangeFirstName = event => {
     setFirstName(event.target.value);
   };
-
-  const handleCreateUser = e => {
+  const handleCreateUser = async (e) => {
     e.preventDefault();
-
-    console.log(fileImage)
-    const form_data = new FormData();
-    form_data.append('image_file',fileImage,fileImage.name);
-    form_data.append('title', 'image');
-    form_data.append('content', fileImage.content);
     console.log(firstName);
     console.log(lastName);
     console.log(username);
@@ -161,13 +163,11 @@ export const CreateUserView = () => {
     console.log(typeId);
     console.log(personal_id);
     console.log(personal_code);
-    console.log(form_data);
     console.log(telephone);
     console.log(address);
     console.log(is_proffessor);
-
-    
-    CreateUserService({
+    console.log("Es coordinador",is_coordinator)
+    await CreateUserService({
       first_name: firstName,
       last_name: lastName,
       username: username,
@@ -176,13 +176,15 @@ export const CreateUserView = () => {
       type_id: typeId,
       personal_id: personal_id,
       personal_code: personal_code,
-      photo: null,
+      // photo: null,
       telephone: telephone,
       address: address,
       is_proffessor: is_proffessor,
-      is_student: is_student
+      is_student: is_student,
+      is_coordinator: is_coordinator
+      // headers: {'Content-Type':'multipart/form-data'}
     })
-      .then( () => {
+      .then( (request) => {
         setOpen(true)
         setTypeAlert('success')
         setMessage('Usuario creado correctamente')
@@ -472,7 +474,7 @@ export const CreateUserView = () => {
                     type="file"
                     className="custom-file-input"
                     id="img-file"
-                    onChange={(e) => {setFileImage(e.target.files[0]);}}
+                    onChange={async (e) => setImagen(e.target.files)}
                     required
                   />
                   <label className="custom-file-label">
@@ -548,6 +550,9 @@ export const CreateUserView = () => {
                   </MenuItem>
                   <MenuItem key="isProffessor2" value="2">
                     Es profesor
+                  </MenuItem>
+                  <MenuItem key="isProffessor3" value="3">
+                    Es coordinator
                   </MenuItem>
                 </TextField>
               </Box>
