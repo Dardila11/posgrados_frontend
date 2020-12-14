@@ -1,10 +1,14 @@
 import axios from 'axios';
-//const API_URL = 'https://mdquilindo.pythonanywhere.com';
-const API_URL = 'http://localhost:8000'
+const API_URL = 'https://mdquilindo.pythonanywhere.com';
+// const API_URL = 'http://localhost:8000'
 
+// export const CreateGIApi = GI => {
+//   const url = `${API_URL}/api/1.0/crear_grupo_investigacion/`;
+//   return axios.post(url, GI,{ headers: {'Authorization' : `token ${localStorage.getItem('token')}`}});
+// };
 export const CreateGIApi = GI => {
   const url = `${API_URL}/api/1.0/crear_grupo_investigacion/`;
-  return axios.post(url, GI,{ headers: {'Authorization' : `token ${localStorage.getItem('token')}`}});
+  return axios.post(url, GI);
 };
 //TODO en back no esta
 export const ListProfessorApi = () => {
@@ -16,7 +20,7 @@ export const AssignDirector = (director) => {
   return axios.post(url, director);
 }
 export const EditDirector = (director) => {
-  const url = `${API_URL}/api/1.0/consultar_dirige/${director.id}/${director.gi}`
+  const url = `${API_URL}/api/1.0/consultar_dirige/${director.id}/${director.inv_group}`
   return axios.put(url, director);
 }
 export const GetDirige =(gi) => {
@@ -48,5 +52,6 @@ export const ConsultProfesorService = () => {
   const url = `${API_URL}/api/1.0/consultar_profesor/`;
   return axios.get(url);
 };
+
 
 

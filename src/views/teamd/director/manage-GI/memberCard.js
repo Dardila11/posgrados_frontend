@@ -43,7 +43,7 @@ export const MemberCard = ({member}) => {
                     Nombre: {usuario.first_name} {usuario.last_name}
                 </Typography>
                 <Typography color="textSecondary" gutterBottom>
-                    Departamento: {usuario.first_name}
+                    Rol: profesor
                 </Typography>
                 {/* <Typography color="textSecondary" gutterBottom>
                     Email: {usuario.email}

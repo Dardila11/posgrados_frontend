@@ -92,6 +92,8 @@ export const CreateView = () => {
       .catch(console.log("nada"));
       ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
   }, []);
+
+
   const handleCreate = async () => {
     setOpen(false)
     await CreateGIApi({
