@@ -59,8 +59,13 @@ import DirectorStudentView from 'src/views/teamc/director/Students/StudentInfoVi
 import DirectorListActivitiesView from 'src/views/teamc/director/Activities/ListActivitiesView';
 import DirectorActivityView from 'src/views/teamc/director/Activities/ActivityInfoView';
 import DirectorListEvaluationsView from 'src/views/teamc/director/Evaluations/ListEvaluationsView';
-import {ManageView} from 'src/views/teamd/director/manage-GI/index'
 /* End Director imports */
+//Imports teamA
+
+import RegisterGrantView from "src/views/teamA/coordinator/RegisterGrantView"
+import RegisterAgreementView from "src/views/teamA/coordinator/RegisterAgreementView"
+import AdministerStudentView from 'src/views/teamA/coordinator/index';
+import AdministerProfileView from 'src/views/teamA/student/index';
 
 const routes = [
   {
@@ -76,8 +81,7 @@ const routes = [
         element: <DirectorActivityView />
       },
       { path: 'list-evaluations', element: <DirectorListEvaluationsView /> },
-      { path: '*', element: <Navigate to="/404" /> },
-      { path: 'manage-gi', element: <ManageView /> }
+      { path: '*', element: <Navigate to="/404" /> }
     ]
   },
   /* Coordinator routes */
@@ -86,12 +90,14 @@ const routes = [
     element: <CoordinatorDashboardLayout />,
     children: [
       { path: '', element: <CoordinatorIndexView /> },
+      { path: 'administer-student', element: <AdministerStudentView /> },
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       {
         path: 'list-students/student/:id',
         element: <CoordinatorStudentView />
       },
       //{ path: 'list-students/student/:id', element: <StudentView /> },
+      { path: 'administer-student', element: <AdministerStudentView /> },
       { path: '/administer-Gi', element: <AdministerView /> },
       { path: '/administer-Places', element: <AdministerPlacesView /> },
       { path: '/administer-Professors', element: <AdministerProfessorsView /> },
@@ -110,6 +116,7 @@ const routes = [
     path: 'student',
     element: <StudentDashboardLayout />,
     children: [
+      { path: 'administer-profile', element: <AdministerProfileView /> },
       { path: 'list-activities/activityone', element: <ActivityOneView /> },
       { path: 'list-activities/activitytwo', element: <ActivityTwoView /> },
       { path: 'list-activities/activitythree', element: <ActivityThreeView /> },
@@ -117,12 +124,15 @@ const routes = [
       { path: 'list-activities/activityfive', element: <ActivityFiveView /> },
       { path: 'list-activities/activitysix', element: <ActivitySixView /> },
       { path: 'list-activities', element: <StudentListActivitiesView /> },
+      { path: 'administer-profile/registerGrant', element: <RegisterGrantView /> },
+      { path: 'administer-profile/registerAgreement', element: <RegisterAgreementView /> },
       {
         path: 'list-activities/activity/:id',
         element: <ActivityStudentView />
       },
       { path: 'list-activities', element: <ActivityView /> },
       { path: '*', element: <Navigate to="/404" /> }
+      
     ]
   },
   {
@@ -144,7 +154,7 @@ const routes = [
       { path: 'login', element: <LoginView /> },
       { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
-      { path: '/', element: <Navigate to="/login" /> },
+      { path: '/', element: <Navigate to="/app/dashboard" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }

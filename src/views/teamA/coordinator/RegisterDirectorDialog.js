@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import { registerStudent } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchUser } from 'src/views/teamd/Search/searchUser';
-import { SearchProgram } from 'src/views/teama/search/searchProgram';
+
 import {
   Box,
   Button,

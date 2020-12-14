@@ -37,6 +37,11 @@ const items = [
     title: 'Activities'
   },
   {
+    href: '/student/administer-profile',
+    icon: UsersIcon,
+    title: 'Perfil'
+  },
+  {
     href: '/404',
     icon: AlertCircleIcon,
     title: 'Error'
