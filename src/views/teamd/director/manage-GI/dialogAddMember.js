@@ -53,10 +53,13 @@ export const DialogAddMember = ({state,setState}) => {
     const handleAdd = (e) => {
         e.preventDefault();
         setOpenAlert(false)
-        addMemberService({
+        if (localStorage.getItem("Gi")===null){
+
+        }else{
+          addMemberService({
             "member_status": true,
             "professor": profesorSelect,
-            "inv_group": 1
+            "inv_group": JSON.parse(localStorage.getItem("Gi")).id
         }).then( () => {
         setOpenAlert(true)
         setTypeAlert('success')
@@ -68,6 +71,9 @@ export const DialogAddMember = ({state,setState}) => {
         })
         setOpen(false)
         setState(false)
+
+        }
+
     }
     const handleClose = () => {
         setOpen(false)

@@ -27,7 +27,12 @@ export const ListMembers = () => {
     const [ListMembers, setListMembers] = useState([])
     const [listProfessors, setlistProfessors] = useState([])
     const [userList, setuserList] = useState([])
-    useEffect(() => {ListMembersApi(1).then((request)=> {setListMembers(request.data.Members)})}, [])
+    useEffect(() => {
+      console.log("EFECTO LISTAR MIEMBROS",JSON.parse(localStorage.getItem("Gi")).id)
+      console.log("listar miembros",JSON.parse(localStorage.getItem("Gi")).id)
+      ListMembersApi(JSON.parse(localStorage.getItem("Gi")).id).then((request)=> {setListMembers(request.data.Members)})
+      
+    }, [])
     const addMember = ()=>{
       setOpenDialog(true);
     }

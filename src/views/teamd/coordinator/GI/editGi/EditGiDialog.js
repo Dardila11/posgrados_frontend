@@ -83,7 +83,7 @@ export const EditGiDialog = ({state,setState,gi}) => {
             EditDirector({
               id:result.data.Manage[0].professor,
               professor: profesorSelect,
-              gi:gi.id
+              inv_group:gi.id
           })
           }
             ).catch()
