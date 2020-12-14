@@ -41,11 +41,11 @@ const CoordinatorDashboardLayout = () => {
   const auth = useAuth();
   return (
     <div className={classes.root}>
-
+{/* 
     {auth.user ? (
       <>
       {auth.user ? (
-        <>
+        <> */}
               <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
               <NavBar
               onMobileClose={() => setMobileNavOpen(false)}
@@ -58,14 +58,14 @@ const CoordinatorDashboardLayout = () => {
                 </div>
               </div>
             </div>  
-    </> 
+    {/* </> 
         ) : (
           navigate('/login', { replace: false })
         )}
       </>
     ) : (
       navigate('/login', { replace: false })
-    )}
+    )} */}
 
     </div>
 

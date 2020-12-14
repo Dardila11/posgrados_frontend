@@ -45,7 +45,7 @@ const StudentDashboardLayout = () => {
 
     {auth.user ? (
       <>
-        {auth.user.is_student ? (
+        {localStorage.getItem("rol") === 'estudiante' ? (
 
           <>
                   <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
