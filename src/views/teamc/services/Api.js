@@ -10,7 +10,7 @@ const getCoordinatorActivities = id =>{
 }
 
 const getCoordinatorEvaluations = id =>{
-  return https.get('api/coordinator/' + id + '/evaluation');  
+  return https.get('api/coordinator/' + id + '/test');  
 }
 /* End Coordinator */
 
@@ -25,7 +25,7 @@ const getDirectorActivities = id => {
 };
 
 const getDirectorEvaluations = id =>{  
-  return https.get('/api/test_director');
+  return https.get('/api/director/'+ id +'/test');
 }
 
 /* End Director services */
