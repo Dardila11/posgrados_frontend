@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { LinearProgress, makeStyles } from '@material-ui/core'
+import { LinearProgress, Typography, makeStyles } from '@material-ui/core'
 import Page from 'src/components/Page'
 import BreadCrumbs from './BreadCrumbs'
 import SearchBar from 'src/components/SearchBar'
@@ -21,13 +21,16 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const DirectorListStudentsView = ({ period, program, status, search }) => {
+const DirectorListStudentsView = ({ period, program, status, search,page }) => {
   const [studentsList, setStudentsList] = useState([])
   const [loading, setLoading] = useState(true)
   const [initialStudentsList, setInitialStudentsList] = useState([])
+  const [serviceState, setServiceState] = useState(true)
+  const itemsByPage = 8
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
   const programs = getPrograms(initialStudentsList)
+  const pages = getPages(initialStudentsList,itemsByPage)
   const classes = useStyles()
 
    /**
@@ -51,7 +54,8 @@ const DirectorListStudentsView = ({ period, program, status, search }) => {
           )
         setStudentsList(studentsListSearch)
       }else{
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }          
     }
     nameSearch(search)
@@ -72,7 +76,8 @@ const DirectorListStudentsView = ({ period, program, status, search }) => {
         )
         setStudentsList(studentsListFiltered)
       } else {
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }
     }
     periodFilter(period)
@@ -90,7 +95,8 @@ const DirectorListStudentsView = ({ period, program, status, search }) => {
         )
         setStudentsList(studentListFilteredByProgram)
       } else {
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }
     }
     programfilter(program)
@@ -108,11 +114,23 @@ const DirectorListStudentsView = ({ period, program, status, search }) => {
         )
         setStudentsList(studentListFilteredByStatus)
       } else {
-        setStudentsList(initialStudentsList)
+        if(page == '')setStudentsList(pages[0])
+        else setStudentsList(pages[page-1])
       }
     }
     statusfilter(status)
   }, [status])
+
+  /**
+   * Pagination event
+   */
+  useEffect(()=>{
+    function pageSelect(page){
+      setStudentsList(pages[page-1])
+      console.log("page selected in component: "+page)
+    }
+    pageSelect(page)
+  },[page]);
 
   /**
    * Obtiene la lista de estudiantes asignados al
@@ -120,9 +138,10 @@ const DirectorListStudentsView = ({ period, program, status, search }) => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      await api.getDirectorStudents(5).then(res => {
-        setStudentsList(res.data.students)
+      await api.getDirectorStudents(13).then(res => {
+        setStudentsList(getPages(res.data.students,itemsByPage)[0])
         setInitialStudentsList(res.data.students)
+        setServiceState(false)
         setLoading(false)
       })
     }
@@ -139,11 +158,14 @@ const DirectorListStudentsView = ({ period, program, status, search }) => {
         programs={programs}/>
       {loading ? (
         <LinearProgress className={classes.progress} />
-      ) : (
+      ) : ( initialStudentsList.length > 0 ? (
         <>
-          <List list={studentsList} option="Student" />
-          <ListPagination />
-        </>
+        <List list={studentsList} option="Student" />
+        <ListPagination pages = {pages}/>
+      </>
+      ) : (
+        <Typography variant='h3'>No se obtuvieron resultados</Typography>
+      ) 
       )}
     </Page>
   )
@@ -172,6 +194,27 @@ function getStatusNameById(statusId) {
     case 5:
       return 'Retirado'
   }
+}
+
+const getPages = (studentsList, npages) => {
+  let pages = []
+  let indexv = 0
+  let br = true
+  while (br) {
+    let page = []
+    for (let index = 1; index <= npages; index++) {
+      if(indexv>=studentsList.length) {
+        index = npages+1
+      }else{
+        page.push(studentsList[indexv])
+        indexv++
+      }      
+    }
+    pages.push(page)
+    if(indexv>=studentsList.length) br=false
+  }
+  console.log(pages)
+  return pages
 }
 
 const getStatus = studentsList => {
@@ -203,7 +246,8 @@ const mapStateToProps = state => ({
   period: state.filters.period,
   program: state.filters.program,
   status: state.filters.status,
-  search: state.searches.search
+  search: state.searches.search,
+  page: state.paginations.page
 })
 
 export default connect(mapStateToProps)(DirectorListStudentsView)
