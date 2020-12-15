@@ -1,61 +1,61 @@
-import http from './ApiConfig';
+import https from './ApiConfig';
 
 /* Coordinator services*/
 const getStudents = () => {
-  return http.get('/api/student');
+  return https.get('/api/student');
 };
 
 const getCoordinatorActivities = id =>{
-  return http.get('/api/coordinator/' + id + '/activity');
+  return https.get('/api/coordinator/' + id + '/activity');
 }
 
 const getCoordinatorEvaluations = id =>{
-  return http.get('api/coordinator/' + id + '/evaluation');  
+  return https.get('api/coordinator/' + id + '/test');  
 }
 /* End Coordinator */
 
 /* Director services */
 
 const getDirectorStudents = id => {
-  return http.get('/api/director/' + id + '/student');
+  return https.get('/api/director/' + id + '/student');
 };
 
 const getDirectorActivities = id => {
-  return http.get('/api/director/' + id + '/activity');
+  return https.get('/api/director/' + id + '/activity');
 };
 
 const getDirectorEvaluations = id =>{  
-  return http.get('/api/test_director');
+  return https.get('/api/director/'+ id +'/test');
 }
 
 /* End Director services */
 
 /* Get services */
 const getActivity = id => {
-  return http.get('/api/activity/'+id);
+  return https.get('/api/activity/'+id);
 };
 
 const getStudent = id => {
-  return http.get('/api/student/' + id);
+  return https.get('/api/student/' + id);
 };
 
 const getStudentActivities = id => {
-  return http.get('/api/student/' + id + '/activity');
+  return https.get('/api/student/' + id + '/activity');
 };
 
 /*End get Services*/
 
 /*Post Services*/
 const postStudentTracking = data => {
-  return http.post('/api/tracking/', data);
+  return https.post('/api/tracking/', data);
 };
 
 const postDirectorEvaluations =  (directorId, data) => {
-  return http.post(`/api/${directorId}`, data);
+  return https.post(`/api/${directorId}`, data);
 }
 
 const postCoordinatorEvaluations = (coordinatorId, data) => {
-  return http.post(`/api/${coordinatorId}`, data);
+  return https.post(`/api/${coordinatorId}`, data);
 }
 /*End post Services*/
 

@@ -6,13 +6,15 @@ import {
   MenuItem,
   Button,
   makeStyles,
-  Divider
+  Divider,
+  Typography
 } from '@material-ui/core'
 
 import Api from 'src/views/teamc/services/Api'
 import { AlertView } from 'src/components/Alert'
 import { Formik } from 'formik'
 import * as yup from 'yup'
+import { isUndefined } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,49 +26,34 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const validationSchema = yup.object().shape({
-  credits: yup
-    .number("seleccion un credito")
-    .required("Creditos es obligatoria"),
   observations: yup
     .string('escriba las observaciones')
     .required('Observaciones es obligatoria')
 })
 
-const CreateEvaluation = props => {
+const EditEvaluationDirector = props => {
   const classes = useStyles()
   const [open, setOpen] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
-  const [isSaved, setIsSaved] = useState(false)
+  const evaluation = props.evaluation
+  const activity = props.activity
 
-  const postData = async values => {
+  const postData = async (values) => {
     setOpen(false)
-    
-    let jsonValues = {
-      activity: values.activity,
-      coordinator: values.coordinator,
-      credits: values.credits,
-      observations: values.observations,
-      is_save: isSaved
-    }
-    console.log(values);
-    console.log(jsonValues);
-
-    Api.postCoordinatorEvaluations(19, jsonValues)
+    Api.postDirectorEvaluations(5, values)
       .then(res => {
-        if (res.status == 201) {
-          console.log(res.status)
+        if(res.status == 201) {
+          console.log(res.status);
           setOpen(true)
-          setTypeAlert('success')
-          setMessage('Evaluación creada con exito')
+          setTypeAlert("success")
+          setMessage("Evaluación creada con exito")
         }
       })
       .catch(error => {
-        console.log(error)
-        setOpen(true)
-        setTypeAlert('error')
-        setMessage('Ha ocurrido un error' + error)
+        console.log(error);
       })
+    
   }
 
   return (
@@ -74,24 +61,19 @@ const CreateEvaluation = props => {
       <h1> {props.title} </h1>
       <Formik
         initialValues={{
-          credits: 1,
-          observations: '',
-          activity: parseInt(props.activityId),
-          coordinator: 19,
-          is_save: isSaved,
-          submitButton: ''
+          /*
+          value: 1 -- Favorable
+          value: 2 -- No Favorable
+          */
+          value: evaluation.value,
+          observations: evaluation.observations,
+          activity: parseInt(activity.id),
+          professor: parseInt(activity.director)
         }}
         validationSchema={validationSchema}
-        onSubmit={(values) => {
-          console.log(values.submitButton)
-
-          if (values.submitButton == "save") {
-            setIsSaved(true)
-            postData(values)
-          } else {
-            setIsSaved(false)
-            postData(values)
-          }
+        onSubmit={values => {
+          console.log(values)
+          postData(values)
         }}
       >
         {({
@@ -100,36 +82,38 @@ const CreateEvaluation = props => {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit,
-          setFieldValue
+          handleSubmit
         }) => (
           <form className={classes.root} onSubmit={handleSubmit} noValidate>
+             {isUndefined(activity.title) ||
+            activity.title == null ||
+            activity.title == '' ? (
+              isUndefined(activity.name) ||
+                activity.name == null ||
+                activity.name == '' ? (
+                  <></>
+                ) : (
+                  <Typography variant="h4" component="p" gutterBottom>
+                    Actividad: {activity.name}
+                  </Typography>
+                )
+            ) : (
+              <Typography variant="h4" component="p" gutterBottom>
+                Actividad: {activity.title}
+              </Typography>
+            )}
             <Select
-              id="activity-credits"
+              id="activity-value"
               variant="outlined"
               type="select"
-              defaultValue={-1}
+              defaultValue={1}
               name="value"
               value={values.value}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={
-                errors.credits &&
-                touched.credits &&
-                errors.credits
-              }
-              helpertext={
-                errors.credits &&
-                touched.credits &&
-                errors.credits
-              }
             >
-
-              <MenuItem value={-1} disabled>Creditos</MenuItem>
-              <MenuItem value={0}>0</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={1}>Favorable</MenuItem>
+              <MenuItem value={2}>No Favorable</MenuItem>
             </Select>
             <TextField
               id="outlined-multiline-static"
@@ -153,12 +137,12 @@ const CreateEvaluation = props => {
               }
             />
             <Divider variant="middle" />
-            <Button type="submit" name="is_save" onClick={() => setFieldValue('submitButton', "save")} variant="contained" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Guardar
             </Button>
-            <Button type="submit" name="action" onClick={() => setFieldValue('submitButton', "send")} variant="contained" color="primary">
-              Guardar y Notificar
-            </Button>
+            <Button type="submit" variant="contained" color="primary">
+            Guardar y Notificar
+          </Button>
           </form>
         )}
       </Formik>
@@ -167,4 +151,4 @@ const CreateEvaluation = props => {
   )
 }
 
-export default CreateEvaluation
+export default EditEvaluationDirector
