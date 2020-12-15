@@ -7,8 +7,9 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import CreateView from './create';
-import AddDirector from './addDirector/add-director';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ListProfessors from './addDirector/listProfessors';
+import {ListGi} from '../GI/editGi/listGi'
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -84,7 +85,7 @@ const AdministerView = () => {
                 <Tab
                   label={
                     <>
-                      <PersonAddIcon fontSize="inherit" /> Asignar director
+                      Grupos de investigacion registrados
                     </>
                   }
                   {...options(1)}
@@ -95,7 +96,7 @@ const AdministerView = () => {
               <CreateView />
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <AddDirector />
+              <ListGi />
             </TabPanel>
           
         </Box>

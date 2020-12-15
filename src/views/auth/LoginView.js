@@ -1,7 +1,10 @@
-import React from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link as RouterLink, useNavigate, Redirect} from 'react-router-dom';
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import { AlertView } from '../../components/Alert'
+import {getUserInfoService} from './service'
 import {
   Box,
   Button,
@@ -12,27 +15,129 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core';
-import FacebookIcon from 'src/icons/Facebook';
-import GoogleIcon from 'src/icons/Google';
 import Page from 'src/components/Page';
+import { loginService } from './service';
+import { perfilService } from './service';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,
     height: '100%',
-    paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    padding: '50px'
+  },
+  inputs: {
+    margin: '10px'
   }
 }));
 
-const LoginView = () => {
+
+ const LoginView = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [open, setOpen] = useState('');
+  const [typeAlert, setTypeAlert] = useState('');
+  const [message, setMessage] = useState('');
+  const [username,setUserName] = useState('');
+  const [password, setPassword] = useState('');
+  const auth = useAuth();
+  const handleChangePassword = (e) =>{
+    setPassword(e.target.value);
+  };
+  const HandleChangeName = (e) =>{
+    setUserName(e.target.value);
+  };
+  const handleLogin = () => {
 
+    // auth.login({
+    //   username: username,
+    //   password: password              
+    // }).then().then((data) => {
+    //     enviar a la url del perfil correspondiente
+    //     let datesComplet = data.data
+    //     
+    //     localStorage.setItem('id',JSON.stringify(data.data.user.id))
+    //     traer datos,manejar el token
+    //     localStorage.setItem('token',data.data.token)
+    //     localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
+    //     getUserInfoService(data.data.user.id).then(request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
+
+
+    //     perfilService(
+    //       data.data.user
+    //     )
+    //     .then((data) =>{
+    //       if (JSON.parse(localStorage.getItem('userInfo')).is_coordinator) {
+    //         navigate('/coordinator', { replace: true });
+    //       }
+    //       else if (JSON.parse(localStorage.getItem('userInfo')).is_professor){
+    //         navigate('/director', { replace: true });
+    //       }
+    //       else if (JSON.parse(localStorage.getItem('userInfo')).is_student){
+    //         navigate('/student', { replace: true });
+    //       }
+          
+    //     })
+  
+    //   })
+    //   .catch(() => {
+    //     setOpen(true)
+    //     setTypeAlert('error')
+    //     setMessage('Error, verifica los datos!')
+
+    //   });
+    setOpen(false)
+    loginService({
+      username: username,
+      password: password              
+    })
+      .then(async (data) => {
+        let datesComplet = data.data
+        localStorage.setItem('id',JSON.stringify(data.data.user.id))
+        localStorage.setItem('token',data.data.token)
+        localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
+        auth.setUser(data.data.user)
+        getUserInfoService(data.data.user.id).then(request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
+
+
+        perfilService(
+          data.data.user
+        )
+        .then(async (data) =>{
+
+            console.log("rol ",data)
+            localStorage.setItem("rol",data.data)
+            if (data.data === "coordinador") {
+              navigate('/coordinator', { replace: true });
+            }
+            else if (data.data === "profesor"){
+              navigate('/director', { replace: true });
+            }
+            else if (data.data === "estudiante"){
+              navigate('/student', { replace: true });
+            }
+
+          }
+
+          
+        )
+  
+      })
+      .catch(() => {
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Usuario o contraseña incorrectos!')
+
+      });
+  };
+  
   return (
+    
     <Page
+      title="Autenticación"
       className={classes.root}
-      title="Login"
     >
       <Box
         display="flex"
@@ -43,15 +148,15 @@ const LoginView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              email: 'demo@devias.io',
-              password: 'Password123'
+              username: '',
+              password: ''
             }}
             validationSchema={Yup.object().shape({
-              email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
-              password: Yup.string().max(255).required('Password is required')
+              username: Yup.string().max(255).required('Debes ingresar un usuario!'),
+              password: Yup.string().max(255).required('Debes indicar tu contraseña!')
             })}
             onSubmit={() => {
-              navigate('/app/dashboard', { replace: true });
+//              navigate('/app/dashboard', { replace: true });
             }}
           >
             {({
@@ -59,96 +164,60 @@ const LoginView = () => {
               handleBlur,
               handleChange,
               handleSubmit,
-              isSubmitting,
               touched,
               values
             }) => (
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} className={classes.root}>
                 <Box mb={3}>
                   <Typography
                     color="textPrimary"
                     variant="h2"
                   >
-                    Sign in
+                    Iniciar Sesión
                   </Typography>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    variant="body2"
-                  >
-                    Sign in on the internal platform
-                  </Typography>
+                  
                 </Box>
                 <Grid
                   container
                   spacing={3}
                 >
+                  
                   <Grid
                     item
                     xs={12}
                     md={6}
                   >
-                    <Button
-                      color="primary"
-                      fullWidth
-                      startIcon={<FacebookIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Facebook
-                    </Button>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                  >
-                    <Button
-                      fullWidth
-                      startIcon={<GoogleIcon />}
-                      onClick={handleSubmit}
-                      size="large"
-                      variant="contained"
-                    >
-                      Login with Google
-                    </Button>
+                    
                   </Grid>
                 </Grid>
-                <Box
-                  mt={3}
-                  mb={1}
-                >
-                  <Typography
-                    align="center"
-                    color="textSecondary"
-                    variant="body1"
-                  >
-                    or login with email address
-                  </Typography>
-                </Box>
+                
                 <TextField
-                  error={Boolean(touched.email && errors.email)}
+                  error={Boolean(touched.username && errors.username)}
                   fullWidth
-                  helperText={touched.email && errors.email}
-                  label="Email Address"
+                  helperText={touched.username && errors.username}
+                  label="Nombre de usuario"
                   margin="normal"
-                  name="email"
+                  name="username"
                   onBlur={handleBlur}
-                  onChange={handleChange}
-                  type="email"
-                  value={values.email}
+                  onChange={(e)=>{
+                    handleChange(e);
+                    HandleChangeName(e);
+                  }}
+                  type="username"                  
                   variant="outlined"
                 />
                 <TextField
                   error={Boolean(touched.password && errors.password)}
                   fullWidth
                   helperText={touched.password && errors.password}
-                  label="Password"
+                  label="Contraseña"
                   margin="normal"
                   name="password"
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(e)=>{
+                    handleChange(e);
+                    handleChangePassword(e);
+                  }}
                   type="password"
                   value={values.password}
                   variant="outlined"
@@ -156,36 +225,26 @@ const LoginView = () => {
                 <Box my={2}>
                   <Button
                     color="primary"
-                    disabled={isSubmitting}
                     fullWidth
                     size="large"
                     type="submit"
                     variant="contained"
+                    onClick={handleLogin}
                   >
-                    Sign in now
+                    Entrar 
                   </Button>
                 </Box>
-                <Typography
-                  color="textSecondary"
-                  variant="body1"
-                >
-                  Don&apos;t have an account?
-                  {' '}
-                  <Link
-                    component={RouterLink}
-                    to="/register"
-                    variant="h6"
-                  >
-                    Sign up
-                  </Link>
-                </Typography>
+                <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
               </form>
+              
             )}
+            
           </Formik>
         </Container>
       </Box>
     </Page>
   );
 };
+
 
 export default LoginView;

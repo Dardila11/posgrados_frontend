@@ -7,7 +7,7 @@ import {Container} from '@material-ui/core';
 const CoordinatorIndexView = () => {
     
     return (
-        <Page  title="Director">      
+        <Page  title="Coordinator">      
             
             <Container>
                 <h1>Coordinator's home page</h1>

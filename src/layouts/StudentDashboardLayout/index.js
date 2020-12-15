@@ -3,8 +3,10 @@ import { Outlet } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
 import TopBar from './TopBar';
-
+import { useAuth } from "src/views/auth/Context/use-auth.js";
+import { Link as RouterLink, useNavigate, Redirect} from 'react-router-dom';
 const useStyles = makeStyles((theme) => ({
+
   root: {
     backgroundColor: theme.palette.background.dark,
     display: 'flex',
@@ -34,23 +36,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const StudentDashboardLayout = () => {
+  const navigate = useNavigate();
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-
+  const auth = useAuth();  
   return (
     <div className={classes.root}>
-      <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
-      <NavBar
-        onMobileClose={() => setMobileNavOpen(false)}
-        openMobile={isMobileNavOpen}
-      />
-      <div className={classes.wrapper}>
-        <div className={classes.contentContainer}>
-          <div className={classes.content}>
-            <Outlet />
-          </div>
-        </div>
-      </div>
+
+    {auth.user ? (
+      <>
+        {localStorage.getItem("rol") === 'estudiante' ? (
+
+          <>
+                  <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
+                  <NavBar
+                  onMobileClose={() => setMobileNavOpen(false)}
+                  openMobile={isMobileNavOpen}
+                  />                  
+                <div className={classes.wrapper}>
+                  <div className={classes.contentContainer}>
+                    <div className={classes.content}>
+                      <Outlet />
+                    </div>
+                  </div>
+                </div>  
+          </>              
+        ) : (
+          navigate('/login', { replace: true })
+        )}
+      </> 
+    ) : (
+      navigate('/login', { replace: true })
+    )}
+
     </div>
   );
 };

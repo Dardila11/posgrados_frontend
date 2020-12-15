@@ -10,7 +10,8 @@ import {
   Container,
   TextField,
   makeStyles,
-  Typography
+  Typography,
+  FormGroup
 } from '@material-ui/core';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
@@ -68,7 +69,10 @@ export const CreateKnowLedgeView = () => {
     event.preventDefault();
   };
   return (
-    <Container maxWidth="sm" className={clases.container}>
+    <Container maxWidth="sm" className={clases.root}>
+      <Typography variant="h2" align="center">
+      Area de conocimiento
+      </Typography>
       <Formik
         initialValues={{
           title: '',
@@ -103,11 +107,9 @@ export const CreateKnowLedgeView = () => {
             height="100%"
             justifyContent="center"
           >
-            <form onSubmit={handleSubmit} className={clases.root}>
-              <Typography variant="h2" align="center">
-                Area de conocimiento
-              </Typography>
+            <form onSubmit={handleSubmit}>
               <Box mb={3}>
+              <FormGroup>
                 <TextField
                   error={Boolean(touched.title && errors.title)}
                   fullWidth
@@ -131,6 +133,8 @@ export const CreateKnowLedgeView = () => {
                     )
                   }}
                 />
+              </FormGroup>
+                <FormGroup>
                 <TextField
                   error={Boolean(touched.description && errors.description)}
                   fullWidth
@@ -156,6 +160,7 @@ export const CreateKnowLedgeView = () => {
                     )
                   }}
                 />
+                </FormGroup>
                 <Box my={2}>
                   <Button
                     color="primary"
@@ -169,10 +174,11 @@ export const CreateKnowLedgeView = () => {
                 </Box>
               </Box>
             </form>
-            <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
+            
           </Box>
         )}
       </Formik>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </Container>
   );
 };

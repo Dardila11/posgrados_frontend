@@ -9,7 +9,7 @@ function Alert(props) {
   
   const useStyles = makeStyles((theme) => ({
     root: {
-      width: '100%',
+      width: '20%',
       '& > * + *': {
         marginTop: theme.spacing(2),
       },

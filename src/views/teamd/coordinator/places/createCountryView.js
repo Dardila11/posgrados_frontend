@@ -34,6 +34,7 @@ const CreateCountryView = () => {
   const clases = useStyles();
   const [name, setname] = useState(' ');
   const handleCreate = () => {
+    console.log(name)
     setOpen(false)
     CreateCountryService({
       name: name
@@ -86,6 +87,7 @@ const CreateCountryView = () => {
               flexDirection="column"
               height="100%"
               justifyContent="center"
+              
             >
               <form onSubmit={e => handleSubmit(e)} className={clases.root}>
                 <Typography color="textPrimary" variant="h1" align="center">
