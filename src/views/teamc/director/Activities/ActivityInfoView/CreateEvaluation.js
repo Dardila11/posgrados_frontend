@@ -35,9 +35,19 @@ const CreateEvaluation = props => {
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
 
-  const postData = async (values) => {
+  const postData = async (values, isSaveed) => {
     setOpen(false)
-    Api.postDirectorEvaluations(5, values)
+    let directorId = parseInt(localStorage.getItem("id"))
+
+    let jsonValues = {
+      value: values.value,
+      observations: values.observations,
+      activity: values.activity,
+      professor: values.professor,
+      is_save: isSaveed
+
+    }
+    Api.postDirectorEvaluations(directorId, jsonValues)
       .then(res => {
         if(res.status == 201) {
           console.log(res.status);
@@ -48,6 +58,9 @@ const CreateEvaluation = props => {
       })
       .catch(error => {
         console.log(error);
+        setOpen(true)
+        setTypeAlert("error")
+        setMessage("Ha ocurrido un error" + error)
       })
     
   }
@@ -64,12 +77,18 @@ const CreateEvaluation = props => {
           value: 1,
           observations: '',
           activity: parseInt(props.activityId),
-          professor: parseInt(props.directorId)
+          professor: parseInt(props.directorId),
+          is_save: false,
+          submitButton: ''
+
         }}
         validationSchema={validationSchema}
         onSubmit={values => {
-          console.log(values)
-          postData(values)
+          if (values.submitButton == "save") {
+            postData(values, true)
+          } else {
+            postData(values, false)
+          }
         }}
       >
         {({
@@ -78,7 +97,8 @@ const CreateEvaluation = props => {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          setFieldValue
         }) => (
           <form className={classes.root} onSubmit={handleSubmit} noValidate>
             <Select
@@ -91,6 +111,7 @@ const CreateEvaluation = props => {
               onChange={handleChange}
               onBlur={handleBlur}
             >
+              
               <MenuItem value={1}>Favorable</MenuItem>
               <MenuItem value={2}>No Favorable</MenuItem>
             </Select>
@@ -116,10 +137,10 @@ const CreateEvaluation = props => {
               }
             />
             <Divider variant="middle" />
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" onClick={() => setFieldValue('submitButton', "save") } variant="contained" color="primary">
               Guardar
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" onClick={() => setFieldValue('submitButton', "send") } variant="contained" color="primary">
             Guardar y Notificar
           </Button>
           </form>
@@ -129,5 +150,4 @@ const CreateEvaluation = props => {
     </>
   )
 }
-
 export default CreateEvaluation
