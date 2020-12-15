@@ -5,9 +5,10 @@ import {
   Select,
   MenuItem,
   makeStyles,
-  DialogActions,
-  Button
+  Button, 
 } from '@material-ui/core'
+
+
 
 import Api from 'src/views/teamc/services/Api'
 import { AlertView } from 'src/components/Alert'
@@ -83,7 +84,7 @@ const TrackStudent = props => {
         initialValues={{
           status: 1,
           enrollment_date: null,
-          graduation_date: Date(),
+          graduation_date: null,
           num_folio: '',
           num_acta: '',
           num_diploma: '',
@@ -101,6 +102,7 @@ const TrackStudent = props => {
           <Select
             id="student-status"
             variant="outlined"
+            label="Estado"
             type="select"
             defaultValue={1}
             name="status"
@@ -115,10 +117,6 @@ const TrackStudent = props => {
             <MenuItem value={4}>Balanceado</MenuItem>
             <MenuItem value={5}>Retirado</MenuItem>
           </Select>
-          
-          {/* Si es Graduado, muestra los siguientes campos */}
-          {/* Fecha de Grado* */} {/* Folio* */} {/* Numero de acta* */}
-          {/* Resolución* */} {/* Premios* */}
           {values.status === 3 ? (
             <>
               <TextField
@@ -190,7 +188,7 @@ const TrackStudent = props => {
             helperText={(errors.observations && touched.observations) && errors.observations}
           />
       
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" variant="contained" pending="true" color="primary">
               Guardar
             </Button>
           
