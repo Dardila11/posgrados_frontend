@@ -42,6 +42,7 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   let option = true;
   const classes = useStyles();
   let spanClass = ''
+  const student = activity.student
  /* switch (activity.state) {
     case 1:
       cardClass = classes.favorableStatus

@@ -88,12 +88,7 @@ const routes = [
     path: 'coordinator',
     element: <CoordinatorDashboardLayout />,
     children: [
-<<<<<<< HEAD
       { path: '', element: <Navigate to="list-students" /> },
-=======
-      { path: '', element: <CoordinatorIndexView /> },
-      { path: 'administer-student', element: <AdministerStudentView /> },
->>>>>>> 1857f75272b61939a63acacebb6ca32bbfa88e75
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       {
         path: 'list-students/student/:id',
