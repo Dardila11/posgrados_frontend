@@ -120,7 +120,7 @@ const ProfileDetails = ({ className, ...rest }) => {
       "personal_code": JSON.parse(localStorage.getItem("userInfo")).personal_code,
       // "photo": JSON.parse(localStorage.getItem("userInfo")).photo,
       "telephone": telephone,
-      "address": JSON.parse(localStorage.getItem("userInfo")).address,
+      "address": address,
     }).then(alert("editado"))
   }
   
