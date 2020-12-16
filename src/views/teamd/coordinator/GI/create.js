@@ -101,7 +101,8 @@ export const CreateView = () => {
       category: category,
       email: email,
       foundation_date: dateFoundation,
-      department: departmentI
+      department: departmentI,
+      "status": true,
     })
       .then((request) => {
         AssignDirector({
