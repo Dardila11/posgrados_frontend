@@ -63,8 +63,8 @@ import DirectorListEvaluationsView from 'src/views/teamc/director/Evaluations/Li
 /* End Director imports */
 //Imports teamA
 
-import RegisterGrantView from "src/views/teamA/coordinator/RegisterGrantView"
-import RegisterAgreementView from "src/views/teamA/coordinator/RegisterAgreementView"
+import RegisterGrantView from "src/views/teamA/student/RegisterGrantView"
+import RegisterAgreementView from "src/views/teamA/student/RegisterAgreementView"
 import AdministerStudentView from 'src/views/teamA/coordinator/index';
 import AdministerProfileView from 'src/views/teamA/student/index';
 

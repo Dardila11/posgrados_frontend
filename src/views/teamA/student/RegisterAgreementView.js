@@ -78,7 +78,7 @@ const RegisterAgreementView = () => {
 
       is_active: true,
       period_academic: period,
-      student: student,
+      student: JSON.parse(localStorage.getItem("estudiante")).id,
       agreement_date: agreementDate,
       start_date: startDate,
       end_date: endDate,
@@ -127,9 +127,8 @@ const RegisterAgreementView = () => {
               period: Yup.string()
                 .required('Periodo requerido'),
                 
-                agreementDate: Yup.number()
-                .required('Año del acuerdo requerido')
-                .positive(),
+                agreementDate: Yup.date()
+                .required('Fecha del acuerdo requerida'),
               percentage: Yup.number()
                 .required('Porcentaje requerido')
                 .positive(),
@@ -180,7 +179,7 @@ const RegisterAgreementView = () => {
                         Los campos con * son obligatorios
                       </Typography>
                     </Box>
-                    <SearchStudent callback={getStudent} />
+                 
 
                     {/* <TextField
                     error={Boolean(touched.lineResearch && errors.lineResearch)}
@@ -250,25 +249,29 @@ const RegisterAgreementView = () => {
                       fullWidth
                     />
                     <TextField
+                      error={Boolean(touched.agreementDate && errors.agreementDate)}
+                      fullWidth
+                      helperText={touched.agreementDate && errors.agreementDate}
                       id="agreementDate"
-                      label="Año del acuerdo"
-                      variant="outlined"
-                      type="number"
+                      label="Fecha del convenio"
                       margin="normal"
-                      InputProps={{ inputProps: { min: 1990, max: 2100 } }}
-                      onChange={e => {
+                      name="agreementDate"
+                      type="date"
+                      required
+                      defaultValue="2017-05-24"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      onBlur={handleBlur}
+                      onChangeCapture={e => {
                         handleChange(e);
                         handleChangeAgreementDate(e.target.value);
                       }}
-                      error={Boolean(
-                        touched.agreementDate && errors.agreementDate
-                      )}
-                      helperText={touched.agreementDate && errors.agreementDate}
-                      onBlur={handleBlur}
                       value={values.agreementDate}
-                      required
-                      fullWidth
+                      variant="outlined"
                     />
+                    
 
                     <TextField
                       error={Boolean(touched.startDate && errors.startDate)}
@@ -362,3 +365,4 @@ const RegisterAgreementView = () => {
 };
 
 export default RegisterAgreementView;
+
