@@ -6,9 +6,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import RegisterStudentView from './RegisterStudentView';
-import RegisterProjectView from './RegisterProjectView';
 import RegisterStudent from './RegisterStudent';
+import RegisterProjectView from './RegisterProjectView';
+import EditStudent from './EditStudent';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import RegisterAgreementView from './RegisterAgreementView';
 import RegisterGrantView from './RegisterGrantView';
@@ -108,6 +108,15 @@ const AdministerStudentView = () => {
                   }
                   {...options(3)}
                 />
+                <Tab
+                  label={
+                    <>
+                      <PersonAddIcon fontSize="inherit" /> Editar estudiante
+                    </>
+                  }
+                  {...options(4)}
+                />
+                
               </Tabs>
             </AppBar>
             <TabPanel value={value} index={2}>
@@ -116,11 +125,14 @@ const AdministerStudentView = () => {
             <TabPanel value={value} index={1}>
               <RegisterProjectView/>
             </TabPanel>
-            <TabPanel value={value} index={0}>
-              <RegisterStudent/>
+            <TabPanel value={value} index={4}>
+              <EditStudent/>
             </TabPanel>
             <TabPanel value={value} index={3}>
               <RegisterAgreementView/>
+            </TabPanel>
+            <TabPanel value={value} index={0}>
+              <RegisterStudent/>
             </TabPanel>
           
         </Box>

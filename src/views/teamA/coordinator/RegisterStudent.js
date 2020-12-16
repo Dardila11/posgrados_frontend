@@ -22,11 +22,11 @@ import CreateProgramDialog from './CreateProgramDialog';
 
 import RegisterDirectorDialog from './RegisterDirectorDialog';
 import AddCodirectorDialog from './AddCodirectorDialog';
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
 import { registerStudent } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
-
+import './styles.css';
 //ICONS
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -40,17 +40,14 @@ import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
 import { FormLabel } from '@material-ui/core';
-import {ConsultStudent} from "../search/service"
+
 import { SearchTeacherOrAdd } from 'src/views/teamA/search/searchTeacherOrAdd';
 import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
 import { SearchProgramOrAdd } from 'src/views/teamA/search/searchProgramOrAdd';
 import { SearchProgram } from 'src/views/teamA/search/searchProgram';
-import {UpdateStudentService} from "src/views/teamA/student/service"
-import {getStudents} from "src/views/teamA/student/service"
-import {UpdateUserService} from "src/views/teamA/student/service"
 import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
 import RegisterAgreementDialog from './RegisterAgreementDialog';
-import {EditarUser} from 'src/views/teamd/Search/service'
+
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -85,72 +82,23 @@ const RegisterStudent = () => {
 
   const [dedicationType, setDedicationType] = useState('');
 
-  const [username, setUsername] = useState('');
-  const [academicTitle, setAcademicTitle] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('a');
+  const [academicTitle, setAcademicTitle] = useState('a');
+  const [password, setPassword] = useState('1');
+  const [firstName, setFirstName] = useState('123');
+  const [lastName, setLastName] = useState('133');
+  const [email, setEmail] = useState('a@unicauca.edu.co');
   const [typeId, setTypeId] = useState('1');
-  const [personal_id, setPersonal_id] = useState(''); // identificacion
-  const [personal_code, setPersonal_code] = useState(''); // en el back debe ser automatico
-  const [telephone, setTelephone] = useState('');
-  const [address, setAddress] = useState('');
-  const [role, setRole] = useState(''); //en el back hay dos variable is_professor is_student
+  const [personal_id, setPersonal_id] = useState('13123'); // identificacion
+  const [personal_code, setPersonal_code] = useState('1313'); // en el back debe ser automatico
+  const [telephone, setTelephone] = useState('312313');
+  const [address, setAddress] = useState('12313');
+  const [role, setRole] = useState('1'); //en el back hay dos variable is_professor is_student
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const [is_proffessor, setIs_proffessor] = useState(0);
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({});
 
-    const [listaEstudiantes, setlistaEstudiantes] = useState([])
-    const [estudianteSeleccionado, setestudianteSeleccionado] = useState()
-    const editarEstudiante = () =>{
-        UpdateStudentService({
-          "academic_title": academicTitle,
-            id:estudianteSeleccionado.id
-        }).then(
-
-          EditarUser({
-            "id": estudianteSeleccionado.user.id,
-            "first_name": firstName,
-            "last_name": lastName,
-            "username": username,
-            "email": email,
-            "type_id": typeId,
-            "personal_id": personal_id,
-            "personal_code": personal_code,
-            "username": estudianteSeleccionado.user.username,
-            // "photo": JSON.parse(localStorage.getItem("userInfo")).photo,
-            "telephone":telephone,
-      
-            "address": address,
-      
-          }).then(alert("editado"))
-        )
-    
-    }
-  useEffect(() => {
-    ConsultStudent().then(result => setlistaEstudiantes(result.data))
-  }, [])
-
-  const getIdEstudiante = (e) => {
-    setestudianteSeleccionado(e)
-  }
-  useEffect(() => {
-    if(estudianteSeleccionado){
-      setFirstName(estudianteSeleccionado.user.first_name)
-      setLastName(estudianteSeleccionado.user.last_name)
-      setEmail(estudianteSeleccionado.user.email)
-      setTypeId(estudianteSeleccionado.user.type_id)
-      setPersonal_id(estudianteSeleccionado.user.personal_id)
-      setPersonal_code(estudianteSeleccionado.user.personal_code)
-      setTelephone(estudianteSeleccionado.user.telephone)
-      setDedicationType(estudianteSeleccionado.dedication)
-      setAcademicTitle(estudianteSeleccionado.academic_title)
-      setAddress(estudianteSeleccionado.user.address)
-      console.log(estudianteSeleccionado)
-    }
-  }, [estudianteSeleccionado])
   const getProgram = id => {
     setProgram(id);
   };
@@ -265,16 +213,6 @@ const RegisterStudent = () => {
     // form_data.append('content', fileImage.content);
     // console.log(firstName);
     console.log(lastName);
-    console.log(username);
-    console.log(password);
-    console.log(email);
-    console.log(typeId);
-    console.log(personal_id);
-    console.log(personal_code);
-    //console.log(form_data);
-    console.log(telephone);
-    console.log(address);
-    console.log(is_proffessor);
 
     registerStudent({
       user: {
@@ -313,18 +251,18 @@ const RegisterStudent = () => {
     <Container maxWidth="md" className={clases.container}>
       <Formik
         initialValues={{
-          firstName: firstName,
-          lastName: lastName,
-          username: username,
+          firstName: '',
+          lastName: '',
+          username: '',
           password: '',
-          email: email,
-          typeId: typeId,
-          personal_id: personal_id,
-          personal_code: personal_code,
+          email: '',
+          typeId: '',
+          personal_id: '',
+          personal_code: '',
           photo: '',
-          telephone: telephone,
-          address: address,
-          academicTitle: academicTitle,
+          telephone: '',
+          address: '',
+          academicTitle: '',
           role: '1'
         }}
         validationSchema={Yup.object().shape({
@@ -368,10 +306,10 @@ const RegisterStudent = () => {
         {({ errors, handleBlur, handleChange, touched, values }) => (
           <Card className={clases.RegisterStudent}>
             <CardContent>
-              <form>
+              <form onSubmit={handleCreateUser}>
                 <Box mb={3}>
                   <Typography color="textPrimary" variant="h2">
-                    Editar estudiante
+                    Registrar estudiante
                   </Typography>
                   <Typography
                     color="textSecondary"
@@ -382,25 +320,60 @@ const RegisterStudent = () => {
                   </Typography>
                 </Box>
 
-
-                <Autocomplete
-                  id="estudiantes"
-                  options={listaEstudiantes}
-                  getOptionLabel={option => option.user.username}
-                  style={{ marginBottom: 10, marginTop: 10, widht: 300 }}
-                  renderInput={params => (
-                    <TextField
-                      id="usernameStudiante"
-                      {...params}
-                      label="Elegir estudiante"
-                      variant="outlined"
-                      required
-                    />
-                  )}
-                  onInputChange={(e, input) => getIdEstudiante(input)}
-                  onChange={(e, input) => getIdEstudiante(input)}
-                />
                 <Grid container spacing={2}>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="username"
+                      label="Nombre de usuario"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeUsername(e);
+                      }}
+                      error={Boolean(touched.username && errors.username)}
+                      helperText={touched.username && errors.username}
+                      onBlur={handleBlur}
+                      value={values.username}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <AlternateEmailRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="password"
+                      label="Contraseña"
+                      variant="outlined"
+                      type="password"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangePassword(e);
+                      }}
+                      error={Boolean(touched.password && errors.password)}
+                      helperText={touched.password && errors.password}
+                      onBlur={handleBlur}
+                      value={values.password}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <VpnKeyRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="firstName"
@@ -415,7 +388,7 @@ const RegisterStudent = () => {
                       error={Boolean(touched.firstName && errors.firstName)}
                       helperText={touched.firstName && errors.firstName}
                       onBlur={handleBlur}
-                      value={firstName}
+                      value={values.firstName}
                       required
                       fullWidth
                       InputProps={{
@@ -441,7 +414,7 @@ const RegisterStudent = () => {
                       error={Boolean(touched.lastName && errors.lastName)}
                       helperText={touched.lastName && errors.lastName}
                       onBlur={handleBlur}
-                      value={lastName}
+                      value={values.lastName}
                       required
                       fullWidth
                       InputProps={{
@@ -467,7 +440,7 @@ const RegisterStudent = () => {
                       error={Boolean(touched.email && errors.email)}
                       helperText={touched.email && errors.email}
                       onBlur={handleBlur}
-                      value={email}
+                      value={values.email}
                       required
                       fullWidth
                       InputProps={{
@@ -532,7 +505,7 @@ const RegisterStudent = () => {
                       error={Boolean(touched.personal_id && errors.personal_id)}
                       helperText={touched.personal_id && errors.personal_id}
                       onBlur={handleBlur}
-                      value={personal_id}
+                      value={values.personal_id}
                       required
                       fullWidth
                       InputProps={{
@@ -558,7 +531,7 @@ const RegisterStudent = () => {
                       error={Boolean(touched.telephone && errors.telephone)}
                       helperText={touched.telephone && errors.telephone}
                       onBlur={handleBlur}
-                      value={telephone}
+                      value={values.telephone}
                       required
                       fullWidth
                       InputProps={{
@@ -584,7 +557,7 @@ const RegisterStudent = () => {
                       error={Boolean(touched.address && errors.address)}
                       helperText={touched.address && errors.address}
                       onBlur={handleBlur}
-                      value={address}
+                      value={values.address}
                       required
                       fullWidth
                       InputProps={{
@@ -648,10 +621,10 @@ const RegisterStudent = () => {
                 </Grid>
 
                 <Grid container spacing={2}>
-                  {/* <Grid item md={6} xs={12}>
+                  <Grid item md={6} xs={12}>
                     <SearchTeacher callback={getDirector} />
                   </Grid>
-                  <Grid item md={6} xs={12}> */}
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="academicTitle"
                       label="Título Académico: "
@@ -667,12 +640,21 @@ const RegisterStudent = () => {
                       )}
                       helperText={touched.academicTitle && errors.academicTitle}
                       onBlur={handleBlur}
-                      value={academicTitle}
+                      value={values.academicTitle}
                       required
                       fullWidth
                     />
                   </Grid>
-                {/* </Grid> */}
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item md={6} xs={12}>
+                    <SearchTeacherOrAdd callback={getCodirector1} />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <SearchTeacherOrAdd callback={getCodirector2} />
+                  </Grid>
+                </Grid>
 
                 <Divider className={clases.dividerFullWidth} />
 
@@ -682,9 +664,8 @@ const RegisterStudent = () => {
                   variant="contained"
                   fullWidth
                   className={clases.button}
-                  onClick={editarEstudiante}
                 >
-                  Editar
+                  Crear
                 </Button>
               </form>
               <AlertView open={open} typeAlert={typeAlert} message={message} />
