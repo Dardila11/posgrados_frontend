@@ -44,15 +44,15 @@ const EditEvaluationCoordinator = props => {
 
     let jsonValues = {
       activity: values.activity,
-      coordinator: values.coordinator,
+      coordinator: values.professor,
       credits: values.credits,
       observations: values.observations,
       is_save: isSaveed
     }
-
+    console.log(jsonValues);
     Api.putCoordinatorEvaluations(props.evaluation.id, jsonValues)
       .then(res => {
-        if(res.status == 201) {
+        if(res.status == 200) {
           console.log(res.status);
           setOpen(true)
           setTypeAlert("success")
@@ -80,12 +80,12 @@ const EditEvaluationCoordinator = props => {
           credits: evaluation.credits,
           observations: evaluation.observations,
           activity: parseInt(activity.id),
-          professor: parseInt(activity.director),
+          professor: parseInt(evaluation.coordinator),
           submitButton: ''
         }}
         validationSchema={validationSchema}
         onSubmit={values => {
-          console.log(values)
+          
           if (values.submitButton == "save") {
             postData(values, true)
           } else {
