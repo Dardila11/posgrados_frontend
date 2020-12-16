@@ -39,9 +39,18 @@ const EditEvaluationCoordinator = props => {
   const evaluation = props.evaluation
   const activity = props.activity
 
-  const postData = async (values) => {
+  const postData = async (values, isSaveed) => {
     setOpen(false)
-    Api.postDirectorEvaluations(5, values)
+
+    let jsonValues = {
+      activity: values.activity,
+      coordinator: values.coordinator,
+      credits: values.credits,
+      observations: values.observations,
+      is_save: isSaveed
+    }
+
+    Api.putCoordinatorEvaluations(parseInt(localStorage.getItem("id")), jsonValues)
       .then(res => {
         if(res.status == 201) {
           console.log(res.status);
@@ -68,12 +77,17 @@ const EditEvaluationCoordinator = props => {
           credits: evaluation.credits,
           observations: evaluation.observations,
           activity: parseInt(activity.id),
-          professor: parseInt(activity.director)
+          professor: parseInt(activity.director),
+          submitButton: ''
         }}
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log(values)
-          postData(values)
+          if (values.submitButton == "save") {
+            postData(values, true)
+          } else {
+            postData(values, false)
+          }
         }}
       >
         {({
@@ -82,7 +96,8 @@ const EditEvaluationCoordinator = props => {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          setFieldValue
         }) => (
           <form className={classes.root} onSubmit={handleSubmit} noValidate>
              {isUndefined(activity.title) ||
@@ -145,12 +160,12 @@ const EditEvaluationCoordinator = props => {
               }
             />
             <Divider variant="middle" />
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" name="is_save" onClick={() => setFieldValue('submitButton', "save")} variant="contained" color="primary">
               Guardar
             </Button>
-            <Button type="submit" variant="contained" color="primary">
-            Guardar y Notificar
-          </Button>
+            <Button type="submit" name="action" onClick={() => setFieldValue('submitButton', "send")} variant="contained" color="primary">
+              Guardar y Notificar
+            </Button>
           </form>
         )}
       </Formik>

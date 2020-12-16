@@ -43,10 +43,11 @@ const CreateEvaluation = props => {
       value: values.value,
       observations: values.observations,
       activity: values.activity,
-      professor: values.professor,
+      director: values.professor,
       is_save: isSaveed
 
     }
+    console.log(jsonValues);
     Api.postDirectorEvaluations(directorId, jsonValues)
       .then(res => {
         if(res.status == 201) {
@@ -60,7 +61,7 @@ const CreateEvaluation = props => {
         console.log(error);
         setOpen(true)
         setTypeAlert("error")
-        setMessage("Ha ocurrido un error" + error)
+        setMessage("Ha ocurrido un error " + error)
       })
     
   }
@@ -77,7 +78,7 @@ const CreateEvaluation = props => {
           value: 1,
           observations: '',
           activity: parseInt(props.activityId),
-          professor: parseInt(props.directorId),
+          professor: parseInt(localStorage.getItem("id")),
           is_save: false,
           submitButton: ''
 
