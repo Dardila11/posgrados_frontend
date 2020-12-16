@@ -51,13 +51,22 @@ const postStudentTracking = data => {
 };
 
 const postDirectorEvaluations =  (directorId, data) => {
-  return https.post(`/api/${directorId}`, data);
+  return https.post(`/api/test_director/`, data);
 }
 
 const postCoordinatorEvaluations = data => {
   return https.post(`/api/test_coordinator/`, data);
 }
 /*End post Services*/
+
+/* Put Services */
+const putDirectorEvaluations = (directorId, data) => {
+  return https.put(`/api/test_director/${directorId}/`,data)
+}
+
+const putCoordinatorEvaluations = (coordinatorId, data) => {
+  return https.put(`/api/test_coordinator/${coordinatorId}/`,data)
+}
 
 export default {
   getDirectorActivities,
@@ -71,5 +80,8 @@ export default {
   getActivity,
   postStudentTracking,
   postDirectorEvaluations,
-  postCoordinatorEvaluations
+  postCoordinatorEvaluations,
+  putDirectorEvaluations,
+  putCoordinatorEvaluations,
+
 };

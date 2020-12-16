@@ -59,7 +59,7 @@ const ActivityInfoView = () => {
   }, [])
   useEffect(() => {
     const fetchData = async () => {
-      await api.getCoordinatorActivities(19).then(res => {
+      await api.getCoordinatorActivities(parseInt(localStorage.getItem("id"))).then(res => {
         let user = res.data.activities.find(activity => activity.id == id).student.user
         console.log(user)
         setStudentInfo(user)
