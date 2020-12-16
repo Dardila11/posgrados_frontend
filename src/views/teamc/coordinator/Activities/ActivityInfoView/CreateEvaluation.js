@@ -24,6 +24,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const validationSchema = yup.object().shape({
+  credits: yup
+    .number("seleccion un credito")
+    .required("Creditos es obligatoria"),
   observations: yup
     .string('escriba las observaciones')
     .required('Observaciones es obligatoria')
@@ -34,10 +37,22 @@ const CreateEvaluation = props => {
   const [open, setOpen] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
+  const [isSaved, setIsSaved] = useState(false)
 
   const postData = async values => {
     setOpen(false)
-    Api.postCoordinatorEvaluations(5, values)
+    
+    let jsonValues = {
+      activity: values.activity,
+      coordinator: values.coordinator,
+      credits: values.credits,
+      observations: values.observations,
+      is_save: isSaved
+    }
+    console.log(values);
+    console.log(jsonValues);
+
+    Api.postCoordinatorEvaluations(19, jsonValues)
       .then(res => {
         if (res.status == 201) {
           console.log(res.status)
@@ -48,6 +63,9 @@ const CreateEvaluation = props => {
       })
       .catch(error => {
         console.log(error)
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Ha ocurrido un error' + error)
       })
   }
 
@@ -56,16 +74,24 @@ const CreateEvaluation = props => {
       <h1> {props.title} </h1>
       <Formik
         initialValues={{
-          //credits: 0,1,2,3
           credits: 1,
           observations: '',
           activity: parseInt(props.activityId),
-          coordinator: 5
+          coordinator: 19,
+          is_save: isSaved,
+          submitButton: ''
         }}
         validationSchema={validationSchema}
-        onSubmit={values => {
-          console.log(values)
-          postData(values)
+        onSubmit={(values) => {
+          console.log(values.submitButton)
+
+          if (values.submitButton == "save") {
+            setIsSaved(true)
+            postData(values)
+          } else {
+            setIsSaved(false)
+            postData(values)
+          }
         }}
       >
         {({
@@ -74,19 +100,32 @@ const CreateEvaluation = props => {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          setFieldValue
         }) => (
           <form className={classes.root} onSubmit={handleSubmit} noValidate>
             <Select
               id="activity-credits"
               variant="outlined"
               type="select"
-              defaultValue={1}
+              defaultValue={-1}
               name="value"
               value={values.value}
               onChange={handleChange}
               onBlur={handleBlur}
+              error={
+                errors.credits &&
+                touched.credits &&
+                errors.credits
+              }
+              helpertext={
+                errors.credits &&
+                touched.credits &&
+                errors.credits
+              }
             >
+
+              <MenuItem value={-1} disabled>Creditos</MenuItem>
               <MenuItem value={0}>0</MenuItem>
               <MenuItem value={1}>1</MenuItem>
               <MenuItem value={2}>2</MenuItem>
@@ -114,10 +153,10 @@ const CreateEvaluation = props => {
               }
             />
             <Divider variant="middle" />
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" name="is_save" onClick={() => setFieldValue('submitButton', "save")} variant="contained" color="primary">
               Guardar
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" name="action" onClick={() => setFieldValue('submitButton', "send")} variant="contained" color="primary">
               Guardar y Notificar
             </Button>
           </form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -10,7 +10,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
-import { Grid, Select, TextField, MenuItem, InputLabel } from '@material-ui/core';
+import { Grid, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 import util from 'src/views/teamb/services/util';
 import service from 'src/views/teamb/services/service';
@@ -52,22 +52,25 @@ const ActivityView = ({ className, ...rest }) => {
   const changeActivityType = (e) => {
     setActivity(e)
   }
-  //Agregamos el valor inicial a "descripcion"
-  const [values, setValues] = useState({ descripcion: '' });
+
+
+ 
   //Constante para definir el estdo de "errorActivity"
   const [errorActivity, setErrorActivity] = useState(null);
-  //Constante para definir el estdo de "errorDescripcion"
-  const [errorDescripcion, setErrorDescripcion] = useState(null);
+  
 
   const handleClickOpen = () => {
     /* Dato quemado desde la tabla User: id_user */
-    objService.GetPeriodService(8).then((result) => {
-      var CurrentPeriod = result.data.period;
-      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-      document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
+    if (localStorage.getItem('id')){
+        objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
+          var CurrentPeriod = result.data.period; 
+          var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+          document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
+        }).catch(() => {
+          alert("Error, no hay registros para mostrar");
+        });
+    }
+    
     setOpen(true);
   };
   // Se modificó "handleClose" para que despliegue la ventana emergente
@@ -77,9 +80,7 @@ const ActivityView = ({ className, ...rest }) => {
 
   // "handleCancelarSi" controla cuando se da click en el botón "SI" de la ventana emergente
   const handleCancelarSi = () => {
-    setValues({ descripcion: '' });
     setActivity('');
-    setErrorDescripcion('');
     setErrorActivity('');
     setOpen(false);
     setEmergenteCancelar(false);
@@ -87,12 +88,6 @@ const ActivityView = ({ className, ...rest }) => {
   // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleCancelarNo = () => {
     setEmergenteCancelar(false);
-  };
-  const handleChange = (event) => {
-    setValues({
-      ...values,
-      [event.target.name]: event.target.value
-    });
   };
   //"handleDatosDetalle" para que despliegue la ventana emergente que pide confirmar la creacion de la actividad
   const handleDatosDetalle = () => {

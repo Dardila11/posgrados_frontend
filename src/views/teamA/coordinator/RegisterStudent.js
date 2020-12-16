@@ -34,7 +34,6 @@ import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
 
-
 import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
 import RegisterAgreementDialog from './RegisterAgreementDialog';
 const useStyles = makeStyles(theme => ({

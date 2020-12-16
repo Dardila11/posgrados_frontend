@@ -1,56 +1,60 @@
-import React, { useState } from 'react';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
-import { Box, Button, Card, CardContent, Grid, TextField, makeStyles, InputLabel, Typography, Container, Divider } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import BreadCrumbs from 'src/views/teamb/activitiesView/BreadCrumbs';
+import React, { useEffect, useState } from 'react';
+import {
+  Card, Grid, TextField, makeStyles, Container, Typography, Divider
+} from '@material-ui/core';
+
+import BreadCrumbs from 'src/views/teamb/activitiesView/components/BreadCrumbs';
+import PDFUpload from 'src/views/teamb/activitiesView/components/UploadPDF';
+import FormOption from 'src/views/teamb/activitiesView/components/FormOption';
+import ConfirmOption from 'src/views/teamb/activitiesView/components/ConfirmOption';
+import Response from 'src/views/teamb/activitiesView/components/Response';
+import SelectField from 'src/views/teamb/activitiesView/components/SelectField';
+
 import service from '../services/service';
 import util from '../services/util';
-
-import DialogContentText from '@material-ui/core/DialogContentText';
-import Slide from '@material-ui/core/Slide';
-
-//Transición  de la ventana emergente que muestra 
-//el resultado de enviar los datos del formulario al backend
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const objService = new service();
 const objUtil = new util();
 
-const institucion = [
-  { value: 'advert', label: 'Seleccione una opción' }, 
-  { value: 'T1', label: 1 },
-  { value: 'T2', label: 2 },
-  { value: 'T3', label: 3 },
-  { value: 'T4', label: 4 }
-];
-
 const useStyles = makeStyles(() => ({
   root: {
-    minWidth: 275,
-    width: '70%',
-    marginTop: '15px'
+    margin: '10px'
   },
-  status: {
-    color: 'green'
+  container: {
+    display: 'flex',
+    justifyContent: 'center'
+  },
+  card: {
+    maxWidth: '50%',
+    margin: '10px'
+  },
+  title: {
+    margin: '20px'
+  },
+  content: {
+    marginBottom: '16px',
+    marginLeft: '16px',
+    marginRight: '16px'
+  },
+  field: {
+    marginTop: '18px'
+  },
+  validator: {
+    color: 'red',
+    fontSize: 13
   }
 }));
 
-const ActivityTwoView = ({ className, ...rest }) => {
+const ActivityTwoView = () => {
   const classes = useStyles();
+  // Estado que controla los valores del formulario
   const [values, setValues] = useState({
-    titulo:'',
-    descripcion:'',
-    nombreEvento:'',
-    lugarCelebracion:'', 
-  	institucionSeleccionado:'',
-	  fechaRealizacion: ''
+    titulo: '',
+    descripcion: '',
+    nombreEvento: '',
+    lugarCelebracion: '',
+    institucionSeleccionada: 0,
+    fechaRealizacion: ''
   });
 
   const handleChange = (event) => {
@@ -59,317 +63,290 @@ const ActivityTwoView = ({ className, ...rest }) => {
       [event.target.name]: event.target.value
     });
   };
-  //Asignamos a "InstitucionSeleccionado"en  el valor de "event.target.value"
-  const institucionSeleccionado = (event) => {
-    setValues({
-      ...values,
-      institucionSeleccionado: event.target.value
-    });
-  };
-  //TODO: Comentar 
-  const fechaRealizacion = (event) => {
-    setValues({
-      ...values,
-      fechaRealizacion: event.target.value
-    });
-  };
-  // Costante para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre el botón cancelar
+
+  const [archivo, setArchivo] = useState(null);
+  const uploadFile = e => {
+    setArchivo(e);
+    if (e.length > 0) { 
+      var name = e[0].name;
+      var nameSplit = name.split(".");
+      var ext = nameSplit[nameSplit.length - 1];
+      
+      if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
+      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+    }
+    else { document.getElementById("text-file").textContent = ""; }
+  }
+  // Costantes para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre una de las 
+  // opciones disponibles
   const [emergenteCancelar, setEmergenteCancelar] = React.useState(false);
-  //TODO: Comentar
   const [emergenteGuardar, setEmergenteGuardar] = React.useState(false);
   const [emergenteGuardarYEnviar, setEmergenteGuardarYEnviar] = React.useState(false);
-  const [errorTitulo, setErrorTitulo] = useState(null);
-  const [errorDescripcion, setErrorDescripcion] = useState(null);
-  const [errorNombreEvento, setErrorNombreEvento] = useState(null);
-  const [errorLugar, setErrorLugar] = useState(null);
-  const [errorInstitucion, setErrorInstitucion] = useState(null);
-  const [errorFechas, setErrorFechas] = useState(null);
-
-
-  // Costante para definir el estado de la ventana emergente que muestra 
-  //el resultado de enviar los datos del formulario al backend
-  const [emergenteEnviarBack, setEmergenteEnviarBack] = React.useState(false);
-
-  // Costante para definir el mensaje de la ventana emergente que muestra 
-  //el resultado de enviar los datos del formulario al backend
-  const [resultadoBack, setResultadoBack] = useState(null);
-
-  const handleEnviarBackAceptar = () => {
-    if(resultadoBack == "Actividad registrada correctamente") {
-      window.location.href = window.location.href;
-    }
-    setEmergenteEnviarBack(false);
-    setResultadoBack(null);
-  };
-
-
 
   // Se modificó "handleClose" para que despliegue la ventana emergente
   const handleClose = () => {
     setEmergenteCancelar(true);
   };
   // "handleNo" controla cuando se da click en el botón "NO" de la ventana emergente
- const handleCancelarNo = () => {
-  setEmergenteCancelar(false);
+  const handleCancelarNo = () => {
+    setEmergenteCancelar(false);
   };
 
-  //TODO: Comentar
+  // "handleGuardar" valida los datos y lanza la ventana emergente
   const handleGuardar = () => {
-    if(validar()){
-      setEmergenteGuardar(true);
-    }
+    if (validarGuardar()) { setEmergenteGuardar(true); }
   };
-
-  // "handleCancelarNo" controla cuando se da click en el botón "NO" de la ventana emergente
+  // "handleGuardarNo" controla cuando se da click en el botón "NO" de la ventana emergente
   const handleGuardarNo = () => {
     setEmergenteGuardar(false);
   };
-  //"validar" permite verificar que todos los campos requeridos se encuentren diligenciados 
-  const validar =()=>{
-    var result = true;
 
-    if(values.titulo.length){
-      setErrorTitulo(null)
+  // Valida los datos y lanza la ventana emergente
+  const handleGuardarYEnviar = () => {
+    if (validarGuardarYEnviar()) { setEmergenteGuardarYEnviar(true); }
+  };
+  // Controla cuando se da click en el botón "NO" de la ventana emergente
+  const handleGuardarYEnviarNo = () => {
+    setEmergenteGuardarYEnviar(false);
+  };
+
+  const [errorTitulo, setErrorTitulo] = useState(null);
+  const [errorDescripcion, setErrorDescripcion] = useState(null);
+  const [errorNombreEvento, setErrorNombreEvento] = useState(null);
+  const [errorLugar, setErrorLugar] = useState(null);
+  const [errorInstitucion, setErrorInstitucion] = useState(null);
+  const [errorFecha, setErrorFecha] = useState(null);
+  const [errorFile, setErrorFile] = useState(null);
+
+  const  resetError = () => {
+    setErrorTitulo(null);
+    setErrorDescripcion(null);
+    setErrorNombreEvento(null);
+    setErrorLugar(null);
+    setErrorInstitucion(null);
+    setErrorFecha(null);
+    setErrorFile(null);
+  }
+ // Permite verificar que todos los campos requeridos se encuentren diligenciados 
+ const validarGuardarYEnviar = () => {
+  resetError();
+  var result = validarGuardar();
+ 
+  var textFile = document.getElementById("text-file").textContent;
+  if (textFile.length > 0) { setErrorFile(null) }
+  else {
+    setErrorFile("Es necesario subir el archivo");
+    result = false;
+  }
+  return result;
+}
+  // Permite verificar que todos los campos requeridos se encuentren diligenciados en Guardar
+  const validarGuardar = () => {
+    resetError();
+    var result = true;
+     
+    if(values.titulo !== ''){
+      if (values.titulo.length < 61) { setErrorTitulo(null) }
+      else {
+        setErrorTitulo("El campo debe tener máximo 60 carateres")
+        result = false;
+      }
     }
-    else{
-      setErrorTitulo("El campo es obligatorio");
+    else {
+      setErrorTitulo("El campo es obligatorio")
       result = false;
     }
-    if(values.descripcion.length){
-      setErrorDescripcion(null)
+    if(values.descripcion !== ''){
+      if (values.descripcion.length < 149) { setErrorDescripcion(null) }
+      else {
+        setErrorDescripcion("El campo debe tener máximo 148 caracteres")
+        result = false;
+      }
     }
-    else{
-      setErrorDescripcion("El campo es obligatorio");
+    else {
+      setErrorDescripcion("El campo es obligatorio")
       result = false;
-    }
-    if(values.nombreEvento.length){
-      setErrorNombreEvento(null)
+    }    
+    if(values.nombreEvento !== ''){  
+      if (values.nombreEvento.length < 61) { setErrorNombreEvento(null) }
+      else {
+        setErrorNombreEvento("El campo debe tener máximo 60 caracteres")
+        result = false;
+      }
     }
     else{
       setErrorNombreEvento("El campo es obligatorio");
       result = false;
     }
-	  if(values.lugarCelebracion.length){
-      setErrorLugar(null)
+    if(values.lugarCelebracion !== ''){
+      if (values.lugarCelebracion.length < 41) { setErrorLugar(null) }
+      else {
+        setErrorLugar("El campo debe tener máximo 40 caracteres")
+        result = false;
+      }
     }
     else{
       setErrorLugar("El campo es obligatorio");
       result = false;
     }
-    if(values.institucionSeleccionado.length && values.institucionSeleccionado != "Seleccione una opción"){
-      setErrorInstitucion(null)
-    }
-    else{
+    if (values.institucionSeleccionada !== 0) { setErrorInstitucion(null) }
+    else {
       setErrorInstitucion("Seleccione una opción válida");
       result = false;
     }
-	  if(values.fechaRealizacion.length){
-        setErrorFechas("")
-    }    
-    else{
-        setErrorFechas("Seleccióne una fecha");
-        result = false;  
+    if (values.fechaRealizacion.length) { setErrorFecha("") }
+    else {
+      setErrorFecha("Seleccióne una fecha");
+      result = false;
     }
     return result;
   }
+  // Costante para definir el estado de la ventana emergente que muestra el resultado de enviar los datos del 
+  // formulario al backend
+  const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
 
-  //TODO: Comentar
-  const handleGuardarYEnviar = () => {
-    
-    if(validar()){
-      setEmergenteGuardarYEnviar(true);
+  // Costante para definir el mensaje de la ventana emergente que muestra el resultado de enviar los datos del 
+  // formulario al backend
+  const [response, setResponse] = useState(null);
+
+  const handleResponseAccept = () => {
+    if (response === "Actividad registrada correctamente") {
+      window.location.href = window.location.href;
     }
+    setPopUpRequestPost(false);
+    setResponse(null);
   };
-	const handleGuardarYEnviarNo = () => {
-    
-    setEmergenteGuardarYEnviar(false);
-    };
+
+  const handleBack = () => {
+    window.location.href = './';
+  };
+
+  const [currentAcadYear, setCurrentAcadYear] = useState(null);
+  const [listaEstudiantes, setListaEstudiantes] = useState([]);
+  useEffect(() => {
+    objService.GetStudents().then(result => setListaEstudiantes(result.data));
+
+    /* Dato quemado desde la tabla User: id_user */
+    if (localStorage.getItem('id')){
+      objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
+        var CurrentPeriod = result.data.period;
+        var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+        setCurrentAcadYear(CurrentAcadYear);
+      }).catch(() => {
+        alert("Error, no hay registros para mostrar");
+      });
+    }
+  }, []);
 
   const SaveActivity = () => {
-    setEmergenteGuardar(false);
-    var vartitulo = document.getElementById("titulo").value;
-    var vardescripcion = document.getElementById("descripcion").value;
-    var varnombreevento = document.getElementById("nombreevento").value;
-    var varlugarcelebracion = document.getElementById("lugarcelebracion").value;
-    var varentidadorganizadora = document.getElementById("entidadorganizadora").value;
-    var vardate = document.getElementById("date").value;
     var now = objUtil.GetCurretTimeDate();
-    
-
-    //Se captura el valor booleano de "emergenteGuardarYEnviar" y se envía en el 
-    //documento JSON con el fin de saber si se debe enviar el email a quien corresponda
+    /* Se captura el valor booleano de "emergenteGuardarYEnviar", para saber si se enviara en el
+    documento JSON, la validacion para el correo */
     var send_email = emergenteGuardarYEnviar;
 
-    objService.PostActivityTwo(
-      { 
-        "title": vartitulo,
-        "description" : vardescripcion,
-        "name" : varnombreevento,
-        "place" : varlugarcelebracion,
-        "institution": varentidadorganizadora,
-        "start_date" : vardate,
-        "state" : 1,
-        "academic_year" : "2020-21", /* consultar año academico actual */
-        "type" : "Ponencia", /* Colocar el tipo numerico al que corresponda */
-        "student" : 36, /* Consultar el id del estudiante actual */
-        "date_record": now,
-        "date_update": now,
-        "send_email": send_email          
-      }
-    ).then((result) => { 
-      setResultadoBack("Actividad registrada correctamente");
+    const fd = new FormData();
+    fd.append("title", values.titulo);
+    fd.append("description", values.descripcion);
+    fd.append("name", values.nombreEvento);
+    fd.append("place", values.lugarCelebracion);
+    fd.append("institution", values.institucionSeleccionada);
+    fd.append("start_date", values.fechaRealizacion);
+    // Datos adicionales
+    fd.append("academic_year", currentAcadYear);
+    fd.append("type", 2);
+    fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
+    fd.append("date_record", now);
+    fd.append("date_update", now);
+    //fd.append("is_active", true);
+    if (send_email) {
+      fd.append("send_email", send_email);
+      fd.append("state", 2);
+    }
+    else { fd.append("state", 1); }
+    if (archivo !== null) { fd.append("receipt", archivo[0]); }
+
+    objService.PostActivityTwo(fd).then((result) => {
+      setResponse("Actividad registrada correctamente");
     }).catch(() => {
-      setResultadoBack("Ups! Ha ocurrido un error al registrar la actividad, verifique los campos o intentelo mas tarde");
+      setResponse("Ups! Ha ocurrido un error al registrar la actividad, intentelo mas tarde o contacte con el administrador");
     });
-    setEmergenteEnviarBack(true);
+    setPopUpRequestPost(true);
     setEmergenteGuardar(false);
     setEmergenteGuardarYEnviar(false);
   }
+
   return (
-    <div>
+    <Grid className={classes.root}>
       <BreadCrumbs />
-      <Container>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <form autoComplete="off" noValidate className={clsx(classes.root, className)} {...rest}>
-            <Card className={classes.root}>
-              <h1 style={{ display: 'flex', justifyContent: 'center' }} align="center" name="crearactividad">
-                Datos de detalle ponencias en congreso, simposios y/o jornadas
-              </h1>
-              <br></br>
-              <Divider />
-              <CardContent >
-                <br></br>
-                <Grid item md={12} xs={12}>
-                <TextField fullWidth label="Titulo de la contribución" id="titulo" name="titulo" onChange={handleChange} required value={values.titulo} variant="outlined"/>
-                  {/* TODO: Comentar */}
-                  {errorTitulo? <p style={{ display: 'flex', color:'red' }}>{errorTitulo}</p>:null}
-                  <br></br>
-                  <br></br>
-                  <TextField fullWidth label="Descripcion general" id="descripcion" name="descripcion" onChange={handleChange} required value={values.descripcion} variant="outlined"/>
-                  {/* TODO: Comentar */}
-                  {errorDescripcion? <p style={{ display: 'flex', color:'red' }}>{errorDescripcion}</p>:null}
-                  <br></br>
-                  <br></br>
-                  <TextField fullWidth label="Nombre del evento" id="nombreevento" name="nombreEvento" onChange={handleChange} required value={values.nombreEvento} variant="outlined"/>
-                  {/* TODO: Comentar */}
-                  {errorNombreEvento? <p style={{ display: 'flex', color:'red' }}>{errorNombreEvento}</p>:null}
-                  <br></br>
-                  <br></br>
-                  <TextField fullWidth label="Lugar de celebracion" id="lugarcelebracion" name="lugarCelebracion" onChange={handleChange} required value={values.lugarCelebracion}
-                    variant="outlined"/>
-                     {/* TODO: Comentar */}
-                    {errorLugar? <p style={{ display: 'flex', color:'red' }}>{errorLugar}</p>:null}
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <TextField fullWidth label="Entidad organizadora" id="entidadorganizadora" name="entidadorganizadora" onChange={institucionSeleccionado} required select SelectProps={{ native: true }}
-                    variant="outlined"
-                  >
-                    {institucion.map((option) => (
-                      <option key={option.value} value={option.label}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </TextField>
-                  {errorInstitucion? <p style={{ display: 'flex', color:'red' }}>{errorInstitucion}</p>:null}
-                  <br></br>
-                  <br></br>
-                  <br></br>
-                  <TextField id="date" label="Fecha de realización" type="date"
-                    className={classes.textField} InputLabelProps={{ shrink: true }}
-                    onChange={fechaRealizacion}/>
-                  <br></br>
-                  {errorFechas? <p style={{ display: 'flex', color:'red' }}>{errorFechas}</p>:null}
-                  <br></br>
-                  <Button color="primary" variant="outlined"> Agregar premio </Button>
-                  <br></br>
-                  <br></br>
-                  <Button color="primary" variant="outlined"> Justificante </Button>
-                </Grid>
-                <br></br>
-              </CardContent>
+      <Container className={classes.container}>
+        <Card className={classes.card}>
+          <Grid className={classes.content}>
+            <Typography className={classes.title} variant="h1" align="center" gutterBottom>
+              Ponencias en congreso, simposios y/o jornadas
+            </Typography>
+            <Divider />
+            <form>
+              <TextField className={classes.field} fullWidth label="Titulo de la contribución" name="titulo"
+                onChange={handleChange} required variant="outlined"
+              />
+              {/* Validacion del campo */}
+              {errorTitulo ? <Typography className={classes.validator}> {errorTitulo} </Typography> : null}
 
-              <Box display="flex" justifyContent="flex-end" p={2}>
-                {/* Se le agrega la propiedad onClick para lanzar la ventana emergente de 
-                confirmación cuando se pulsa sobre el botón cancelar, se debe quitar la propiedad RouterLink */}
-                <Button onClick={handleClose} color="primary"variant="outlined">Cancelar</Button>&nbsp;
+              <TextField className={classes.field} fullWidth label="Descripcion general" name="descripcion"
+                onChange={handleChange} required variant="outlined"
+              />
+              {/* Validacion del campo */}
+              {errorDescripcion ? <Typography className={classes.validator}> {errorDescripcion} </Typography> : null}
 
-                <Button onClick={handleGuardar} color="primary" variant="contained"> Guardar </Button>&nbsp;
+              <TextField className={classes.field} fullWidth label="Nombre del evento" name="nombreEvento"
+                onChange={handleChange} required variant="outlined"
+              />
+              {/* Validacion del campo */}
+              {errorNombreEvento ? <Typography className={classes.validator}> {errorNombreEvento} </Typography> : null}
 
-                <Button onClick={handleGuardarYEnviar} color="primary" variant="contained"> Guardar y Enviar </Button>
-              </Box>
-            </Card>
-          </form>
-          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "cancelar" en "Crear Actividad" */}
-          <Dialog open={emergenteCancelar} onClose={handleCancelarNo} >
-            <DialogTitle id="alert-dialog-title">{"¿Está seguro que desea cancelar?"}</DialogTitle>
-            <DialogContent>
-            </DialogContent>
-            <DialogActions>
-            <Button onClick={handleCancelarNo} color="primary" autoFocus>No</Button>
-            <RouterLink to = "../"> 
-                <Button color="primary">Si</Button>
-            </RouterLink>
-            </DialogActions>
-          </Dialog> 
-          
-          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR" en "Crear Actividad" */}
-          <Dialog open={emergenteGuardar} onClose={handleGuardarNo} >
-            <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar la actividad?"}</DialogTitle>
-            <DialogContent>
-            </DialogContent>
-            <DialogActions>
-              {/* TODO: Enviar a backend y guardar */}
-              <Button onClick={handleGuardarNo} color="primary" autoFocus>No</Button>
-              <Button onClick={SaveActivity} color="primary">Si</Button>
-            </DialogActions>
-          </Dialog> 
-          
-          {/*HTML que lanza la ventana emergente de confirmación cuando se pulsa sobre el botón "GUARDAR Y ENVIAR" 
-            en "Crear Actividad" */}
-          <Dialog open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo}>
-        <DialogTitle id="alert-dialog-title">{"¿Esta seguro que desea guardar y enviar la actividad?"}</DialogTitle>
-        <DialogContent>
-        </DialogContent>
-        <DialogActions>
-        {/* TODO: GUARDAR EN BACK Y ENVIAR POR E-MAIL */}
-          <Button onClick={handleGuardarYEnviarNo} color="primary" autoFocus>No</Button>
-          <Button color="primary" onClick={SaveActivity} >Si</Button>
-        </DialogActions>
-      </Dialog>  
-        
-                    
+              <SelectField name="institucionSeleccionada" Selected={values.institucionSeleccionada} label="Entidad organizadora" handleChange={handleChange} />
+              {/* Validacion del campo */}
+              {errorInstitucion ? <Typography className={classes.validator}> {errorInstitucion} </Typography> : null}
 
+              <TextField className={classes.field} fullWidth label="Lugar de celebracion" name="lugarCelebracion"
+                onChange={handleChange} required variant="outlined"
+              />
+              {/* Validacion del campo */}
+              {errorLugar ? <Typography className={classes.validator}> {errorLugar} </Typography> : null}
 
-          {/* HTML que muestra el resultado de enviar los datos del formulario al backend */}
-          <Dialog
-            open={emergenteEnviarBack}
-            TransitionComponent={Transition}
-            keepMounted
-            onClose={handleEnviarBackAceptar}
-            aria-labelledby="alert-dialog-slide-title"
-            aria-describedby="alert-dialog-slide-description"
-          >
-            <DialogTitle id="alert-dialog-slide-title">{"Resultado"}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-slide-description">
-              {resultadoBack? <Typography component={'span'} variant={'body2'}>{resultadoBack}</Typography>:null}
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleEnviarBackAceptar} color="primary">
-                Aceptar
-              </Button>
-            </DialogActions>
-          </Dialog>
+              <TextField className={classes.field} name="fechaRealizacion" label="Fecha de realización" type="date"
+                InputLabelProps={{ shrink: true }} onChange={handleChange} variant="outlined" required
+              />
+              {errorFecha ? <Typography className={classes.validator}> {errorFecha} </Typography> : null}
 
+              <PDFUpload uploadFile={uploadFile} name="Justificante" />
+              {errorFile ? <Typography className={classes.validator}> {errorFile} </Typography> : null}
+            </form>
+            <Divider className={classes.field} />
+            <Grid container justify="flex-end">
+              <FormOption name={"Cancelar"} onClick={handleClose} variant={"outlined"} />
+              <FormOption name={"Guardar"} onClick={handleGuardar} variant={"contained"} />
+              <FormOption name={"Guardar y Enviar"} onClick={handleGuardarYEnviar} variant={"contained"} />
+            </Grid>
+          </Grid>
+        </Card>
 
-        </div>
+        {/* Muestra un mensaje de confirmacion para cada una de las opciones del formulario */}
+        <ConfirmOption open={emergenteCancelar} onClose={handleCancelarNo} onClickPositive={handleBack}
+          msg={'¿Esta seguro de que desea salir del registro?'}
+        />
+        <ConfirmOption open={emergenteGuardar} onClose={handleGuardarNo} onClickPositive={SaveActivity}
+          msg={'¿Esta seguro de que desea guardar la actividad?'}
+        />
+        <ConfirmOption open={emergenteGuardarYEnviar} onClose={handleGuardarYEnviarNo} onClickPositive={SaveActivity}
+          msg={'¿Esta seguro de que desea guardar la actividad y enviar un correo a sus directores?'}
+        />
+
+        {/* Muestra la respuesta del servidor cuando se realiza la peticion */}
+        <Response popUpRequestPost={popUpRequestPost} handleResponseAccept={handleResponseAccept} response={response} />
+
       </Container>
-    </div>
+    </Grid>
   );
-};
-ActivityTwoView.propTypes = {
-  className: PropTypes.string
 };
 export default ActivityTwoView;

@@ -10,6 +10,7 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { isUndefined } from 'lodash';
+import { Activity } from 'react-feather';
 
 const useStyles = makeStyles({
   root: {
@@ -18,11 +19,17 @@ const useStyles = makeStyles({
     paddingTop: 5,
     paddingBottom: 5
   },
-  favorableStatus:{
+  /*favorableStatus:{
     backgroundColor : '#b9f6ca'
   },
   unfavorableStatus:{
     backgroundColor: '#f4ff81'
+  }*/
+  favorableStatus:{
+    color : '#4caf50'
+  },
+  unfavorableStatus:{
+    color: '#ffc400'
   }
 });
 
@@ -35,9 +42,8 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   const link = context + '/activity/' + activity.id;
   let option = true;
   const classes = useStyles();
-  let cardClass = ''
-  
-  switch (activity.state) {
+  let spanClass = ''
+ /* switch (activity.state) {
     case 1:
       cardClass = classes.favorableStatus
       break;
@@ -46,12 +52,22 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
       break;
     default:
       break;
+  }*/
+  switch (activity.state) {
+    case 1:
+      spanClass = classes.favorableStatus
+      break;
+    case 2:
+      spanClass= classes.unfavorableStatus
+      break;
+    default:
+      break;
   }
   if(isUndefined(activity.title) || activity.title==null || activity.title=="") option=false;
   return (
     <RouterLink to={link}>
       <Box boxShadow={3}>
-        <Card className={clsx(cardClass, className)} {...rest}>
+        <Card className={clsx(className)} {...rest}>
           <CardActionArea className={classes.CardAction}>
             <Box
               alignItems="center"
@@ -76,7 +92,7 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
               <Typography variant="body1" component="h1" variant="h4" gutterBottom>
                 {activity.description}
               </Typography>
-            )}
+            )}        
               
               <Typography color="textSecondary" variant="body1">
                 {activity.type}
@@ -86,6 +102,16 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
               </Typography> */}
               <Typography color="textSecondary" variant="body1">
                 {activity.start_date}
+              </Typography>
+              <Typography color="textSecondary" variant="body1">
+              Estado:
+              <b> <span className={spanClass}>
+                {activity.state == 1? (
+                  <> Nueva</>
+                ):(
+                  <> En revisión</>
+                )}       
+              </span> </b>
               </Typography>
             </Box>
           </CardActionArea>

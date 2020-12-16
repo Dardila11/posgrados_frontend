@@ -24,4 +24,3 @@ export const registerProject = (registro) =>{
         const url= `${API_URL}/grant/`;
         return axios.post(url,registro);
     }
-    //TODO en back no esta

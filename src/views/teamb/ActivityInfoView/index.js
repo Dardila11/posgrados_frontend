@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import api from 'src/views/teamc/services/Api';
 import Page from 'src/components/Page';
 import { makeStyles,Typography } from '@material-ui/core';
 import BreadCrumbs from './BreadCrumbs';
@@ -28,6 +27,7 @@ const ActivityStudentView = () => {
     <Page className={classes.root} title="Estudiante">
       {/* BreadCrumbs */}
       <BreadCrumbs  />
+      <br></br>
       {/* Student Basic Info
           - Nombre, programa, cohorte*/}
       <ActivityInfoView />
@@ -37,5 +37,4 @@ const ActivityStudentView = () => {
     </>
   );
 };
-
 export default ActivityStudentView;

@@ -1,7 +1,7 @@
 export default class util {
 
     GetCurrentYear(currentPeriod) {
-        var Splits = currentPeriod.split(".");
+        var Splits = currentPeriod.split("-");
         var CurrentYear = Splits[0];
         var semester = Splits[1];
 
@@ -41,5 +41,33 @@ export default class util {
         var currentTime = date.getHours() + ":" + date.getMinutes();
         var now = currentDate + " " + currentTime;
         return now;
+    }
+
+    GetState(state){
+        switch(state){
+            case 1 : return "Registrado";
+            case 2 : return "En revision";
+            case 3 : return "Revisada";
+            case 4 : return "Aceptada";
+            default: return "Estado no identificado."
+        }
+    }
+
+    GetEvaluation(state){
+        switch(state){
+            case 1 : return "Favorable";
+            case 2 : return "No favorable";
+            default: return "Evaluación no identificada."
+        }
+    }
+
+    GetEstudianteConIdUsuario(state, id){   
+        let encontrado = state.find(element => element.user.id === parseInt(id))
+        if(encontrado === undefined){
+            return null;
+        }
+        else{
+            return encontrado.id;
+        }
     }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {
@@ -59,13 +59,28 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+
+
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles();
   const location = useLocation();
+  const [user, setUser] = useState({
+    avatar: '/static/images/avatars/avatar_6.png',
+    jobTitle: 'Estudiante de Posgrado',
+    name: 'Juliana Amaya'
+  });
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
+    }
+
+    if (localStorage.getItem('userInfo')){
+      setUser({
+        avatar: 'https://mdquilindo.pythonanywhere.com/'+JSON.parse(localStorage.getItem('userInfo')).photo,
+        jobTitle: 'Estudiante de Posgrado',
+        name: JSON.parse(localStorage.getItem('userInfo')).first_name +' '+ JSON.parse(localStorage.getItem('userInfo')).last_name
+      })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
