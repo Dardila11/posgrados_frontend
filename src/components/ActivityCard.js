@@ -43,9 +43,6 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   let option = true;
   const classes = useStyles();
   let spanClass = ''
-  const student = activity.student
-  console.log(student)
-  
  /* switch (activity.state) {
     case 1:
       cardClass = classes.favorableStatus
@@ -95,10 +92,8 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
               <Typography variant="body1" component="h1" variant="h4" gutterBottom>
                 {activity.description}
               </Typography>
-            )}
-              <Typography color="textSecondary" variant="body1">
-                {student.user.first_name} {student.user.last_name}
-              </Typography>
+            )}        
+              
               <Typography color="textSecondary" variant="body1">
                 {activity.type}
               </Typography>
