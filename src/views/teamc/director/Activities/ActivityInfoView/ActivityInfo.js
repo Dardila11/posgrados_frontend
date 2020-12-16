@@ -19,8 +19,6 @@ import CreateEvaluation from 'src/views/teamc/director/Activities/ActivityInfoVi
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 275,
-    height: '250px',
     marginTop: '15px'
   },
   statusActive: {
@@ -43,8 +41,11 @@ const useStyles = makeStyles({
 const ActivityInfoView = () => {
   let { id } = useParams()
   const [activityInfo, setActivityInfo] = useState({})
+  const [studentInfo, setStudentInfo] = useState({})
   const [loading, setBusy] = useState(true)
   const [activityPk, setActivityPk] = useState('')
+  const classes = useStyles()
+  const [open, setOpen] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,8 +57,18 @@ const ActivityInfoView = () => {
     }
     fetchData()
   }, [])
-  const classes = useStyles()
-  const [open, setOpen] = useState(false)
+  useEffect(() => {
+    const fetchData = async () => {
+      await api.getDirectorActivities(13).then(res => {
+        console.log(res.data)
+        console.log(id)
+        let user = res.data.activities.find(activity => activity.id = id).student.user
+        console.log(user)
+        setStudentInfo(user)
+      })
+    }
+    fetchData()
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true)
@@ -80,31 +91,49 @@ const ActivityInfoView = () => {
             {isUndefined(activityInfo.title) ||
             activityInfo.title == null ||
             activityInfo.title == '' ? (
-              console.log('')
+              <></>
             ) : (
               <Typography variant="body1" component="p" gutterBottom>
                 <b>Titulo:</b> {activityInfo.title}
               </Typography>
             )}
+            {isUndefined(activityInfo.name) ||
+            activityInfo.name == null ||
+            activityInfo.name == '' ? (
+              <></>
+            ) : (
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Nombre:</b> {activityInfo.name}
+              </Typography>
+            )}
+            {isUndefined(studentInfo) ||
+            studentInfo == null ? (
+              <></>
+            ) : (
+              <Typography variant="body1" component="p" gutterBottom>
+                <b>Estudiante:</b> {studentInfo.first_name} {studentInfo.last_name}
+              </Typography>
+            )}
             {isUndefined(activityInfo.description) ||
             activityInfo.description == null ||
             activityInfo.description == '' ? (
-              console.log('')
+              <></>
             ) : (
               <Typography variant="body1" component="p" gutterBottom>
                 <b>Descripcion:</b> {activityInfo.description}
               </Typography>
             )}
-            {isUndefined(activityInfo.academic_year) ||
+            
+             {isUndefined(activityInfo.academic_year) ||
             activityInfo.academic_year == null ? (
-              console.log('')
+              <></>
             ) : (
               <Typography variant="body1" component="p" gutterBottom>
                 <b>Año academico:</b> {activityInfo.academic_year}
               </Typography>
             )}
             {isUndefined(activityInfo.type) || activityInfo.type == null ? (
-              console.log('')
+              <></>
             ) : (
               <Typography variant="body1" component="p" gutterBottom>
                 <b>Tipo:</b> {activityInfo.type}
@@ -133,7 +162,7 @@ const ActivityInfoView = () => {
               open={open}
               handleClose={handleClose}
               handleOpen={handleClickOpen}
-              component={<CreateEvaluation activityId={activityPk} />}
+              component={<CreateEvaluation activityId={activityPk} directorId={5} />}
             />
           </CardActions>
         </Card>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { Box, Container } from '@material-ui/core';
 import Page from 'src/components/Page';
 import PropTypes from 'prop-types';
@@ -58,7 +58,6 @@ const useStyles = makeStyles(() => ({
 const AdministerView = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

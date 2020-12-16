@@ -52,7 +52,11 @@ const tipo = [
 export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
   const classes = useStyles();
 
+  const [listaEstudiantes, setListaEstudiantes] = useState([]);
+
   useEffect(() => {
+    objService.GetStudents().then(result => setListaEstudiantes(result.data));
+
     if(state.receipt !== null) {
       document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
     }
@@ -301,7 +305,7 @@ export const ActivityThreeEdit = ({state, callbackDialogOpen}) => {
     // Datos adicionales
     fd.append("academic_year", state.academic_year);
     fd.append("type", 3);
-    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("student",  objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
     //fd.append("is_active", true);

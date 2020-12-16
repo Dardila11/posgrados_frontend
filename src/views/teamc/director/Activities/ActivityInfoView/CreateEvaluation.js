@@ -58,13 +58,13 @@ const CreateEvaluation = props => {
       <Formik
         initialValues={{
           /*
-      value: 1 -- Favorable
-      value: 2 -- No Favorable
-      */
+          value: 1 -- Favorable
+          value: 2 -- No Favorable
+          */
           value: 1,
           observations: '',
           activity: parseInt(props.activityId),
-          professor: 5
+          professor: parseInt(props.directorId)
         }}
         validationSchema={validationSchema}
         onSubmit={values => {

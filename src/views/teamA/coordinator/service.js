@@ -31,9 +31,11 @@ export const registerAgreement = (registro) =>{
     const url= `${API_URL}/agreement/`;
     return axios.post(url,registro);
     }
+
 export const registerGrant = (registro) =>{
     console.log("axios -",registro)
     const url= `${API_URL}/grant/`;
     return axios.post(url,registro);
 }
 //TODO en back no esta
+

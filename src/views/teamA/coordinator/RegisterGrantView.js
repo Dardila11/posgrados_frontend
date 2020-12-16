@@ -18,6 +18,7 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerGrant } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
+
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -77,10 +78,12 @@ const RegisterGrantView = () => {
       name: name,
       announcement: announcement,
 
+
       is_active: true,
       description: description,
       num_resolution: resolution,
       student: student,
+
       start_date: startDate,
       end_date: endDate,
       long: long
@@ -103,7 +106,10 @@ const RegisterGrantView = () => {
   };
 
   return (
+
     <Page className={classes.root} title="Registrar beca">
+
+
       <Box
         display="flex"
         flexDirection="column"
@@ -119,11 +125,13 @@ const RegisterGrantView = () => {
               endDate: '',
               long: '',
               announcement:'',
+
               num_resolution:'',
+
            
             }}
             validationSchema={Yup.object().shape({
-              
+
               name: Yup.string().required('Titulo de la tesis requerido'),
               description: Yup.string().required('Titulo de la tesis requerido'),
               startDate :Yup.string().required('Titulo de la tesis requerido'),
@@ -131,6 +139,7 @@ const RegisterGrantView = () => {
               long :Yup.string().required('Titulo de la tesis requerido'),
               announcement :Yup.string().required('Titulo de la tesis requerido'),
               num_resolution :Yup.string().required('Titulo de la tesis requerido'),
+
 
             })}
             onSubmit={() => {
@@ -161,7 +170,9 @@ const RegisterGrantView = () => {
                         Los campos con * son obligatorios
                       </Typography>
                     </Box>
+
                     <SearchStudent callback={getStudent} />
+
 
                     
                     <TextField
@@ -317,6 +328,8 @@ const RegisterGrantView = () => {
         </Container>
       </Box>
     </Page>
+
+
   );
 };
 

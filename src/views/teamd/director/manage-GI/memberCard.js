@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Box from '@material-ui/core/Box';
 import {ConsultUser} from './service'
 import {ConsultProfesor} from './service'
+import {eliminarMiembroSerivce} from './service'
 const useStyles = makeStyles({
     root: {
       borderRadius: 3,
@@ -24,8 +25,12 @@ export const MemberCard = ({member}) => {
     const setStateVentana = (state) =>{
         setDialogState(state)
     }
-    const handleAssign = () =>{
-        setDialogState(true)
+    const eliminarMiembro = () =>{
+        eliminarMiembroSerivce({
+            "member_status": false,
+            "professor": professor,
+            "inv_group": inv_group
+        }).then(result => alert("se eliminó"))
     }
     useEffect(() => {
         ConsultProfesor(professor).then(request => ConsultUser(request.data.Professor[0].user).then(request => setUsuario(request.data.Users[0]))).catch()
@@ -59,7 +64,7 @@ export const MemberCard = ({member}) => {
                             variant="outlined" 
                             color="primary" size="small" 
                             className = {classes.button}
-                            onClick = {handleAssign}
+                            onClick = {eliminarMiembro}
                             >
                                 Eliminar miembro
                         </Button>
