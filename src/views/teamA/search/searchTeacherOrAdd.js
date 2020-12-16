@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ConsultProgram, ConsultStudent } from './service';
-
+import 'src/views/teamA/coordinator/styles.css';
 import {
   Box,
   Button,
