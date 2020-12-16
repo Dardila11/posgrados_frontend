@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
   }
 }))
 
-const SearchBar = ({ className, context, periods, status, programs, ...rest }) => {
+const SearchBar = ({ className, searchOption, context, periods, status, programs, ...rest }) => {
   const classes = useStyles()
 
   const handleChange = e => {
@@ -68,7 +68,8 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
         <Card className={classes.SearchBar}>
           <CardContent>
             <Grid container spacing={3}>
-              <Grid item lg={5} md={5} xs={12}>
+              {searchOption === undefined? (
+                <Grid item lg={5} md={5} xs={12}>
                 <Box maxWidth={500}>
                   <TextField
                     fullWidth
@@ -83,9 +84,9 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                       )
                     }}
                     placeholder={
-                      context == 'activities'
+                      context === 'activities'
                         ? 'Buscar actividad ...'
-                        : context == 'students'
+                        : context === 'students'
                         ? 'Buscar estudiante ...'
                         : 'Buscar Evaluación ...'
                     }
@@ -93,7 +94,10 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                   />
                 </Box>
               </Grid>
-              {periods == undefined ? (
+              ):(
+                <></>
+              )}              
+              {periods === undefined ? (
                 console.log('No period parameter filther')
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
@@ -115,7 +119,7 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                   </Box>
                 </Grid>
               )}
-              {status == undefined ? (
+              {status === undefined ? (
                 console.log('No status parameter filther')
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
@@ -138,7 +142,7 @@ const SearchBar = ({ className, context, periods, status, programs, ...rest }) =
                   </Box>
                 </Grid>
               )}
-              {programs == undefined ? (
+              {programs === undefined ? (
                 console.log('No programs parameter filther')
               ) : (
                 <Grid item lg={2} md={2} xs={12}>

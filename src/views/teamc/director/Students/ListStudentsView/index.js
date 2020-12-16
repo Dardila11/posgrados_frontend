@@ -138,7 +138,8 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      await api.getDirectorStudents(13).then(res => {
+      let directorId = localStorage.getItem("id")
+      await api.getDirectorStudents(directorId).then(res => {
         setStudentsList(getPages(res.data.students,itemsByPage)[0])
         setInitialStudentsList(res.data.students)
         setServiceState(false)

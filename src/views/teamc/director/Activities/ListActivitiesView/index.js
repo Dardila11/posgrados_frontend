@@ -93,7 +93,8 @@ const DirectorListActivitiesView = ({search, status, page}) => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      await api.getDirectorActivities(13).then(res => {
+      let directorId = localStorage.getItem("id")
+      await api.getDirectorActivities(directorId).then(res => {
         setActivityList(getPages(res.data.activities,itemsByPage)[0])
         setInitialActivityList(res.data.activities);
         setServiceState(false)

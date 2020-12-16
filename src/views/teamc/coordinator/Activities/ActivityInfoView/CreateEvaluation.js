@@ -39,7 +39,7 @@ const CreateEvaluation = props => {
   const [message, setMessage] = useState('')
   const [isSaved, setIsSaved] = useState(false)
 
-  const postData = async values => {
+  const postData = async (values, isSaveed) => {
     setOpen(false)
     
     let jsonValues = {
@@ -47,12 +47,9 @@ const CreateEvaluation = props => {
       coordinator: values.coordinator,
       credits: values.credits,
       observations: values.observations,
-      is_save: isSaved
+      is_save: isSaveed
     }
-    console.log(values);
-    console.log(jsonValues);
-
-    Api.postCoordinatorEvaluations(19, jsonValues)
+    Api.postCoordinatorEvaluations(jsonValues)
       .then(res => {
         if (res.status == 201) {
           console.log(res.status)
@@ -74,23 +71,19 @@ const CreateEvaluation = props => {
       <h1> {props.title} </h1>
       <Formik
         initialValues={{
-          credits: 1,
+          credits: -1,
           observations: '',
           activity: parseInt(props.activityId),
-          coordinator: 19,
-          is_save: isSaved,
+          coordinator: parseInt(localStorage.getItem("id")),
+          is_save: false,
           submitButton: ''
         }}
         validationSchema={validationSchema}
         onSubmit={(values) => {
-          console.log(values.submitButton)
-
           if (values.submitButton == "save") {
-            setIsSaved(true)
-            postData(values)
+            postData(values, true)
           } else {
-            setIsSaved(false)
-            postData(values)
+            postData(values, false)
           }
         }}
       >
@@ -108,21 +101,11 @@ const CreateEvaluation = props => {
               id="activity-credits"
               variant="outlined"
               type="select"
-              defaultValue={-1}
-              name="value"
-              value={values.value}
+              name="credits"
+              value={values.credits}
               onChange={handleChange}
               onBlur={handleBlur}
-              error={
-                errors.credits &&
-                touched.credits &&
-                errors.credits
-              }
-              helpertext={
-                errors.credits &&
-                touched.credits &&
-                errors.credits
-              }
+              
             >
 
               <MenuItem value={-1} disabled>Creditos</MenuItem>
@@ -166,5 +149,4 @@ const CreateEvaluation = props => {
     </>
   )
 }
-
 export default CreateEvaluation

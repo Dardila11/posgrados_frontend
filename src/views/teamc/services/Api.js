@@ -54,8 +54,8 @@ const postDirectorEvaluations =  (directorId, data) => {
   return https.post(`/api/${directorId}`, data);
 }
 
-const postCoordinatorEvaluations = (coordinatorId, data) => {
-  return https.post(`/api/${coordinatorId}`, data);
+const postCoordinatorEvaluations = data => {
+  return https.post(`/api/test_coordinator/`, data);
 }
 /*End post Services*/
 
