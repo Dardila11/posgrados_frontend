@@ -84,10 +84,10 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
   }
   switch (evaluation.is_save) {
     case true:
-      statusclass = classes.calificacionAcepted;
+      statusclass = classes.calificacionReject;
       break;
     case false:
-      statusclass = classes.calificacionReject;
+      statusclass = classes.calificacionAcepted;
       break;
     default:
       break;
@@ -141,9 +141,9 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
               Estado:
               <b> <span className={statusclass}>
                 {evaluation.is_save? (
-                  <> Notificada</>
-                ):(
                   <> Sin Notificar</>
+                ):(
+                  <> Notificada</>
                 )}       
               </span> </b>
               </Typography>

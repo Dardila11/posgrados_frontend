@@ -27,8 +27,21 @@ const useStyles = makeStyles((theme) => ({
 
 const NotFoundView = () => {
   const classes = useStyles();
-  const link = "/student";
-
+  let link = "";
+  switch (localStorage.getItem("rol")) {
+    case "estudiante":
+      link="/student"
+      break;
+  case "profesor":
+      link="/director"
+      break;
+  case "coordinador":
+      link="/coordinator"
+      break;
+    default:
+      link="/"
+      break;
+  }
   return (
     <Page
       className={classes.root}
@@ -46,15 +59,14 @@ const NotFoundView = () => {
             color="textPrimary"
             variant="h1"
           >
-            404: The page you are looking for isn’t here
+            404: La página que estas buscando no se encontró
           </Typography>
           <Typography
             align="center"
             color="textPrimary"
             variant="subtitle2"
           >
-            You either tried some shady route or you came here by mistake.
-            Whichever it is, try using the navigation
+            Verifica que la ruta especificada pertenezca 
           </Typography>
           <Box textAlign="center">
             <img

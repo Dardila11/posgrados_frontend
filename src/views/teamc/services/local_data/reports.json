@@ -5,7 +5,7 @@
     },
     {
         "name": "Relación estudiante - tutor",
-        "path": "ruta del reporte"
+        "path": "https://mdquilindo.pythonanywhere.com/api/report7ac"
     },
     {
         "name": "Informe por cada cohorte",
