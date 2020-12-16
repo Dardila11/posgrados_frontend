@@ -18,7 +18,7 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerGrant } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
-import BreadCrumbsGrant from './BreadCrumbsGrant'
+
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -77,10 +77,13 @@ const RegisterGrantView = () => {
     registerGrant({
       name: name,
       announcement: announcement,
+
+
       is_active: true,
       description: description,
       num_resolution: resolution,
-      student: JSON.parse(localStorage.getItem("estudiante")).id,
+      student: student,
+
       start_date: startDate,
       end_date: endDate,
       long: long
@@ -103,10 +106,10 @@ const RegisterGrantView = () => {
   };
 
   return (
-    <>
-    <BreadCrumbsGrant/>
+
     <Page className={classes.root} title="Registrar beca">
-      
+
+
       <Box
         display="flex"
         flexDirection="column"
@@ -122,18 +125,21 @@ const RegisterGrantView = () => {
               endDate: '',
               long: '',
               announcement:'',
-              resolution:'',
+
+              num_resolution:'',
+
            
             }}
             validationSchema={Yup.object().shape({
-              
-              name: Yup.string().required('Nombre de la beca requerida'),
-              description: Yup.string().required('Descripción de la beca requerida'),
-              startDate :Yup.string().required('Fecha de inicio requerida'),
-              endDate :Yup.string().required('Fecha de fin requerida'),
-              long :Yup.string().required('Tiempo de duración requerido'),
-              announcement :Yup.string().required('Numero de convocatoria requerdo'),
-              resolution :Yup.string().required('Numero de resolución requerido'),
+
+              name: Yup.string().required('Titulo de la tesis requerido'),
+              description: Yup.string().required('Titulo de la tesis requerido'),
+              startDate :Yup.string().required('Titulo de la tesis requerido'),
+              endDate :Yup.string().required('Titulo de la tesis requerido'),
+              long :Yup.string().required('Titulo de la tesis requerido'),
+              announcement :Yup.string().required('Titulo de la tesis requerido'),
+              num_resolution :Yup.string().required('Titulo de la tesis requerido'),
+
 
             })}
             onSubmit={() => {
@@ -164,7 +170,9 @@ const RegisterGrantView = () => {
                         Los campos con * son obligatorios
                       </Typography>
                     </Box>
-                    {/* <SearchStudent callback={getStudent} /> */}
+
+                    <SearchStudent callback={getStudent} />
+
 
                     
                     <TextField
@@ -320,7 +328,8 @@ const RegisterGrantView = () => {
         </Container>
       </Box>
     </Page>
-    </>
+
+
   );
 };
 

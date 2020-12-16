@@ -1,4 +1,4 @@
-#btAdd {
+#bt {
   position: relative;
   margin-top: 25px;
   margin-left: 15px;
@@ -7,4 +7,15 @@
   position: relative;
   margin-top: 35px;
   margin-left: 15px;
+}
+#mg-left {
+  margin-left: 15px;
+}
+#SearchTeacher,
+#SearchProgram {
+  width: 100%;
+  margin: 10px, 0 0 10px;
+}
+#fullwidth {
+  width: 100%;
 }
