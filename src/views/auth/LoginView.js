@@ -18,6 +18,7 @@ import {
 import Page from 'src/components/Page';
 import { loginService } from './service';
 import { perfilService } from './service';
+import { SplitButton } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -108,17 +109,17 @@ const useStyles = makeStyles((theme) => ({
         .then(async (data) =>{
 
             console.log("rol ",data)
-            let split = data.data.split(",")
-            localStorage.setItem("rol",data.data)
-            if (split[0] === "coordinador") {
+            let role = data.data[0]
+            localStorage.setItem("rol",role)
+            if (role === "coordinador") {
               navigate('/coordinator', { replace: true });
-            }else if (split[0] === "director"){
+            }else if (role === "director"){
               navigate('/director', { replace: true });
             }
-            else if (split[0] === "profesor"){
+            else if (role === "profesor"){
               navigate('/director', { replace: true });
             }
-            else if (split[0] === "estudiante"){
+            else if (role === "estudiante"){
               navigate('/student', { replace: true });
             }
 
