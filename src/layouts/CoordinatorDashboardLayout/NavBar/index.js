@@ -71,6 +71,11 @@ const items = [
     href: '/coordinator/reports',
     icon: DescriptionIcon,
     title: 'Reportes'
+  },
+  {
+    href: '/coordinator/reportsStudent',
+    icon: DescriptionIcon,
+    title: 'Reportes x Año Ingreso'
   }
 ];
 
