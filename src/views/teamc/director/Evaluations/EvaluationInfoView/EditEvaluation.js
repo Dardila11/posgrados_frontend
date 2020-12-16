@@ -51,13 +51,14 @@ const EditEvaluationDirector = props => {
 
     }
     console.log(jsonValues);
-    Api.putDirectorEvaluations(directorId, jsonValues)
+    console.log(props.evaluation);
+    Api.putDirectorEvaluations(props.evaluation.id, jsonValues)
       .then(res => {
         if(res.status == 200) {
           console.log(res.status);
           setOpen(true)
           setTypeAlert("success")
-          setMessage("Evaluación creada con exito")
+          setMessage("Evaluación actualizada con exito")
         }
       })
       .catch(error => {

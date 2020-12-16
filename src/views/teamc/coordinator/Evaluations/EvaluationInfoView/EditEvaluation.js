@@ -50,17 +50,20 @@ const EditEvaluationCoordinator = props => {
       is_save: isSaveed
     }
 
-    Api.putCoordinatorEvaluations(parseInt(localStorage.getItem("id")), jsonValues)
+    Api.putCoordinatorEvaluations(props.evaluation.id, jsonValues)
       .then(res => {
         if(res.status == 201) {
           console.log(res.status);
           setOpen(true)
           setTypeAlert("success")
-          setMessage("Evaluación creada con exito")
+          setMessage("Evaluación actualizada con exito")
         }
       })
       .catch(error => {
         console.log(error);
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Ha ocurrido un error' + error)
       })
     
   }
