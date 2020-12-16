@@ -35,6 +35,7 @@ import AdministerPlacesView from 'src/views/teamd/coordinator/places/index';
 import AdministerProfessorsView from 'src/views/teamd/coordinator/professors/index';
 import { CreateOtherView } from './views/teamd/coordinator/createOthers';
 import { CreateUserView } from './views/teamd/coordinator/users/CreateUser';
+import { ManageView } from './views/teamd/director/manage-GI/index';
 //import FreeSoloCreateOptionDialog from 'src/views/teamd/Search/prueba'
 //EndImports TeamD
 
@@ -78,6 +79,10 @@ const routes = [
       {
         path: 'list-activities/activity/:id',
         element: <DirectorActivityView />
+      },
+      {
+        path: 'manage-gi',
+        element: <ManageView />
       },
       { path: 'list-evaluations', element: <DirectorListEvaluationsView /> },
       { path: '*', element: <Navigate to="/404" /> }
@@ -154,7 +159,7 @@ const routes = [
       { path: 'login', element: <LoginView /> },
       { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
-      { path: '/', element: <Navigate to="/app/dashboard" /> },
+      { path: '/', element: <Navigate to="/login" /> },
       { path: '*', element: <Navigate to="/404" /> }
     ]
   }

@@ -136,7 +136,7 @@ const ProfileDetails = ({ className, ...rest }) => {
         console.log("es nulo")
         }else{
         getStudents().then(result => setListaEstudiantes(result.data))
-        let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo            /////////Todo
+        let photo = "https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo            /////////Todo
         setValues(
           {
           // firstName: JSON.parse(localStorage.getItem("userInfo")).first_name,

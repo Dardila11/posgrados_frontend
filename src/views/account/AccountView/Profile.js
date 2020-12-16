@@ -41,7 +41,7 @@ const Profile = ({ className, ...rest }) => {
     if(auth.user===null){
       console.log("es nulo")
       }else{
-      let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo //Todo
+      let photo = "https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo //Todo
       setUser(
         {
         avatar: photo,

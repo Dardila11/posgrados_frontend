@@ -69,7 +69,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   useEffect(() => {
     if(auth.user===null){
       }else{
-      let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo //TODO CAMBIAR IMAGEN CON SERVIDOR 
+      let photo = "https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo //TODO CAMBIAR IMAGEN CON SERVIDOR 
       setUser(
         {
         avatar: photo,
