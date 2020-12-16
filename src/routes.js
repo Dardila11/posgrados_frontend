@@ -22,11 +22,8 @@ import ActivityFiveView from 'src/views/teamb/activitiesView/ActivityFiveView';
 import ActivitySixView from 'src/views/teamb/activitiesView/ActivitySixView';
 import StudentListActivitiesView from 'src/views/teamb/ListActivities';
 import ActivityStudentView from 'src/views/teamb/ActivityInfoView';
-import StudentDashboardLayout from 'src/layouts/StudentDashboardLayout';
 /* End Student Imports*/
 
-/* Coordinator imports */
-import CoordinatorDashboardLayout from 'src/layouts/CoordinatorDashboardLayout';
 
 //import StudentView from 'src/views/teamc/coordinator/StudentInfoView';
 //StartImports teamD
@@ -54,7 +51,6 @@ import ReportsSView from 'src/views/teamd/coordinator/Report/generateReportView'
 /* End Coordinator imports*/
 
 /* Director imports */
-import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
 import DirectorListStudentsView from 'src/views/teamc/director/Students/ListStudentsView';
 import DirectorStudentView from 'src/views/teamc/director/Students/StudentInfoView';
 import DirectorListActivitiesView from 'src/views/teamc/director/Activities/ListActivitiesView';
@@ -68,10 +64,11 @@ import RegisterAgreementView from "src/views/teamA/student/RegisterAgreementView
 import AdministerStudentView from 'src/views/teamA/coordinator/index';
 import AdministerProfileView from 'src/views/teamA/student/index';
 
+
 const routes = [
   {
     path: 'director',
-    element: <DirectorDashboardLayout />,
+    element: <DashboardLayout />,
     children: [
       { path: '', element: <Navigate to="list-students"/> },
       { path: 'list-students', element: <DirectorListStudentsView /> },
@@ -92,7 +89,7 @@ const routes = [
   /* Coordinator routes */
   {
     path: 'coordinator',
-    element: <CoordinatorDashboardLayout />,
+    element: <DashboardLayout />,
     children: [
       { path: '', element: <Navigate to="list-students" /> },
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
@@ -121,7 +118,7 @@ const routes = [
   },
   {
     path: 'student',
-    element: <StudentDashboardLayout />,
+    element: <DashboardLayout />,
     children: [
       { path: 'account', element: <AccountView /> },
       { path: 'administer-profile', element: <AdministerProfileView /> },
@@ -144,23 +141,10 @@ const routes = [
     ]
   },
   {
-    path: 'app',
-    element: <DashboardLayout />,
-    children: [
-      { path: 'account', element: <AccountView /> },
-      { path: 'customers', element: <CustomerListView /> },
-      { path: 'dashboard', element: <DashboardView /> },
-      { path: 'products', element: <ProductListView /> },
-      { path: 'settings', element: <SettingsView /> },
-      { path: '*', element: <Navigate to="/404" /> }
-    ]
-  },
-  {
     path: '/',
     element: <MainLayout />,
     children: [
       { path: 'login', element: <LoginView /> },
-      { path: 'register', element: <RegisterView /> },
       { path: '404', element: <NotFoundView /> },
       { path: '/', element: <Navigate to="/login" /> },
       { path: '*', element: <Navigate to="/404" /> }
