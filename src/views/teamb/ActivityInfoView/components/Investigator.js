@@ -10,7 +10,7 @@ const Investigator = (props) => {
      
     useEffect(() => {
         objService.GetInvestigator(props.id).then((result) => {
-            setInfo(result.data.user);
+            setInfo(result.data.investigator.user);
         }).catch(() => {
             alert("Error, no hay registros para mostrar");
         });

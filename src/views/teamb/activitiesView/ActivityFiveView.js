@@ -245,15 +245,20 @@ const ActivityFiveView = () => {
   };
 
   const [currentAcadYear, setCurrentAcadYear] = useState(null);
+  const [listaEstudiantes, setListaEstudiantes] = useState([]);
   useEffect(() => {
+    objService.GetStudents().then(result => setListaEstudiantes(result.data));
+
     /* Dato quemado desde la tabla User: id_user */
-    objService.GetPeriodService(8).then((result) => {
-      var CurrentPeriod = result.data.period;
-      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-      setCurrentAcadYear(CurrentAcadYear);
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
+    if (localStorage.getItem('id')){
+      objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
+        var CurrentPeriod = result.data.period;
+        var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+        setCurrentAcadYear(CurrentAcadYear);
+      }).catch(() => {
+        alert("Error, no hay registros para mostrar");
+      });
+    }
   }, []);
 
   const SaveActivity = () => {
@@ -274,7 +279,7 @@ const ActivityFiveView = () => {
     // Datos adicionales
     fd.append("academic_year", currentAcadYear);
     fd.append("type", 5);
-    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", now);
     fd.append("date_update", now);
     //fd.append("is_active", true);

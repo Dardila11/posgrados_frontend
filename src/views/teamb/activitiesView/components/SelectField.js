@@ -55,7 +55,7 @@ const SelectField = (props) => {
         }
         if (props.name === "investigadorSeleccionado") {
             objService.GetInvestigators().then((result) => {
-                var data = result.data;
+                var data = result.data.investigadores;
                 setStateSelect({ list: data });
             }).catch(() => {
                 alert("No hay investigadores registrados");

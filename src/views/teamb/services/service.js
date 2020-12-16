@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://mdquilindo.pythonanywhere.com';
+const API_URL = 'https://mdquilindo.pythonanywhere.com';
 //const API_URL = 'http://localhost:8000';
 
 export default class service {
@@ -79,6 +79,10 @@ export default class service {
     }
     GetInvestigationLine(id){
         const url= `${API_URL}/api/investigationline/`+id+`/`;
+        return axios.get(url);
+    }
+    GetStudents(){
+        const url= `${API_URL}/student/`;
         return axios.get(url);
     }
 
