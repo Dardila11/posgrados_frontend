@@ -20,6 +20,11 @@ import { useAuth } from "src/views/auth/Context/use-auth.js";
 
 
 const items = [
+   {
+    href: '/coordinator/administer-student',
+    icon: UsersIcon,
+    title: 'Administrar Estudiantes'
+  },
   {
     href: '/coordinator/list-students',
     icon: UsersIcon,
