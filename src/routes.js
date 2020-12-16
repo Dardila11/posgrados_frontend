@@ -121,6 +121,7 @@ const routes = [
     path: 'student',
     element: <StudentDashboardLayout />,
     children: [
+      { path: 'account', element: <AccountView /> },
       { path: 'administer-profile', element: <AdministerProfileView /> },
       { path: 'list-activities/activityone', element: <ActivityOneView /> },
       { path: 'list-activities/activitytwo', element: <ActivityTwoView /> },

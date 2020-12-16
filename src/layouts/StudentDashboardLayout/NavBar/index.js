@@ -106,7 +106,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
           className={classes.avatar}
           component={RouterLink}
           src={user.avatar}
-          to="/app/account"
+          to="/student/account"
         />
         <Typography
           className={classes.name}
