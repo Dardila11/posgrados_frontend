@@ -45,8 +45,11 @@ const useStyles = makeStyles(() => ({
 
 export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
   const classes = useStyles();
+  const [listaEstudiantes, setListaEstudiantes] = useState([]);
 
   useEffect(() => {
+    objService.GetStudents().then(result => setListaEstudiantes(result.data));
+
     if(state.receipt !== null) {
       document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado";
     }
@@ -264,6 +267,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     var send_email = emergenteGuardarYEnviar;
 
     const fd = new FormData();
+    console.log(values);
     fd.append("id", values.id);
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
@@ -273,7 +277,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     if (values.fechaFin === null) { values.fechaFin = ''; }
     fd.append("end_date", values.fechaFin);
     fd.append("academic_year", state.academic_year);
-    fd.append("student", 36); // Consultar el id del estudiante actual
+    fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
     if (send_email) {

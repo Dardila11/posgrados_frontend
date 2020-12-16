@@ -36,12 +36,12 @@ const SearchBar = ({ className, context, ...rest }) => {
 
     useEffect(() => {
         /* Dato quemado desde la tabla User: id_user */
-        objService.GetPeriodsService(8).then((result) => {
+        objService.GetPeriodsService(22).then((result) => {
             var dataPeriods = result.data.list_period;
             var acadYears = objUtil.GetAcademicYears(dataPeriods);
             setAcademicYears({ years: acadYears });
         }).catch(() => {
-            alert("Error, no hay registros para mostrar");
+           /*  alert("Error, no hay registros para mostrar"); */
         });
     }, []);
 
@@ -56,12 +56,20 @@ const SearchBar = ({ className, context, ...rest }) => {
         /* Dato quemado desde la tabla User: id_user*/
         if (academicYear === "") { alert("En necesario seleccionar un año academico para realizar la consulta"); }
         else {
-            objService.GetActivities(8, academicYear).then((result) => {
-                var dataActivities = result.data;
-                setActivities(dataActivities.list_activities);
-            }).catch(() => {
-                alert("Error, no fue posible realizar la consulta");
-            });
+            if (localStorage.getItem('id')){
+                objService.GetActivities(localStorage.getItem('id'), academicYear).then((result) => {
+                    var dataActivities = result.data;
+                    if(dataActivities.list_activities.length === 0) {
+                        alert("No hay actividades registradas");
+                    }
+                    else{
+                        setActivities(dataActivities.list_activities);
+                    }
+                    
+                }).catch(() => {
+                    alert("Error, no fue posible realizar la consulta");
+                });
+            }
         }
     };
 

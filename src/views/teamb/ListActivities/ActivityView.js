@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -52,19 +52,25 @@ const ActivityView = ({ className, ...rest }) => {
   const changeActivityType = (e) => {
     setActivity(e)
   }
+
+
  
   //Constante para definir el estdo de "errorActivity"
   const [errorActivity, setErrorActivity] = useState(null);
+  
 
   const handleClickOpen = () => {
     /* Dato quemado desde la tabla User: id_user */
-    objService.GetPeriodService(8).then((result) => {
-      var CurrentPeriod = result.data.period;
-      var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-      document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
-    }).catch(() => {
-      alert("Error, no hay registros para mostrar");
-    });
+    if (localStorage.getItem('id')){
+        objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
+          var CurrentPeriod = result.data.period; 
+          var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+          document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
+        }).catch(() => {
+          alert("Error, no hay registros para mostrar");
+        });
+    }
+    
     setOpen(true);
   };
   // Se modificó "handleClose" para que despliegue la ventana emergente
