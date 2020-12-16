@@ -36,20 +36,26 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
   const [open, setOpen] = useState(false)
   let statusclass = null;
   let valueclass = null;
+  console.log(evaluation)
   
   useEffect(() => {
     const fetchData = async () => {
       if(context=="director"){
-        await api.getDirectorActivities(13).then(res => {
+        let directorId = localStorage.getItem("id")
+        await api.getDirectorActivities(directorId).then(res => {
           let activity = res.data.activities.find(activity => activity.id == evaluation.activity)
           setActivityInfo(activity)
           setStudentInfo(activity.student.user)
           setLoading(false)
         })
       }else{
-        await api.getCoordinatorActivities(19).then(res => {
+        let coordinatorId = localStorage.getItem("id")
+        await api.getCoordinatorActivities(coordinatorId).then(res => {
+          console.log(res.data)
+          console.log(evaluation.activity)
           let activity = res.data.activities.find(activity => activity.id == evaluation.activity)
           setActivityInfo(activity)
+          console.log(activity)
           setStudentInfo(activity.student.user)
           setLoading(false)
         })

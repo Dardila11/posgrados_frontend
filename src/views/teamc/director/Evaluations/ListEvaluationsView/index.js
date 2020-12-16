@@ -26,7 +26,6 @@ const DirectorListEvaluationsView = ({search, status, page}) => {
   const [evaluationList, setEvaluationList] = useState([])
   const [initialEvaluationList, setInitialEvaluationList] = useState([])
   const [loading, setLoading] = useState(true);
-  const [serviceState, setServiceState] = useState(true)
   const itemsByPage = 8
   const pages = getPages(initialEvaluationList,itemsByPage)
   const classes = useStyles();
@@ -93,11 +92,10 @@ const DirectorListEvaluationsView = ({search, status, page}) => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      await api.getDirectorEvaluations(13).then(res => {
-        console.log(res.data.test_activities)
+      let directorId = localStorage.getItem("id")
+      await api.getDirectorEvaluations(directorId).then(res => {
         setEvaluationList(getPages(res.data.test_activities,itemsByPage)[0])
         setInitialEvaluationList(res.data.test_activities);
-        setServiceState(false)
         setLoading(false);
       });
       
@@ -108,7 +106,7 @@ const DirectorListEvaluationsView = ({search, status, page}) => {
   return (
     <Page className={classes.root} title="Listado de evaluaciones">
       <BreadCrumbs />
-      <SearchBar context="evaluations" status={state}/>
+      <SearchBar searchOption="true" context="evaluations" status={state} />
       {loading ? (
         
         <LinearProgress className={classes.progress}/>

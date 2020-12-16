@@ -10,7 +10,6 @@ import {
 import { Link as RouterLink } from 'react-router-dom';
 import clsx from 'clsx';
 import { isUndefined } from 'lodash';
-import { Activity } from 'react-feather';
 
 const useStyles = makeStyles({
   root: {
@@ -96,9 +95,17 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
                 {activity.description}
               </Typography>
             )}
+            {context=="/director/list-activities" || context =="/coordinator/list-activities" ? 
+            (
               <Typography color="textSecondary" variant="body1">
                 {student.user.first_name} {student.user.last_name}
               </Typography>
+            )
+            :
+            (
+              <></>
+            )
+            }              
               <Typography color="textSecondary" variant="body1">
                 {activity.type}
               </Typography>

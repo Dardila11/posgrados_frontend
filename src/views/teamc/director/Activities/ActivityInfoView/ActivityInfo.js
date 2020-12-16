@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import api from 'src/views/teamc/services/Api'
 
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import {
   Card,
   CardActions,
@@ -15,7 +15,7 @@ import {
 } from '@material-ui/core'
 import { isUndefined } from 'lodash'
 import DialogForm from 'src/components/DialogForm'
-import CreateEvaluation from 'src/views/teamc/director/Activities/ActivityInfoView/CreateEvaluation'
+import CreateEvaluation from './CreateEvaluation'
 
 const useStyles = makeStyles({
   root: {
@@ -59,7 +59,8 @@ const ActivityInfoView = () => {
   }, [])
   useEffect(() => {
     const fetchData = async () => {
-      await api.getDirectorActivities(13).then(res => {
+      let directorId = localStorage.getItem("id")
+      await api.getDirectorActivities(directorId).then(res => {
         let user = res.data.activities.find(activity => activity.id == id).student.user
         console.log(user)
         setStudentInfo(user)

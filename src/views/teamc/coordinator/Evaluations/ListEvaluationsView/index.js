@@ -93,11 +93,10 @@ const CoordinatorListEvaluationsView = ({search, status, page}) => {
    */
   useEffect(() => {
     const fetchData = async () => {
-      await api.getCoordinatorEvaluations(27).then(res => {
-        console.log(res.data.test_activities)
+      let coordinatorId = localStorage.getItem("id")
+      await api.getCoordinatorEvaluations(coordinatorId).then(res => {
         setEvaluationList(getPages(res.data.test_activities,itemsByPage)[0])
         setInitialEvaluationList(res.data.test_activities);
-        setServiceState(false)
         setLoading(false);
       });
       

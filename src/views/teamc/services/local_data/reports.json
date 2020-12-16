@@ -1,0 +1,19 @@
+[
+    {
+        "name": "reporte 1",
+        "path": "ruta del reporte"
+    },
+    {
+        "name": "Relación estudiante - tutor",
+        "path": "ruta del reporte"
+    },
+    {
+        "name": "Informe por cada cohorte",
+        "path": "https://mdquilindo.pythonanywhere.com/api/report/cohorte/1"
+    },
+    {
+        "name": "reporte 4",
+        "path": "ruta del reporte"
+    }
+
+]

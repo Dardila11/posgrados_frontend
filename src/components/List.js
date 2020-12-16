@@ -3,6 +3,7 @@ import React from 'react';
 import StudentCard from 'src/components/StudentCard';
 import ActivityCard from 'src/components/ActivityCard';
 import EvaluationCard from './EvaluationCard';
+import ReportCard from './ReportCard';
 
 const List = ({ list, option, context }) => {
   return (
@@ -18,12 +19,14 @@ const List = ({ list, option, context }) => {
                 activity={element}
                 context={context}
               />
-            ) : (
+            ) : option == 'Evaluation' ? (
               <EvaluationCard
                 key={element.id}
                 evaluation={element}
                 context={context}
               />
+            ):(
+              <ReportCard  report={element} />
             )}
           </Grid>
         ))}
