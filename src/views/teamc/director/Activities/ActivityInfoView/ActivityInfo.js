@@ -60,9 +60,7 @@ const ActivityInfoView = () => {
   useEffect(() => {
     const fetchData = async () => {
       await api.getDirectorActivities(13).then(res => {
-        console.log(res.data)
-        console.log(id)
-        let user = res.data.activities.find(activity => activity.id = id).student.user
+        let user = res.data.activities.find(activity => activity.id == id).student.user
         console.log(user)
         setStudentInfo(user)
       })

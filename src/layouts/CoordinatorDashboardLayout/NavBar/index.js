@@ -14,6 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import { Users as UsersIcon, Eye as EyeIcon } from 'react-feather';
 import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
+import DescriptionIcon from '@material-ui/icons/Description';
 import NavItem from './NavItem';
 import { useAuth } from "src/views/auth/Context/use-auth.js";
 
@@ -23,6 +24,16 @@ const items = [
     href: '/coordinator/list-students',
     icon: UsersIcon,
     title: 'Visualizar Estudiantes'
+  },
+  {
+    href: '/coordinator/list-activities',
+    icon: EyeIcon,
+    title: 'Actividades'
+  },
+  {
+    href: '/coordinator/list-evaluations',
+    icon: EyeIcon,
+    title: 'Evaluaciones'
   },
   // Options Team D
   {
@@ -53,20 +64,13 @@ const items = [
   },
 
   // End Options Team D
-  /*   {
-    href: '/director/list-evaluations',
-    icon: UsersIcon,
-    title: 'Visualizar Evaluaciones'
-  } */
+  /**
+   * Reports
+   */
   {
-    href: '/coordinator/list-activities',
-    icon: EyeIcon,
-    title: 'Actividades'
-  },
-  {
-    href: '/coordinator/list-evaluations',
-    icon: EyeIcon,
-    title: 'Evaluaciones'
+    href: '/coordinator/reports',
+    icon: DescriptionIcon,
+    title: 'Reportes'
   }
 ];
 

@@ -42,18 +42,17 @@ import { CreateUserView } from './views/teamd/coordinator/users/CreateUser';
 import StudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
 //import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/ActivityEvaluationsView/index';
 
-import CoordinatorIndexView from 'src/views/teamc/coordinator';
 import CoordinatorListStudentsView from 'src/views/teamc/coordinator/StudentTracking/ListStudentsView';
 import CoordinatorStudentView from 'src/views/teamc/coordinator/StudentTracking/StudentInfoView';
 import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activities/ListActivitiesView';
 import CoordinatorActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
 import CoordinatorListEvaluationsView from './views/teamc/coordinator/Evaluations/ListEvaluationsView';
+import ReportsView from 'src/views/teamc/coordinator/ReportsView';
 
 /* End Coordinator imports*/
 
 /* Director imports */
 import DirectorDashboardLayout from 'src/layouts/DirectorDashboardLayout';
-import DirectorIndexView from 'src/views/teamc/director/index';
 import DirectorListStudentsView from 'src/views/teamc/director/Students/ListStudentsView';
 import DirectorStudentView from 'src/views/teamc/director/Students/StudentInfoView';
 import DirectorListActivitiesView from 'src/views/teamc/director/Activities/ListActivitiesView';
@@ -67,7 +66,7 @@ const routes = [
     path: 'director',
     element: <DirectorDashboardLayout />,
     children: [
-      { path: '', element: <DirectorIndexView /> },
+      { path: '', element: <Navigate to="list-students"/> },
       { path: 'list-students', element: <DirectorListStudentsView /> },
       { path: 'list-students/student/:id', element: <DirectorStudentView /> },
       { path: 'list-activities', element: <DirectorListActivitiesView /> },
@@ -85,7 +84,7 @@ const routes = [
     path: 'coordinator',
     element: <CoordinatorDashboardLayout />,
     children: [
-      { path: '', element: <CoordinatorIndexView /> },
+      { path: '', element: <Navigate to="list-students" /> },
       { path: 'list-students', element: <CoordinatorListStudentsView /> },
       {
         path: 'list-students/student/:id',
@@ -103,6 +102,7 @@ const routes = [
         element: <CoordinatorActivityInfoView />
       },
       { path: 'list-evaluations', element: <CoordinatorListEvaluationsView /> },
+      { path: 'reports', element: <ReportsView/>},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },

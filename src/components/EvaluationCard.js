@@ -30,19 +30,31 @@ const useStyles = makeStyles({
  */
 const EvaluationCard = ({ evaluation,context, ...rest }) => {
   const classes = useStyles();
-  const [activityInfo, setActivityInfo] = useState({})
+  let [activityInfo, setActivityInfo] = useState({})
+  let [studentInfo, setStudentInfo] = useState({})
   const [loading, setLoading] = useState(true)
   const [open, setOpen] = useState(false)
   let statusclass = null;
   let valueclass = null;
-  console.log(context)
   
   useEffect(() => {
     const fetchData = async () => {
-      await api.getActivity(evaluation.id).then(res => {
-        setActivityInfo(res.data)
-        setLoading(false)
-      })
+      if(context=="director"){
+        await api.getDirectorActivities(13).then(res => {
+          let activity = res.data.activities.find(activity => activity.id == evaluation.activity)
+          setActivityInfo(activity)
+          setStudentInfo(activity.student.user)
+          setLoading(false)
+        })
+      }else{
+        await api.getCoordinatorActivities(19).then(res => {
+          let activity = res.data.activities.find(activity => activity.id == evaluation.activity)
+          setActivityInfo(activity)
+          setStudentInfo(activity.student.user)
+          setLoading(false)
+        })
+      }
+     
     }
     fetchData()
   }, [])
@@ -98,6 +110,15 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
             ) : (
               <Typography variant="h4" component="p" gutterBottom>
                 {activityInfo.title}
+              </Typography>
+            )}
+            {isUndefined(studentInfo.first_name) ||
+            studentInfo.first_name == null ||
+            studentInfo.first_name == '' ? (
+              <></>
+            ) : (
+              <Typography variant="body1" component="p" gutterBottom>
+                {studentInfo.first_name} {studentInfo.last_name}
               </Typography>
             )}
             <Typography color="textSecondary" variant="body1">
