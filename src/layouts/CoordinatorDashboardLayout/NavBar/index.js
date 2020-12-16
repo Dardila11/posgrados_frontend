@@ -100,7 +100,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     if(auth.user===null){
       console.log("es nulo")
       }else{
-      let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo
+      let photo = "https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo
       setUser(
         {
         avatar: photo,
