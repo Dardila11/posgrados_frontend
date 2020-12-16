@@ -99,7 +99,7 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
       ):(
         <Box boxShadow={3}>
         <Card className={clsx(classes.root)} {...rest}>
-          <CardActionArea className = {classes.CardAction} onClick={handleClickOpen}>
+          <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} enable="false">
             <Box alignItems="center" display="flex" flexDirection="column">
               {isUndefined(activityInfo.title) ||
             activityInfo.title == null ||
@@ -153,17 +153,20 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
             </Box>
           </CardActionArea>
         </Card>
-        <DialogForm
-              title="Modificar evaluación"
-              open={open}
-              handleClose={handleClose}
-              handleOpen={handleClickOpen}
-              component={context == "director"? (
-                <EditEvaluationDirector evaluation={evaluation} activity={activityInfo}/>
-              ):(
-                <EditEvaluationCoordinator evaluation={evaluation} activity={activityInfo}/>
-              )}
-            />
+        {evaluation.is_save? (
+          <DialogForm
+          title="Modificar evaluación"
+          open={open}
+          handleClose={handleClose}
+          handleOpen={handleClickOpen}
+          component={context == "director"? (
+            <EditEvaluationDirector evaluation={evaluation} activity={activityInfo}/>
+          ):(
+            <EditEvaluationCoordinator evaluation={evaluation} activity={activityInfo}/>
+          )}
+        />
+        ):(<></>)}
+        
       </Box>
       
       )}
