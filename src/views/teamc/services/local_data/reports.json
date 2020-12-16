@@ -10,10 +10,6 @@
     {
         "name": "Informe por cada cohorte",
         "path": "https://mdquilindo.pythonanywhere.com/api/report/cohorte/1"
-    },
-    {
-        "name": "reporte 4",
-        "path": "ruta del reporte"
     }
 
 ]

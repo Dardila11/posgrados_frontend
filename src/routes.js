@@ -49,6 +49,7 @@ import CoordinatorListActivitiesView from 'src/views/teamc/coordinator/Activitie
 import CoordinatorActivityInfoView from 'src/views/teamc/coordinator/Activities/ActivityInfoView';
 import CoordinatorListEvaluationsView from './views/teamc/coordinator/Evaluations/ListEvaluationsView';
 import ReportsView from 'src/views/teamc/coordinator/ReportsView';
+import ReportsSView from 'src/views/teamd/coordinator/Report/generateReportView';
 
 /* End Coordinator imports*/
 
@@ -114,6 +115,7 @@ const routes = [
       },
       { path: 'list-evaluations', element: <CoordinatorListEvaluationsView /> },
       { path: 'reports', element: <ReportsView/>},
+      { path: 'reportsStudent', element: <ReportsSView/>},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
