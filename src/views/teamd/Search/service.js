@@ -50,4 +50,8 @@ export const ConsultProfesorService = () => {
   const url = `${API_URL}/api/1.0/consultar_profesor/`;
   return axios.get(url);
 };
+export const EditarUser = (info) => {
+  const url = `${API_URL}/api/auth/consult_user_id/${info.id}`;
+  return axios.put(url,info);
+};
 

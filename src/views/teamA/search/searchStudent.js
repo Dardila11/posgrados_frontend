@@ -11,24 +11,24 @@ export const SearchStudent= ({ callback }) => {
   useEffect(() => {
    ConsultStudent()
       .then(request => {
-        console.log(request.data);
-        setStudentList(request.data.User); //Nota back
+        console.log(request.data[0].user.first_name);
+        setStudentList(request.data); //Nota back
       })
       .catch(() => setStudentList([]));
   }, []);
 
   const getIdStudent = name => {
-    let find = studentList.find(student => student.user.name === name); // NOTA verificar el nombre del programa con el back (Program.name)
+    let find = studentList.find(student => student.user.first_name === name); // NOTA verificar el nombre del programa con el back (Program.name)
     if (find === undefined) {
     } else {
-      callback(find.user.id);
+      callback(find.id);
     }
   };
   return (
     <Autocomplete
       id="SerchStudent" // cambiar de user a program
       options={studentList}
-      getOptionLabel={option => option.name} // option name
+      getOptionLabel={option => option.user.first_name} // option name
       style={{ marginBottom: 15, marginTop: 15 }}
       renderInput={params => (
         <TextField

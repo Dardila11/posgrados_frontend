@@ -40,6 +40,12 @@ export const ConsultDirige_d = (id) => {
   const url = `${API_URL}/api/1.0/consultar_dirige_d/${id}`;
   return axios.get(url);
 };
+export const eliminarMiembroSerivce = (info) => {
+  const url = `${API_URL}/api/1.0/consultar_es_miembro/${info.professor}/${info.inv_group}`;
+  return axios.put(url);
+};
+
+
 
 
 

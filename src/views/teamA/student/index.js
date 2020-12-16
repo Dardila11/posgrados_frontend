@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect,useState}from 'react';
 import { Box, Container } from '@material-ui/core';
 import Page from 'src/components/Page';
 import PropTypes from 'prop-types';
@@ -6,10 +6,17 @@ import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CreateView from './create';
+import UpdateAgreementView from './UpdateAgreementView';
+import UpdateGrantView from './UpdateGrantView';
+import UpdateProjectView from './UpdateProjectView';
+import {UpdateStudent} from './UpdateStudent';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
-import ListProfessors from './addDirector/listProfessors';
-import {ListGi} from '../GI/editGi/listGi'
+import {GrantView} from './grantView'
+import {AgreementViewCard} from './agreementViewCard'
+import {AgreementView} from './agreementView'
+import BreadCrumbs from './BreadCrumbs'
+import { useAuth } from "src/views/auth/Context/use-auth.js";
+import {getStudents} from "src/views/teamA/student/service"
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -55,14 +62,37 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-const AdministerView = () => {
+
+const AdministerProfileView = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const auth = useAuth();
+  const [ListaEstudiantes, setListaEstudiantes] = useState([])
+
+
+  useEffect(() => {
+    if(auth.user===null){
+      console.log("es nulo")
+      }else{
+      getStudents().then(result => setListaEstudiantes(result.data))            /////////Todo
+    }
+  }, [])
+  useEffect(() => {
+    let encontrado = ListaEstudiantes.find ( element=> element.user.id === parseInt(localStorage.getItem("id")))
+    if(encontrado === undefined){
+
+    }else{
+      localStorage.setItem("estudiante",JSON.stringify(encontrado))
+      localStorage.setItem("IDestudiante",JSON.stringify(encontrado.id))
+    }
+  }, [ListaEstudiantes])
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   return (
-    <Page title="Administer GI">
+    <Page title="Administrar estudiantes">
+      <BreadCrumbs/>
       <Container maxWidth={false}>
         <Box mt={3}>
           
@@ -73,29 +103,44 @@ const AdministerView = () => {
                 value={value}
                 onChange={handleChange}
               >
-                <Tab
+
+                <Tab 
                   label={
                     <>
-                      <PersonAddIcon fontSize="inherit" /> Crear
+                      <PersonAddIcon fontSize="inherit" /> Mi proyecto
                     </>
                   }
                   {...options(0)}
                 />
-                <Tab
+                 <Tab
                   label={
                     <>
-                      Grupos de investigacion registrados
+                      <PersonAddIcon fontSize="inherit" /> Becas
                     </>
                   }
                   {...options(1)}
                 />
+                <Tab
+                  label={
+                    <>
+                      <PersonAddIcon fontSize="inherit" /> Convenios
+                    </>
+                  }
+                  {...options(2)}
+                />
               </Tabs>
             </AppBar>
+            {/* <TabPanel value={value} index={0}>
+              <UpdateStudent/>
+            </TabPanel> */}
             <TabPanel value={value} index={0}>
-              <CreateView />
+              <UpdateProjectView/>
             </TabPanel>
             <TabPanel value={value} index={1}>
-              <ListGi />
+            <GrantView/>
+            </TabPanel>
+            <TabPanel value={value} index={2}>
+            <AgreementView/>
             </TabPanel>
           
         </Box>
@@ -104,4 +149,4 @@ const AdministerView = () => {
   );
 };
 
-export default AdministerView;
+export default AdministerProfileView;

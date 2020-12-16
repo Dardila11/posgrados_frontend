@@ -3,11 +3,11 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { ConsultProgram } from './service';
 
-export const SearchProgram= ({ callback }) => {
+export const SearchProgram = ({ callback }) => {
   const [programList, setProgramList] = useState([]); // cambiar los nombres de los estados
   //llenando la lista de opciones
   useEffect(() => {
-   ConsultProgram()
+    ConsultProgram()
       .then(request => {
         console.log(request.data);
         setProgramList(request.data); //Nota back

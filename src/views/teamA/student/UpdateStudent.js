@@ -13,20 +13,9 @@ import {
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
 
-import DialogForm from './DialogForm';
-import Autocomplete, {
-  createFilterOptions
-} from '@material-ui/lab/Autocomplete';
-import CreateProgramDialog from './CreateProgramDialog';
-
-import RegisterDirectorDialog from './RegisterDirectorDialog';
-import AddCodirectorDialog from './AddCodirectorDialog';
-import React, { useState } from 'react';
-import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
-import { registerStudent } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
-
 //ICONS
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -37,18 +26,11 @@ import FormatListNumberedRoundedIcon from '@material-ui/icons/FormatListNumbered
 import ContactsRoundedIcon from '@material-ui/icons/ContactsRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
-import { FormLabel } from '@material-ui/core';
+import ListIcon from '@material-ui/icons/List';
 
-
-import { SearchTeacherOrAdd } from 'src/views/teamA/search/searchTeacherOrAdd';
-import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
-import { SearchProgramOrAdd } from 'src/views/teamA/search/searchProgramOrAdd';
-import { SearchProgram } from 'src/views/teamA/search/searchProgram';
-
-import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
-import RegisterAgreementDialog from './RegisterAgreementDialog';
+import {UpdateStudentService} from './service'
+import {getUserLogin} from './service'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -67,25 +49,51 @@ const useStyles = makeStyles(theme => ({
     margin: `20px 0 0 ${theme.spacing(0)}px`
   }
 }));
-const RegisterStudent = () => {
+export const UpdateStudent = () => {
   const [open, setOpen] = useState(false);
-  const [open1, setOpen1] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
-  const [open4, setOpen4] = useState(false);
   const [typeAlert, setTypeAlert] = useState('success');
   const [message, setMessage] = useState('');
+
+
+
+  //Estudiante logeado //TODO
+  const [studentLoggedin, setStudentLoggedin] = useState({
+
+    "id": 1,
+    "dedication": 1,
+    "program": 1,
+    "date_record": "2020-11-02T14:42:24-05:00",
+    "date_update": "2020-11-02T14:42:26-05:00",
+    "user": {
+        "id": 5,
+        "password": "pbkdf2_sha256$180000$ulJMQfIxGyTx$o0Gohlw6YUB2C3/DvNaP4jOHPrsNDEp4GrA9qNXoaks=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "mdquilindo",
+        "first_name": "miller",
+        "last_name": "quilindo",
+        "email": "mdquilindo@unicauca.edu.co",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2020-11-02T14:41:24-05:00",
+        "type_id": 1,
+        "personal_id": "1061793073",
+        "personal_code": "104613020476",
+        "photo": "https://mdquilindo.pythonanywhere.com/media/d_accounts_app/users/raf750x1000075tFFFFFF_97ab1c12de.u2.jpg",
+        "telephone": "0",
+        "address": "0",
+        "is_proffessor": false,
+        "is_student": true
+    }
+
+
+
+  })
+
   const clases = useStyles();
-
   const [program, setProgram] = useState('');
-  const [director, setDirector] = useState('');
-  const [codirector1, setCodirector1] = useState('');
-  const [codirector2, setCodirector2] = useState('');
-
-  const [dedicationType, setDedicationType] = useState('');
-
+  const [dedicationType, setDedicationType] = useState(1);
   const [username, setUsername] = useState('a');
-  const [academicTitle, setAcademicTitle] = useState('a');
   const [password, setPassword] = useState('1');
   const [firstName, setFirstName] = useState('123');
   const [lastName, setLastName] = useState('133');
@@ -93,28 +101,15 @@ const RegisterStudent = () => {
   const [typeId, setTypeId] = useState('1');
   const [personal_id, setPersonal_id] = useState('13123'); // identificacion
   const [personal_code, setPersonal_code] = useState('1313'); // en el back debe ser automatico
-  const [telephone, setTelephone] = useState('312313');
-  const [address, setAddress] = useState('12313');
+  const [telephone, setTelephone] = useState(studentLoggedin.user.telephone);
+  const [address, setAddress] = useState(studentLoggedin.user.address);
   const [role, setRole] = useState('1'); //en el back hay dos variable is_professor is_student
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const [is_proffessor, setIs_proffessor] = useState(0);
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({});
-
   const getProgram = id => {
     setProgram(id);
-  };
-
-  const getDirector = id => {
-    setDirector(id);
-  };
-
-  const getCodirector1 = id => {
-    setCodirector1(id);
-  };
-
-  const getCodirector2 = id => {
-    setCodirector2(id);
   };
 
   const handleChangeDedicationType = e => {
@@ -147,9 +142,6 @@ const RegisterStudent = () => {
   const handleChangeAddress = e => {
     setAddress(e.target.value);
   };
-  const handleChangeAcademicTitle = e => {
-    setAcademicTitle(e.target.value);
-  };
 
   const handleChangeRole = event => {
     setRole(event.target.value);
@@ -165,92 +157,46 @@ const RegisterStudent = () => {
     setFirstName(event.target.value);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleClickOpen1 = () => {
-    setOpen1(true);
-  };
-
-  const handleClose1 = () => {
-    setOpen1(false);
-  };
-
-  const handleClickOpen2 = () => {
-    setOpen2(true);
-  };
-
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
-
-  const handleClickOpen3 = () => {
-    setOpen3(true);
-  };
-
-  const handleClose3 = () => {
-    setOpen3(false);
-  };
-
-  const handleClickOpen4 = () => {
-    setOpen4(true);
-  };
-
-  const handleClose4 = () => {
-    setOpen4(false);
-  };
-
-  const handleCreateUser = e => {
+  const handleEditStudent = e => {
     e.preventDefault();
-
-    // console.log(fileImage);
+    
     // const form_data = new FormData();
     // form_data.append('image_file', fileImage, fileImage.name);
     // form_data.append('title', 'image');
     // form_data.append('content', fileImage.content);
-    // console.log(firstName);
-    console.log(lastName);
-    console.log(username);
-    console.log(password);
-    console.log(email);
-    console.log(typeId);
-    console.log(personal_id);
-    console.log(personal_code);
-    //console.log(form_data);
-    console.log(telephone);
-    console.log(address);
-    console.log(is_proffessor);
 
-    registerStudent({
-      user: {
-        first_name: firstName,
-        last_name: lastName,
-        username: username,
-        password: password,
-        email: email,
-        type_id: typeId,
-        personal_id: personal_id,
-        personal_code: personal_code,
-        //photo: null,
-        telephone: telephone,
-        address: address,
-
-        is_proffessor: false,
-        is_student: true
-      },
-      dedication: dedicationType,
-      program: program,
-      academic_title: academicTitle
+    UpdateStudentService({
+        "id": studentLoggedin.id,
+        "dedication": studentLoggedin.dedication,
+        "program": studentLoggedin.program,
+        "date_record": studentLoggedin.date_record,
+        "date_update": studentLoggedin.date_update, //TODO UPDATE TODAY
+        "user": {
+            "id": studentLoggedin.user.id,
+            "password": studentLoggedin.user.password,
+            "last_login": studentLoggedin.user.last_login,
+            "is_superuser": studentLoggedin.user.is_superuser,
+            "username": studentLoggedin.user.username,
+            "first_name": studentLoggedin.user.first_name,
+            "last_name": studentLoggedin.user.last_name,
+            "email":  studentLoggedin.user.email,
+            "is_staff": studentLoggedin.user.is_staff,
+            "is_active": studentLoggedin.user.is_active,
+            "date_joined": studentLoggedin.user.date_joined,
+            "type_id": studentLoggedin.user.type_id,
+            "personal_id": studentLoggedin.user.personal_id,
+            "personal_code": studentLoggedin.user.personal_code,
+            "photo": "https://mdquilindo.pythonanywhere.com/media/d_accounts_app/users/raf750x1000075tFFFFFF_97ab1c12de.u2.jpg", //Todo foto
+            "telephone": telephone,
+            "address": address,
+            "is_proffessor": studentLoggedin.user.is_proffessor,
+            "is_student": studentLoggedin.user.is_student
+        }
     })
       .then(() => {
         setOpen(true);
         setTypeAlert('success');
-        setMessage('Usuario creado correctamente');
+        setMessage('Usuario editado correctamente');
       })
       .catch(() => {
         setOpen(true);
@@ -259,22 +205,30 @@ const RegisterStudent = () => {
       });
   };
 
+
+  //Obtener datos del usuario logeado // TODO DATO QUEMADO PARA UN SOLO USUARIO
+
+  // useEffect(() => {
+  //   getUserLogin().then(result => {setStudentLoggedin(result.data.student)})
+  // }, [])
+
+
+
   return (
     <Container maxWidth="md" className={clases.container}>
       <Formik
         initialValues={{
-          firstName: '',
-          lastName: '',
-          username: '',
-          password: '',
-          email: '',
-          typeId: '',
-          personal_id: '',
-          personal_code: '',
-          photo: '',
-          telephone: '',
-          address: '',
-          academicTitle: '',
+          firstName: studentLoggedin.user.first_name,
+          lastName: studentLoggedin.user.last_name,
+          username: studentLoggedin.user.username,
+          password: studentLoggedin.user.password,
+          email: studentLoggedin.user.email,
+          typeId: studentLoggedin.user.type_id,
+          personal_id: studentLoggedin.user.personal_id,
+          personal_code: studentLoggedin.user.personal_code,
+          photo: studentLoggedin.user.photo,
+          telephone: studentLoggedin.user.telephone,
+          address: studentLoggedin.user.telephone,
           role: '1'
         }}
         validationSchema={Yup.object().shape({
@@ -302,7 +256,9 @@ const RegisterStudent = () => {
           personal_code: Yup.string()
             .max(255)
             .required('Codigo del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
-          photo: Yup.string().max(255),
+          photo: Yup.string()
+            .max(255)
+            .required('Foto requerida'), //TODO file image
           telephone: Yup.string().min(
             6,
             'El teléfono debe tener mínimo 6 caracteres'
@@ -318,10 +274,10 @@ const RegisterStudent = () => {
         {({ errors, handleBlur, handleChange, touched, values }) => (
           <Card className={clases.RegisterStudent}>
             <CardContent>
-              <form onSubmit={handleCreateUser}>
+              <form onSubmit={handleEditStudent}>
                 <Box mb={3}>
                   <Typography color="textPrimary" variant="h2">
-                    Registrar estudiante
+                    Mi perfil
                   </Typography>
                   <Typography
                     color="textSecondary"
@@ -331,9 +287,18 @@ const RegisterStudent = () => {
                     Los campos con * son obligatorios
                   </Typography>
                 </Box>
+                <Divider className={clases.dividerFullWidth} />
+
+                <Typography
+                  color="textSecondary"
+                  display="block"
+                  variant="caption"
+                >
+                  Información basica
+                </Typography>
 
                 <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
+                  {/* <Grid item md={6} xs={12}>
                     <TextField
                       id="username"
                       label="Nombre de usuario"
@@ -359,7 +324,6 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
-
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="password"
@@ -385,12 +349,13 @@ const RegisterStudent = () => {
                         )
                       }}
                     />
-                  </Grid>
+                  </Grid> */}
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="firstName"
                       label="Nombres"
                       variant="outlined"
+                      disabled
                       type="text"
                       margin="normal"
                       onChange={e => {
@@ -417,6 +382,7 @@ const RegisterStudent = () => {
                       id="lastName"
                       label="Apellidos"
                       variant="outlined"
+                      disabled
                       type="text"
                       margin="normal"
                       onChange={e => {
@@ -443,6 +409,7 @@ const RegisterStudent = () => {
                       id="email"
                       label="Email"
                       variant="outlined"
+                      disabled
                       type="email"
                       margin="normal"
                       onChange={e => {
@@ -467,8 +434,9 @@ const RegisterStudent = () => {
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="TypeId"
-                      label="Tipo de identificación"
+                      label="Tipo de identificacion"
                       variant="outlined"
+                      disabled
                       select
                       margin="normal"
                       onChange={e => {
@@ -478,28 +446,18 @@ const RegisterStudent = () => {
                       error={Boolean(touched.typeId && errors.typeId)}
                       helperText={touched.typeId && errors.typeId}
                       onBlur={handleBlur}
-                      value={typeId}
+                      value={values.typeId}
                       required
                       fullWidth
-                      InputProps={{
-                        startAdornment: (
-                          <InputAdornment position="start">
-                            <ContactsRoundedIcon />
-                          </InputAdornment>
-                        )
-                      }}
                     >
                       <MenuItem key="typeIdOption1" value="1">
-                        Cédula de ciudadanía
+                        Cedula
                       </MenuItem>
                       <MenuItem key="typeIdOption2" value="2">
-                        Cédula de extranjería
+                        Cedula extranjera
                       </MenuItem>
                       <MenuItem key="typeIdOption3" value="3">
                         Tarjeta de identidad
-                      </MenuItem>
-                      <MenuItem key="typeIdOption4" value="4">
-                        Pasaporte
                       </MenuItem>
                     </TextField>
                   </Grid>
@@ -509,6 +467,7 @@ const RegisterStudent = () => {
                       label="Numero de identificacion"
                       variant="outlined"
                       type="text"
+                      disabled
                       margin="normal"
                       onChange={e => {
                         handleChange(e);
@@ -558,7 +517,7 @@ const RegisterStudent = () => {
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="address"
-                      label="Dirección de residencia"
+                      label="Direccion de residencia"
                       variant="outlined"
                       type="text"
                       margin="normal"
@@ -582,19 +541,49 @@ const RegisterStudent = () => {
                     />
                   </Grid>
                   <Grid item md={12} xs={12}>
-                    <FormLabel>Elige una imagen de perfil: </FormLabel>
-                    <Button
-                      variant="contained"
-                      component="label"
-                      id="mg-left"
-                      startIcon={<CloudUploadIcon />}
-                    >
-                      Explorar...
-                      <input type="file" style={{ display: 'none' }} />
-                    </Button>
+                    <div className="custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="img-file"
+                        onChange={e => {
+                          setFileImage(e.target.files[0]);
+                        }}
+                        required
+                        disabled
+                      />
+                      <label className="custom-file-label">
+                        Elije una imagen de perfil
+                      </label>
+                      {/* TODO IMG */}
+                    </div>
                   </Grid>
                 </Grid>
 
+                {/* <TextField
+                  id="personal_code"
+                  label="Codigo estudiante"
+                  variant="outlined"
+                  type="number"
+                  margin="normal"
+                  onChange={e => {
+                    handleChange(e);
+                    handleChangePersonalCode(e);
+                  }}
+                  error={Boolean(touched.personal_code && errors.personal_code)}
+                  helperText={touched.personal_code && errors.personal_code}
+                  onBlur={handleBlur}
+                  value={values.personal_code}
+                  required
+                  fullWidth
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <CodeRoundedIcon />
+                      </InputAdornment>
+                    )
+                  }}
+                /> */}
                 <Divider className={clases.dividerFullWidth} />
 
                 <Typography
@@ -602,10 +591,196 @@ const RegisterStudent = () => {
                   display="block"
                   variant="caption"
                 >
-                  Informacion matrícula
+                  Informacion matricula
                 </Typography>
 
                 <Grid container spacing={2}>
+                <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Titulo academico"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Institucion"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Pais de la institucion"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Ciudad de la institucion"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Ciudad de procedencia"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address} //Todo ciudad
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Departamento de procedencia"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address} //Todo departamento
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  
+                <Grid item md={6} xs={12}>
+                    <TextField
+                      id="address"
+                      label="Programa"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      disabled
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAddress(e);
+                      }}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
+                      onBlur={handleBlur}
+                      value={values.address} //Todo Programa
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <HomeRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="dedicationType"
@@ -620,51 +795,19 @@ const RegisterStudent = () => {
                       onBlur={handleBlur}
                       value={dedicationType}
                       required
+                      disabled
                       fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <ListIcon />
+                          </InputAdornment>
+                        )
+                      }}
                     >
                       <MenuItem value="1">Completo</MenuItem>
                       <MenuItem value="2">Tiempo parcial</MenuItem>
                     </TextField>
-                  </Grid>
-
-                  <Grid item md={6} xs={12}>
-                    <SearchProgramOrAdd callback={getProgram} />
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <SearchTeacher callback={getDirector} />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <TextField
-                      id="academicTitle"
-                      label="Título Académico: "
-                      variant="outlined"
-                      type="text"
-                      margin="normal"
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeAcademicTitle(e);
-                      }}
-                      error={Boolean(
-                        touched.academicTitle && errors.academicTitle
-                      )}
-                      helperText={touched.academicTitle && errors.academicTitle}
-                      onBlur={handleBlur}
-                      value={values.academicTitle}
-                      required
-                      fullWidth
-                    />
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <SearchTeacherOrAdd callback={getCodirector1} />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <SearchTeacherOrAdd callback={getCodirector2} />
                   </Grid>
                 </Grid>
 
@@ -677,7 +820,7 @@ const RegisterStudent = () => {
                   fullWidth
                   className={clases.button}
                 >
-                  Crear
+                  Actualizar
                 </Button>
               </form>
               <AlertView open={open} typeAlert={typeAlert} message={message} />
@@ -688,4 +831,3 @@ const RegisterStudent = () => {
     </Container>
   );
 };
-export default RegisterStudent;
