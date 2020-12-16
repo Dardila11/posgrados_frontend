@@ -49,6 +49,7 @@ const CreateEvaluation = props => {
       observations: values.observations,
       is_save: isSaveed
     }
+    console.log(jsonValues);
     Api.postCoordinatorEvaluations(jsonValues)
       .then(res => {
         if (res.status == 201) {
