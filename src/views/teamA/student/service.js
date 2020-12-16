@@ -16,6 +16,10 @@ export const registerProject = (registro) =>{
         const url= `${API_URL}/project/`;
         return axios.post(url,registro);
     }
+export const getProject = () =>{
+        const url= `${API_URL}/project/`;
+        return axios.get(url);
+    }
 export const registerAgreement = (registro) =>{
      console.log("axios -",registro)
     const url= `${API_URL}/agreement/`;
@@ -34,8 +38,12 @@ export const getUserLogin = () =>{
     const url= `${API_URL}/student/1`;
     return axios.get(url);
 }
+export const getStudents = () =>{
+    const url= `${API_URL}/student/`;
+    return axios.get(url);
+}
 export const UpdateStudentService = (registro) =>{
-    const url= `${API_URL}/student/${registro.id}`;
+    const url= `${API_URL}/updatestudent/${registro.id}`;
     return axios.put(url,registro);
 }
 export const UpdateProjectService = (registro) =>{
@@ -48,7 +56,7 @@ export const GetGrantsService = () =>{
     return axios.get(url);
 }
 export const UpdateGrantService = (registro) =>{
-    const url= `${API_URL}/grant/${registro.id}/`;
+    const url= `${API_URL}/updategrant/${registro.id}`;
     return axios.put(url,registro);
 }
 export const GetAgreementsService = () =>{
@@ -56,6 +64,13 @@ export const GetAgreementsService = () =>{
     return axios.get(url);
 }
 export const UpdateAgreementService = (registro) =>{
-    const url= `${API_URL}/agreement/${registro.id}/`;
+    const url= `${API_URL}/updateagreement/${registro.id}`;
     return axios.put(url,registro);
 }
+export const UpdateUserService = (registro) =>{
+    const url= `${API_URL}/api/auth/consult_user_id/${registro.id}`;
+    return axios.put(url,registro);
+}
+
+
+

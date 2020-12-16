@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import DialogForm from './DialogForm';
+import CreateProgramDialog from './CreateProgramDialog';
 import { Formik } from 'formik';
+import './styles.css';
 import {
   Box,
   Button,
@@ -11,62 +14,15 @@ import {
   Grid,
   Card,
   CardContent,
-  InputLabel,
-  Select,
-  MenuItem,
-  makeStyles
+  makeStyles,
+  Divider,
+  MenuItem
 } from '@material-ui/core';
 import Page from 'src/components/Page';
-import { CenterFocusStrong, Height, BathtubRounded } from '@material-ui/icons';
-import { unstable_batchedUpdates } from 'react-dom';
-import './styles.css';
+import { registerStudent } from './service';
+import { AlertView } from 'src/components/Alert';
+import { SearchUser } from 'src/views/teamd/Search/searchUser';
 
-const typeDedications = [
-  {
-    value: 'exclusive',
-    label: 'Exclusiva'
-  },
-  {
-    value: 'partTime',
-    label: 'Tiempo parcial'
-  }
-];
-const states = [
-  {
-    value: 'active',
-    label: 'Activo'
-  },
-  {
-    value: 'inactive',
-    label: 'Inactivo'
-  },
-  {
-    value: 'retired',
-    label: 'Retirado'
-  },
-  {
-    value: 'graduade',
-    label: 'Graduado'
-  },
-  {
-    value: 'balanced',
-    label: 'Puto inutil'
-  }
-];
-const academicHelp = [
-  {
-    value: 'scholarship',
-    label: 'Beca'
-  },
-  {
-    value: 'Agreement',
-    label: 'Convenio'
-  },
-  {
-    value: 'none',
-    label: 'Ninguno'
-  }
-];
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -80,75 +36,83 @@ const useStyles = makeStyles(theme => ({
     paddingTop: 4,
     paddingBottom: 2,
     height: 90
+  },
+  dividerFullWidth: {
+    margin: `10px 0 0 ${theme.spacing(1)}px`
   }
 }));
 
 const RegisterStudentView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [typeAlert, setTypeAlert] = useState('success');
+  const [message, setMessage] = useState('');
+  const [program, setProgram] = useState('');
 
+  const [dedicationType, setDedicationType] = useState('');
+  const [usuario, setusuario] = useState('');
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const getUser = id => {
+    setusuario(id);
+  };
+
+  const getProgram = id => {
+    setProgram(id);
+  };
+
+  const handleChangeDedicationType = e => {
+    setDedicationType(e.target.value);
+  };
+
+  const handleSubmitRegister = e => {
+    setOpen(false);
+    registerStudent({
+      dedication: dedicationType,
+      user: usuario,
+      program: program,
+      is_active: true
+    })
+      .then(result => {
+        setOpen(true);
+        setTypeAlert('success');
+        setMessage('Estudiante creado correctamente');
+      })
+
+      .catch(() => {
+        setOpen(true);
+        setTypeAlert('error');
+        setMessage('Estudiante creado incorrectamente');
+      });
+  };
+  const handleSubmit = event => {
+    event.preventDefault();
+    handleSubmitRegister();
+  };
   return (
     <Page className={classes.root} title="Registrar estudiante">
       <Box display="flex" flexDirection="column" justifyContent="center">
         <Container maxWidth="md">
           <Formik
             initialValues={{
-              identification: '',
-              code: '',
-              names: '',
-              lastnames: '',
-              email: '',
-              program: '',
-              admissionDate: '',
-              enrollmentDate: '',
-              phone: '',
-              address: '',
-              academicTitle: '',
-              institution: '',
-              institutionCity: '',
-              institutionCountry: '',
-              provenanceDepartament: '',
-              dedicationType: '',
-              stateStudent: '',
-              scholarshipAgreement: '',
-              director: '',
-              coDirectors: '',
-              investigationGroup: ''
+              program: ''
             }}
             validationSchema={Yup.object().shape({
-              identification: Yup.string().required('Debe ingresar un código'),
-              code: Yup.string().required('Debe ingresar un código'),
-              names: Yup.string().required('Debe ingresar nombres'),
-              lastnames: Yup.string().required('Debe ingresar apellidos'),
-              email: Yup.string()
-                .email('Debe ingresar un email válido')
-                .max(255)
-                .required('Debe ingresar un email'),
               program: Yup.string().required('Debe ingresar el programa'),
               admissionDate: Yup.date().required(
                 'Debe ingresar una fecha de admisión'
-              ),
-              enrollmentDate: Yup.date().required(
-                'Debe ingresar una fecha de matrícula'
-              ),
-              phone: Yup.number()
-                .required('Debe ingresar un teléfono')
-                .min(6, 'Ingrese un teléfonoc on mínimo 6 caracteres'),
-              address: Yup.string().required('Debe ingresar una dirección'),
-              dedicationType: Yup.string().required(
-                'Debe seleccionar el tipo de dedicación'
-              ),
-              studentState: Yup.string().required(
-                'Debe seleccionar el estado del estudiante'
-              ),
-              scholarshipAgreement: Yup.string().required(
-                'Debe seleccionar si tiene una beca o convenio'
-              ),
-              director: Yup.string().required('Debe ingresar un director'),
-              coDirectors: Yup.string().required('Debe ingresar un codirector'),
-              investigationGroup: Yup.string().required(
-                'Debe ingresar un grupo de investigación'
               )
+              // enrollmentDate: Yup.date().required('Debe ingresar una fecha de matrícula'),
+
+              //dedicationType: Yup.string().required('Debe seleccionar el tipo de dedicación'),
             })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
@@ -158,7 +122,6 @@ const RegisterStudentView = () => {
               errors,
               handleBlur,
               handleChange,
-              handleSubmit,
               isSubmitting,
               touched,
               values
@@ -175,340 +138,64 @@ const RegisterStudentView = () => {
                         gutterBottom
                         variant="body2"
                       >
-                        Registre un nuevo estudiante
+                        Los campos con * son obligatorios
                       </Typography>
                     </Box>
-                    <TextField
-                      error={Boolean(
-                        touched.identification && errors.identification
-                      )}
-                      fullWidth
-                      helperText={
-                        touched.identification && errors.identification
-                      }
-                      label="Identificación"
-                      margin="normal"
-                      name="identification"
-                      required
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      type="number"
-                      value={values.identification}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.code && errors.code)}
-                      fullWidth
-                      helperText={touched.code && errors.code}
-                      label="Código"
-                      margin="normal"
-                      name="code"
-                      required
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      type="number"
-                      value={values.code}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.names && errors.names)}
-                      fullWidth
-                      helperText={touched.names && errors.names}
-                      label="Nombres"
-                      margin="normal"
-                      name="names"
-                      required
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.names}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.lastnames && errors.lastnames)}
-                      fullWidth
-                      helperText={touched.lastnames && errors.lastnames}
-                      label="Apellidos"
-                      margin="normal"
-                      name="lastnames"
-                      required
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.lastnames}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.email && errors.email)}
-                      fullWidth
-                      helperText={touched.email && errors.email}
-                      label="E-mail"
-                      margin="normal"
-                      name="email"
-                      required
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      type="email"
-                      value={values.email}
-                      variant="outlined"
-                    />
-                    <Grid container spacing={3}>
-                      <Grid item md={10}>
+
+                    <Divider />
+
+                    <Typography
+                      className={classes.dividerFullWidth}
+                      color="textSecondary"
+                      display="block"
+                      variant="caption"
+                    >
+                      Información matrícula
+                    </Typography>
+
+                    <Grid container spacing={2}>
+                      <Grid item md={6} xs={12}>
+                        <Button
+                          variant="contained"
+                          onClick={handleClickOpen}
+                          id="bt"
+                        >
+                          Seleccionar programa
+                        </Button>
+                      </Grid>
+                      <DialogForm
+                        title="Seleccione un Programa"
+                        open={open}
+                        handleClose={handleClose}
+                        handleOpen={handleClickOpen}
+                        component={<CreateProgramDialog />}
+                      />
+
+                      <Grid item md={6} xs={12}>
                         <TextField
-                          error={Boolean(touched.program && errors.program)}
-                          fullWidth
-                          helperText={touched.program && errors.program}
-                          label="Programa"
+                          id="dedicationType"
+                          label="Tipo dedicación"
+                          variant="outlined"
+                          select
                           margin="normal"
-                          name="program"
+                          onChange={e => {
+                            handleChange(e);
+                            handleChangeDedicationType(e);
+                          }}
+                          onBlur={handleBlur}
+                          value={dedicationType}
                           required
-                          type="search"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.program}
-                          variant="outlined"
-                        />
-                      </Grid>
-                      <Box>
-                        <Grid item xs={2}>
-                          <Button
-                            id="btAdd1"
-                            classname={classes.BtmCreate}
-                            color="primary"
-                            variant="contained"
-                            margin="normal"
-                            direction="row"
-                            size="large"
-                            paddingTop="4px"
-                          >
-                            Crear
-                          </Button>
-                        </Grid>
-                      </Box>
-                    </Grid>
-                    <TextField
-                      error={Boolean(
-                        touched.admissionDate && errors.admissionDate
-                      )}
-                      fullWidth
-                      helperText={touched.admissionDate && errors.admissionDate}
-                      id="date"
-                      label="Fecha de adimisión"
-                      margin="normal"
-                      name="admissionDate"
-                      type="date"
-                      required
-                      defaultValue="2017-05-24"
-                      className={classes.textField}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.admissionDate}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(
-                        touched.enrollmentDate && errors.enrollmentDate
-                      )}
-                      fullWidth
-                      helperText={
-                        touched.enrollmentDate && errors.enrollmentDate
-                      }
-                      id="date"
-                      label="Fecha de matricula"
-                      margin="normal"
-                      name="enrollmentDate"
-                      type="date"
-                      required
-                      defaultValue="2017-05-24"
-                      className={classes.textField}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.enrollmentDate}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.phone && errors.phone)}
-                      fullWidth
-                      helperText={touched.phone && errors.phone}
-                      label="Teléfono"
-                      margin="normal"
-                      name="phone"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      type="number"
-                      value={values.phone}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.address && errors.address)}
-                      fullWidth
-                      helperText={touched.address && errors.address}
-                      label="Dirección"
-                      margin="normal"
-                      name="address"
-                      required
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.address}
-                      variant="outlined"
-                    />
-
-                    <TextField
-                      fullWidth
-                      label="Tipo dedicación"
-                      name="dedicationType"
-                      onChange={handleChange}
-                      required
-                      select
-                      margin="normal"
-                      required
-                      SelectProps={{ native: true }}
-                      value={values.state}
-                      variant="outlined"
-                    >
-                      {typeDedications.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </TextField>
-                    <TextField
-                      fullWidth
-                      label="Estado"
-                      name="state"
-                      margin="normal"
-                      onChange={handleChange}
-                      required
-                      select
-                      SelectProps={{ native: true }}
-                      value={values.state}
-                      variant="outlined"
-                    >
-                      {states.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </TextField>
-                    <TextField
-                      fullWidth
-                      label="Ayuda"
-                      name="scholarshipAgreement"
-                      margin="normal"
-                      onChange={handleChange}
-                      select
-                      SelectProps={{ native: true }}
-                      value={values.scholarshipAgreement}
-                      variant="outlined"
-                    >
-                      {academicHelp.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </TextField>
-                    <Grid container spacing={1}>
-                      <Grid item md={10} xs={2}>
-                        <TextField
-                          error={Boolean(touched.director && errors.director)}
                           fullWidth
-                          helperText={touched.director && errors.director}
-                          label="Director"
-                          margin="normal"
-                          name="director"
-                          type="search"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.director}
-                          variant="outlined"
-                        />
-                      </Grid>
-                      <Grid item xs={10} xs={2}>
-                        <Box className={classes.BtmCreate}>
-                          <Button
-                            color="primary"
-                            variant="contained"
-                            id="btAdd"
-                          >
-                            Crear
-                          </Button>
-                        </Box>
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={1}>
-                      <Grid item xs={10}>
-                        <TextField
-                          error={Boolean(
-                            touched.coDirectors && errors.coDirectors
-                          )}
-                          fullWidth
-                          helperText={touched.coDirectors && errors.coDirectors}
-                          label="Co-Directores"
-                          margin="normal"
-                          name="coDirectors"
-                          type="search"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.coDirectors}
-                          variant="outlined"
-                        />
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Button
-                          id="btAdd"
-                          color="primary"
-                          variant="contained"
-                          margin="normal"
-                          direction="row"
-                          justify="right"
                         >
-                          Crear
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    <Grid container spacing={1}>
-                      <Grid item xs={10}>
-                        <TextField
-                          error={Boolean(
-                            touched.investigationGroup &&
-                              errors.investigationGroup
-                          )}
-                          fullWidth
-                          helperText={
-                            touched.investigationGroup &&
-                            errors.investigationGroup
-                          }
-                          label="Grupo de investigacion"
-                          margin="normal"
-                          name="investigationGroup"
-                          type="search"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value={values.investigationGroup}
-                          variant="outlined"
-                        />
-                      </Grid>
-                      <Grid item xs={2}>
-                        <Button
-                          id="btAdd"
-                          color="primary"
-                          variant="contained"
-                          margin="normal"
-                          direction="row"
-                          justify="right"
-                        >
-                          Crear
-                        </Button>
+                          <MenuItem value="1">Completo</MenuItem>
+                          <MenuItem value="2">Tiempo parcial</MenuItem>
+                        </TextField>
                       </Grid>
                     </Grid>
 
+                    <Divider />
                     <Box my={2}>
                       <Button
-                        id="btAdd"
                         color="primary"
                         disabled={isSubmitting}
                         fullWidth
@@ -520,6 +207,11 @@ const RegisterStudentView = () => {
                       </Button>
                     </Box>
                   </form>
+                  <AlertView
+                    open={open}
+                    typeAlert={typeAlert}
+                    message={message}
+                  />
                 </CardContent>
               </Card>
             )}

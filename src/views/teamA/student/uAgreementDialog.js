@@ -74,7 +74,6 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
             "period_academic": periodicAcademic,
             "percentage_discount": percentage_discount,
             "observation": observation,
-            "student": 1 //TODO STUDIANTE ACTUAL
         }).then(alert("Ejecutado"))
     }
 
@@ -98,13 +97,19 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
                       value={long}
                       variant="outlined"
         />
-        <TextField
+            <TextField
                       fullWidth
-                      label="Año de la beca"
+                      id="endDate"
+                      label="agrement_date"
                       margin="normal"
-                      type='number'
-                      name="agreemeent_date"
-                      onChange={e => {
+                      name="endDate"
+                      type="date"
+                      required
+
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      onChangeCapture={e => {
                         handleChangeAgreementDate(e.target.value);
                       }}
                       value={agreement_date}

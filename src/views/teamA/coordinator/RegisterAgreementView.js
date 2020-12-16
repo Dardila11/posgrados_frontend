@@ -1,133 +1,134 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import { TextareaAutosize } from '@material-ui/core';
-import { Card } from '@material-ui/core';
-import { CardContent } from '@material-ui/core';
-import { FormLabel } from '@material-ui/core';
 import {
   Box,
   Button,
   Container,
   TextField,
   Typography,
+  Card,
+  CardContent,
   makeStyles
 } from '@material-ui/core';
 import Page from 'src/components/Page';
+import { SearchStudent } from '../search/searchStudent';
+import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
+import { registerAgreement } from './service';
+import { AlertView } from 'src/components/Alert';
+import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
+import { registerGrant } from './service';
 
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
-
+    height: '100%',
     paddingBottom: theme.spacing(3),
-    paddingTop: theme.spacing(3)
+    paddingTop: theme.spacing(3),
+    paddingBlockEnd: theme.spacing(3)
   }
 }));
-const discountPercentageOpt = [
-  {
-    value: '10',
-    label: '10%'
-  },
-  {
-    value: '20',
-    label: '20%'
-  },
-  {
-    value: '30',
-    label: '30%'
-  },
-  {
-    value: '40',
-    label: '40%'
-  },
-  {
-    value: '50',
-    label: '50%'
-  },
-  {
-    value: '60',
-    label: '60%'
-  },
-  {
-    value: '70',
-    label: '70%'
-  },
-  {
-    value: '80',
-    label: '80%'
-  },
-  {
-    value: '90',
-    label: '90%'
-  },
-  {
-    value: '100',
-    label: '100%'
-  }
-];
-
-const agreementSemesterOpt = [
-  {
-    value: '1',
-    label: 'I'
-  },
-  {
-    value: '2',
-    label: 'II'
-  }
-];
-
-const agreementYearOpt = [
-  {
-    value: '2018',
-    label: '2018'
-  },
-  {
-    value: '2019',
-    label: '2019'
-  },
-  {
-    value: '2020',
-    label: '2020'
-  },
-  {
-    value: '2021',
-    label: '2021'
-  },
-  {
-    value: '2022',
-    label: '2022'
-  }
-];
 
 const RegisterAgreementView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [typeAlert, setTypeAlert] = useState('success');
+  const [message, setMessage] = useState('');
+
+  const [observation, setobservation] = useState('');
+  const [period, setperiod] = useState('');
+
+  const [percentage, setpercentage] = useState('');
+  const [student, setstudent] = useState('');
+  const [agreementDate, setagreementDate] = useState('');
+  const [long, setlong] = useState('');
+  const [startDate, setstartDate] = useState('');
+  const [endDate, setendDate] = useState('');
+
+  const getStudent = id => {
+    setstudent(id);
+  };
+
+  const handleChangeObservation = e => {
+    setobservation(e);
+  };
+  const handleChangeStartDate = e => {
+    setstartDate(e);
+  };
+  const handleChangeEndDate = e => {
+    setendDate(e);
+  };
+  const handleChangeLong = e => {
+    setlong(e);
+  };
+  const handleChangePeriod = e => {
+    setperiod(e);
+  };
+  const handleChangePercentage = e => {
+    setpercentage(e);
+  };
+  const handleChangeAgreementDate = e => {
+    setagreementDate(e);
+  };
+
+  const handleSubmitRegister = e => {
+    registerAgreement({
+      observation: observation,
+      percentage_discount: percentage,
+
+      is_active: true,
+      period_academic: period,
+      student: student,
+      agreement_date: agreementDate,
+      start_date: startDate,
+      end_date: endDate,
+      long : long
+    })
+      .then(result => {
+        setOpen(true);
+        setTypeAlert('success');
+        setMessage('Convenio creado correctamente');
+      })
+
+      .catch(() => {
+        setOpen(true);
+        setTypeAlert('error');
+        setMessage('Convenio creado incorrectamente');
+      });
+  };
+  const handleSubmit = event => {
+    event.preventDefault();
+    handleSubmitRegister();
+  };
 
   return (
-    <Page className={classes.root} title="Registrar convenio">
+    <Page className={classes.root} title="Registrar proyecto de investigacion">
       <Box
         display="flex"
         flexDirection="column"
         height="100%"
         justifyContent="center"
       >
-        <Container maxWidth="md">
+        <Container maxWidth="sm">
           <Formik
             initialValues={{
-              agreementNumber: '',
-              agreementYear: '',
-              agreementSemester: '',
-              discountPercentage: '',
-              description: '',
-              document: ''
+              title: '',
+              area: '',
+              lineResearch: '',
+              objetive: ''
+              //generalObjetive: '',
+              //specificObjetive: ''
             }}
             validationSchema={Yup.object().shape({
-              agreementNumber: Yup.number().required(
-                'Debe ingresar un número para el convenio'
-              ),
-              description: Yup.string()
+              observation: Yup.string().required('Observaciones requerida'),
+              //area: Yup.string().required('Area de conocimiento requerida'),
+              period: Yup.string().required('Periodo requerido'),
+              percentage: Yup.string().required('Porcentaje requerido')
+
+              // generalObjective: Yup.string().required('Objetivo general requerido'),
+              // specificObjective: Yup.string().required('Objetivos especificos requeridos')
             })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
@@ -137,131 +138,172 @@ const RegisterAgreementView = () => {
               errors,
               handleBlur,
               handleChange,
-              handleSubmit,
+
               isSubmitting,
               touched,
               values
             }) => (
-              <Card className={classes.RegisterAgreement}>
+              <Card className={classes.RegisterProjectView}>
                 <CardContent>
                   <form onSubmit={handleSubmit}>
                     <Box mb={3}>
                       <Typography color="textPrimary" variant="h2">
-                        Registrar convenio
+                        Crear nuevo Convenio
                       </Typography>
                       <Typography
                         color="textSecondary"
                         gutterBottom
                         variant="body2"
                       >
-                        Registre un convenio
+                        Los campos con * son obligatorios
                       </Typography>
                     </Box>
+                    <SearchStudent callback={getStudent} />
+
+                    {/* <TextField
+                    error={Boolean(touched.lineResearch && errors.lineResearch)}
+                    fullWidth
+                    helperText={touched.lineResearch && errors.lineResearch}
+                    label="Linea de investigacion"
+                    margin="normal"
+                    name="lineResearch"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.lineResearch}
+                    variant="outlined"
+                  /> */}
+
                     <TextField
-                      error={Boolean(
-                        touched.agreementNumber && errors.agreementNumber
-                      )}
+                      error={Boolean(touched.period && errors.period)}
                       fullWidth
-                      helperText={
-                        touched.agreementNumber && errors.agreementNumber
-                      }
-                      label="Número de convenio"
+                      helperText={touched.period && errors.period}
+                      label="Periodo academico (aaaa.semestre)"
                       margin="normal"
-                      name="agreementNumber"
+                      name="period"
                       onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.agreementNumber}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangePeriod(e.target.value);
+                      }}
+                      value={values.period}
                       variant="outlined"
                     />
 
                     <TextField
-                      error={Boolean(
-                        touched.institutionName && errors.institutionName
-                      )}
-                      fullWidth
-                      helperText={
-                        touched.institutionName && errors.institutionName
-                      }
-                      label="Nombre de la institución"
-                      margin="normal"
-                      name="institutionName"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.institutionName}
+                      id="percentage"
+                      label="Porcentaje de descuento"
                       variant="outlined"
+                      type="number"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangePercentage(e.target.value);
+                      }}
+                      error={Boolean(touched.percentage && errors.percentage)}
+                      helperText={touched.percentage && errors.percentage}
+                      onBlur={handleBlur}
+                      value={values.percentage}
+                      required
+                      fullWidth
                     />
                     <TextField
+                      id="long"
+                      label="Tiempo duracion (meses)"
+                      variant="outlined"
+                      type="number"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeLong(e.target.value);
+                      }}
+                      error={Boolean(touched.long && errors.long)}
+                      helperText={touched.long && errors.long}
+                      onBlur={handleBlur}
+                      value={values.long}
+                      required
                       fullWidth
+                    />
+                    <TextField
+                      id="agreementDate"
                       label="Año del acuerdo"
-                      name="agreementYear"
-                      margin="normal"
-                      onChange={handleChange}
-                      select
-                      SelectProps={{ native: true }}
-                      value={values.agreementYear}
                       variant="outlined"
-                    >
-                      {agreementYearOpt.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </TextField>
-                    <TextField
-                      fullWidth
-                      label="Año del acuerdoPeriodo"
-                      name="agreementSemester"
+                      type="number"
                       margin="normal"
-                      onChange={handleChange}
-                      select
-                      SelectProps={{ native: true }}
-                      value={values.agreementSemester}
-                      variant="outlined"
-                    >
-                      {agreementSemesterOpt.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </TextField>
-
-                    <TextField
-                      fullWidth
-                      label="Porcentaje de descuento: "
-                      name="discountPercentage"
-                      margin="normal"
-                      onChange={handleChange}
-                      select
-                      SelectProps={{ native: true }}
-                      value={values.discountPercentage}
-                      variant="outlined"
-                    >
-                      {discountPercentageOpt.map(option => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </TextField>
-
-                    <TextField
-                      error={Boolean(touched.description && errors.description)}
-                      fullWidth
-                      helperText={touched.description && errors.description}
-                      label="Descripción"
-                      margin="normal"
-                      name="description"
-                      multiline
-                      rows={4}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAgreementDate(e.target.value);
+                      }}
+                      error={Boolean(touched.agreementDate && errors.agreementDate)}
+                      helperText={touched.agreementDate && errors.agreementDate}
                       onBlur={handleBlur}
-                      onChange={handleChange}
-                      value={values.description}
+                      value={values.agreementDate}
+                      required
+                      fullWidth
+                    />
+
+                    <TextField
+                      error={Boolean(touched.startDate && errors.startDate)}
+                      fullWidth
+                      helperText={touched.startDate && errors.startDate}
+                      id="agreementDate"
+                      label="Fecha de inicio"
+                      margin="normal"
+                      name="startDate"
+                      type="date"
+                      required
+                      defaultValue="2017-05-24"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      onBlur={handleBlur}
+                      onChangeCapture={e => {
+                        handleChangeStartDate(e.target.value);
+                        handleChange(e);
+                      }}
+                      value={values.startDate}
                       variant="outlined"
                     />
-                    <FormLabel>Justificación: </FormLabel>
-                    <Button variant="contained" component="label">
-                      Explorar...
-                      <input type="file" style={{ display: 'none' }} />
-                    </Button>
+                    <TextField
+                      error={Boolean(touched.endDate && errors.endDate)}
+                      fullWidth
+                      helperText={touched.endDate && errors.endDate}
+                      id="endDate"
+                      label="Fecha de fin"
+                      margin="normal"
+                      name="endDate"
+                      type="date"
+                      required
+                      defaultValue="2017-05-24"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      onBlur={handleBlur}
+                      onChangeCapture={e => {
+                        handleChangeEndDate(e.target.value);
+                        handleChange(e);
+                      }}
+                      value={values.endDate}
+                      variant="outlined"
+                    />
+                    <TextField
+                      error={Boolean(touched.observation && errors.observation)}
+                      fullWidth
+                      helperText={touched.observation && errors.observation}
+                      label="Observaciones"
+                      margin="normal"
+                      name="observation"
+                      onBlur={handleBlur}
+                      multiline
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeObservation(e.target.value);
+                      }}
+                      value={values.observation}
+                      variant="outlined"
+                    />
+
 
                     <Box my={2}>
                       <Button
@@ -272,20 +314,15 @@ const RegisterAgreementView = () => {
                         type="submit"
                         variant="contained"
                       >
-                        Regresar
-                      </Button>
-                      <Button
-                        color="primary"
-                        disabled={isSubmitting}
-                        fullWidth
-                        size="large"
-                        type="submit"
-                        variant="contained"
-                      >
-                        Crear
+                        Registrar
                       </Button>
                     </Box>
                   </form>
+                  <AlertView
+                    open={open}
+                    typeAlert={typeAlert}
+                    message={message}
+                  />
                 </CardContent>
               </Card>
             )}

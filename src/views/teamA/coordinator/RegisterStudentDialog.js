@@ -15,18 +15,13 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 
 import DialogForm from './DialogForm';
-import Autocomplete, {
-  createFilterOptions
-} from '@material-ui/lab/Autocomplete';
 import CreateProgramDialog from './CreateProgramDialog';
-
 import RegisterDirectorDialog from './RegisterDirectorDialog';
 import AddCodirectorDialog from './AddCodirectorDialog';
 import React, { useState } from 'react';
 import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
-import { registerStudent } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
-
+import './styles.css';
 //ICONS
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import InputAdornment from '@material-ui/core/InputAdornment';
@@ -37,17 +32,11 @@ import FormatListNumberedRoundedIcon from '@material-ui/icons/FormatListNumbered
 import ContactsRoundedIcon from '@material-ui/icons/ContactsRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
-import { FormLabel } from '@material-ui/core';
 
-import { SearchTeacherOrAdd } from 'src/views/teamA/search/searchTeacherOrAdd';
-import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
-import { SearchProgramOrAdd } from 'src/views/teamA/search/searchProgramOrAdd';
-import { SearchProgram } from 'src/views/teamA/search/searchProgram';
+import { SearchProgram } from 'src/views/teama/search/searchProgram';
 import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
 import RegisterAgreementDialog from './RegisterAgreementDialog';
-
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -76,14 +65,10 @@ const RegisterStudent = () => {
   const clases = useStyles();
 
   const [program, setProgram] = useState('');
-  const [director, setDirector] = useState('');
-  const [codirector1, setCodirector1] = useState('');
-  const [codirector2, setCodirector2] = useState('');
 
   const [dedicationType, setDedicationType] = useState('');
 
   const [username, setUsername] = useState('a');
-  const [academicTitle, setAcademicTitle] = useState('a');
   const [password, setPassword] = useState('1');
   const [firstName, setFirstName] = useState('123');
   const [lastName, setLastName] = useState('133');
@@ -98,21 +83,8 @@ const RegisterStudent = () => {
   const [is_proffessor, setIs_proffessor] = useState(0);
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({});
-
   const getProgram = id => {
     setProgram(id);
-  };
-
-  const getDirector = id => {
-    setDirector(id);
-  };
-
-  const getCodirector1 = id => {
-    setCodirector1(id);
-  };
-
-  const getCodirector2 = id => {
-    setCodirector2(id);
   };
 
   const handleChangeDedicationType = e => {
@@ -144,9 +116,6 @@ const RegisterStudent = () => {
   };
   const handleChangeAddress = e => {
     setAddress(e.target.value);
-  };
-  const handleChangeAcademicTitle = e => {
-    setAcademicTitle(e.target.value);
   };
 
   const handleChangeRole = event => {
@@ -206,12 +175,12 @@ const RegisterStudent = () => {
   const handleCreateUser = e => {
     e.preventDefault();
 
-    // console.log(fileImage);
-    // const form_data = new FormData();
-    // form_data.append('image_file', fileImage, fileImage.name);
-    // form_data.append('title', 'image');
-    // form_data.append('content', fileImage.content);
-    // console.log(firstName);
+    console.log(fileImage);
+    const form_data = new FormData();
+    form_data.append('image_file', fileImage, fileImage.name);
+    form_data.append('title', 'image');
+    form_data.append('content', fileImage.content);
+    console.log(firstName);
     console.log(lastName);
     console.log(username);
     console.log(password);
@@ -219,31 +188,25 @@ const RegisterStudent = () => {
     console.log(typeId);
     console.log(personal_id);
     console.log(personal_code);
-    //console.log(form_data);
+    console.log(form_data);
     console.log(telephone);
     console.log(address);
     console.log(is_proffessor);
 
-    registerStudent({
-      user: {
-        first_name: firstName,
-        last_name: lastName,
-        username: username,
-        password: password,
-        email: email,
-        type_id: typeId,
-        personal_id: personal_id,
-        personal_code: personal_code,
-        //photo: null,
-        telephone: telephone,
-        address: address,
-
-        is_proffessor: false,
-        is_student: true
-      },
-      dedication: dedicationType,
-      program: program,
-      academic_title: academicTitle
+    CreateUserService({
+      first_name: firstName,
+      last_name: lastName,
+      username: username,
+      password: password,
+      email: email,
+      type_id: typeId,
+      personal_id: personal_id,
+      personal_code: personal_code,
+      photo: null,
+      telephone: telephone,
+      address: address,
+      is_proffessor: false,
+      is_student: true
     })
       .then(() => {
         setOpen(true);
@@ -272,43 +235,41 @@ const RegisterStudent = () => {
           photo: '',
           telephone: '',
           address: '',
-          academicTitle: '',
           role: '1'
         }}
         validationSchema={Yup.object().shape({
           username: Yup.string()
             .max(255)
-            .required('Nombre de usuario requerido')
-            .min(4, 'El nombre de usuario no puede ser tan corto'),
+            .required('username is required'),
           password: Yup.string()
             .max(255)
-            .required('Contraseña requerida')
-            .min(6, 'La contraseña debe tene mínimo 6 caracteres'), //TODO validation password
+            .required('password is required'), //TODO validation password
           firstName: Yup.string()
             .max(255)
-            .required('Nombres requeridos'),
+            .required('first name is required'),
           lastName: Yup.string()
             .max(255)
-            .required('Apellidos requeridos'),
+            .required('first name is required'),
           email: Yup.string()
-            .email('Ingrese un correo válido')
-            .required('Email requerido'),
+            .email()
+            .required('first name is required'),
           //typeId = Yup.string.max(255).required('first name is required'), //TODO required combo box
-          personal_id: Yup.string().required(
-            'Indentificacion válida requerida'
-          ),
+          personal_id: Yup.string()
+            .max(255)
+            .required('identification is required'),
           personal_code: Yup.string()
             .max(255)
-            .required('Codigo del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
-          photo: Yup.string().max(255),
-          telephone: Yup.string().min(
-            6,
-            'El teléfono debe tener mínimo 6 caracteres'
+            .required('personal code is required'), //TODO debe ser generado en el backend automaticamente
+          photo: Yup.string()
+            .max(255)
+            .required('first name is required'), //TODO file image
+          telephone: Yup.string().matches(
+            phoneRegExp,
+            'Phone number is not valid'
           ),
           address: Yup.string()
             .max(255)
-            .min(4, 'La dirección debe ser mínimo de 4 caracteres')
-            .required('Direccion es requerida')
+            .required('Address is required')
           //TODO combo box
         })}
         onSubmit={() => {}}
@@ -465,7 +426,7 @@ const RegisterStudent = () => {
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="TypeId"
-                      label="Tipo de identificación"
+                      label="Tipo de identificacion"
                       variant="outlined"
                       select
                       margin="normal"
@@ -488,16 +449,13 @@ const RegisterStudent = () => {
                       }}
                     >
                       <MenuItem key="typeIdOption1" value="1">
-                        Cédula de ciudadanía
+                        Cedula
                       </MenuItem>
                       <MenuItem key="typeIdOption2" value="2">
-                        Cédula de extranjería
+                        Cedula extranjera
                       </MenuItem>
                       <MenuItem key="typeIdOption3" value="3">
                         Tarjeta de identidad
-                      </MenuItem>
-                      <MenuItem key="typeIdOption4" value="4">
-                        Pasaporte
                       </MenuItem>
                     </TextField>
                   </Grid>
@@ -506,7 +464,7 @@ const RegisterStudent = () => {
                       id="personal_id"
                       label="Numero de identificacion"
                       variant="outlined"
-                      type="text"
+                      type="number"
                       margin="normal"
                       onChange={e => {
                         handleChange(e);
@@ -531,7 +489,7 @@ const RegisterStudent = () => {
                     <TextField
                       label="Telefono"
                       variant="outlined"
-                      type="text"
+                      type="number"
                       margin="normal"
                       name="telephone"
                       onChange={e => {
@@ -556,7 +514,7 @@ const RegisterStudent = () => {
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="address"
-                      label="Dirección de residencia"
+                      label="Direccion de residencia"
                       variant="outlined"
                       type="text"
                       margin="normal"
@@ -580,16 +538,21 @@ const RegisterStudent = () => {
                     />
                   </Grid>
                   <Grid item md={12} xs={12}>
-                    <FormLabel>Elige una imagen de perfil: </FormLabel>
-                    <Button
-                      variant="contained"
-                      component="label"
-                      id="mg-left"
-                      startIcon={<CloudUploadIcon />}
-                    >
-                      Explorar...
-                      <input type="file" style={{ display: 'none' }} />
-                    </Button>
+                    <div className="custom-file">
+                      <input
+                        type="file"
+                        className="custom-file-input"
+                        id="img-file"
+                        onChange={e => {
+                          setFileImage(e.target.files[0]);
+                        }}
+                        required
+                      />
+                      <label className="custom-file-label">
+                        Elije una imagen de perfil
+                      </label>
+                      {/* TODO IMG */}
+                    </div>
                   </Grid>
                 </Grid>
 
@@ -600,7 +563,7 @@ const RegisterStudent = () => {
                   display="block"
                   variant="caption"
                 >
-                  Informacion matrícula
+                  Informacion matricula
                 </Typography>
 
                 <Grid container spacing={2}>
@@ -624,45 +587,109 @@ const RegisterStudent = () => {
                       <MenuItem value="2">Tiempo parcial</MenuItem>
                     </TextField>
                   </Grid>
-
                   <Grid item md={6} xs={12}>
-                    <SearchProgramOrAdd callback={getProgram} />
-                  </Grid>
-                </Grid>
-
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <SearchTeacher callback={getDirector} />
-                  </Grid>
-                  <Grid item md={6} xs={12}>
+                    <Grid item md={12} xs={12}>
                     <TextField
-                      id="academicTitle"
-                      label="Título Académico: "
+                      id=""
+                      label="Programa"
                       variant="outlined"
                       type="text"
                       margin="normal"
+                      onClick={handleClickOpen}
                       onChange={e => {
                         handleChange(e);
-                        handleChangeAcademicTitle(e);
+                        handleChangeAddress(e);
                       }}
-                      error={Boolean(
-                        touched.academicTitle && errors.academicTitle
-                      )}
-                      helperText={touched.academicTitle && errors.academicTitle}
+                      error={Boolean(touched.address && errors.address)}
+                      helperText={touched.address && errors.address}
                       onBlur={handleBlur}
-                      value={values.academicTitle}
+                      value={program}
                       required
                       fullWidth
+                      
+                    />
+                    </Grid>
+                    <DialogForm
+                      title="Seleccione un Programa"
+                      open={open}
+                      handleClose={handleClose}
+                      handleOpen={handleClickOpen}
+                      component={<CreateProgramDialog callback= {getProgram} />}
                     />
                   </Grid>
-                </Grid>
-
-                <Grid container spacing={2}>
                   <Grid item md={6} xs={12}>
-                    <SearchTeacherOrAdd callback={getCodirector1} />
+                    <Button
+                      variant="contained"
+                      onClick={handleClickOpen1}
+                      id="bt"
+                      size="small"
+                    >
+                      Registrar beca
+                    </Button>
+
+                    <DialogForm
+                      title="Registrar beca"
+                      open={open1}
+                      handleClose={handleClose1}
+                      handleOpen={handleClickOpen1}
+                      component={<RegisterSchoolarshipDialog />}
+                    />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchTeacherOrAdd callback={getCodirector2} />
+                    <Button
+                      variant="contained"
+                      onClick={handleClickOpen2}
+                      id="bt"
+                      size="small"
+                    >
+                      Registrar convenio
+                    </Button>
+
+                    <DialogForm
+                      title="Registrar convenio"
+                      open={open2}
+                      handleClose={handleClose2}
+                      handleOpen={handleClickOpen2}
+                      component={<RegisterAgreementDialog />}
+                    />
+                  </Grid>
+                  <Grid md={6} xs={12}>
+                    <Grid item md={6} xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={handleClickOpen3}
+                        id="bt"
+                        size="small"
+                      >
+                        Seleccionar director
+                      </Button>
+                    </Grid>
+                    <DialogForm
+                      title="Seleccione el director"
+                      open={open3}
+                      handleClose={handleClose3}
+                      handleOpen={handleClickOpen3}
+                      component={<RegisterDirectorDialog />}
+                    />
+                  </Grid>
+                  <Grid>
+                    <Grid item md={6} xs={12}>
+                      <Button
+                        variant="contained"
+                        onClick={handleClickOpen4}
+                        id="bt"
+                        size="small"
+                      >
+                        Agregar un Codirector
+                      </Button>
+                    </Grid>
+                    <DialogForm
+                      title="Agregar un codirector"
+                      open={open4}
+                      handleClose={handleClose4}
+                      handleOpen={handleClickOpen4}
+                      component={<AddCodirectorDialog />}
+                    />
                   </Grid>
                 </Grid>
 

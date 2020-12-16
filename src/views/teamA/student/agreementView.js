@@ -19,17 +19,10 @@ export const AgreementView = () => {
     useEffect(() => {
         GetAgreementsService().then(result => setAgreement(result.data)) //Todo actualizar result
     }, [])
-    useEffect(() => {
-      agreement.map( (agreement)=>{
-        if (agreement.student === studentLoggin) {
-            setAgreementsStudent([...agrementsStudent,agreement])
-        }
-    })
-    }, [agreement])
 
     
     // FUNCIONES
-    const link='/student/administer-profile/registerGrant'
+    const link='/student/administer-profile/registerAgreement'
     return (
       <Container>
         <Grid container spacing={3}>
@@ -46,9 +39,16 @@ export const AgreementView = () => {
           </RouterLink>
           </Grid>
           
-          {agrementsStudent && agrementsStudent.map(element => (
-            <Grid item lg={6} md={8} xs={12} key={element.id}>
-              <AgreementViewCard agreement={element}/>
+          {agreement && agreement.map(element => (
+            <Grid item lg={5} md={6} xs={8} key={element.id}>
+
+              {element.student === parseInt(localStorage.getItem("IDestudiante"))   ? (
+                <AgreementViewCard agreement={element}/>
+              ):(
+                <>
+                </>
+              )}
+              
             </Grid>
           ))}
         </Grid>

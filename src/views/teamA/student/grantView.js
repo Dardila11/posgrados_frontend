@@ -10,36 +10,17 @@ export const GrantView = () => {
 
     //Estados
     const [grants, setGrants] = useState([]) // Todos los convenios registrados
-
-    
-    const [studentLoggin, setstudentLoggin] = useState(1)   //ID de estudiante logeado actualmente 
+    const [studentLoggin, setstudentLoggin] = useState(JSON.parse(localStorage.getItem("estudiante")).id)   //ID de estudiante logeado actualmente 
     const [grantsStudent, setGrantsStudent] = useState([]) //Convenios del estudiante
 
 
     //Effect Obtener listado de convenios registrado
     useEffect(() => {
-        GetGrantsService().then(result => setGrants(result.data)) //Todo actualizar result
+      const data = async () => {GetGrantsService().then(result => setGrants(result.data))}
+      data()
     }, [])
-    useEffect(() => {
-        getGrants();
-    }, [grants])
 
-    
-    // FUNCIONES
-    //Obtener los convenios del estudiante logeado
-    const getGrants = ()=>{
-        grants.map( (grant)=>{
-            if (grant.student === studentLoggin) {
-                setGrantsStudent([...grantsStudent,grant])
-            }
-        })
-    }
-
-    //Agregar Becas
-    const addGrant=() =>{
-
-    }
-    const link='/student/administer-profile/registerAgreement'
+    const link='/student/administer-profile/registerGrant'
     return (
   
       <Container>
@@ -56,10 +37,17 @@ export const GrantView = () => {
             </Button>
           </RouterLink>
           </Grid>
-          {grantsStudent && grantsStudent.map(element => (
-            <Grid item lg={5} md={7} xs={12} key={element.id}>
-                <GrantViewCard grant={element}/>
-
+          {grants && grants.map(element => (
+            <Grid item lg={6} md={9} xs={11} key={element.id}>
+              {
+                element.student === parseInt(localStorage.getItem("IDestudiante")) ? (
+                  <GrantViewCard grant={element}/>
+                ):(
+                  <>
+                  </>
+                  )
+              }
+                
             </Grid>
 
           ))} 

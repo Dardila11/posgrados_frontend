@@ -10,6 +10,8 @@ import RegisterStudentView from './RegisterStudentView';
 import RegisterProjectView from './RegisterProjectView';
 import RegisterStudent from './RegisterStudent';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import RegisterAgreementView from './RegisterAgreementView';
+import RegisterGrantView from './RegisterGrantView';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -93,21 +95,32 @@ const AdministerStudentView = () => {
                  <Tab
                   label={
                     <>
-                      <PersonAddIcon fontSize="inherit" /> Registrar estudiante
+                      <PersonAddIcon fontSize="inherit" /> Registrar beca
                     </>
                   }
                   {...options(2)}
                 />
+                 <Tab
+                  label={
+                    <>
+                      <PersonAddIcon fontSize="inherit" /> Registrar convenio
+                    </>
+                  }
+                  {...options(3)}
+                />
               </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0}>
-              <RegisterStudentView />
+            <TabPanel value={value} index={2}>
+              <RegisterGrantView />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <RegisterProjectView/>
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            <TabPanel value={value} index={0}>
               <RegisterStudent/>
+            </TabPanel>
+            <TabPanel value={value} index={3}>
+              <RegisterAgreementView/>
             </TabPanel>
           
         </Box>

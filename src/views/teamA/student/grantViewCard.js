@@ -17,12 +17,14 @@ export const GrantViewCard = ({grant}) => {
         <Card className="border border-dark rounded mb-0">
             
             <CardContent>
-            <Typography color="textPrimary" variant="h3">Información del convenio</Typography>
+            <Typography color="textPrimary" variant="h3">Beca</Typography>
             <Box display="flex" flexDirection="column"marginTop={2}>
-                <Typography color="textPrimary" variant="h4">Nombre <Typography color="textPrimary" variant="body2">{grant.name}</Typography></Typography>
-                <Typography color="textPrimary" variant='h4'>Inicio<Typography color="textPrimary" variant="body2">{grant.start_date}</Typography></Typography>
-                <Typography color="textPrimary" variant='h4'>Fecha de vencimiento<Typography color="textPrimary" variant="body2">{grant.end_date}</Typography></Typography>
-                <Typography color="textPrimary" variant='h4'> Description <Typography color="textPrimary" variant="body2">{grant.description}</Typography></Typography>
+                <Typography color="textPrimary" variant="h5">Nombre <Typography color="textPrimary" variant="body2">{grant.name}</Typography></Typography>
+                <Typography color="textPrimary" variant='h5'>Fecha de inicio<Typography color="textPrimary" variant="body2">{grant.start_date}</Typography></Typography>
+                <Typography color="textPrimary" variant='h5'>Fecha de vencimiento<Typography color="textPrimary" variant="body2">{grant.end_date}</Typography></Typography>
+                <Typography color="textPrimary" variant='h5'> Descripcion <Typography color="textPrimary" variant="body2">{grant.description}</Typography></Typography>
+                <Typography color="textPrimary" variant='h5'> Numero de resolucion <Typography color="textPrimary" variant="body2">{grant.num_resolution}</Typography></Typography>
+                <Typography color="textPrimary" variant='h5'> Duración en meses <Typography color="textPrimary" variant="body2">{grant.long}</Typography></Typography>
             </Box>
             <Box display="flex" justifyContent="flex-end">
                     <CardActions>

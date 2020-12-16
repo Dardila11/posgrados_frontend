@@ -64,13 +64,23 @@ export const UGrantDialog = ({grant,state,setState}) => {
             id: grant.id,
             name: name,
             announcement: announcement,
-            is_active: true,
+            // is_active: true,
             description: description,
             num_resolution: resolution,
-            student: 1, // TODO STUDENT ACTUAL
+            // student: 1, // TODO STUDENT ACTUAL
             start_date: startDate,
             end_date: endDate,
             long: long
+
+
+
+            // // "long": 56,
+            // // "start_date": "2020-12-08",
+            // // "end_date": "2020-12-20",
+            // // "name": "IOT",
+            // // "announcement": 12312312,
+            // // "description": "Si señor",
+            // "num_resolution": "3123123"
         }).then(alert("Ejecutado"))
     }
 

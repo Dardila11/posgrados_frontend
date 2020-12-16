@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -19,6 +19,7 @@ import { registerProject, registerStudent } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
 import {UpdateProjectService} from './service'
+import {getProject} from './service'
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -38,38 +39,42 @@ const useStyles = makeStyles(theme => ({
 const UpdateProjectView = () => {
 
 
-  
-  const [proyecto, setProyecto] = useState(
-    {
-      "id": 1,
-      "provisional_title": "Cambio climatico",
-      "objetive_topic": "Cambio climatico",
-      "date_record": "2020-11-08T18:10:16.891707-05:00",
-      "date_update": "2020-11-08T18:10:16.891764-05:00",
-      "is_active": true,
-      "investigation_line": 3,
-      "student": 1
-  }
-  )
+  const [proyectos, setProyectos] = useState([])
+  const [proyecto, setProyecto] = useState([{
+    
+  }])
   const classes = useStyles();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [typeAlert, setTypeAlert] = useState('success');
   const [message, setMessage] = useState('');
 
-  const [title, settitle] = useState(proyecto.provisional_title);
-  const [objetive, setobjetive] = useState(proyecto.objetive_topic);
+  const [title, settitle] = useState();
+  const [objetive, setobjetive] = useState();
 
-  const [line, setline] = useState(proyecto.investigation_line);
-  const [student, setstudent] = useState(proyecto.student);
+  const [line, setline] = useState();
+  const [student, setstudent] = useState();
   const [area, setarea] = useState('');
 
+  useEffect(() => {
+    getProject().then( result =>
+      setProyectos(result.data)
+    )
+  }, [])
 
+  useEffect(() => {
+    proyectos.map( element => {
+      if (element.student === parseInt(localStorage.getItem("IDestudiante"))){
+        setProyecto(element)
+        console.log("encontro")
+      }})
+    },[proyectos])
 
-
-  const getStudent = id => {
-    setstudent(id);
-  };
+  useEffect(() => {
+      settitle(proyecto.provisional_title)
+      setobjetive(proyecto.objetive_topic)
+      console.log(proyecto.provisional_title)
+  }, [proyecto])
 
   const handleChangeTitle = e => {
     settitle(e);
@@ -87,13 +92,12 @@ const UpdateProjectView = () => {
 
   const handleSubmitUpdate = e => {
     UpdateProjectService({
-      "id": 1,
+      "id": proyecto.id,
       provisional_title: title,
       objetive_topic: objetive,
-
       is_active: true,
       investigation_line: line,
-      student: student
+      student: localStorage.getItem('IDestudiante')
     })
       .then(result => {
         setOpen(true);

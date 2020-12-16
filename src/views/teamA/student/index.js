@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect,useState}from 'react';
 import { Box, Container } from '@material-ui/core';
 import Page from 'src/components/Page';
 import PropTypes from 'prop-types';
@@ -15,6 +15,8 @@ import {GrantView} from './grantView'
 import {AgreementViewCard} from './agreementViewCard'
 import {AgreementView} from './agreementView'
 import BreadCrumbs from './BreadCrumbs'
+import { useAuth } from "src/views/auth/Context/use-auth.js";
+import {getStudents} from "src/views/teamA/student/service"
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -60,9 +62,30 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+
 const AdministerProfileView = () => {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const auth = useAuth();
+  const [ListaEstudiantes, setListaEstudiantes] = useState([])
+
+
+  useEffect(() => {
+    if(auth.user===null){
+      console.log("es nulo")
+      }else{
+      getStudents().then(result => setListaEstudiantes(result.data))            /////////Todo
+    }
+  }, [])
+  useEffect(() => {
+    let encontrado = ListaEstudiantes.find ( element=> element.user.id === parseInt(localStorage.getItem("id")))
+    if(encontrado === undefined){
+
+    }else{
+      localStorage.setItem("estudiante",JSON.stringify(encontrado))
+      localStorage.setItem("IDestudiante",JSON.stringify(encontrado.id))
+    }
+  }, [ListaEstudiantes])
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -80,23 +103,24 @@ const AdministerProfileView = () => {
                 value={value}
                 onChange={handleChange}
               >
-                <Tab
-                  label={
-                    <>
-                      <PersonAddIcon fontSize="inherit" /> Mi perfil
-                    </>
-                  }
-                  {...options(0)}
-                />
-                <Tab
+
+                <Tab 
                   label={
                     <>
                       <PersonAddIcon fontSize="inherit" /> Mi proyecto
                     </>
                   }
-                  {...options(1)}
+                  {...options(0)}
                 />
                  <Tab
+                  label={
+                    <>
+                      <PersonAddIcon fontSize="inherit" /> Becas
+                    </>
+                  }
+                  {...options(1)}
+                />
+                <Tab
                   label={
                     <>
                       <PersonAddIcon fontSize="inherit" /> Convenios
@@ -104,27 +128,19 @@ const AdministerProfileView = () => {
                   }
                   {...options(2)}
                 />
-                <Tab
-                  label={
-                    <>
-                      <PersonAddIcon fontSize="inherit" /> Becas
-                    </>
-                  }
-                  {...options(3)}
-                />
               </Tabs>
             </AppBar>
-            <TabPanel value={value} index={0}>
+            {/* <TabPanel value={value} index={0}>
               <UpdateStudent/>
-            </TabPanel>
-            <TabPanel value={value} index={1}>
+            </TabPanel> */}
+            <TabPanel value={value} index={0}>
               <UpdateProjectView/>
             </TabPanel>
-            <TabPanel value={value} index={2}>
-              <GrantView/>
+            <TabPanel value={value} index={1}>
+            <GrantView/>
             </TabPanel>
-            <TabPanel value={value} index={3}>
-              <AgreementView/>
+            <TabPanel value={value} index={2}>
+            <AgreementView/>
             </TabPanel>
           
         </Box>

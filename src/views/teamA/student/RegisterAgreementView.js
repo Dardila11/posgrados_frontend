@@ -15,7 +15,7 @@ import {
 import Page from 'src/components/Page';
 import { SearchStudent } from '../search/searchStudent';
 import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
-import { registerGrant } from './service';
+import { registerAgreement } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
 const useStyles = makeStyles(theme => ({
@@ -28,19 +28,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const RegisterGrantView = () => {
+const RegisterAgreementView = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [typeAlert, setTypeAlert] = useState('success');
   const [message, setMessage] = useState('');
 
-  const [name, setname] = useState('');
-  const [announcement, setannouncement] = useState('');
+  const [observation, setobservation] = useState('');
+  const [period, setperiod] = useState('');
 
-  const [description, setdescription] = useState('');
+  const [percentage, setpercentage] = useState('');
   const [student, setstudent] = useState('');
-  const [resolution, setresolution] = useState('');
+  const [agreementDate, setagreementDate] = useState('');
   const [long, setlong] = useState('');
   const [startDate, setstartDate] = useState('');
   const [endDate, setendDate] = useState('');
@@ -49,18 +49,8 @@ const RegisterGrantView = () => {
     setstudent(id);
   };
 
-  const handleChangeName = e => {
-    setname(e);
-  };
-  const handleChangeDescription = e => {
-    setdescription(e);
-  };
-
-  const handleChangeResolution = e => {
-    setresolution(e);
-  };
-  const handleChangeAnnouncement = e => {
-    setannouncement(e);
+  const handleChangeObservation = e => {
+    setobservation(e);
   };
   const handleChangeStartDate = e => {
     setstartDate(e);
@@ -71,16 +61,25 @@ const RegisterGrantView = () => {
   const handleChangeLong = e => {
     setlong(e);
   };
+  const handleChangePeriod = e => {
+    setperiod(e);
+  };
+  const handleChangePercentage = e => {
+    setpercentage(e);
+  };
+  const handleChangeAgreementDate = e => {
+    setagreementDate(e);
+  };
 
   const handleSubmitRegister = e => {
-    registerGrant({
-      name: name,
-      announcement: announcement,
+    registerAgreement({
+      observation: observation,
+      percentage_discount: percentage,
 
       is_active: true,
-      description: description,
-      num_resolution: resolution,
+      period_academic: period,
       student: student,
+      agreement_date: agreementDate,
       start_date: startDate,
       end_date: endDate,
       long: long
@@ -88,13 +87,13 @@ const RegisterGrantView = () => {
       .then(result => {
         setOpen(true);
         setTypeAlert('success');
-        setMessage('Beca creada correctamente');
+        setMessage('Convenio creado correctamente');
       })
 
       .catch(() => {
         setOpen(true);
         setTypeAlert('error');
-        setMessage('No se pudo crear la beca ');
+        setMessage('Convenio creado incorrectamente');
       });
   };
   const handleSubmit = event => {
@@ -103,7 +102,7 @@ const RegisterGrantView = () => {
   };
 
   return (
-    <Page className={classes.root} title="Registrar beca">
+    <Page className={classes.root} title="Registrar proyecto de investigacion">
       <Box
         display="flex"
         flexDirection="column"
@@ -113,25 +112,45 @@ const RegisterGrantView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              name: '',
-              description: '',
-              startDate: '',
-              endDate: '',
               long: '',
-              announcement:'',
-              num_resolution:'',
-           
+              period: '',
+              agreementDate: '',
+              observation: '',
+              startDate: '',
+              endDate: ''
+              //generalObjetive: '',
+              //specificObjetive: ''
             }}
             validationSchema={Yup.object().shape({
-              
-              name: Yup.string().required('Titulo de la tesis requerido'),
-              description: Yup.string().required('Titulo de la tesis requerido'),
-              startDate :Yup.string().required('Titulo de la tesis requerido'),
-              endDate :Yup.string().required('Titulo de la tesis requerido'),
-              long :Yup.string().required('Titulo de la tesis requerido'),
-              announcement :Yup.string().required('Titulo de la tesis requerido'),
-              num_resolution :Yup.string().required('Titulo de la tesis requerido'),
+              observation: Yup.string().required('Observaciones requerida'),
+              //area: Yup.string().required('Area de conocimiento requerida'),
+              period: Yup.string()
+                .required('Periodo requerido'),
+                
+                agreementDate: Yup.number()
+                .required('Año del acuerdo requerido')
+                .positive(),
+              percentage: Yup.number()
+                .required('Porcentaje requerido')
+                .positive(),
+              startDate: Yup.date().required(
+                'Debe ingresar la fecha de inicio'
+              ),
+              long: Yup.string().required('Seleccione la duración'),
+              endDate: Yup.date()
+                .required('Debe ingresar la fecha de finalización')
+                .when(
+                  'startDate',
+                  (startDate, schema) =>
+                    startDate &&
+                    schema.min(
+                      startDate,
+                      'La fecha final debe ser posterior a la inicial'
+                    )
+                )
 
+              // generalObjective: Yup.string().required('Objetivo general requerido'),
+              // specificObjective: Yup.string().required('Objetivos especificos requeridos')
             })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
@@ -151,7 +170,7 @@ const RegisterGrantView = () => {
                   <form onSubmit={handleSubmit}>
                     <Box mb={3}>
                       <Typography color="textPrimary" variant="h2">
-                        Crear nueva beca
+                        Crear nuevo Convenio
                       </Typography>
                       <Typography
                         color="textSecondary"
@@ -163,70 +182,54 @@ const RegisterGrantView = () => {
                     </Box>
                     <SearchStudent callback={getStudent} />
 
-                    
+                    {/* <TextField
+                    error={Boolean(touched.lineResearch && errors.lineResearch)}
+                    fullWidth
+                    helperText={touched.lineResearch && errors.lineResearch}
+                    label="Linea de investigacion"
+                    margin="normal"
+                    name="lineResearch"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.lineResearch}
+                    variant="outlined"
+                  /> */}
+
                     <TextField
-                      error={Boolean(touched.name && errors.name)}
+                      error={Boolean(touched.period && errors.period)}
                       fullWidth
-                      helperText={touched.name && errors.name}
-                      label="Nombre"
+                      helperText={touched.period && errors.period}
+                      label="Periodo academico (aaaa.semestre)"
                       margin="normal"
-                      name="name"
+                      
+                      name="period"
                       onBlur={handleBlur}
+                      InputProps={{ inputProps: { min: 1, max: 2 } }}
                       onChange={e => {
                         handleChange(e);
-                        handleChangeName(e.target.value);
+                        handleChangePeriod(e.target.value);
                       }}
-                      value={values.name}
+                      value={values.period}
                       variant="outlined"
                     />
+
                     <TextField
-                      error={Boolean(
-                        touched.announcement && errors.announcement
-                      )}
-                      fullWidth
-                      helperText={touched.announcement && errors.announcement}
-                      label="Numero convocatoria"
+                      id="percentage"
+                      label="Porcentaje de descuento"
+                      variant="outlined"
+                      type="number"
+                      InputProps={{ inputProps: { min: 1, max: 100 } }}
                       margin="normal"
-                      type='number'
-                      name="announcement"
-                      onBlur={handleBlur}
                       onChange={e => {
                         handleChange(e);
-                        handleChangeAnnouncement(e.target.value);
+                        handleChangePercentage(e.target.value);
                       }}
-                      value={values.announcement}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.description && errors.description)}
-                      fullWidth
-                      helperText={touched.description && errors.description}
-                      label="Descripción"
-                      margin="normal"
-                      name="description"
+                      error={Boolean(touched.percentage && errors.percentage)}
+                      helperText={touched.percentage && errors.percentage}
                       onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeDescription(e.target.value);
-                      }}
-                      value={values.description}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.resolution && errors.resolution)}
+                      value={values.percentage}
+                      required
                       fullWidth
-                      helperText={touched.resolution && errors.resolution}
-                      label="Numero de resolución"
-                      margin="normal"
-                      typer="number"
-                      name="resolution"
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeResolution(e.target.value);
-                      }}
-                      value={values.resolution}
-                      variant="outlined"
                     />
                     <TextField
                       id="long"
@@ -234,6 +237,7 @@ const RegisterGrantView = () => {
                       variant="outlined"
                       type="number"
                       margin="normal"
+                      InputProps={{ inputProps: { min: 1, max: 100 } }}
                       onChange={e => {
                         handleChange(e);
                         handleChangeLong(e.target.value);
@@ -245,6 +249,27 @@ const RegisterGrantView = () => {
                       required
                       fullWidth
                     />
+                    <TextField
+                      id="agreementDate"
+                      label="Año del acuerdo"
+                      variant="outlined"
+                      type="number"
+                      margin="normal"
+                      InputProps={{ inputProps: { min: 1990, max: 2100 } }}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeAgreementDate(e.target.value);
+                      }}
+                      error={Boolean(
+                        touched.agreementDate && errors.agreementDate
+                      )}
+                      helperText={touched.agreementDate && errors.agreementDate}
+                      onBlur={handleBlur}
+                      value={values.agreementDate}
+                      required
+                      fullWidth
+                    />
+
                     <TextField
                       error={Boolean(touched.startDate && errors.startDate)}
                       fullWidth
@@ -291,6 +316,22 @@ const RegisterGrantView = () => {
                       value={values.endDate}
                       variant="outlined"
                     />
+                    <TextField
+                      error={Boolean(touched.observation && errors.observation)}
+                      fullWidth
+                      helperText={touched.observation && errors.observation}
+                      label="Observaciones"
+                      margin="normal"
+                      name="observation"
+                      onBlur={handleBlur}
+                      multiline
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeObservation(e.target.value);
+                      }}
+                      value={values.observation}
+                      variant="outlined"
+                    />
 
                     <Box my={2}>
                       <Button
@@ -320,4 +361,4 @@ const RegisterGrantView = () => {
   );
 };
 
-export default RegisterGrantView;
+export default RegisterAgreementView;
