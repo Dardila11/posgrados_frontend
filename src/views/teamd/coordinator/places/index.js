@@ -13,7 +13,11 @@ import CreateInstitutionView from './createInstitutionView';
 import EditCountryView from './EditPlaces/editCountryView';
 import EditDepartmentView from './EditPlaces/editDepartmentView';
 import EditCityView from './EditPlaces/editCityView';
-import EditInstitutionView from './EditPlaces/editInstitutionView'
+import EditInstitutionView from './EditPlaces/editInstitutionView';
+import DeleteCityView from './DeletePlaces/deleteCityView';
+import DeleteDeparmentView from './DeletePlaces/deleteDeparmentView';
+import DeleteCountryView from './DeletePlaces/deleteCountryView';
+import DeleteInstitutionView from './DeletePlaces/deleteInstitutionView';
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -47,7 +51,7 @@ const useStyles = makeStyles(() => ({
   appbar: {
     marginLeft: '10px',
     marginRight: '10px',
-    width: '100vh',
+    width: '150vh',
     boxShadow: 'none',
     background: 'none'
   },
@@ -90,6 +94,10 @@ const AdministerPlacesView = () => {
               <Tab label="Editar Departamento" {...options(5)} />
               <Tab label="Editar Ciudad " {...options(6)} />
               <Tab label="Editar Institución " {...options(7)} />
+              <Tab label="Eliminar Ciudad" {...options(8)} />
+              <Tab label="Eliminar Departamento" {...options(9)} />
+              <Tab label="Eliminar Pais" {...options(10)} />
+              <Tab label="Eliminar Institucion" {...options(11)} />
             </Tabs>
           </AppBar>
           <TabPanel value={value} index={0}>
@@ -116,6 +124,18 @@ const AdministerPlacesView = () => {
           <TabPanel value={value} index={7}>
             <EditInstitutionView />
           </TabPanel>
+          <TabPanel value={value} index={8}>
+            <DeleteCityView />
+          </TabPanel>
+          <TabPanel value={value} index={9}>
+            <DeleteDeparmentView />
+          </TabPanel> 
+          <TabPanel value={value} index={10}>
+            <DeleteCountryView />
+          </TabPanel>
+          <TabPanel value={value} index={11}>
+            <DeleteInstitutionView />
+          </TabPanel>          
         </Box>
       </Container>
     </Page>

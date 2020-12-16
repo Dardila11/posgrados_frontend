@@ -29,23 +29,24 @@ const useStyles = makeStyles({
 });
 const CreateCountryView = () => {
   const [open, setOpen] = useState(false)
+  const [openAlert, setOpenAlert] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
   const clases = useStyles();
   const [name, setname] = useState(' ');
   const handleCreate = () => {
-    console.log(name)
     setOpen(false)
     CreateCountryService({
-      name: name
+      name: name,
+      status: 1
     })
       .then(() => {
-        setOpen(true)
+        setOpenAlert(true)
         setTypeAlert('success')
         setMessage('Pais creado correctamente')
       })
       .catch(() => {
-        setOpen(true)
+        setOpenAlert(true)
         setTypeAlert('error')
         setMessage('Error, verifica los datos!')
 
@@ -87,7 +88,6 @@ const CreateCountryView = () => {
               flexDirection="column"
               height="100%"
               justifyContent="center"
-              
             >
               <form onSubmit={e => handleSubmit(e)} className={clases.root}>
                 <Typography color="textPrimary" variant="h1" align="center">
@@ -130,7 +130,7 @@ const CreateCountryView = () => {
           </>
         )}
       </Formik>
-      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
+      <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
     </Container>
     
   );

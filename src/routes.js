@@ -91,6 +91,7 @@ const routes = [
         path: 'list-students/student/:id',
         element: <CoordinatorStudentView />
       },
+      { path: '/account', element: <AccountView /> },
       //{ path: 'list-students/student/:id', element: <StudentView /> },
       { path: '/administer-Gi', element: <AdministerView /> },
       { path: '/administer-Places', element: <AdministerPlacesView /> },

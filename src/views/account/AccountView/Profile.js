@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
+import { useEffect,useState } from 'react';
 import {
   Avatar,
   Box,
@@ -14,14 +15,7 @@ import {
   makeStyles
 } from '@material-ui/core';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -32,6 +26,36 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Profile = ({ className, ...rest }) => {
+
+
+  const [user, setUser] = useState({
+    avatar: '/static/images/avatars/avatar_6.png',
+    city: 'Los Angeles',
+    country: 'USA',
+    jobTitle: 'Senior Developer',
+    name: 'Katarina Smith',
+    timezone: 'GTM-7'
+  })
+  const auth = useAuth();
+  useEffect(() => {
+    if(auth.user===null){
+      console.log("es nulo")
+      }else{
+      let photo = "http://localhost:8000" + JSON.parse(localStorage.getItem("userInfo")).photo //Todo
+      setUser(
+        {
+        avatar: photo,
+        jobTitle: localStorage.getItem("rol"),
+        city: '',
+        country: 'USA',
+        timezone: 'GTM-5',
+        name: JSON.parse(localStorage.getItem("userInfo")).first_name + " " + JSON.parse(localStorage.getItem("userInfo")).last_name
+        })
+    }
+  }, [])
+
+
+
   const classes = useStyles();
 
   return (

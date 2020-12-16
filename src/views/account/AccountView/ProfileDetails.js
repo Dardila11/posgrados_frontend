@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
@@ -33,6 +33,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ProfileDetails = ({ className, ...rest }) => {
+
+
+
   const classes = useStyles();
   const [values, setValues] = useState({
     firstName: 'Katarina',
@@ -42,6 +45,10 @@ const ProfileDetails = ({ className, ...rest }) => {
     state: 'Alabama',
     country: 'USA'
   });
+  //COORDINADOR
+
+  //localStorage.getItem("rol").split(",").find(element => element === "coordinator")
+  
 
   const handleChange = (event) => {
     setValues({
@@ -59,8 +66,8 @@ const ProfileDetails = ({ className, ...rest }) => {
     >
       <Card>
         <CardHeader
-          subheader="The information can be edited"
-          title="Profile"
+          subheader="La siguiente información se puede editar"
+          title="Perfil"
         />
         <Divider />
         <CardContent>

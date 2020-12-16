@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { EditCountryService } from './service';
+import { DeleteCountryService } from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AlertView } from '../../../../../components/Alert'
-import { SearchCountry } from 'src/views/teamd/Search/searchCountry'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -18,6 +17,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import {SearchCountry} from 'src/views/teamd/Search/searchCountry';
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -33,17 +33,17 @@ const useStyles = makeStyles({
     marginTop: '30px'
   }
 });
-const EditCountryView = () => {
-  const [open, setOpen] = useState(false)  
+const DeleteCountryView = () => {
+  const [open, setOpen] = useState(false)
   const [openAlert, setOpenAlert] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
   const clases = useStyles();
   const [name, setname] = useState(' ');
-  const [Country, setidCountry] = useState('');
-  const [namecountry,setNameCountry] = useState('');
-  const handleClickOpenEditCountry = () => {
+  const [idCountry, setIdCountry] = useState('');
+  const handleClickOpenDeleteCountry = () => {
     const namecountry = document.getElementById("searchCountries").value;
+    setname(namecountry)
     if (namecountry == ""){
         setOpenAlert(true)
         setTypeAlert('error')
@@ -53,45 +53,40 @@ const EditCountryView = () => {
         setOpen(true);
     }     
 };
-  const handleEdit = () => {
-      //setOpen(true)
-      console.log(Country)
-      console.log(name)
+  const handleDelete = () => {
     setOpenAlert(false)
-      EditCountryService({
-        
-        id: Country,
-        name: name
-        
+    DeleteCountryService({
+      id: idCountry,
+      name: name,
+      status: 0
     })
       .then(() => {
         setOpenAlert(true)
         setTypeAlert('success')
-        setMessage('Pais Editado correctamente')
-        
+        setMessage('Pais Eliminado Correctamente')
       })
       .catch(() => {
         setOpenAlert(true)
         setTypeAlert('error')
         setMessage('Error, verifica los datos!')
-        
+
       });
-      
+      setOpen(false)
   };
   const handleSubmit = event => {
+    handleClickOpenDeleteCountry();
     event.preventDefault()
-    //handleEdit();
+    //handleDelete();
+  };
+  const handleOnchangeName = e => {
+    setname(e.target.value);
   };
   const handleClose = () => {
     setOpen(false);
 };
-  const handleOnchangeName = e => {
-    setname(e.target.value);
-    console.log(setname);
-  };
-  const getCountry = id => {    
-    setidCountry(id);
-  };
+  const getCountry = id => {
+      setIdCountry(id);
+  }
   return (
     <Container maxWidth="sm" className={clases.container}>
       <Formik
@@ -99,7 +94,9 @@ const EditCountryView = () => {
           name: ''
         }}
         validationSchema={Yup.object().shape({
-          name: Yup.string().max(255).required('name is required')
+          name: Yup.string()
+            .max(255)
+            .required('name is required')
         })}
         onSubmit={() => {
           return 1;
@@ -119,69 +116,56 @@ const EditCountryView = () => {
               flexDirection="column"
               height="100%"
               justifyContent="center"
-              
             >
-              <form className={clases.root}>
+              <form onSubmit={e => handleSubmit(e)} className={clases.root}>
                 <Typography color="textPrimary" variant="h1" align="center">
-                  Editar Pais
+                  Eliminar Pais
                 </Typography>
                 <Box mb={3}>
-                <SearchCountry  callback={getCountry} />
-                
+                 
+                  <SearchCountry  callback={getCountry} />
                   <Box my={2}>
                     <Button
                       color="primary"                      
                       fullWidth
-                      size="large"   
-                                    
+                      size="large"
+                      type="submit"
                       variant="contained"                      
-                      onClick={handleClickOpenEditCountry}
                     >
-                      Editar
+                      Eliminar
                     </Button>
                     <Dialog open={open} onSubmit={e => handleSubmit(e)} name={name} onClose={handleClose} aria-labelledby="form-dialog-title">
-                            <DialogTitle id="form-dialog-title">Editar Pais</DialogTitle>
+                            <DialogTitle id="form-dialog-title"></DialogTitle>
                                 <DialogContent>
                                     <DialogContentText>
-                                        Edite los campos necesarios.
-                                    </DialogContentText>                                    
-                                    <TextField
-                                        fullWidth
-                                        label="Nombre"
-                                        margin="normal"
-                                        name="name" 
-                                        
-                                        onChange={e => {
-                                        handleOnchangeName(e);
-                                        }}
-                                        type="text"
-                                        variant="outlined"
-                                    />
+                                        Esta seguro que desea eliminar el Pais.
+                                    </DialogContentText>                                                                        
                                    
-                                </DialogContent>
+                                  </DialogContent>
                                 <DialogActions>
                                 <Button onClick={handleClose} color="primary">
                                     Cancelar
                                 </Button>
-                                <Button onClick={handleEdit} color="primary" type="submit" disabled={isSubmitting}>
-                                    Editar
+                                <Button onClick={handleDelete} color="primary" type="submit" disabled={isSubmitting}>
+                                    Eliminar
                                 </Button>
                                 </DialogActions>
                                 
                         </Dialog>
 
+
                   </Box>
                 </Box>
               </form>
-              <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
+              
             </Box>
           </>
         )}
       </Formik>
-      
+      <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
     </Container>
     
   );
 };
 
-export default EditCountryView;
+export default DeleteCountryView;
