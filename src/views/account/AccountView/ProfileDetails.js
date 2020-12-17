@@ -19,20 +19,6 @@ import { useAuth } from "src/views/auth/Context/use-auth.js";
 import {UpdateStudentService} from "src/views/teamA/student/service"
 import {getStudents} from "src/views/teamA/student/service"
 import {UpdateUserService} from "src/views/teamA/student/service"
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
 
 const useStyles = makeStyles(() => ({
   root: {}

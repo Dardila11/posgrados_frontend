@@ -21,6 +21,10 @@ const useStyles = makeStyles({
   calificacionReject: {
     color: '#f44336'
   },
+  disabled: {
+    pointerEvents: 'none'
+  }
+  
 });
 
 /**
@@ -36,6 +40,7 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
   const [open, setOpen] = useState(false)
   let statusclass = null;
   let valueclass = null;
+  let isDisabled = null
   console.log(evaluation)
   
   useEffect(() => {
@@ -85,9 +90,11 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
   switch (evaluation.is_save) {
     case true:
       statusclass = classes.calificacionReject;
+      isDisabled = false
       break;
     case false:
       statusclass = classes.calificacionAcepted;
+      isDisabled = true
       break;
     default:
       break;
@@ -99,7 +106,7 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
       ):(
         <Box boxShadow={3}>
         <Card className={clsx(classes.root)} {...rest}>
-          <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} enable="false">
+          <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} disabled={ isDisabled ? true : false}>
             <Box alignItems="center" display="flex" flexDirection="column">
               {isUndefined(activityInfo.title) ||
             activityInfo.title == null ||
