@@ -267,7 +267,6 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     var send_email = emergenteGuardarYEnviar;
 
     const fd = new FormData();
-    console.log(values);
     fd.append("id", values.id);
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
@@ -280,6 +279,7 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
+    fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);

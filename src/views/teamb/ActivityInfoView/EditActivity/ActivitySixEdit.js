@@ -326,7 +326,7 @@ export const ActivitySixEdit = ({ state, callbackDialogOpen }) => {
     fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
-    //fd.append("is_active", true);
+    fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);

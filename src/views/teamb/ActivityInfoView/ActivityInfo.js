@@ -128,7 +128,16 @@ const ActivityInfoView = () => {
     setEmergenteEliminar(false);
   };
   const handleEliminarSi = () => {
-    objService.DeleteActivity(activity.id).then((result) => {
+    const fd = new FormData();
+    var now = objUtil.GetCurretTimeDate();
+    fd.append("start_date", activity.start_date);
+    fd.append("type", activity.type);
+    fd.append("academic_year", activity.academic_year);
+    fd.append("date_record", activity.date_record);
+    fd.append("date_update", now);
+    fd.append("is_active", false);
+    
+    objService.DeleteActivity(fd, activity.id).then((result) => {
       window.location.href = '../';
     }).catch(() => {
       alert("Error, no hay registros para  mostrar");
