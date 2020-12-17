@@ -16,8 +16,8 @@ import {Logout} from 'src/views/auth/auth'
 const TopBar = () => {
   const navigate = useNavigate();
   const logout1 = ()=>{
-    Logout(localStorage.getItem("token")).then(()=>{ return navigate('/login', { replace: true })}).catch(console.log('natin'))
-    localStorage.clear()
+    Logout(localStorage.getItem("token")).then(()=>{ localStorage.clear();navigate('/login', { replace: true })}).catch(console.log('no logout'))
+    
   }
   return (
     <AppBar>

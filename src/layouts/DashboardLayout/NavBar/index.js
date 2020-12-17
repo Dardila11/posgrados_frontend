@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import ListSubheader from '@material-ui/core/ListSubheader';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import SendIcon from '@material-ui/icons/Send';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
@@ -24,13 +18,6 @@ import {
   makeStyles
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
   Users as UsersIcon,
   Eye as EyeIcon
 } from 'react-feather';
@@ -39,12 +26,6 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import AddIcon from '@material-ui/icons/Add';
 import NavItem from './NavItem';
-
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
 
 const StudentItems = [
   {
@@ -171,7 +152,8 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const [openDirector, setOpenDirector] = React.useState(false);
   const [openCoordinator, setOpenCoordinator] = React.useState(false);
   const [openStudent, setOpenStudent] = React.useState(false);
-
+  const auth = useAuth();
+  const [photo, setPhoto] = useState()
   const handleClickDirector = () => {
     setOpenDirector(!openDirector);
   };
@@ -191,8 +173,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
-
   const content = (
+    <>
+    {auth.user && localStorage.getItem("userInfo") ? (
+    
+    <>
     <Box
       height="100%"
       display="flex"
@@ -204,18 +189,19 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         flexDirection="column"
         p={2}
       >
+
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
-          to="/app/account"
+          src={"https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo}
+          to="/user/account"
         />
         <Typography
           className={classes.name}
           color="textPrimary"
           variant="h5"
         >
-          {JSON.parse(localStorage.getItem("userInfo")).first_name}{JSON.parse(localStorage.getItem("userInfo")).last_name}
+          {JSON.parse(localStorage.getItem("userInfo")).first_name + " " +JSON.parse(localStorage.getItem("userInfo")).last_name}
         </Typography>
         <Typography
           color="textSecondary"
@@ -310,6 +296,10 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       )}
       </Box>      
     </Box>
+
+    </>):(<></>)}
+    </>
+    
   );
 
   return (

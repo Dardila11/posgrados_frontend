@@ -78,6 +78,7 @@ const routes = [
         path: 'list-activities/activity/:id',
         element: <DirectorActivityView />
       },
+      { path: 'account', element: <AccountView /> },
       {
         path: 'manage-gi',
         element: <ManageView />
@@ -97,7 +98,7 @@ const routes = [
         path: 'list-students/student/:id',
         element: <CoordinatorStudentView />
       },
-      { path: '/account', element: <AccountView /> },
+      { path: 'account', element: <AccountView /> },
       //{ path: 'list-students/student/:id', element: <StudentView /> },
       { path: 'administer-student', element: <AdministerStudentView /> },
       { path: '/administer-Gi', element: <AdministerView /> },
@@ -138,6 +139,13 @@ const routes = [
       { path: 'list-activities', element: <ActivityView /> },
       { path: '*', element: <Navigate to="/404" /> }
       
+    ]
+  },
+  {
+    path: 'user',
+    element: <DashboardLayout />,
+    children: [
+      { path: 'account', element: <AccountView /> },
     ]
   },
   {

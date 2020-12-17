@@ -18,7 +18,6 @@ import {
 import Page from 'src/components/Page';
 import { loginService } from './service';
 import { perfilService } from './service';
-import { SplitButton } from 'react-bootstrap';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,44 +50,6 @@ const useStyles = makeStyles((theme) => ({
     setUserName(e.target.value);
   };
   const handleLogin = () => {
-
-    // auth.login({
-    //   username: username,
-    //   password: password              
-    // }).then().then((data) => {
-    //     enviar a la url del perfil correspondiente
-    //     let datesComplet = data.data
-    //     
-    //     localStorage.setItem('id',JSON.stringify(data.data.user.id))
-    //     traer datos,manejar el token
-    //     localStorage.setItem('token',data.data.token)
-    //     localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
-    //     getUserInfoService(data.data.user.id).then(request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
-
-
-    //     perfilService(
-    //       data.data.user
-    //     )
-    //     .then((data) =>{
-    //       if (JSON.parse(localStorage.getItem('userInfo')).is_coordinator) {
-    //         navigate('/coordinator', { replace: true });
-    //       }
-    //       else if (JSON.parse(localStorage.getItem('userInfo')).is_professor){
-    //         navigate('/director', { replace: true });
-    //       }
-    //       else if (JSON.parse(localStorage.getItem('userInfo')).is_student){
-    //         navigate('/student', { replace: true });
-    //       }
-          
-    //     })
-  
-    //   })
-    //   .catch(() => {
-    //     setOpen(true)
-    //     setTypeAlert('error')
-    //     setMessage('Error, verifica los datos!')
-
-    //   });
     setOpen(false)
     loginService({
       username: username,
@@ -100,9 +61,7 @@ const useStyles = makeStyles((theme) => ({
         localStorage.setItem('token',data.data.token)
         localStorage.setItem('username',JSON.stringify(datesComplet.personal_id))
         auth.setUser(data.data.user)
-        getUserInfoService(data.data.user.id).then(request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
-
-
+        getUserInfoService(data.data.user.id).then(async request => localStorage.setItem("userInfo",JSON.stringify(request.data.Users[0])))
         perfilService(
           data.data.user
         )

@@ -17,8 +17,8 @@ import {
     token: localStorage.getItem('token')
   };
 
-//const API_URL = 'https://mdquilindo.pythonanywhere.com';
-const API_URL = 'http://localhost:8000' 
+const API_URL = 'https://mdquilindo.pythonanywhere.com';
+// const API_URL = 'http://localhost:8000' 
   // LOAD USER
 export const loadUser = () => async (dispatch, getState) => {
     dispatch({ type: USER_LOADING });
