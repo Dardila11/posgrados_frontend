@@ -41,7 +41,7 @@ const DashboardLayout = () => {
   const navigate = useNavigate();
   return (
     <>
-    {auth.user?(
+    {localStorage.getItem("userInfo")?(
       <div className={classes.root}>
       <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
       <NavBar

@@ -175,7 +175,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   }, [location.pathname]);
   const content = (
     <>
-    {auth.user && localStorage.getItem("userInfo") ? (
+    {localStorage.getItem("userInfo") ? (
     
     <>
     <Box
