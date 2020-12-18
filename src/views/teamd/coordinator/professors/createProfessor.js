@@ -36,8 +36,9 @@ const CreateProfessorView = () => {
   const clases = useStyles();
   const [user, setUser] = useState('');
   const [Institution, setInstitution] = useState(null);
-  const [isInternal, setisInternal] = useState(true);
   const [departmentI, setdepartmentI] = useState(null);
+  const [isInternal, setisInternal] = useState(true);
+
 
   //obtener inputs
   const handleChangeDepartmentI = result => {

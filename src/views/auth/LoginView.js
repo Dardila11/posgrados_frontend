@@ -68,17 +68,19 @@ const useStyles = makeStyles((theme) => ({
         .then(async (data) =>{
 
             console.log("rol ",data)
-            let role = data.data[0]
+            let role = data.data
             localStorage.setItem("rol",role)
-            if (role === "coordinador") {
+
+            
+            if (role.find(element => element === "coordinador")) {
               navigate('/coordinator', { replace: true });
-            }else if (role === "director"){
+            }else if (role.find(element => element === "director")){
               navigate('/director', { replace: true });
             }
-            else if (role === "profesor"){
+            else if (role.find(element => element === "profesor")){
               navigate('/director', { replace: true });
             }
-            else if (role === "estudiante"){
+            else if (role.find(element => element === "estudiante")){
               navigate('/student', { replace: true });
             }
 
