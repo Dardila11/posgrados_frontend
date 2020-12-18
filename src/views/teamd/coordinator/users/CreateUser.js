@@ -6,6 +6,7 @@ import {
   MenuItem,
   TextField,
   makeStyles,
+  Grid
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -23,6 +24,8 @@ import ContactsRoundedIcon from '@material-ui/icons/ContactsRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
 import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
+import { SearchInstitution } from 'src/views/teamd/Search/searchInstitution';
+import { SearchDeparmentI } from 'src/views/teamd/Search/searchDepartmentI';
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -41,7 +44,7 @@ const useStyles = makeStyles({
   form: {
     display: 'flex',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'left',
     flexDirection: 'row'
   },
   form_section: {
@@ -53,7 +56,8 @@ const useStyles = makeStyles({
     width: '120vh'
   },
   button: {
-    display: 'block',
+    display: 'flex',
+    justifyContent: "center",
     width: '400px'
   },
   imgContainer: {}
@@ -82,6 +86,18 @@ export const CreateUserView = () => {
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({})
   const [is_coordinator, setIs_coordinator] = useState(0)
+  const [isInternal, setisInternal] = useState(true);
+  const [Institution, setInstitution] = useState(null);
+  const [departmentI, setdepartmentI] = useState(null);
+  const handleChangeIsInternal = () => {
+    let selecteds = document.getElementById('selectedIsInternal');
+    setisInternal(selecteds.options[selecteds.selectedIndex].text);
+    if (selecteds.options[selecteds.selectedIndex].text === 'No') {
+      setisInternal(false);
+    } else {
+      setisInternal(true);
+    }
+  };
   const handleChangeUsername = e => {
     setUsername(e.target.value);
   };
@@ -109,6 +125,12 @@ export const CreateUserView = () => {
   const handleChangeAddress = e => {
     setAddress(e.target.value);
   };
+  const handleChangeDepartmentI = result => {
+    setdepartmentI(result);
+  };
+  const getIdInstitution = id => {
+    setInstitution(id);
+  };
   //upload image
   
   // const handleUpload = e => {
@@ -131,42 +153,30 @@ export const CreateUserView = () => {
 
 
   const [imagen, setImagen] = useState([])
-  const handleChangeRole = event => {
-    setRole(event.target.value);
-    if (event.target.value === '1'){
-      setIs_student(1)
-      setIs_proffessor(0)
-      setIs_coordinator(0)
+  // const handleChangeRole = event => {
+  //   setRole(event.target.value);
+  //   if (event.target.value === '1'){
+  //     setIs_student(1)
+  //     setIs_proffessor(0)
+  //     setIs_coordinator(0)
 
-    }
-    if(event.target.value === '2'){
-      setIs_proffessor(1)
-      setIs_student(0)
-      setIs_coordinator(0)
-    }
-    if(event.target.value === '3'){
-      setIs_coordinator(1)
-      setIs_student(0)
-      setIs_proffessor(0)
-    }
-  };
+  //   }
+  //   if(event.target.value === '2'){
+  //     setIs_proffessor(1)
+  //     setIs_student(0)
+  //     setIs_coordinator(0)
+  //   }
+  //   if(event.target.value === '3'){
+  //     setIs_coordinator(1)
+  //     setIs_student(0)
+  //     setIs_proffessor(0)
+  //   }
+  // };
   const handleChangeFirstName = event => {
     setFirstName(event.target.value);
   };
   const handleCreateUser = async (e) => {
     e.preventDefault();
-    console.log(firstName);
-    console.log(lastName);
-    console.log(username);
-    console.log(password);
-    console.log(email);
-    console.log(typeId);
-    console.log(personal_id);
-    console.log(personal_code);
-    console.log(telephone);
-    console.log(address);
-    console.log(is_proffessor);
-    console.log("Es coordinador",is_coordinator)
     await CreateUserService({
       first_name: firstName,
       last_name: lastName,
@@ -185,6 +195,7 @@ export const CreateUserView = () => {
       // headers: {'Content-Type':'multipart/form-data'}
     })
       .then( (request) => {
+        console.log(request.data)
         setOpen(true)
         setTypeAlert('success')
         setMessage('Usuario creado correctamente')
@@ -260,59 +271,73 @@ export const CreateUserView = () => {
               align="center"
               className={clases.title}
             >
-              Crear Usuario
+              Crear profesor
             </Typography>
 
             <form onSubmit={handleCreateUser} className={clases.form}>
-              <Box className={clases.form_section}>
-                <TextField
-                  id="username"
-                  label="Nombre de usuario"
-                  variant="outlined"
-                  type="text"
-                  margin="normal"
-                  onChange={e => {
-                    handleChange(e);
-                    handleChangeUsername(e);
-                  }}
-                  error={Boolean(touched.username && errors.username)}
-                  helperText={touched.username && errors.username}
-                  onBlur={handleBlur}
-                  value={values.username}
-                  required
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <AlternateEmailRoundedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-                <TextField
-                  id="password"
-                  label="Contraseña"
-                  variant="outlined"
-                  type="password"
-                  margin="normal"
-                  onChange={e => {
-                    handleChange(e);
-                    handleChangePassword(e);
-                  }}
-                  error={Boolean(touched.password && errors.password)}
-                  helperText={touched.password && errors.password}
-                  onBlur={handleBlur}
-                  value={values.password}
-                  required
-                  fullWidth
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <VpnKeyRoundedIcon />
-                      </InputAdornment>
-                    )
-                  }}
-                />
+
+            <Typography
+                  color="textSecondary"
+                  display="block"
+                  variant="caption"
+                >
+                  Información personal
+                </Typography>
+              <Grid container spacing={2}>
+                  <Grid item md={6} xs={12}>
+                  <TextField
+                    id="username"
+                    label="Nombre de usuario"
+                    variant="outlined"
+                    type="text"
+                    margin="normal"
+                    onChange={e => {
+                      handleChange(e);
+                      handleChangeUsername(e);
+                    }}
+                    error={Boolean(touched.username && errors.username)}
+                    helperText={touched.username && errors.username}
+                    onBlur={handleBlur}
+                    value={values.username}
+                    required
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AlternateEmailRoundedIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                    id="password"
+                    label="Contraseña"
+                    variant="outlined"
+                    type="password"
+                    margin="normal"
+                    onChange={e => {
+                      handleChange(e);
+                      handleChangePassword(e);
+                    }}
+                    error={Boolean(touched.password && errors.password)}
+                    helperText={touched.password && errors.password}
+                    onBlur={handleBlur}
+                    value={values.password}
+                    required
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <VpnKeyRoundedIcon />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                  
                 <TextField
                   id="firstName"
                   label="Nombres"
@@ -337,6 +362,9 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
+                </Grid>
+                <Grid item md={6} xs={12}>
+                  
                 <TextField
                   id="lastName"
                   label="Apellidos"
@@ -361,6 +389,8 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   id="email"
                   label="Email"
@@ -385,6 +415,8 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   id="TypeId"
                   label="Tipo de identificacion"
@@ -419,8 +451,8 @@ export const CreateUserView = () => {
                     Tarjeta de identidad
                   </MenuItem>
                 </TextField>
-              </Box>
-              <Box className={clases.form_section}>
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   id="personal_id"
                   label="Numero de identificacion"
@@ -445,6 +477,8 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   id="personal_code"
                   label="Codigo personal"
@@ -469,6 +503,8 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
+                </Grid>
+                <Grid item md={12} xs={12}>
                 <div className="custom-file">
                   <input
                     type="file"
@@ -482,7 +518,19 @@ export const CreateUserView = () => {
                   </label>
                   {/* TODO IMG */}
                 </div>
+                </Grid>
+                
+                <Grid item md={12} xs={12}>
+                <Typography
+                  color="textSecondary"
+                  display="block"
+                  variant="caption"
+                >
+                  Contacto
+                </Typography>
+                </Grid>
 
+                <Grid item md={6} xs={12}>
                 <TextField
                   label="Telefono"
                   variant="outlined"
@@ -507,6 +555,8 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
+                </Grid>
+                <Grid item md={6} xs={12}>
                 <TextField
                   id="address"
                   label="Direccion de residencia"
@@ -531,7 +581,53 @@ export const CreateUserView = () => {
                     )
                   }}
                 />
-                <TextField
+                </Grid>
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item md={12} xs={12}>
+                  <Typography
+                    color="textSecondary"
+                    display="block"
+                    variant="caption"
+                  >
+                    Información Laborar
+                  </Typography>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <Typography variant="inherit">
+                            ¿El profesor es interno?
+                    </Typography>
+                    <select
+                    style={{
+                      marginTop: '0px',
+                      width: '50px',
+                      height: '25px',
+                      marginLeft: '15px'
+                    }}
+                      id="selectedIsInternal"
+                      onChange={handleChangeIsInternal}
+                    >
+                      <option value="Si">Si</option>
+                      <option value="No">No</option>
+                    </select>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                  <span>
+                      {isInternal ? (
+                        <div /* Este es el div 1 */>
+                          <SearchDeparmentI
+                            callback={handleChangeDepartmentI}
+                          />
+                        </div>
+                      ) : (
+                        /* Institution*/
+                        <SearchInstitution callback={getIdInstitution} />
+                      )}
+                    </span>
+                  </Grid>
+                </Grid>
+                {/* <TextField
                   id="role"
                   label="Role"
                   variant="outlined"
@@ -554,8 +650,7 @@ export const CreateUserView = () => {
                   <MenuItem key="isProffessor3" value="3">
                     Es coordinator
                   </MenuItem>
-                </TextField>
-              </Box>
+                </TextField> */}
               <Button
                 color="primary"
                 type="submit"
