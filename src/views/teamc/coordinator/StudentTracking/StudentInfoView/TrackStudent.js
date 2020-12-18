@@ -73,6 +73,9 @@ const TrackStudent = props => {
       })
       .catch(error => {
         console.log(error)
+        setOpen(true)
+        setTypeAlert("error")
+        setMessage("Ha ocurrido un error " + error)
       })
   }
 

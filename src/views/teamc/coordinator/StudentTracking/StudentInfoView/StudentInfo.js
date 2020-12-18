@@ -130,13 +130,6 @@ const StudentInfo = () => {
               Realizar seguimiento
             </Button>
 
-            {/* <Dialog open={open} onClose={handleClose}>
-              <DialogTitle variant="h2" onClose={handleClose}>
-                Seguimiento de estudiante
-              </DialogTitle>
-              <TrackStudent />
-            </Dialog> */}
-
             <DialogForm
               title="Seguimiento de estudiante"
               open={open}

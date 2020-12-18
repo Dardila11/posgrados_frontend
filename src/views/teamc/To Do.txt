@@ -1,0 +1,21 @@
+To Do
+
+COORDINADOR
+
+Puede visualizar actividades del estudiante ?
+deberia  mostrar todas las actividades del estudiante pero sin poder evaluarlas, 
+a menos que ya hayan sido revisadas por el director
+
+- evaluaciones coordinador, bloquear tarjeta -- Daniel 
+- agregar creditos a las card de evaluaciones del coordinador
+- tracking estudiante. si es graduado. 
+    - Qué pasa con las actividades del estudiante si este pasa a estar graduado?
+    - Qué pasa con las actividades del estudiante si este pasa a estar inactivo, retirado o balanceado?
+    - Para qué estado del estudiante se debe enviar el enrollment_date? 
+      Hasta ahora se envia null para cualquier estado del estudiante.
+
+
+DIRECTOR
+
+id del director no es igual al id del profesor cuando se crea la evaluación.
+Miller hizo lo mismo para el crear evaluación del coordinador
