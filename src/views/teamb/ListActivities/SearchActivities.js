@@ -7,6 +7,7 @@ import { element } from 'prop-types';
 
 import List from 'src/components/List';
 import ActivityView from 'src/views/teamb/ListActivities/ActivityView';
+import Response from 'src/views/teamb/activitiesView/components/Response';
 
 const objService = new service();
 const objUtil = new util();
@@ -30,18 +31,20 @@ const useStyles = makeStyles(() => ({
 
 const SearchBar = ({ className, context, ...rest }) => {
 
+    const [open, setOpen] = useState('');
+    const [message, setMessage] = useState('');
+
     const [academicYears, setAcademicYears] = useState({
         years: []
     })
 
     useEffect(() => {
-        /* Dato quemado desde la tabla User: id_user */
         objService.GetPeriodsService(localStorage.getItem('id')).then((result) => {
             var dataPeriods = result.data.list_period;
             var acadYears = objUtil.GetAcademicYears(dataPeriods);
             setAcademicYears({ years: acadYears });
         }).catch(() => {
-           /*  alert("Error, no hay registros para mostrar"); */
+            /*  alert("Error, no hay registros para mostrar"); */
         });
     }, []);
 
@@ -52,22 +55,31 @@ const SearchBar = ({ className, context, ...rest }) => {
         setAcademicYear(event.target.value);
     };
 
+    const handleResponseAccept = () => {
+        setMessage('');
+        setOpen(false);
+    }
+
     const changeList = () => {
-        /* Dato quemado desde la tabla User: id_user*/
-        if (academicYear === "") { alert("En necesario seleccionar un año academico para realizar la consulta"); }
+        if (academicYear == "") {
+            setMessage('En necesario seleccionar un año academico para realizar la consulta!');
+            setOpen(true);
+        }
         else {
-            if (localStorage.getItem('id')){
+            if (localStorage.getItem('id')) {
                 objService.GetActivities(localStorage.getItem('id'), academicYear).then((result) => {
                     var dataActivities = result.data;
-                    if(dataActivities.list_activities.length === 0) {
-                        alert("No hay actividades registradas");
+                    if (dataActivities.list_activities.length === 0) {
+                        setMessage('No tienes actividades registradas en el año academico ' + academicYear );
+                        setOpen(true);
+                        setActivities([]);
                     }
-                    else{
+                    else {
                         setActivities(dataActivities.list_activities);
                     }
-                    
                 }).catch(() => {
-                    alert("Error, no fue posible realizar la consulta");
+                    setMessage('Error, no fue posible realizar la consulta, intentelo mas tarde o contacte con el administrador');
+                    setOpen(true);
                 });
             }
         }
@@ -107,6 +119,7 @@ const SearchBar = ({ className, context, ...rest }) => {
             </Container>
             <br></br>
             <List list={activities} option="Activity" context="/student/list-activities" />
+            <Response popUpRequestPost={open} handleResponseAccept={handleResponseAccept} response={message} />
         </Container>
     );
 }
