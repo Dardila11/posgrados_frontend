@@ -19,9 +19,11 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 //Import component search
-import { SearchCountry } from 'src/views/teamd/Search/searchCountry';
-import { SearchDepartment } from 'src/views/teamd/Search/searchDepartment';
-import { SearchCity } from 'src/views/teamd/Search/searchCity';
+import { SearchFullCountry }   from 'src/views/teamd/Search/searchFullCountry';
+import { SearchFullDepartment } from 'src/views/teamd/Search/searchFullDepartment';
+import { SearchFullCity } from 'src/views/teamd/Search/searchFullCity';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const useStyles = makeStyles({
   root: {
@@ -49,7 +51,7 @@ const EditCityView = () => {
   const [idDepartment, setidDdepartment] = useState(' ');
   const [idCountry, setidCountry] = useState(' ');
   const [idCity, setIdCity] = useState('');
-
+  const [type, setType] = useState(' ');
   const setCountry = id => {
     setidCountry(id);
   };
@@ -88,7 +90,8 @@ const EditCityView = () => {
     EditCityService({
       id: idCity,
       name: name,
-      state: idDepartment
+      state: idDepartment,
+      status: type
     })
       .then(() => {
         setOpenAlert(true)
@@ -100,6 +103,7 @@ const EditCityView = () => {
         setTypeAlert('error')
         setMessage('Error, Verifica los datos!')
       });
+      setOpen(false)
   };
   const handleClose = () => {
     setOpen(false);
@@ -108,7 +112,9 @@ const EditCityView = () => {
   //  handleCreate();
     event.preventDefault();
   };
-
+  const handleOnchangetype = e => {
+    setType(e.target.value);
+  };
   return (
     <Container maxWidth="sm" className={clases.container}>
       <Formik
@@ -135,12 +141,12 @@ const EditCityView = () => {
                   Editar Ciudad
                 </Typography>
                 <Box mb={3}>
-                <SearchCountry callback={setCountry} />
-                <SearchDepartment
+                <SearchFullCountry callback={setCountry} />
+                <SearchFullDepartment
                   idCountry={idCountry}
                   callback={setDepartment}
                 />
-                <SearchCity 
+                <SearchFullCity 
                   idDepartment={idDepartment}
                   callback={setCity}
                 />
@@ -177,11 +183,22 @@ const EditCityView = () => {
                                 value={values.name}
                                 variant="outlined"
                               />
-                              <SearchCountry callback={setCountry} />
-                              <SearchDepartment
+                              <SearchFullCountry callback={setCountry} />
+                              <SearchFullDepartment
                                 idCountry={idCountry}
                                 callback={setDepartment}
                               />
+                              <Typography color="textPrimary" variant="h5">
+                                Estado 
+                              </Typography>
+                              <Select 
+                                id="Select-cohorte"
+                                onChange={handleOnchangetype}>
+                                                              
+                                <MenuItem value={0}>Inactivo</MenuItem>
+                                <MenuItem value={1}>Activo</MenuItem>
+                                        
+                              </Select>
                               
                           </DialogContent>
                           <DialogActions>
