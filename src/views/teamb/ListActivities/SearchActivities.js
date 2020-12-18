@@ -36,7 +36,7 @@ const SearchBar = ({ className, context, ...rest }) => {
 
     useEffect(() => {
         /* Dato quemado desde la tabla User: id_user */
-        objService.GetPeriodsService(22).then((result) => {
+        objService.GetPeriodsService(localStorage.getItem('id')).then((result) => {
             var dataPeriods = result.data.list_period;
             var acadYears = objUtil.GetAcademicYears(dataPeriods);
             setAcademicYears({ years: acadYears });

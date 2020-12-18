@@ -19,20 +19,6 @@ import { useAuth } from "src/views/auth/Context/use-auth.js";
 import {UpdateStudentService} from "src/views/teamA/student/service"
 import {getStudents} from "src/views/teamA/student/service"
 import {UpdateUserService} from "src/views/teamA/student/service"
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  }
-];
 
 const useStyles = makeStyles(() => ({
   root: {}
@@ -182,6 +168,127 @@ const ProfileDetails = ({ className, ...rest }) => {
         <Divider />
         <CardContent>
         {localStorage.getItem("rol").split(",").find(element => element === "coordinador") ? (
+          <>
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              helperText="Please specify the first name"
+              label="First name"
+              name="firstName"
+              onChange={handleChangeFirstName}
+              required
+              value={first_name}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Last name"
+              name="lastName"
+              onChange={handleChangeLastName}
+              required
+              value={last_name}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Username"
+              name="username"
+              onChange={handleChangeUsername}
+              required
+              value={username}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Email Address"
+              name="email"
+              onChange={handleChangeEmail}
+              required
+              value={email}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Identificación"
+              name="identificacion"
+              onChange={handleChangePersonalId}
+              required
+              value={personalId}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Telefono"
+              name="phone"
+              onChange={handleChangeTelephone}
+              type="number"
+              value={telephone}
+              variant="outlined"
+            />
+          </Grid>
+          <Grid
+            item
+            md={6}
+            xs={12}
+          >
+            <TextField
+              fullWidth
+              label="Direccion de residencia"
+              name="adress"
+              onChange={handleChangeAddress}
+              type="text"
+              value={address}
+              variant="outlined"
+            />
+          </Grid>
+          </Grid>
+
+
+
+          </>
+        ):(
+          <>
+          </>
+        )}
+        {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? (
           <>
         <Grid
           container

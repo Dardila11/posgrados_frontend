@@ -18,8 +18,6 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerAgreement } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
-import { registerGrant } from './service';
-
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -84,7 +82,7 @@ const RegisterAgreementView = () => {
       agreement_date: agreementDate,
       start_date: startDate,
       end_date: endDate,
-      long : long
+      long: long
     })
       .then(result => {
         setOpen(true);
@@ -114,18 +112,41 @@ const RegisterAgreementView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              title: '',
-              area: '',
-              lineResearch: '',
-              objetive: ''
+              long: '',
+              period: '',
+              agreementDate: '',
+              observation: '',
+              startDate: '',
+              endDate: ''
               //generalObjetive: '',
               //specificObjetive: ''
             }}
             validationSchema={Yup.object().shape({
               observation: Yup.string().required('Observaciones requerida'),
               //area: Yup.string().required('Area de conocimiento requerida'),
-              period: Yup.string().required('Periodo requerido'),
-              percentage: Yup.string().required('Porcentaje requerido')
+              period: Yup.string()
+                .required('Periodo requerido'),
+                
+                agreementDate: Yup.date()
+                .required('Fecha del acuerdo requerida'),
+              percentage: Yup.number()
+                .required('Porcentaje requerido')
+                .positive(),
+              startDate: Yup.date().required(
+                'Debe ingresar la fecha de inicio'
+              ),
+              long: Yup.string().required('Seleccione la duración'),
+              endDate: Yup.date()
+                .required('Debe ingresar la fecha de finalización')
+                .when(
+                  'startDate',
+                  (startDate, schema) =>
+                    startDate &&
+                    schema.min(
+                      startDate,
+                      'La fecha final debe ser posterior a la inicial'
+                    )
+                )
 
               // generalObjective: Yup.string().required('Objetivo general requerido'),
               // specificObjective: Yup.string().required('Objetivos especificos requeridos')
@@ -179,8 +200,10 @@ const RegisterAgreementView = () => {
                       helperText={touched.period && errors.period}
                       label="Periodo academico (aaaa.semestre)"
                       margin="normal"
+                      
                       name="period"
                       onBlur={handleBlur}
+                      InputProps={{ inputProps: { min: 1, max: 2 } }}
                       onChange={e => {
                         handleChange(e);
                         handleChangePeriod(e.target.value);
@@ -194,6 +217,7 @@ const RegisterAgreementView = () => {
                       label="Porcentaje de descuento"
                       variant="outlined"
                       type="number"
+                      InputProps={{ inputProps: { min: 1, max: 100 } }}
                       margin="normal"
                       onChange={e => {
                         handleChange(e);
@@ -212,6 +236,7 @@ const RegisterAgreementView = () => {
                       variant="outlined"
                       type="number"
                       margin="normal"
+                      InputProps={{ inputProps: { min: 1, max: 100 } }}
                       onChange={e => {
                         handleChange(e);
                         handleChangeLong(e.target.value);
@@ -224,22 +249,29 @@ const RegisterAgreementView = () => {
                       fullWidth
                     />
                     <TextField
+                      error={Boolean(touched.agreementDate && errors.agreementDate)}
+                      fullWidth
+                      helperText={touched.agreementDate && errors.agreementDate}
                       id="agreementDate"
-                      label="Año del acuerdo"
-                      variant="outlined"
-                      type="number"
+                      label="Fecha del convenio"
                       margin="normal"
-                      onChange={e => {
+                      name="agreementDate"
+                      type="date"
+                      required
+                      defaultValue="2017-05-24"
+                      className={classes.textField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      onBlur={handleBlur}
+                      onChangeCapture={e => {
                         handleChange(e);
                         handleChangeAgreementDate(e.target.value);
                       }}
-                      error={Boolean(touched.agreementDate && errors.agreementDate)}
-                      helperText={touched.agreementDate && errors.agreementDate}
-                      onBlur={handleBlur}
                       value={values.agreementDate}
-                      required
-                      fullWidth
+                      variant="outlined"
                     />
+                    
 
                     <TextField
                       error={Boolean(touched.startDate && errors.startDate)}
@@ -303,7 +335,6 @@ const RegisterAgreementView = () => {
                       value={values.observation}
                       variant="outlined"
                     />
-
 
                     <Box my={2}>
                       <Button

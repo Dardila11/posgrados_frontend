@@ -23,7 +23,7 @@ const Account = () => {
   return (
     <Page
       className={classes.root}
-      title="Pefil"
+      title="Perfil"
     >
       <Container maxWidth="lg">
         <Grid

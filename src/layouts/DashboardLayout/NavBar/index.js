@@ -1,77 +1,134 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import { useAuth } from "src/views/auth/Context/use-auth.js";
 import {
   Avatar,
   Box,
-  Button,
   Divider,
   Drawer,
   Hidden,
-  List,
   Typography,
   makeStyles
 } from '@material-ui/core';
 import {
-  AlertCircle as AlertCircleIcon,
-  BarChart as BarChartIcon,
-  Lock as LockIcon,
-  Settings as SettingsIcon,
-  ShoppingBag as ShoppingBagIcon,
-  User as UserIcon,
-  UserPlus as UserPlusIcon,
-  Users as UsersIcon
+  Users as UsersIcon,
+  Eye as EyeIcon
 } from 'react-feather';
+import GroupRoundedIcon from '@material-ui/icons/GroupRounded';
+import DescriptionIcon from '@material-ui/icons/Description';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import AddIcon from '@material-ui/icons/Add';
 import NavItem from './NavItem';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith'
-};
-
-const items = [
+const StudentItems = [
   {
-    href: '/app/dashboard',
-    icon: BarChartIcon,
-    title: 'Dashboard'
-  },
-  {
-    href: '/app/customers',
+    href: '/student/list-activities',
     icon: UsersIcon,
-    title: 'Customers'
+    title: 'Activities'
   },
   {
-    href: '/app/products',
-    icon: ShoppingBagIcon,
-    title: 'Products'
-  },
-  {
-    href: '/app/account',
-    icon: UserIcon,
-    title: 'Account'
-  },
-  {
-    href: '/app/settings',
-    icon: SettingsIcon,
-    title: 'Settings'
-  },
-  {
-    href: '/login',
-    icon: LockIcon,
-    title: 'Login'
-  },
-  {
-    href: '/register',
-    icon: UserPlusIcon,
-    title: 'Register'
-  },
-  {
-    href: '/404',
-    icon: AlertCircleIcon,
-    title: 'Error'
+    href: '/student/administer-profile',
+    icon: UsersIcon,
+    title: 'Perfil'
   }
 ];
+
+
+const CoordinatorItems = [
+  {
+   href: '/coordinator/administer-student',
+   icon: UsersIcon,
+   title: 'Administrar Estudiantes'
+ },
+ {
+   href: '/coordinator/list-students',
+   icon: UsersIcon,
+   title: 'Visualizar Estudiantes'
+ },
+ {
+   href: '/coordinator/list-activities',
+   icon: EyeIcon,
+   title: 'Actividades'
+ },
+ {
+   href: '/coordinator/list-evaluations',
+   icon: EyeIcon,
+   title: 'Evaluaciones'
+ },
+ // Options Team D
+ {
+   href: '/coordinator/administer-Gi',
+   icon: SupervisorAccountIcon,
+   title: 'Administar Grupo Investigacion'
+ },
+ {
+   href: '/coordinator/administer-Places',
+   icon: SupervisorAccountIcon,
+   title: 'Administar Lugares'
+ },
+ {
+   href: '/coordinator/administer-Professors',
+   icon: SupervisorAccountIcon,
+   title: 'Administar Profesores'
+ },
+
+ {
+   href: '/coordinator/administerUsers',
+   icon: GroupRoundedIcon,
+   title: 'Administrar Usuarios'
+ },
+ {
+   href: '/coordinator/create-others',
+   icon: AddIcon,
+   title: 'Administar ++'
+ },
+
+ // End Options Team D
+ /**
+  * Reports
+  */
+ {
+   href: '/coordinator/reports',
+   icon: DescriptionIcon,
+   title: 'Reportes'
+ },
+ {
+   href: '/coordinator/reportsStudent',
+   icon: DescriptionIcon,
+   title: 'Reportes x Año Ingreso'
+ }
+];
+
+const DirectorItems = [
+  {
+    href: '/director/list-students',
+    icon: UsersIcon,
+    title: 'Mis Estudiantes'
+  },
+  {
+    href: '/director/list-activities',
+    icon: EyeIcon,
+    title: 'Actividades'
+  },
+  {
+    href: '/director/list-evaluations',
+    icon: EyeIcon,
+    title: 'Evaluaciones'
+  },
+  {
+    href: '/director/manage-gi',
+    icon: EyeIcon,
+    title: 'Grupo de investigación'
+  }
+];
+
 
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
@@ -90,8 +147,25 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NavBar = ({ onMobileClose, openMobile }) => {
-  const classes = useStyles();
-  const location = useLocation();
+  const classes = useStyles()
+  const location = useLocation()
+  const [openDirector, setOpenDirector] = React.useState(false);
+  const [openCoordinator, setOpenCoordinator] = React.useState(false);
+  const [openStudent, setOpenStudent] = React.useState(false);
+  const auth = useAuth();
+  const [photo, setPhoto] = useState()
+  const handleClickDirector = () => {
+    setOpenDirector(!openDirector);
+  };
+
+  const handleClickCoordinator = () => {
+    setOpenCoordinator(!openCoordinator);
+  };
+
+  const handleClickStudent = () => {
+    setOpenStudent(!openStudent);
+  };
+
 
   useEffect(() => {
     if (openMobile && onMobileClose) {
@@ -99,8 +173,11 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname]);
-
   const content = (
+    <>
+    {localStorage.getItem("userInfo") ? (
+    
+    <>
     <Box
       height="100%"
       display="flex"
@@ -112,30 +189,43 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         flexDirection="column"
         p={2}
       >
+
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={user.avatar}
-          to="/app/account"
+          src={"https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo}
+          to="/user/account"
         />
         <Typography
           className={classes.name}
           color="textPrimary"
           variant="h5"
         >
-          {user.name}
+          {JSON.parse(localStorage.getItem("userInfo")).first_name + " " +JSON.parse(localStorage.getItem("userInfo")).last_name}
         </Typography>
         <Typography
           color="textSecondary"
           variant="body2"
         >
-          {user.jobTitle}
+          {localStorage.getItem("rol")}
         </Typography>
       </Box>
       <Divider />
       <Box p={2}>
+
+      {localStorage.getItem("rol").split(',').find(item => item== "profesor") ? (
+        <List
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className={classes.root}
+      >
+        <ListItem button onClick={handleClickDirector}>
+          <ListItemText primary="Opciones de director" />
+          {openDirector ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openDirector} timeout="auto" unmountOnExit>
         <List>
-          {items.map((item) => (
+          {DirectorItems.map((item) => (
             <NavItem
               href={item.href}
               key={item.title}
@@ -144,42 +234,72 @@ const NavBar = ({ onMobileClose, openMobile }) => {
             />
           ))}
         </List>
-      </Box>
-      <Box flexGrow={1} />
-      <Box
-        p={2}
-        m={2}
-        bgcolor="background.dark"
+        </Collapse>
+      </List>
+          
+      ):(
+        <></>
+      )}
+      {localStorage.getItem("rol").split(',').find(item => item== "coordinador") ? (
+        <List
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className={classes.root}
       >
-        <Typography
-          align="center"
-          gutterBottom
-          variant="h4"
-        >
-          Need more?
-        </Typography>
-        <Typography
-          align="center"
-          variant="body2"
-        >
-          Upgrade to PRO version and access 20 more screens
-        </Typography>
-        <Box
-          display="flex"
-          justifyContent="center"
-          mt={2}
-        >
-          <Button
-            color="primary"
-            component="a"
-            href="https://react-material-kit.devias.io"
-            variant="contained"
-          >
-            See PRO version
-          </Button>
-        </Box>
-      </Box>
+        <ListItem button onClick={handleClickCoordinator}>
+          <ListItemText primary="Opciones de Coordinador" />
+          {openCoordinator ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openCoordinator} timeout="auto" unmountOnExit>
+        <List>
+          {CoordinatorItems.map((item) => (
+            <NavItem
+              href={item.href}
+              key={item.title}
+              title={item.title}
+              icon={item.icon}
+            />
+          ))}
+        </List>
+        </Collapse>
+      </List>
+          
+      ):(
+        <></>
+      )}
+      {localStorage.getItem("rol").split(',').find(item => item== "estudiante") ? (
+        <List
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className={classes.root}
+      >
+        <ListItem button onClick={handleClickStudent}>
+          <ListItemText primary="Opciones de estudiante" />
+          {openStudent ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openStudent} timeout="auto" unmountOnExit>
+        <List>
+          {StudentItems.map((item) => (
+            <NavItem
+              href={item.href}
+              key={item.title}
+              title={item.title}
+              icon={item.icon}
+            />
+          ))}
+        </List>
+        </Collapse>
+      </List>
+          
+      ):(
+        <></>
+      )}
+      </Box>      
     </Box>
+
+    </>):(<></>)}
+    </>
+    
   );
 
   return (

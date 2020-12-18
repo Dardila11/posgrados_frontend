@@ -39,19 +39,33 @@ const EditEvaluationDirector = props => {
   const evaluation = props.evaluation
   const activity = props.activity
 
-  const postData = async (values) => {
+  const postData = async (values, isSaveed) => {
     setOpen(false)
-    Api.postDirectorEvaluations(5, values)
+    let directorId = parseInt(localStorage.getItem("id"))
+    let jsonValues = {
+      value: values.value,
+      observations: values.observations,
+      activity: values.activity,
+      director: values.professor,
+      is_save: isSaveed
+
+    }
+    console.log(jsonValues);
+    console.log(props.evaluation);
+    Api.putDirectorEvaluations(props.evaluation.id, jsonValues)
       .then(res => {
-        if(res.status == 201) {
+        if(res.status == 200) {
           console.log(res.status);
           setOpen(true)
           setTypeAlert("success")
-          setMessage("Evaluación creada con exito")
+          setMessage("Evaluación actualizada con exito")
         }
       })
       .catch(error => {
         console.log(error);
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Ha ocurrido un error' + error)
       })
     
   }
@@ -68,12 +82,17 @@ const EditEvaluationDirector = props => {
           value: evaluation.value,
           observations: evaluation.observations,
           activity: parseInt(activity.id),
-          professor: parseInt(activity.director)
+          professor: parseInt(localStorage.getItem("id")),
+          submitButton: ''
         }}
         validationSchema={validationSchema}
         onSubmit={values => {
           console.log(values)
-          postData(values)
+          if (values.submitButton == "save") {
+            postData(values, true)
+          } else {
+            postData(values, false)
+          }
         }}
       >
         {({
@@ -82,7 +101,8 @@ const EditEvaluationDirector = props => {
           touched,
           handleChange,
           handleBlur,
-          handleSubmit
+          handleSubmit,
+          setFieldValue
         }) => (
           <form className={classes.root} onSubmit={handleSubmit} noValidate>
              {isUndefined(activity.title) ||
@@ -137,10 +157,10 @@ const EditEvaluationDirector = props => {
               }
             />
             <Divider variant="middle" />
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" onClick={() => setFieldValue('submitButton', "save") } variant="contained" color="primary">
               Guardar
             </Button>
-            <Button type="submit" variant="contained" color="primary">
+            <Button type="submit" onClick={() => setFieldValue('submitButton', "send") } variant="contained" color="primary">
             Guardar y Notificar
           </Button>
           </form>

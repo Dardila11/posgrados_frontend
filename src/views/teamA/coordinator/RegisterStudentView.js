@@ -22,7 +22,7 @@ import Page from 'src/components/Page';
 import { registerStudent } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchUser } from 'src/views/teamd/Search/searchUser';
-
+import { SearchProgram } from 'src/views/teama/search/searchProgram';
 
 const useStyles = makeStyles(theme => ({
   root: {
