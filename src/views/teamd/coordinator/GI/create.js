@@ -23,6 +23,7 @@ import { CreateGIApi } from './service';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailRoundedIcon from '@material-ui/icons/MailRounded';
+import {SearchProfessor} from "src/views/teamd/Search/searchProfessor"
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -66,13 +67,7 @@ export const CreateView = () => {
     setDateFoundation(e.target.value);
   };
   const getIdProfessor = input =>{
-    let find = listProfessors.find(profesor => profesor.username === input);
-    console.log("Profesor seleccionado",find)
-    if (find === undefined) {
-    } else {
-      let find2 = userList.find (professor => professor.user === find.id)
-      setProfesorSelect(find2.id);
-    }
+      setProfesorSelect(input)
 
   }
 
@@ -285,6 +280,7 @@ export const CreateView = () => {
                         onInputChange={(e, input) => getIdProfessor(input)}
                         onChange={(e, input) => getIdProfessor(input)}
                       />
+                      {/* <SearchProfessor callback= {getIdProfessor}/> */}
                   </FormGroup>
                   <Box my={2}>
                     <Button

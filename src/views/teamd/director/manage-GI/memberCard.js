@@ -26,6 +26,7 @@ export const MemberCard = ({member}) => {
         setDialogState(state)
     }
     const eliminarMiembro = () =>{
+        
         eliminarMiembroSerivce({
             "member_status": false,
             "professor": professor,

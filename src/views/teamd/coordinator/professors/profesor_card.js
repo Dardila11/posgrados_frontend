@@ -51,15 +51,6 @@ export const Profesor_card = ({profesor}) => {
             <Typography color="textPrimary" variant="h5">Institución <Typography color="textPrimary" variant="caption">{nameInstitution}</Typography></Typography>
             <Typography color="textPrimary" variant="h5">Departamento <Typography color="textPrimary" variant="caption">{nameDeparment}</Typography></Typography>
             </Box>
-                {/* <Typography color="textSecondary" gutterBottom>
-                    Email: {usuario.email}
-                </Typography>
-                <Typography color="textSecondary" gutterBottom>
-                    Institucion: {nameInstitution}
-                </Typography>
-                <Typography color="textSecondary" gutterBottom>
-                    Departamento: {nameDeparment}
-                </Typography> */}
                     <Box display="flex" justifyContent="flex-end">
                     <CardActions>
                             <Button 

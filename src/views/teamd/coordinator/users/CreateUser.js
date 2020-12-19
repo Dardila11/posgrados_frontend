@@ -26,6 +26,7 @@ import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
 import { SearchInstitution } from 'src/views/teamd/Search/searchInstitution';
 import { SearchDeparmentI } from 'src/views/teamd/Search/searchDepartmentI';
+import { CreateProfessorApi } from 'src/views/teamd/coordinator/professors/service';
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -153,25 +154,6 @@ export const CreateUserView = () => {
 
 
   const [imagen, setImagen] = useState([])
-  // const handleChangeRole = event => {
-  //   setRole(event.target.value);
-  //   if (event.target.value === '1'){
-  //     setIs_student(1)
-  //     setIs_proffessor(0)
-  //     setIs_coordinator(0)
-
-  //   }
-  //   if(event.target.value === '2'){
-  //     setIs_proffessor(1)
-  //     setIs_student(0)
-  //     setIs_coordinator(0)
-  //   }
-  //   if(event.target.value === '3'){
-  //     setIs_coordinator(1)
-  //     setIs_student(0)
-  //     setIs_proffessor(0)
-  //   }
-  // };
   const handleChangeFirstName = event => {
     setFirstName(event.target.value);
   };
@@ -195,16 +177,61 @@ export const CreateUserView = () => {
       // headers: {'Content-Type':'multipart/form-data'}
     })
       .then( (request) => {
-        console.log(request.data)
-        setOpen(true)
+        if (isInternal === true) {
+          CreateProfessorApi({
+            is_director_student: false,
+            is_director_gi: false,
+            is_internal: isInternal,
+            user: request.data.id,
+            institution: 1,
+            department: departmentI
+          })
+            .then((request) => {
+              setOpen(true)
+              setTypeAlert('success')
+              setMessage('Profesor creado correctamente')
+            })
+            .catch((request) => {
+              setOpen(true)
+              setTypeAlert('error')
+              setMessage('Error, Verifica los datos!')
+            });
+        } else {
+          CreateProfessorApi({
+            is_director_student: false,
+            is_director_gi: false,
+            is_internal: isInternal,
+            user: request.data.id,
+            institution: Institution,
+            department: departmentI
+          })
+            .then((request) => {
+              setOpen(true)
+              setTypeAlert('success')
+              setMessage('Profesor creado correctamente')
+            })
+            .catch((request) => {
+              console.log(request)
+              setOpen(true)
+              setTypeAlert('error')
+              setMessage('Error, Verifica los datos!')
+            });
+        }
+
+
+
+
         setTypeAlert('success')
-        setMessage('Usuario creado correctamente')
+        setMessage('Profesor creado correctamente')
       })
       .catch(() => {
         setOpen(true)
         setTypeAlert('error')
         setMessage('Error, Verifica los datos!')
       });
+
+
+
   };
 
   return (
@@ -275,8 +302,7 @@ export const CreateUserView = () => {
             </Typography>
 
             <form onSubmit={handleCreateUser} className={clases.form}>
-
-            <Typography
+              <Typography
                   color="textSecondary"
                   display="block"
                   variant="caption"
@@ -585,7 +611,7 @@ export const CreateUserView = () => {
                 </Grid>
 
                 <Grid container spacing={2}>
-                  <Grid item md={12} xs={12}>
+                <Grid item md={12} xs={12}>
                   <Typography
                     color="textSecondary"
                     display="block"
@@ -594,7 +620,7 @@ export const CreateUserView = () => {
                     Información Laborar
                   </Typography>
                   </Grid>
-                  <Grid item md={12} xs={12}>
+                <Grid item md={12} xs={12}>
                     <Typography variant="inherit">
                             ¿El profesor es interno?
                     </Typography>
@@ -612,7 +638,7 @@ export const CreateUserView = () => {
                       <option value="No">No</option>
                     </select>
                   </Grid>
-                  <Grid item md={12} xs={12}>
+                <Grid item md={12} xs={12}>
                   <span>
                       {isInternal ? (
                         <div /* Este es el div 1 */>
@@ -627,6 +653,7 @@ export const CreateUserView = () => {
                     </span>
                   </Grid>
                 </Grid>
+
                 {/* <TextField
                   id="role"
                   label="Role"

@@ -69,9 +69,7 @@ const useStyles = makeStyles((theme) => ({
 
             console.log("rol ",data)
             let role = data.data
-            localStorage.setItem("rol",role)
-
-            
+            localStorage.setItem("rol",role)           
             if (role.find(element => element === "coordinador")) {
               navigate('/coordinator', { replace: true });
             }else if (role.find(element => element === "director")){

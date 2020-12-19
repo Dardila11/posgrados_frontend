@@ -31,14 +31,14 @@ export const SearchInstitution = ({ callback }) => {
       id="searchInstitutions"
       options={listInstitution}
       getOptionLabel={option => option.name_inst}
-      style={{ marginBottom: 10, marginTop: 10, widht: 300 }}
       renderInput={params => (
         <TextField
           id="inputOptionInstitution"
           {...params}
-          label='Institucion'
+          label='Institución'
           variant='outlined'
           required
+          style={{width: 300,marginLeft:10,marginBottom:20}}
         />
       )}
       onInputChange={(e, input) => getIdInstitution(input)}
