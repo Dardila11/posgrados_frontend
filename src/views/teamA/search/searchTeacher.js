@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ConsultProgram, ConsultStudent , ConsultUserService} from './service';
+import { ConsultProgram, ConsultStudent } from './service';
+
+import CreateProgramDialog from 'src/views/teamA/coordinator/CreateProgramDialog';
+import { ConsultProfesorService } from './service';
+import { ConsultUserService } from './service';
 import 'src/views/teamA/coordinator/styles.css';
 import {
   Box,
@@ -21,17 +25,47 @@ import Autocomplete, {
 const filter = createFilterOptions();
 
 //Profes para llenar la lista
-
+const Teachers = [
+  { teacher: 'Miguel Ángel Niño' },
+  { teacher: 'Carlos Ardila' },
+  { teacher: 'Daniel A Paz' },
+  { teacher: 'Ricardo Zambrano' },
+  { teacher: 'Pepito Pérez' },
+  { teacher: 'Martha Mendoza' },
+  { teacher: 'Alejandro López Vargas' },
+  { teacher: 'Gabriel Mauricio Vega' },
+  { teacher: 'José Alfonso Espada' },
+  { teacher: 'Edgad David Ñañez' },
+  { teacher: 'Carlos Enrique Perez' },
+  { teacher: 'Jhon Eder Masso' },
+  { teacher: 'Carolina Gonzales Serrano' },
+  { teacher: 'Ruben Dario Molina' },
+  { teacher: 'Iván Enrique Paz' },
+  { teacher: 'Hugo Hernán Erazo' },
+  { teacher: 'Luis Alfrdo Londoño' },
+  { teacher: 'Alfredo Valderruten' },
+  { teacher: 'Noé López' },
+  { teacher: 'José Manuel Tobar' },
+  { teacher: 'Fulanito de tal' },
+  { teacher: 'Sandra Milena Roa' },
+  { teacher: 'Libardo Pandoja' },
+  { teacher: 'María Isabel Vidal' },
+  { teacher: 'FLor Milena Vela' },
+  { teacher: 'Jeiver Tapia' },
+  { teacher: 'Helder Mauicio CHacon' },
+  { teacher: 'Edwin Rengifo' },
+  { teacher: 'Johana Andrea Hurtado' },
+  { teacher: 'Wilson Alfredo Ortega' },
+  { teacher: 'César Jesús Pardo' },
+  { teacher: 'Eduardo Andrés Canola' },
+  { teacher: 'Jumena Adriana Timana' }
+];
 
 export const SearchTeacher = ({ callback }) => {
   const [teacherList, setTeacherList] = useState([]); // cambiar los nombres de los estados
   const [value, setValue] = React.useState(null);
   const [open, toggleOpen] = React.useState(false);
-  const [Teachers, setTeachers] = useState([]);
-useEffect(() => {
-  ConsultUserService().then(result => setTeachers(result.data.Users.find(result => result.is_proffessor == true)))
-  
-}, [])
+
   const [dialogValue, setDialogValue] = React.useState({
     teacher: ''
   });
@@ -110,7 +144,7 @@ useEffect(() => {
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
-        renderOption={option => option.username}
+        renderOption={option => option.teacher}
         freeSolo
         renderInput={params => (
           <TextField {...params} label="Director" variant="outlined" />

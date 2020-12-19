@@ -63,7 +63,7 @@ const programs = [
 ];
 
 export const SearchProgramOrAdd = ({ callback }) => {
-  const [programList, setProgramList] = useState([]); // cambiar los nombres de los estados
+  const [programList, setProgramList] = useState([]); // ca'mbiar los nombres de los estados
   const [value, setValue] = React.useState(null);
   const [open, toggleOpen] = React.useState(false);
 

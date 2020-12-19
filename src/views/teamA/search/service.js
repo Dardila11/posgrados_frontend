@@ -11,8 +11,14 @@ export const ConsultStudent = () => {
   const url = `${API_URL}/student/`;
   return axios.get(url);
 };
+
 export const ConsultUserService = () => {
   const url = `${API_URL}/api/auth/consult_user`;
+  return axios.get(url);
+};
+
+export const ConsultProfesorService = () => {
+  const url = `${API_URL}/api/1.0/consultar_profesor/`;
   return axios.get(url);
 };
 //TODO en back no esta

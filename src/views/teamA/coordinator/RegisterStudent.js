@@ -14,19 +14,11 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-import DialogForm from './DialogForm';
-import Autocomplete, {
-  createFilterOptions
-} from '@material-ui/lab/Autocomplete';
-import CreateProgramDialog from './CreateProgramDialog';
 
-import RegisterDirectorDialog from './RegisterDirectorDialog';
-import AddCodirectorDialog from './AddCodirectorDialog';
+
 import React, { useState } from 'react';
 
-import { CreateUserService } from 'src/views/teamd/Search/service';
-import { registerEnrrollment, registerStudent } from 'src/views/teamA/coordinator/service';
-
+import { registerEnrrollment, registerStudent, registerDirector } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
 import './styles.css';
 //ICONS
@@ -38,18 +30,18 @@ import DialpadRoundedIcon from '@material-ui/icons/DialpadRounded';
 import FormatListNumberedRoundedIcon from '@material-ui/icons/FormatListNumberedRounded';
 import ContactsRoundedIcon from '@material-ui/icons/ContactsRounded';
 import HomeRoundedIcon from '@material-ui/icons/HomeRounded';
-import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
+
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
 import { FormLabel } from '@material-ui/core';
 
 import { SearchTeacherOrAdd } from 'src/views/teamA/search/searchTeacherOrAdd';
 import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
-import { SearchProgramOrAdd } from 'src/views/teamA/search/searchProgramOrAdd';
+
 import { SearchProgram } from 'src/views/teamA/search/searchProgram';
-import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
-import RegisterAgreementDialog from './RegisterAgreementDialog';
-import { register } from 'src/serviceWorker';
+
+
+import {SearchProfessor} from "src/views/teamA/search/searchProfessor" 
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -68,6 +60,155 @@ const useStyles = makeStyles(theme => ({
     margin: `20px 0 0 ${theme.spacing(0)}px`
   }
 }));
+const countries = [
+  { country: 'Afghanistan' },
+  { country: 'Albania' },
+  { country: 'Algeria' },
+  { country: 'Andorra' },
+  { country: 'Angola' },
+  { country: 'Antigua and Barbuda' },
+  { country: 'Argentina' },
+  { country: 'Armenia' },
+  { country: 'Australia' },
+  { country: 'Austria' },
+  { country: 'Azerbaijan' },
+  { country: 'Bahamas' },
+  { country: 'Bahrain' },
+  { country: 'Bangladesh' },
+  { country: 'Barbados' },
+  { country: 'Belarusia' },
+  { country: 'Belgica' },
+  { country: 'Belice' },
+  { country: 'Birmania' },
+  { country: 'Bolivia' },
+  { country: 'Bosnia' },
+  { country: 'Botsuana' },
+  { country: 'Brasil' },
+  { country: 'Bulgaria' },
+  { country: 'Burundi' },
+  { country: 'Camboya' },
+  { country: 'Camerún' },
+  { country: 'Canadá ' },
+  { country: 'Catar' },
+  { country: 'Chad' },
+  { country: 'Chile' },
+  { country: 'China' },
+  { country: 'Chipre' },
+  { country: 'Colombia' },
+  { country: 'Comoras' },
+  { country: 'Costa Rica' },
+  { country: 'Croacia' },
+  { country: 'Cuba' },
+  { country: 'Dinamarca' },
+  { country: 'Dominica' },
+  { country: 'Ecuador' },
+  { country: 'Egipto' },
+  { country: 'El Salvador' },
+  { country: 'Emiratos Árabes Unidos' },
+  { country: 'Eslovaquia' },
+  { country: 'Eslovenia' },
+  { country: 'España' },
+  { country: 'Estados Unidos' },
+  { country: 'Estonia' },
+  { country: 'Etiopía' },
+  { country: 'Filipinas' },
+  { country: 'Finlandia' },
+  { country: 'Francia' },
+  { country: 'Gambia' },
+  { country: 'Georgia' },
+  { country: 'Ghana' },
+  { country: 'Haití' },
+  { country: 'Honduras' },
+  { country: 'India' },
+  { country: 'Indonesia' },
+  { country: 'Irak' },
+  { country: 'Irán' },
+  { country: 'Irlanda' },
+  { country: 'Islandia' },
+  { country: 'Italia' },
+  { country: 'Japón' },
+  { country: 'Kenia' },
+  { country: 'Laos' },
+  { country: 'Libia' },
+  { country: 'Lituania' },
+  { country: 'Madagascar' },
+  { country: 'Malasia' },
+  { country: 'Malta' },
+  { country: 'México' },
+  { country: 'Mónaco' },
+  { country: 'Mongolia' },
+  { country: 'Nepal ' },
+  { country: 'Nicaragua' },
+  { country: 'Nigeria' },
+  { country: 'Noruega' },
+  { country: 'Nueva Zelanda' },
+  { country: 'Países Bajos' },
+  { country: 'Panamá' },
+  { country: 'Paraguay' },
+  { country: 'Perú' },
+  { country: 'Polonia' },
+  { country: 'Portugal' },
+  { country: 'Reino Unido' },
+  { country: 'República Checa' },
+  { country: 'República del Congo' },
+  { country: 'República Dominicana' },
+  { country: 'Ruanda' },
+  { country: 'Rumanía' },
+  { country: 'Rusia' },
+  { country: 'Samoa' },
+  { country: 'Senegal' },
+  { country: 'Sierra Leona' },
+  { country: 'Sri Lanka' },
+  { country: 'Sudán' },
+  { country: 'Suecia' },
+  { country: 'Suiza' },
+  { country: 'Surinam' },
+  { country: 'Tailandia' },
+  { country: 'Tanzania' },
+  { country: 'Trinidad y Tobago' },
+  { country: 'Turquía' },
+  { country: 'Ucrania' },
+  { country: 'Uruguay' },
+  { country: 'Venezuela' },
+  { country: 'Vietnam' },
+  { country: 'Yemen' },
+  { country: 'Zambia' },
+  { country: 'Zimbabue' }
+];
+const departments = [
+  { deparment: 'Amazonas' },
+  { deparment: 'Antioquia' },
+  { deparment: 'Arauca' },
+  { deparment: 'Atlántico' },
+  { deparment: 'Bolívar' },
+  { deparment: 'Boyacá' },
+  { deparment: 'Caldas' },
+  { deparment: 'Caquetá' },
+  { deparment: 'Casanare' },
+  { deparment: 'Cauca' },
+  { deparment: 'Cesar' },
+  { deparment: 'Chocó' },
+  { deparment: 'Córdoba' },
+  { deparment: 'Cundinamarca' },
+  { deparment: 'Guainía' },
+  { deparment: 'Guaviare' },
+  { deparment: 'Huila' },
+  { deparment: 'La Guajira' },
+  { deparment: 'Magdalena' },
+  { deparment: 'Meta' },
+  { deparment: 'Nariño' },
+  { deparment: 'Norte de Santander' },
+  { deparment: 'Putumayo' },
+  { deparment: 'Quindío' },
+  { deparment: 'Risaralda' },
+  { deparment: 'San Andrés y Providencia' },
+  { deparment: 'Santander' },
+  { deparment: 'Sucre' },
+  { deparment: 'Tolima' },
+  { deparment: 'Valle del Cauca' },
+  { deparment: 'Vaupés' },
+  { deparment: 'Vichada' }
+];
 const RegisterStudent = () => {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -92,7 +233,11 @@ const RegisterStudent = () => {
   const [is_active, setis_active] = useState('');
    const [ListaEstudiantes, setListaEstudiantes] = useState([])
    ///////
-
+   const [originDepartment, setDepartment] = useState('');
+  const [city, setCity] = useState('Ciudad');
+  const [institutionCountry, setCountry] = useState('');
+  const [cityI, setCityI] = useState('Ciudad');
+  const [institution, setInstitution] = useState('1');
   const [username, setUsername] = useState('');
   const [academicTitle, setAcademicTitle] = useState('');
   const [password, setPassword] = useState('');
@@ -165,6 +310,22 @@ const RegisterStudent = () => {
   const handleChangePeriod = e => {
     setperiod(e.target.value);
   };
+  const handleChangeCity = e => {
+    setCity(e.target.value);
+  };
+  const handleChangeInstitutionCity = e => {
+    setCityI(e.target.value);
+  };
+  const handleChangeCountry = e => {
+    setCountry(e.target.value);
+  };
+
+  const handleChangeDepartment = e => {
+    setDepartment(e.target.value);
+  };
+  const handleChangeInstitution = e => {
+    setInstitution(e.target.value);
+  };
 
   const handleChangeRole = event => {
     setRole(event.target.value);
@@ -179,47 +340,6 @@ const RegisterStudent = () => {
   const handleChangeFirstName = event => {
     setFirstName(event.target.value);
   };
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleClickOpen1 = () => {
-    setOpen1(true);
-  };
-
-  const handleClose1 = () => {
-    setOpen1(false);
-  };
-
-  const handleClickOpen2 = () => {
-    setOpen2(true);
-  };
-
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
-
-  const handleClickOpen3 = () => {
-    setOpen3(true);
-  };
-
-  const handleClose3 = () => {
-    setOpen3(false);
-  };
-
-  const handleClickOpen4 = () => {
-    setOpen4(true);
-  };
-
-  const handleClose4 = () => {
-    setOpen4(false);
-  };
-
   const handleCreateUser = e => {
     e.preventDefault();
 
@@ -258,11 +378,29 @@ const RegisterStudent = () => {
         registerEnrrollment({
           admission_date: admissionDate,
           enrrollment_date: '2020-12-18',
-          state : 2,
+          state : 1,
           period : period,
           is_active: true,
           student: result.data.id
 
+        })
+        registerDirector({
+          role: 1,
+          is_active: true,
+          student: result.data.id,
+          professor: director
+        })
+        registerDirector({
+          role: 2,
+          is_active: true,
+          student: result.data.id,
+          professor: codirector1
+        })
+        registerDirector({
+          role: 2,
+          is_active: true,
+          student: result.data.id,
+          professor: codirector2
         })
         setOpen(true);
         setTypeAlert('success');
@@ -455,7 +593,7 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item md={12} xs={12}>
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="email"
                       label="Email"
@@ -476,6 +614,32 @@ const RegisterStudent = () => {
                         startAdornment: (
                           <InputAdornment position="start">
                             <MailRoundedIcon />
+                          </InputAdornment>
+                        )
+                      }}
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="personal_code"
+                      label="Código del estudiante"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangePersonalCode(e);
+                      }}
+                      error={Boolean(touched.personal_code && errors.personal_code)}
+                      helperText={touched.personal_code && errors.personal_code}
+                      onBlur={handleBlur}
+                      value={values.personal_code}
+                      required
+                      fullWidth
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <FormatListNumberedRoundedIcon />
                           </InputAdornment>
                         )
                       }}
@@ -546,6 +710,7 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
+                  
                   <Grid item md={6} xs={12}>
                     <TextField
                       label="Telefono"
@@ -598,6 +763,51 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="city"
+                      label="Ciudad de origen"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeCity(e);
+                      }}
+                      error={Boolean(touched.city && errors.city)}
+                      helperText={touched.city && errors.city}
+                      onBlur={handleBlur}
+                      value={values.city}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="originDepartment"
+                      label="Departamento de origen"
+                      variant="outlined"
+                      select
+                      margin="normal"
+                      value={originDepartment}
+                      required
+                      onChange={e => {
+                        handleChangeDepartment(e);
+                        handleChange(e);
+                      }}
+                      fullWidth
+                    >
+                      {departments.map(option => (
+                        <MenuItem
+                          key={option.deparment}
+                          value={option.deparment}
+                        >
+                          {option.deparment}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  
                   <Grid item md={12} xs={12}>
                     <FormLabel>Elige una imagen de perfil: </FormLabel>
                     <Button
@@ -691,18 +901,10 @@ const RegisterStudent = () => {
                       variant="outlined"
                     />
                   </Grid>
-
-                 
-                </Grid>
-
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <SearchTeacher callback={getDirector} />
-                  </Grid>
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="academicTitle"
-                      label="Título Académico: "
+                      label="Título Académico "
                       variant="outlined"
                       type="text"
                       margin="normal"
@@ -720,14 +922,87 @@ const RegisterStudent = () => {
                       fullWidth
                     />
                   </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="institution"
+                      label="Institución:"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeInstitution(e);
+                      }}
+                      error={Boolean(touched.institution && errors.institution)}
+                      helperText={touched.institution && errors.institution}
+                      onBlur={handleBlur}
+                      value={values.institution}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="institutionCountry"
+                      label="País de la institución"
+                      variant="outlined"
+                      select
+                      onChange={e => {
+                        handleChangeCountry(e);
+                        handleChange(e);
+                      }}
+                      margin="normal"
+                      value={institutionCountry}
+                      required
+                      fullWidth
+                    >
+                      {countries.map(option => (
+                        <MenuItem key={option.country} value={option.country}>
+                          {option.country}
+                        </MenuItem>
+                      ))}
+                    </TextField>
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="cityI"
+                      label="Ciudad de la institución:"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeInstitutionCity(e);
+                      }}
+                      error={Boolean(touched.cityI && errors.cityI)}
+                      helperText={touched.cityI && errors.cityI}
+                      onBlur={handleBlur}
+                      value={values.cityI}
+                      required
+                      fullWidth
+                    />
+                  </Grid>
+                  
+
+                 
                 </Grid>
 
                 <Grid container spacing={2}>
                   <Grid item md={6} xs={12}>
-                    <SearchTeacherOrAdd callback={getCodirector1} />
+                    <SearchProfessor callback= {getDirector}/>
+                    
+                  </Grid>
+                  
+                </Grid>
+
+                <Grid container spacing={2}>
+                  <Grid item md={6} xs={12}>
+                    <SearchProfessor callback= {getCodirector1}/>
+                    
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchTeacherOrAdd callback={getCodirector2} />
+                    <SearchProfessor callback= {getCodirector2}/>
+                    
                   </Grid>
                 </Grid>
 
