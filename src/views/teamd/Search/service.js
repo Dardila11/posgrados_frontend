@@ -14,7 +14,7 @@ export const GetLineResearch = idArea => {
 };
 
 export const GetDeparmentIListService = () => {
-  const URL = `${API_URL}/api/1.0/consultar_departamentoU_id/${1}`;
+  const URL = `${API_URL}/api/1.0/consultar_departamentoU/`;
   return axios.get(URL);
 };
 

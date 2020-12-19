@@ -9,7 +9,7 @@ export const SearchDeparmentI = ({ callback }) => {
   useEffect(() => {
     GetDeparmentIListService()
       .then(result => {
-        setListDepartmentI(result.data.Department);
+        setListDepartmentI(result.data.Departments);
       })
       .catch(()=>setListDepartmentI([]));
   }, []);

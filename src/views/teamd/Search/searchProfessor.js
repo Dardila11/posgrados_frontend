@@ -13,48 +13,38 @@ import {
 export const SearchProfessor = ({ callback }) => {
 
     
-    const [listUsers, setListUsers] = useState([])
-    const [listProfessors, setListProfesors] = useState(null)  
+    const [listUsers, setListUsers] = useState(JSON.parse(localStorage.getItem("usuarios")))
+    const [listProfessors, setListProfesors] = useState(JSON.parse(localStorage.getItem("profesores")))  
     const [listProfessorsActive, setlistProfessorsActive] = useState([])
     const [state, setstate] = useState([])
-    const getUsersList = async () => {
-        await ConsultUserService().then( response => {
+    const getUsersList =() => {
+        ConsultUserService().then( response => {
             setListUsers(response.data.Users)
         })
     }
-
-    useEffect(async () => {
-        await getUsersList()
-        await ConsultProfesorAll().then(response => {
-            setListProfesors(response.data.Professors)
-        })
-        console.log("profesores  ",listProfessorsActive)
-    }, [])
     useEffect(() => {
         let list = []
         let profesors = []
         if (listUsers && listProfessors){
-            console.log("entro")
+            console.log("Buscando profesores activos")
             listProfessors.map( element => {
                 if(element.status === true){
                     list.push(element)
                 }
             })
             listUsers.map( response => {
-                if(response.is_proffessor){
-                    list.map( element => {
+                list.map( element => {
                         if(element.user === response.id){
                             profesors.push(response)
                         }
                     })
-                }
-                console.log("HOLA",profesors)
+                console.log("Profesores en usuarios",profesors)
                 setstate(profesors)
             })
             
 
         }
-    }, [listProfessors])
+    }, [])
 
 
     const getIdProfesor = (input) =>{

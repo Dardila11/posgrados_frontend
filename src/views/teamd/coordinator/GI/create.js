@@ -67,7 +67,7 @@ export const CreateView = () => {
     setDateFoundation(e.target.value);
   };
   const getIdProfessor = input =>{
-      setProfesorSelect(input)
+      setProfesorSelect(input.id)
 
   }
 
@@ -82,11 +82,13 @@ export const CreateView = () => {
           }
         })
         setlistProfessors(lista)
-        
       })
       .catch(console.log("nada"));
       ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
   }, []);
+  useEffect(() => {
+    console.log("hola")
+  }, [listProfessors])
 
 
   const handleCreate = async () => {
