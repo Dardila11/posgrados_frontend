@@ -1,26 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import {ConsultGi} from './service'
-import {ConsultProfesorAll} from './service'
 import {ConsultDirige_d} from './service'
-import {useParams
-} from "react-router-dom";
 import {
-  Card,
-  CardActions,
-  CardContent,
-  Button, 
   Box,
   Typography,
   makeStyles,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   Container
 } from '@material-ui/core';
-
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import {ConsultMemberForProfesor} from "src/views/teamd/Search/service"
+import {IsMemberGI} from "src/views/teamd/Search/service"
+import {GetGIId} from "src/views/teamd/Search/service"
 const useStyles = makeStyles({
     root: {
       minWidth: 275,
@@ -43,10 +32,10 @@ const useStyles = makeStyles({
 
 export const InfoGi = () => {   
     const classes = useStyles();
-    const [Gi, setGi] = useState([])
-    const [profesores, setProfesores] = useState([])
+    const [profesores, setProfesores] = useState(JSON.parse(localStorage.getItem("profesores")))
     const [profesor, setProfesor] = useState(null)
     const [grupoDeInvestigacion, setGrupoDeInvestigacion] = useState()
+    const [RangoEnGi, setRangoEnGi] = useState("")
 
 
     const buscarProfesorPorUsuario =() =>{
@@ -61,21 +50,30 @@ export const InfoGi = () => {
       }
     }
     useEffect(() => {
-        ConsultProfesorAll().then(request => setProfesores(request.data.Professors))
-    }, [])
-    useEffect(() => {
       console.log(profesores)
       buscarProfesorPorUsuario()
-    }, [profesores])
+    }, [])
     useEffect(() => {
       if(profesor===null){
-
       }else{
-        ConsultDirige_d(profesor.id).then(result => {ConsultGi(result.data.Manage[0].inv_group).then(result => {
-          setGrupoDeInvestigacion(result.data.Group[0])
-          localStorage.setItem("Gi",JSON.stringify(result.data.Group[0]))
-        
-        })})
+        if(localStorage.getItem("rol").split(",").find(element => element ===  "director")){
+          ConsultDirige_d(profesor.id).then(result => {ConsultGi(result.data.Manage[0].inv_group).then(result => {
+            setGrupoDeInvestigacion(result.data.Group[0])
+            localStorage.setItem("GiDirector",JSON.stringify(result.data.Group[0]))
+            setRangoEnGi("Director")
+          })})
+        }
+        if(localStorage.getItem("rol").split(",").find(element => element === "profesor")){
+          ConsultMemberForProfesor(JSON.parse(localStorage.getItem("profesorInfo")).id).then(result => {
+            GetGIId(result.data.Members[0].inv_group).then(result => {
+              setGrupoDeInvestigacion(result.data.Group[0])
+              localStorage.setItem("GiMiembro",JSON.stringify(result.data.Group[0]))
+              setRangoEnGi("Miembro")
+            })
+          } )
+
+        }
+
       }
       
     }, [profesor])
@@ -104,6 +102,9 @@ export const InfoGi = () => {
                   </Typography>
                   <Typography variant="body1" component="p" gutterBottom>
                     Categoria: {grupoDeInvestigacion.category}
+                  </Typography>
+                  <Typography variant="body1" component="p" gutterBottom>
+                    Rango: {RangoEnGi}
                   </Typography>
                 </>
         ) : (

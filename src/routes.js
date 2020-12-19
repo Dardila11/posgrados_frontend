@@ -86,6 +86,18 @@ const routes = [
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
+    {
+      path: 'profesor',
+      element: <DashboardLayout />,
+      children: [
+        { path: 'account', element: <AccountView /> },
+        {
+          path: 'manage-gi',
+          element: <ManageView />
+        },
+        { path: '*', element: <Navigate to="/404" /> }
+      ]
+    },
   /* Coordinator routes */
   {
     path: 'coordinator',

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import { Link as RouterLink, useNavigate, Redirect} from 'react-router-dom';
 import { useAuth } from "src/views/auth/Context/use-auth.js";
 import * as Yup from 'yup';
@@ -88,6 +88,11 @@ const useStyles = makeStyles((theme) => ({
           })
           ConsultProfesorAll().then(response => {
             localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
+            JSON.parse(localStorage.getItem("profesores")).map( element => {
+              if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
+                localStorage.setItem("profesorInfo",JSON.stringify(element))
+              }
+            })
         })
             
 
