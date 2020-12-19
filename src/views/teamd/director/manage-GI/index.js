@@ -80,7 +80,8 @@ export const ManageView = () => {
               >
                 <Tab label="Información Gi" {...options(0)} />
                 <Tab label="Miembros" {...options(1)} />
-                <Tab label="Agregar area de estudio" {...options(2)} />
+                {localStorage.getItem("rol").split(",").find(element => element === "director") ? ( <Tab label="Agregar area de estudio" {...options(2)} />):(<></>)}
+                {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? ( <Tab label="Agregar linea de conocimiento" {...options(3)} />):(<></>)}
                 {/* <Tab label="Agregar linea de investigacion" {...options(3)} /> */} {/*Todo */}
               </Tabs>
             </AppBar>
@@ -91,9 +92,17 @@ export const ManageView = () => {
             <TabPanel value={value} index={1}>
              <ListMembers /> 
             </TabPanel>
-            <TabPanel value={value} index={2}>
+
+            {localStorage.getItem("rol").split(",").find(element => element === "director") ? ( <>
+              <TabPanel value={value} index={2}>
               <AddKnowLedgeView />
             </TabPanel>
+            </>):(<></>)}
+            {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? ( 
+              <TabPanel value={value} index={3}>
+                <h1>TODO</h1>
+             </TabPanel>
+            ):(<></>)}
             {/* <TabPanel value={value} index={3}>
               <AddLineResearchView />
             </TabPanel> */}

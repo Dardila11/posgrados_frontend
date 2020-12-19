@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core';
 import NavBar from './NavBar';
@@ -37,11 +37,14 @@ const useStyles = makeStyles((theme) => ({
 const DashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
-  const auth = useAuth();
   const navigate = useNavigate();
+
   return (
     <>
     {localStorage.getItem("userInfo")?(
+      
+      <>
+      
       <div className={classes.root}>
       <TopBar onMobileNavOpen={() => setMobileNavOpen(true)} />
       <NavBar
@@ -56,6 +59,7 @@ const DashboardLayout = () => {
         </div>
       </div>
     </div>
+    </>
     ):(
       navigate('/login', { replace: true })
     )}

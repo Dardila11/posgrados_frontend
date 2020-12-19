@@ -31,6 +31,7 @@ import {SearchGI} from "src/views/teamd/Search/searchGI"
 import { Autocomplete } from '@material-ui/lab'
 import {SetLabProfesor} from "./service"
 import {SetMember} from "./service"
+import {ConsultProfesorAll} from "src/views/teamd/Search/service"
 
 const useStyles = makeStyles({
   root: {
@@ -98,6 +99,7 @@ export const CreateProfessorView = () => {
   const [GIID, setGIID] = useState(false)
   const [CategoriaLaboral, setCategoriaLaboral] = useState(0)
   const [tiempoLaboral, settiempoLaboral] = useState(0)
+  
   const handleChangeIsInternal = () => {
     let selecteds = document.getElementById('selectedIsInternal');
     setisInternal(selecteds.options[selecteds.selectedIndex].text);
@@ -219,6 +221,14 @@ export const CreateProfessorView = () => {
                   setOpen(true)
                   setTypeAlert('success')
                   setMessage('Profesor creado correctamente')
+                  ConsultProfesorAll().then(response => {
+                    localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
+                    JSON.parse(localStorage.getItem("profesores")).map( element => {
+                      if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
+                        localStorage.setItem("profesorInfo",JSON.stringify(element))
+                      }
+                    })
+                })
                 })
               })
             })
