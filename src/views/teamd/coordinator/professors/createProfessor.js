@@ -200,7 +200,7 @@ export const CreateProfessorView = () => {
             is_director_gi: false,
             is_internal: isInternal,
             user: request.data.id,
-            institution: 1,
+            institution: 12,    /// TODO INSTITUCION
             department: departmentI
           })
             .then((request) => {
