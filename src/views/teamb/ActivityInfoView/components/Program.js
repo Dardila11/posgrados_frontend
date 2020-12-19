@@ -7,7 +7,6 @@ import Response from 'src/views/teamb/activitiesView/components/Response';
 const Program = (props) => {
     const objService = new service();
 
-
     const [InfoProgram, setInfoProgram] = useState('');
     const [popUp, setPopUp] = React.useState(false);
     const [response, setResponse] = useState(null);

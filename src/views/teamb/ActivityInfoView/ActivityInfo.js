@@ -13,6 +13,7 @@ import Institution from 'src/views/teamb/ActivityInfoView/components/Institution
 import City from 'src/views/teamb/ActivityInfoView/components/City';
 import Investigator from 'src/views/teamb/ActivityInfoView/components/Investigator';
 import InvestigationLine from 'src/views/teamb/ActivityInfoView/components/InvestigationLine';
+import Response from 'src/views/teamb/activitiesView/components/Response';
 
 import ActivityOneEdit from '../ActivityInfoView/EditActivity/ActivityOneEdit';
 import ActivityTwoEdit from '../ActivityInfoView/EditActivity/ActivityTwoEdit';
@@ -54,6 +55,14 @@ const ActivityInfoView = () => {
   const [open, setOpen] = React.useState(false);
   const [emergenteEliminar, setEmergenteEliminar] = React.useState(false);
   const [activity, setActivity] = useState('');
+  const [popUp, setPopUp] = React.useState(false);
+  const [response, setResponse] = useState(null);
+
+  const handleResponseAccept = () => {
+    setPopUp(false);
+    setResponse(null);
+  };
+
   useEffect(() => {
     objService.GetActivity(id).then((result) => {
       var data = result.data;
@@ -63,7 +72,8 @@ const ActivityInfoView = () => {
             var dataActivity = result.data;
             setActivity(dataActivity);
           }).catch(() => {
-            alert("Error, no hay registros para mostrar");
+            setResponse('Error al consultar el curso!');
+            setPopUp(true);
           });
           break;
         case "Ponencia en congresos, simposios y/o jornadas":
@@ -71,7 +81,8 @@ const ActivityInfoView = () => {
             var dataActivity = result.data;
             setActivity(dataActivity);
           }).catch(() => {
-            alert("Error, no hay registros para mostrar");
+            setResponse('Error al consultar la ponencia!');
+            setPopUp(true);
           });
           break;
         case "Publicación":
@@ -79,7 +90,8 @@ const ActivityInfoView = () => {
             var dataActivity = result.data;
             setActivity(dataActivity);
           }).catch(() => {
-            alert("Error, no hay registros para mostrar");
+            setResponse('Error al consultar la publicacion!');
+            setPopUp(true);
           });
           break;
         case "Exposición de resultados parciales de investigación":
@@ -87,7 +99,8 @@ const ActivityInfoView = () => {
             var dataActivity = result.data;
             setActivity(dataActivity);
           }).catch(() => {
-            alert("Error, no hay registros para mostrar");
+            setResponse('Error al consultar la presentacion de resultados!');
+            setPopUp(true);
           });
           break;
         case "Estancia de investigación en otra institucion":
@@ -95,7 +108,8 @@ const ActivityInfoView = () => {
             var dataActivity = result.data;
             setActivity(dataActivity);
           }).catch(() => {
-            alert("Error, no hay registros para  mostrar");
+            setResponse('Error al consultar la estancia de investigacion!');
+            setPopUp(true);
           });
           break;
         case "Participación en proyecto de investigación":
@@ -103,14 +117,17 @@ const ActivityInfoView = () => {
             var dataActivity = result.data;
             setActivity(dataActivity);
           }).catch(() => {
-            alert("Error, no hay registros para mostrar");
+            setResponse('Error al consultar la participacion de proyectos!');
+            setPopUp(true);
           });
           break;
         default:
-          alert("Error, no hay registros para mostrar");
+          setResponse('Error al obtener la actividad!');
+          setPopUp(true);
       }
     }).catch(() => {
-      alert("Error, no hay registros para mostrar");
+      setResponse('Error al obtener la actividad!');
+      setPopUp(true);
     });
   }, []);
 
@@ -120,7 +137,7 @@ const ActivityInfoView = () => {
   const handleEditarClose = () => {
     setOpen(false);
   }
-  
+
   const handleEliminar = () => {
     setEmergenteEliminar(true);
   };
@@ -136,11 +153,12 @@ const ActivityInfoView = () => {
     fd.append("date_record", activity.date_record);
     fd.append("date_update", now);
     fd.append("is_active", false);
-    
+
     objService.DeleteActivity(fd, activity.id).then((result) => {
       window.location.href = '../';
     }).catch(() => {
-      alert("Error, no hay registros para  mostrar");
+      setResponse('Error al eliminar la actividad!');
+      setPopUp(true);
     });
 
   };
@@ -369,7 +387,7 @@ const ActivityInfoView = () => {
         return activityFive();
       case 6:
         return activitySix();
-      default:        
+      default:
     }
   }
 
@@ -432,6 +450,8 @@ const ActivityInfoView = () => {
       <ConfirmOption open={emergenteEliminar} onClose={handleEliminarNo} onClickPositive={handleEliminarSi}
         msg={'¿Esta seguro de que desea eliminar la actividad?'}
       />
+
+      <Response popUpRequestPost={popUp} handleResponseAccept={handleResponseAccept} response={response} />
     </Container>
   );
 };

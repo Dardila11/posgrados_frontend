@@ -76,16 +76,19 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
 
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
-    setArchivo(e);
     if (e.length > 0) {
+      setArchivo(e);
       var name = e[0].name;
       var nameSplit = name.split(".");
       var ext = nameSplit[nameSplit.length - 1];
 
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
-      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+      else { 
+        setResponse('Solo es posible subir archivos con extension .pdf!');
+        setPopUpRequestPost(true);
+      }
     }
-    else { document.getElementById("text-file").textContent = ""; }
+    else { document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado"; }
   }
   // Costantes para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre una de las 
   // opciones disponibles
@@ -250,8 +253,8 @@ const ActivityFiveEdit = ({ state, callbackDialogOpen }) => {
   const handleResponseAccept = () => {
     if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
+      callbackDialogOpen(false);
     }
-    callbackDialogOpen(false);
     setPopUpRequestPost(false);
     setResponse(null);
   };

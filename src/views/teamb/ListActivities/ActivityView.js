@@ -14,6 +14,7 @@ import { Grid, Select, MenuItem, InputLabel } from '@material-ui/core';
 
 import util from 'src/views/teamb/services/util';
 import service from 'src/views/teamb/services/service';
+import Response from 'src/views/teamb/activitiesView/components/Response';
 
 const objService = new service();
 const objUtil = new util();
@@ -53,24 +54,29 @@ const ActivityView = ({ className, ...rest }) => {
     setActivity(e)
   }
 
-
- 
   //Constante para definir el estdo de "errorActivity"
   const [errorActivity, setErrorActivity] = useState(null);
-  
+  const [popUp, setPopUp] = React.useState(false);
+  const [response, setResponse] = useState(null);
+
+  const handleResponseAccept = () => {
+    setPopUp(false);
+    setResponse(null);
+  };
 
   const handleClickOpen = () => {
     /* Dato quemado desde la tabla User: id_user */
-    if (localStorage.getItem('id')){
-        objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
-          var CurrentPeriod = result.data.period; 
-          var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
-          document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
-        }).catch(() => {
-          alert("Error, no hay registros para mostrar");
-        });
+    if (localStorage.getItem('id')) {
+      objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
+        var CurrentPeriod = result.data.period;
+        var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+        document.getElementById("CurrentAcadYear").textContent += " " + CurrentAcadYear;
+      }).catch(() => {
+        setResponse('Error al consultar el periodo actual!');
+        setPopUp(true);
+      });
     }
-    
+
     setOpen(true);
   };
   // Se modificó "handleClose" para que despliegue la ventana emergente
@@ -93,7 +99,7 @@ const ActivityView = ({ className, ...rest }) => {
   const handleDatosDetalle = () => {
     //Validamos que los campos tengan los datos correspondientes 
 
-    if (activity.length) { 
+    if (activity.length) {
       setErrorActivity("");
       setEmergenteDatosDetalle(true);
     }
@@ -142,7 +148,7 @@ const ActivityView = ({ className, ...rest }) => {
            */}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button> &nbsp;  
+          <Button autoFocus onClick={handleClose} color="secondary"> Cancelar </Button> &nbsp;
           {/*Todo: comentar*/}
           <Button onClick={handleDatosDetalle} variant="contained" color="primary"> Datos de detalle</Button>
         </DialogActions>
@@ -167,6 +173,7 @@ const ActivityView = ({ className, ...rest }) => {
           </RouterLink>
         </DialogActions>
       </Dialog>
+      <Response popUpRequestPost={popUp} handleResponseAccept={handleResponseAccept} response={response} />
     </div>
   );
 };

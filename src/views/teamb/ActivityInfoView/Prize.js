@@ -30,6 +30,9 @@ const useStyles = makeStyles(() => ({
 const Prize = (props) => {
     const classes = useStyles();
 
+    const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
+    const [response, setResponse] = useState(null);
+
     useEffect(() => {
         objService.GetPrizes(props.id).then((result) => {
             var data = result.data.prizes;
@@ -43,7 +46,8 @@ const Prize = (props) => {
             else { listField = "Esta actividad aun no tiene premios asignados"; }
             document.getElementById("listPrizes").textContent = listField;
         }).catch(() => {
-            alert("Error al consultar los premios");
+            setResponse('Error al consultar los premios!');
+            popUpRequestPost(true);
         });
     }, []);
 
@@ -62,8 +66,6 @@ const Prize = (props) => {
     const [popUpAdd, setPopUpAdd] = React.useState(false);
     const [popUpCancel, setPopUpCancel] = React.useState(false);
     const [errorName, setErrorName] = useState(null);
-    const [popUpRequestPost, setPopUpRequestPost] = React.useState(false);
-    const [response, setResponse] = useState(null);
 
     const handleResponseAccept = () => {
         if (response == "Premio asignado correctamente") {

@@ -44,7 +44,8 @@ const SearchBar = ({ className, context, ...rest }) => {
             var acadYears = objUtil.GetAcademicYears(dataPeriods);
             setAcademicYears({ years: acadYears });
         }).catch(() => {
-            /*  alert("Error, no hay registros para mostrar"); */
+            setMessage('Error al listar los años academicos!');
+            setOpen(true);
         });
     }, []);
 
@@ -62,7 +63,7 @@ const SearchBar = ({ className, context, ...rest }) => {
 
     const changeList = () => {
         if (academicYear == "") {
-            setMessage('En necesario seleccionar un año academico para realizar la consulta!');
+            setMessage('Es necesario seleccionar un año academico para realizar la consulta!');
             setOpen(true);
         }
         else {
