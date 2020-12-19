@@ -24,7 +24,7 @@ import RegisterDirectorDialog from './RegisterDirectorDialog';
 import AddCodirectorDialog from './AddCodirectorDialog';
 import React, { useState } from 'react';
 import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
-import { registerStudent } from 'src/views/teamA/coordinator/service';
+import { registerEnrrollment, registerStudent } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
 import './styles.css';
 //ICONS
@@ -47,6 +47,7 @@ import { SearchProgramOrAdd } from 'src/views/teamA/search/searchProgramOrAdd';
 import { SearchProgram } from 'src/views/teamA/search/searchProgram';
 import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
 import RegisterAgreementDialog from './RegisterAgreementDialog';
+import { register } from 'src/serviceWorker';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -81,18 +82,26 @@ const RegisterStudent = () => {
   const [codirector2, setCodirector2] = useState('');
 
   const [dedicationType, setDedicationType] = useState('');
+  //Control matricula
+  const [admissionDate, setadmissionDate] = useState('');
+  const [enrrollment_date, setenrrollment_date] = useState('');
+  const [state, setstate] = useState('');
+  const [period, setperiod] = useState('');
+  const [is_active, setis_active] = useState('');
+   const [ListaEstudiantes, setListaEstudiantes] = useState([])
+   ///////
 
-  const [username, setUsername] = useState('a');
-  const [academicTitle, setAcademicTitle] = useState('a');
-  const [password, setPassword] = useState('1');
-  const [firstName, setFirstName] = useState('123');
-  const [lastName, setLastName] = useState('133');
-  const [email, setEmail] = useState('a@unicauca.edu.co');
-  const [typeId, setTypeId] = useState('1');
-  const [personal_id, setPersonal_id] = useState('13123'); // identificacion
-  const [personal_code, setPersonal_code] = useState('1313'); // en el back debe ser automatico
-  const [telephone, setTelephone] = useState('312313');
-  const [address, setAddress] = useState('12313');
+  const [username, setUsername] = useState('');
+  const [academicTitle, setAcademicTitle] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [typeId, setTypeId] = useState('');
+  const [personal_id, setPersonal_id] = useState(''); // identificacion
+  const [personal_code, setPersonal_code] = useState(''); // en el back debe ser automatico
+  const [telephone, setTelephone] = useState('');
+  const [address, setAddress] = useState('');
   const [role, setRole] = useState('1'); //en el back hay dos variable is_professor is_student
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const [is_proffessor, setIs_proffessor] = useState(0);
@@ -147,6 +156,12 @@ const RegisterStudent = () => {
   };
   const handleChangeAcademicTitle = e => {
     setAcademicTitle(e.target.value);
+  };
+  const handleChangeAdmissionDate = e => {
+    setadmissionDate(e.target.value);
+  };
+  const handleChangePeriod = e => {
+    setperiod(e.target.value);
   };
 
   const handleChangeRole = event => {
@@ -206,12 +221,7 @@ const RegisterStudent = () => {
   const handleCreateUser = e => {
     e.preventDefault();
 
-    // console.log(fileImage);
-    // const form_data = new FormData();
-    // form_data.append('image_file', fileImage, fileImage.name);
-    // form_data.append('title', 'image');
-    // form_data.append('content', fileImage.content);
-    // console.log(firstName);
+   
     console.log(lastName);
 
     registerStudent({
@@ -223,19 +233,35 @@ const RegisterStudent = () => {
         email: email,
         type_id: typeId,
         personal_id: personal_id,
-        personal_code: personal_code,
+        personal_code: 106180243,
         //photo: null,
         telephone: telephone,
         address: address,
 
         is_proffessor: false,
-        is_student: true
+        is_student: true,
+        is_coordinator: false
       },
+      departament_origin : 'Cauca',
+      city_origin : 'Popayan',
+      country_intituion: 'Colombia',
+      city_intituion: 'Popayan',
+      instituion_degree: 'Fup',
       dedication: dedicationType,
       program: program,
-      academic_title: academicTitle
+      academic_title: 'Ingeniero en Computacion'
     })
-      .then(() => {
+      .then((result) => {
+        
+        registerEnrrollment({
+          admission_date: admissionDate,
+          enrrollment_date: '2020-12-18',
+          state : 2,
+          period : period,
+          is_active: true,
+          student: result.data.id
+
+        })
         setOpen(true);
         setTypeAlert('success');
         setMessage('Usuario creado correctamente');
@@ -246,6 +272,7 @@ const RegisterStudent = () => {
         setMessage('Error, Verifica los datos!');
       });
   };
+  
 
   return (
     <Container maxWidth="md" className={clases.container}>
@@ -614,10 +641,56 @@ const RegisterStudent = () => {
                       <MenuItem value="2">Tiempo parcial</MenuItem>
                     </TextField>
                   </Grid>
-
                   <Grid item md={6} xs={12}>
-                    <SearchProgramOrAdd callback={getProgram} />
+                    <SearchProgram callback={getProgram} />
                   </Grid>
+                  <Grid item md={6} xs={12}>
+                    <TextField
+                      id="period"
+                      label="Periodo(aaaa.periodo)"
+                      variant="outlined"
+                      type="text"
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangePeriod(e);
+                      }}
+                      error={Boolean(touched.period && errors.period)}
+                      helperText={touched.period && errors.period}
+                      onBlur={handleBlur}
+                      value={values.period}
+                      required
+                      fullWidth
+                     
+                    />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                  <TextField
+                      error={Boolean(touched.admissionDate && errors.admissionDate)}
+                      fullWidth
+                      helperText={touched.admissionDate && errors.admissionDate}
+                      id="agreementDate"
+                      label="Fecha de admisión"
+                      margin="normal"
+                      name="admissionDate"
+                      type="date"
+                      required
+                      defaultValue="2017-05-24"
+                      className={clases.textField}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      onBlur={handleBlur}
+                      onChangeCapture={e => {
+                        handleChangeAdmissionDate(e);
+                        handleChange(e);
+                      }}
+                      value={values.admissionDate}
+                      variant="outlined"
+                    />
+                  </Grid>
+
+                 
                 </Grid>
 
                 <Grid container spacing={2}>
