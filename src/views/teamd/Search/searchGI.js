@@ -21,7 +21,6 @@ export const SearchGI = ({callback,departmentIID}) => {
         }
     }
     return (
-        <>
             <Autocomplete
                 id = "searchGI"
                 options = {listGi}
@@ -31,19 +30,16 @@ export const SearchGI = ({callback,departmentIID}) => {
                         <TextField
                          id="inputLabelGI"
                          {...params}
-                         label = "Ingresar Gi"
+                         label = "Grupo de investigación"
                          variant = 'outlined'
                          required
-                         style={{ marginBottom: 10, marginTop: 10, width: 300 }}
+                         style={{width: 300,marginLeft:10, marginBottom: 10 }}
                         >
                         </TextField>
                     )
                 }
                 onInputCapture = { (e,input) => {getIdGi(input)}}
                 onChange = { (e,input) => {getIdGi(input)}}
-            >
-
-            </Autocomplete>
-        </>
+            />
     )
 }

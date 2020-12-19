@@ -4,6 +4,7 @@ import {
 } from '@material-ui/core';
 
 import service from '../../services/service';
+import Response from 'src/views/teamb/activitiesView/components/Response';
 
 const objService = new service();
 
@@ -18,7 +19,14 @@ const SelectField = (props) => {
     
     const [stateSelect, setStateSelect] = useState({
         list: []
-    })
+    });
+    const [popUp, setPopUp] = React.useState(false);
+    const [response, setResponse] = useState(null);
+
+    const handleResponseAccept = () => {
+        setPopUp(false);
+        setResponse(null);
+    };
 
     useEffect(() => {
         if (props.name === "programaSeleccionado") {
@@ -26,7 +34,8 @@ const SelectField = (props) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
-                alert("No hay programas registrados");
+                setResponse('Error al listar los programas!');
+                setPopUp(true);
             });
         }
         if (props.name === "institucionSeleccionada") {
@@ -34,7 +43,8 @@ const SelectField = (props) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
-                alert("No hay instituciones registradas");
+                setResponse('Error al listar las instituciones!');
+                setPopUp(true);
             });
         }
         if (props.name === "paisSeleccionado") {
@@ -42,7 +52,8 @@ const SelectField = (props) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
-                alert("No hay paises registrados");
+                setResponse('Error al listar los paises!');
+                setPopUp(true);
             });
         }
         if (props.name === "ciudadSeleccionada") {
@@ -50,7 +61,8 @@ const SelectField = (props) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
-                alert("No hay ciudades registradas");
+                setResponse('Error al listar las ciudades!');
+                setPopUp(true);
             });
         }
         if (props.name === "investigadorSeleccionado") {
@@ -58,7 +70,8 @@ const SelectField = (props) => {
                 var data = result.data.investigadores;
                 setStateSelect({ list: data });
             }).catch(() => {
-                alert("No hay investigadores registrados");
+                setResponse('Error al listar los investigadores!');
+                setPopUp(true);
             });
         }
         if (props.name === "lineaSeleccionada") {
@@ -66,7 +79,8 @@ const SelectField = (props) => {
                 var data = result.data;
                 setStateSelect({ list: data });
             }).catch(() => {
-                alert("No hay lineas de investigacion registradas");
+                setResponse('Error al listar las lineas de investigacion!');
+                setPopUp(true);
             });
         }
     }, []);
@@ -77,15 +91,16 @@ const SelectField = (props) => {
             <Select value={props.Selected} onChange={props.handleChange} label={props.label} name={props.name}>
                 <MenuItem disabled value={0}> Seleccione una opción... </MenuItem>
                 {stateSelect.list.map(element => (
-                    <MenuItem key={element.id} value={element.id}> 
+                    <MenuItem key={element.id} value={element.id}>
                         {
-                            props.name === "institucionSeleccionada" ?  element.name_inst : 
-                            props.name === "investigadorSeleccionado" ?  element.user.first_name + " " +  element.user.last_name :
-                            element.name
-                        } 
+                            props.name === "institucionSeleccionada" ? element.name_inst :
+                                props.name === "investigadorSeleccionado" ? element.user.first_name + " " + element.user.last_name :
+                                    element.name
+                        }
                     </MenuItem>
                 ))}
             </Select>
+            <Response popUpRequestPost={popUp} handleResponseAccept={handleResponseAccept} response={response} />
         </FormControl>
     );
 };

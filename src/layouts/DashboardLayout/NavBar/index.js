@@ -39,8 +39,6 @@ const StudentItems = [
     title: 'Perfil'
   }
 ];
-
-
 const CoordinatorItems = [
   {
    href: '/coordinator/administer-student',
@@ -78,12 +76,6 @@ const CoordinatorItems = [
    icon: SupervisorAccountIcon,
    title: 'Administar Profesores'
  },
-
- {
-   href: '/coordinator/administerUsers',
-   icon: GroupRoundedIcon,
-   title: 'Administrar Usuarios'
- },
  {
    href: '/coordinator/create-others',
    icon: AddIcon,
@@ -105,7 +97,6 @@ const CoordinatorItems = [
    title: 'Reportes x Año Ingreso'
  }
 ];
-
 const DirectorItems = [
   {
     href: '/director/list-students',
@@ -128,8 +119,13 @@ const DirectorItems = [
     title: 'Grupo de investigación'
   }
 ];
-
-
+const ProfessorItems = [
+  {
+    href: '/director/manage-gi',
+    icon: EyeIcon,
+    title: 'Grupo de investigación'
+  }
+];
 const useStyles = makeStyles(() => ({
   mobileDrawer: {
     width: 256
@@ -145,17 +141,18 @@ const useStyles = makeStyles(() => ({
     height: 64
   }
 }));
-
 const NavBar = ({ onMobileClose, openMobile }) => {
   const classes = useStyles()
   const location = useLocation()
   const [openDirector, setOpenDirector] = React.useState(false);
+  const [openProfesor, setOpenProfesor] = React.useState(false);
   const [openCoordinator, setOpenCoordinator] = React.useState(false);
   const [openStudent, setOpenStudent] = React.useState(false);
-  const auth = useAuth();
-  const [photo, setPhoto] = useState()
   const handleClickDirector = () => {
     setOpenDirector(!openDirector);
+  };
+  const handleClickProfesor = () => {
+    setOpenProfesor(!openProfesor);
   };
 
   const handleClickCoordinator = () => {
@@ -176,7 +173,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
   const content = (
     <>
     {localStorage.getItem("userInfo") ? (
-    
     <>
     <Box
       height="100%"
@@ -213,7 +209,34 @@ const NavBar = ({ onMobileClose, openMobile }) => {
       <Divider />
       <Box p={2}>
 
-      {localStorage.getItem("rol").split(',').find(item => item== "profesor") ? (
+      {localStorage.getItem("rol").split(',').find(item => item== "dd") ? (
+        <List
+        component="nav"
+        aria-labelledby="nested-list-subheader"
+        className={classes.root}
+      >
+        <ListItem button onClick={handleClickProfesor}>
+          <ListItemText primary="Opciones de profesor" />
+          {openProfesor ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={openProfesor} timeout="auto" unmountOnExit>
+        <List>
+          {ProfessorItems.map((item) => (
+            <NavItem
+              href={item.href}
+              key={item.title}
+              title={item.title}
+              icon={item.icon}
+            />
+          ))}
+        </List>
+        </Collapse>
+      </List>
+          
+      ):(
+        <></>
+      )}
+        {localStorage.getItem("rol").split(',').find(item => item== "profesor") ? (
         <List
         component="nav"
         aria-labelledby="nested-list-subheader"
@@ -301,7 +324,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     </>
     
   );
-
   return (
     <>
       <Hidden lgUp>

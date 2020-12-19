@@ -9,7 +9,7 @@ export const SearchDeparmentI = ({ callback }) => {
   useEffect(() => {
     GetDeparmentIListService()
       .then(result => {
-        setListDepartmentI(result.data.Department);
+        setListDepartmentI(result.data.Departments);
       })
       .catch(()=>setListDepartmentI([]));
   }, []);
@@ -30,10 +30,10 @@ export const SearchDeparmentI = ({ callback }) => {
         <TextField
           id="inputOptionDepartmentI"
           {...params}
-          label="Departamento al que pertenece"
+          label="Departamento de la universidad"
           variant="outlined"
           required
-          style={{ marginBottom: 10, marginTop: 10, width: 300 }}
+          style={{width: 300, marginLeft:10,marginBottom: 10 }}
         />
       )}
       onInputChange={(e, input) => getIdDepartmentI(input)}

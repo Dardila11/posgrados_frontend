@@ -26,6 +26,7 @@ export const MemberCard = ({member}) => {
         setDialogState(state)
     }
     const eliminarMiembro = () =>{
+        
         eliminarMiembroSerivce({
             "member_status": false,
             "professor": professor,
@@ -34,7 +35,6 @@ export const MemberCard = ({member}) => {
     }
     useEffect(() => {
         ConsultProfesor(professor).then(request => ConsultUser(request.data.Professor[0].user).then(request => setUsuario(request.data.Users[0]))).catch()
-
     }, [member])
 
 
@@ -42,7 +42,7 @@ export const MemberCard = ({member}) => {
         // <RouterLink to={link}>
         <Card className="border border-dark rounded mb-0">
             <CardContent>
-            <Box alignItems="center" display="flex" flexDirection="column">
+            <Box alignItems="left" display="flex" flexDirection="column">
                 
                 <Typography color="textSecondary" gutterBottom>
                     Nombre: {usuario.first_name} {usuario.last_name}
@@ -50,15 +50,19 @@ export const MemberCard = ({member}) => {
                 <Typography color="textSecondary" gutterBottom>
                     Rol: profesor
                 </Typography>
-                {/* <Typography color="textSecondary" gutterBottom>
+                <Typography color="textSecondary" gutterBottom>
                     Email: {usuario.email}
                 </Typography>
-                <Typography color="textSecondary" gutterBottom>
+                {/* <Typography color="textSecondary" gutterBottom>
                     Institucion: {nameInstitution}
                 </Typography>
                 <Typography color="textSecondary" gutterBottom>
                     Departamento: {nameDeparment}
                 </Typography> */}
+
+                { localStorage.getItem("rol").split(",").find(element => element === "director") ?
+                    (
+                    <>
                     <CardActions>
                         <Button 
                             variant="outlined" 
@@ -69,6 +73,11 @@ export const MemberCard = ({member}) => {
                                 Eliminar miembro
                         </Button>
                     </CardActions>
+                    </>):
+                    (
+                    <>
+                    </>)}
+
                     {/* <EditProfesorDialog state={dialogState} setState={setDialogState} Member={member}/> */}
             </Box>
             </CardContent>

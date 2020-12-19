@@ -23,7 +23,6 @@ import CreateProgramDialog from './CreateProgramDialog';
 import RegisterDirectorDialog from './RegisterDirectorDialog';
 import AddCodirectorDialog from './AddCodirectorDialog';
 import React, { useState,useEffect } from 'react';
-import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
 import { registerStudent } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
 

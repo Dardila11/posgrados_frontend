@@ -23,6 +23,7 @@ import { CreateGIApi } from './service';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailRoundedIcon from '@material-ui/icons/MailRounded';
+import {SearchProfessor} from "src/views/teamd/Search/searchProfessor"
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -45,11 +46,7 @@ export const CreateView = () => {
   const [departmentI, setDepartmentI] = useState('');
   const [dateFoundation, setDateFoundation] = useState('');
   const [category, setCategory] = useState('A');
-  const [professorsList, setProfessorsList] = useState([])
-  const [listProfessors, setlistProfessors] = useState([])
   const [profesorSelect, setProfesorSelect] = useState("")
-  const [requestCreate, setRequestCreate] = useState("")
-  const [userList, setuserList] = useState([])
   const handleChangeName = event => {
     setName(event.target.value);
   };
@@ -66,34 +63,10 @@ export const CreateView = () => {
     setDateFoundation(e.target.value);
   };
   const getIdProfessor = input =>{
-    let find = listProfessors.find(profesor => profesor.username === input);
-    console.log("Profesor seleccionado",find)
-    if (find === undefined) {
-    } else {
-      let find2 = userList.find (professor => professor.user === find.id)
-      setProfesorSelect(find2.id);
-    }
+      console.log("profesor seleccionado ",input)
+      setProfesorSelect(input)
 
   }
-
-  useEffect(() => {
-    ConsultUserService()
-      .then(request => {
-        console.log("Consultar usuarios ",request.data.Users)
-        let lista = listProfessors
-        request.data.Users.map( (usuario)=>{
-          if (usuario.is_proffessor === true){ // Todo arreglar setListProfessor
-            lista.push(usuario)
-          }
-        })
-        setlistProfessors(lista)
-        
-      })
-      .catch(console.log("nada"));
-      ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
-  }, []);
-
-
   const handleCreate = async () => {
     setOpen(false)
     await CreateGIApi({
@@ -268,7 +241,7 @@ export const CreateView = () => {
                     />
                   </FormGroup>
                   <FormGroup>
-                      <Autocomplete
+                      {/* <Autocomplete
                         id="searchProffesor"
                         options={listProfessors}
                         getOptionLabel={option => option.username}
@@ -284,7 +257,8 @@ export const CreateView = () => {
                         )}
                         onInputChange={(e, input) => getIdProfessor(input)}
                         onChange={(e, input) => getIdProfessor(input)}
-                      />
+                      /> */}
+                      <SearchProfessor callback= {getIdProfessor}/>
                   </FormGroup>
                   <Box my={2}>
                     <Button

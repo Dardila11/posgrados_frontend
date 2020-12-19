@@ -19,7 +19,7 @@ import { useAuth } from "src/views/auth/Context/use-auth.js";
 import {UpdateStudentService} from "src/views/teamA/student/service"
 import {getStudents} from "src/views/teamA/student/service"
 import {UpdateUserService} from "src/views/teamA/student/service"
-
+import { AlertView } from 'src/components/Alert'
 const useStyles = makeStyles(() => ({
   root: {}
 }));
@@ -49,6 +49,10 @@ const ProfileDetails = ({ className, ...rest }) => {
     "telephone": JSON.parse(localStorage.getItem("userInfo")).telephone,
     "address": JSON.parse(localStorage.getItem("userInfo")).address,
   });
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
+
 
   const [first_name, setfirst_name] = useState(JSON.parse(localStorage.getItem("userInfo")).first_name)
   const [last_name, setlast_name] = useState(JSON.parse(localStorage.getItem("userInfo")).last_name)
@@ -82,6 +86,7 @@ const ProfileDetails = ({ className, ...rest }) => {
 
 
   const saveUser = () =>{
+    setOpen(false)
     if(localStorage.getItem("rol").split(",").find(element => element === "estudiante")){
       UpdateStudentService({
         "academic_title": tituloAcademicoEstudiante,
@@ -109,7 +114,18 @@ const ProfileDetails = ({ className, ...rest }) => {
 
       "address": address,
 
-    }).then(alert("editado"))
+    }).then( result => 
+      {
+      setOpen(true)
+      setTypeAlert('success')
+      setMessage('Profesor creado correctamente')
+      }
+    ).catch((request) => {
+      console.log(request)
+      setOpen(true)
+      setTypeAlert('error')
+      setMessage('Error, Verifica los datos!')
+    })
   }
   
     //ESTUDIANTE
@@ -286,9 +302,7 @@ const ProfileDetails = ({ className, ...rest }) => {
           </>
         ):(
           <>
-          </>
-        )}
-        {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? (
+          {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? (
           <>
         <Grid
           container
@@ -407,10 +421,7 @@ const ProfileDetails = ({ className, ...rest }) => {
           </>
         ):(
           <>
-          </>
-        )}
-        
-            {localStorage.getItem("rol").split(",").find(element => element === "estudiante") ? (
+          {localStorage.getItem("rol").split(",").find(element => element === "estudiante") ? (
               <>
               <Grid
             container
@@ -542,34 +553,10 @@ const ProfileDetails = ({ className, ...rest }) => {
               <>
               </>
             )}
-
-
-            {/* <Grid
-              item
-              md={6}
-              xs={12}
-            >
-              <TextField
-                fullWidth
-                label="Select State"
-                name="state"
-                onChange={handleChange}
-                required
-                select
-                SelectProps={{ native: true }}
-                value={values.state}
-                variant="outlined"
-              >
-                {states.map((option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
-            </Grid> */}
+          </>
+        )}
+          </>
+        )}
         </CardContent>
         <Divider />
         <Box
@@ -586,7 +573,9 @@ const ProfileDetails = ({ className, ...rest }) => {
           </Button>
         </Box>
       </Card>
+      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </form>
+    
   );
 };
 

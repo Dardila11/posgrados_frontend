@@ -42,7 +42,7 @@ export const ConsultDirige_d = (id) => {
 };
 export const eliminarMiembroSerivce = (info) => {
   const url = `${API_URL}/api/1.0/consultar_es_miembro/${info.professor}/${info.inv_group}`;
-  return axios.put(url);
+  return axios.put(url,info);
 };
 
 

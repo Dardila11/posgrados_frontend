@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Container, Card,TextField } from '@material-ui/core';
-import CreateProfessorView from './createProfessor';
+import {CreateProfessorView} from './createProfessor';
 import Page from 'src/components/Page';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
@@ -85,7 +85,7 @@ const AdministerProfessorsView = () => {
               <Tab
                 label={
                   <>
-                    <PersonAddIcon fontSize="inherit" /> Editar profesor
+                    <PersonAddIcon fontSize="inherit" /> Profesores
                   </>
                 }
                 {...options(1)}

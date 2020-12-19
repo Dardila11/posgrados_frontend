@@ -13,7 +13,6 @@ import {
   Box,
   Button,
   Container,
-  TextField,
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -44,7 +43,7 @@ const DeleteCountryView = () => {
   const handleClickOpenDeleteCountry = () => {
     const namecountry = document.getElementById("searchCountries").value;
     setname(namecountry)
-    if (namecountry == ""){
+    if (namecountry === ""){
         setOpenAlert(true)
         setTypeAlert('error')
         setMessage('Error, campos vacios !')        

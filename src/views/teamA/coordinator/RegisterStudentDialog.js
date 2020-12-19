@@ -19,7 +19,7 @@ import CreateProgramDialog from './CreateProgramDialog';
 import RegisterDirectorDialog from './RegisterDirectorDialog';
 import AddCodirectorDialog from './AddCodirectorDialog';
 import React, { useState } from 'react';
-import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
+import { CreateUserService } from 'src/views/teamd/Search/service';
 import { AlertView } from 'src/components/Alert';
 import './styles.css';
 //ICONS
