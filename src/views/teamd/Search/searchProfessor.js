@@ -40,13 +40,14 @@ export const SearchProfessor = ({ callback }) => {
 
 
     const getIdProfesor = (input) =>{
-        console.log("dasdad",input)
-        console.log("usuarios ",listProfessors)
-        let user =listProfessors.find( element => element.user === input.id)
-        if (user){
-            console.log("dasdasdasdasd",user)
-            callback(user.id)
+        if(input){
+            let user =listProfessors.find( element => element.user === input.id)
+            if (user){
+                console.log("dasdasdasdasd",user)
+                callback(user.id)
+            }
         }
+
     }
 
 
