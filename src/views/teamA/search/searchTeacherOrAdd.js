@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ConsultProgram, ConsultStudent } from './service';
 import 'src/views/teamA/coordinator/styles.css';
+import CreateProgramDialog from 'src/views/teamA/coordinator/CreateProgramDialog';
+import { ConsultProfesorService } from './service';
+import { ConsultUserService } from './service';
 import {
   Box,
   Button,
@@ -18,19 +21,36 @@ import Autocomplete, {
   createFilterOptions
 } from '@material-ui/lab/Autocomplete';
 
-const filter = createFilterOptions();
-
-//Profes para llenar la lista
-
-
 export const SearchTeacherOrAdd = ({ callback }) => {
   const [teacherList, setTeacherList] = useState([]); // cambiar los nombres de los estados
   const [value, setValue] = React.useState(null);
   const [openCod, toggleOpen] = React.useState(false);
-
+  const filter = createFilterOptions();
+  const [listProfessors, setlistProfessors] = useState([]);
+  const [userList, setuserList] = useState([]);
+  const [teacherSelect, setTeacherSelect] = useState('');
   const [dialogValue, setDialogValue] = React.useState({
     teacher: ''
   });
+  useEffect(() => {
+    ConsultUserService()
+      .then(request => {
+        console.log('Consultar usuarios ', request.data.Users);
+        let lista = listProfessors;
+        request.data.Users.map(usuario => {
+          if (usuario.is_proffessor === true) {
+            // Todo arreglar setListProfessor
+            lista.push(usuario);
+          }
+        });
+        setlistProfessors(lista);
+      })
+      .catch(console.log('nada'));
+    ConsultProfesorService().then(request => {
+      setuserList(request.data.Professors);
+    });
+  }, []);
+
   const handleSubmit = event => {
     event.preventDefault();
     setValue({
@@ -57,10 +77,11 @@ export const SearchTeacherOrAdd = ({ callback }) => {
   }, []);
 
   const getIdTeacher = name => {
-    let find = teacherList.find(teacher => teacher.name === name); // NOTA verificar el nombre del profesor con el back (Program.name)
+    let find = teacherList.find(teacher => teacher.user.username === name); // NOTA verificar el nombre del profesor con el back (Program.name)
     if (find === undefined) {
     } else {
-      callback(find.id);
+      let find = userList.find(teacher => teacher.user === find.id);
+      setTeacherSelect(find.id);
     }
   };
   return (
@@ -99,7 +120,7 @@ export const SearchTeacherOrAdd = ({ callback }) => {
 
           return filtered;
         }}
-        options={teacherList}
+        options={listProfessors}
         getOptionLabel={option => {
           // e.g value selected with enter, right from the input
           if (typeof option === 'string') {
