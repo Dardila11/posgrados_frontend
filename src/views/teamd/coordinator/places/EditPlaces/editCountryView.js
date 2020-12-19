@@ -4,12 +4,14 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AlertView } from '../../../../../components/Alert'
-import { SearchCountry } from 'src/views/teamd/Search/searchCountry'
+import { SearchFullCountry } from 'src/views/teamd/Search/searchFullCountry'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import {
   Box,
   Button,
@@ -41,7 +43,7 @@ const EditCountryView = () => {
   const clases = useStyles();
   const [name, setname] = useState(' ');
   const [Country, setidCountry] = useState('');
-  const [namecountry,setNameCountry] = useState('');
+  const [type, setType] = useState(' ');
   const handleClickOpenEditCountry = () => {
     const namecountry = document.getElementById("searchCountries").value;
     if (namecountry == ""){
@@ -61,7 +63,8 @@ const EditCountryView = () => {
       EditCountryService({
         
         id: Country,
-        name: name
+        name: name,
+        status: type
         
     })
       .then(() => {
@@ -76,15 +79,19 @@ const EditCountryView = () => {
         setMessage('Error, verifica los datos!')
         
       });
-      
+      setOpen(false)
   };
   const handleSubmit = event => {
+    handleClickOpenEditCountry();
     event.preventDefault()
     //handleEdit();
   };
   const handleClose = () => {
     setOpen(false);
 };
+  const handleOnchangetype = e => {
+    setType(e.target.value);
+  };
   const handleOnchangeName = e => {
     setname(e.target.value);
     console.log(setname);
@@ -121,21 +128,21 @@ const EditCountryView = () => {
               justifyContent="center"
               
             >
-              <form className={clases.root}>
+              <form className={clases.root} onSubmit={e => handleSubmit(e)}>
                 <Typography color="textPrimary" variant="h1" align="center">
                   Editar Pais
                 </Typography>
                 <Box mb={3}>
-                <SearchCountry  callback={getCountry} />
+                <SearchFullCountry  callback={getCountry} />
                 
                   <Box my={2}>
                     <Button
                       color="primary"                      
                       fullWidth
                       size="large"   
-                                    
+                      type="submit"              
                       variant="contained"                      
-                      onClick={handleClickOpenEditCountry}
+                      
                     >
                       Editar
                     </Button>
@@ -157,6 +164,17 @@ const EditCountryView = () => {
                                         type="text"
                                         variant="outlined"
                                     />
+                                    <Typography color="textPrimary" variant="h5">
+                                      Estado 
+                                    </Typography>
+                                    <Select 
+                                      id="Select-cohorte"
+                                      onChange={handleOnchangetype}>
+                                                              
+                                        <MenuItem value={0}>Inactivo</MenuItem>
+                                        <MenuItem value={1}>Activo</MenuItem>
+                                        
+                                    </Select>
                                    
                                 </DialogContent>
                                 <DialogActions>

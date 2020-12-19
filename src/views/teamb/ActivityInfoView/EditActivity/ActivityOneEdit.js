@@ -75,16 +75,19 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
 
   const [archivo, setArchivo] = useState(null);
   const uploadFile = e => {
-    setArchivo(e);
     if (e.length > 0) {
+      setArchivo(e);
       var name = e[0].name;
       var nameSplit = name.split(".");
       var ext = nameSplit[nameSplit.length - 1];
 
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
-      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+      else { 
+        setResponse('Solo es posible subir archivos con extension .pdf!');
+        setPopUpRequestPost(true);
+      }
     }
-    else { document.getElementById("text-file").textContent = ""; }
+    else { document.getElementById("text-file").textContent = "El archivo previamente registrado esta cargado"; }
   }
   // Costantes para definir el estado de la ventana emergente de confirmación cuando se pulsa sobre una de las 
   // opciones disponibles
@@ -141,7 +144,6 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
   const validarGuardarYEnviar = () => {
     resetError();
     var result = validarGuardar();
-
     
     if (values.horasAsignadas > 0 && values.horasAsignadas !== "") {
       if( values.horasAsignadas < 10000) {setErrorHour(null) }
@@ -249,8 +251,8 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
   const handleResponseAccept = () => {
     if (response === "Actividad editada correctamente") {
       window.location.href = window.location.href;
+      callbackDialogOpen(false);
     }
-    callbackDialogOpen(false);
     setPopUpRequestPost(false);
     setResponse(null);
   };
@@ -267,7 +269,6 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     var send_email = emergenteGuardarYEnviar;
 
     const fd = new FormData();
-    console.log(values);
     fd.append("id", values.id);
     fd.append("title", values.titulo);
     fd.append("description", values.descripcion);
@@ -280,10 +281,12 @@ export const ActivityOneEdit = ({ state, callbackDialogOpen }) => {
     fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", state.date_record);
     fd.append("date_update", now);
+    fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);
     }
+    console.log(archivo);
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
 
     objService.PutActivityOneEdit(fd, values.id).then((request) => {

@@ -140,8 +140,8 @@ export default class service {
         return axios.put(url, activity);
     }
 
-    DeleteActivity(id) {
+    DeleteActivity(activity, id) {
         const url= `${API_URL}/api/activity/`+id+`/`;  
-        return axios.delete(url);
+        return axios.put(url, activity);
     }
 }

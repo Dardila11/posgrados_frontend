@@ -65,6 +65,7 @@ const ActivityOneView = () => {
   };
 
   const [archivo, setArchivo] = useState(null);
+
   const uploadFile = e => {
     setArchivo(e);
     if (e.length > 0) {
@@ -73,7 +74,10 @@ const ActivityOneView = () => {
       var ext = nameSplit[nameSplit.length - 1];
 
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
-      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+      else {
+        setResponse('Solo es posible subir archivos con extension .pdf!');
+        setPopUpRequestPost(true);
+      }
     }
     else { document.getElementById("text-file").textContent = ""; }
   }
@@ -133,10 +137,9 @@ const ActivityOneView = () => {
     resetError();
     var result = validarGuardar();
 
-    
     if (values.horasAsignadas > 0 && values.horasAsignadas !== "") {
-      if( values.horasAsignadas < 10000) {setErrorHour(null) }
-      else{
+      if (values.horasAsignadas < 10000) { setErrorHour(null) }
+      else {
         setErrorHour("El numero de horas asignadas debe ser menor a 10000")
         result = false;
       }
@@ -169,7 +172,7 @@ const ActivityOneView = () => {
     resetError();
     var result = true;
 
-    if(values.titulo !== ''){
+    if (values.titulo !== '') {
       if (values.titulo.length < 61) { setErrorTitle(null) }
       else {
         setErrorTitle("El campo debe tener máximo 60 carateres")
@@ -180,7 +183,7 @@ const ActivityOneView = () => {
       setErrorTitle("El campo es obligatorio")
       result = false;
     }
-    if(values.descripcion !== ''){
+    if (values.descripcion !== '') {
       if (values.descripcion.length < 149) { setErrorDescription(null) }
       else {
         setErrorDescription("El campo debe tener máximo 148 caracteres")
@@ -197,8 +200,8 @@ const ActivityOneView = () => {
       result = false;
     }
     if (values.horasAsignadas >= 0 && values.horasAsignadas !== "") {
-      if( values.horasAsignadas < 10000) {setErrorHour(null) }
-      else{
+      if (values.horasAsignadas < 10000) { setErrorHour(null) }
+      else {
         setErrorHour("El numero de horas asignadas debe ser menor a 10000")
         result = false;
       }
@@ -207,17 +210,17 @@ const ActivityOneView = () => {
       setErrorHour("Seleccione un número de horas valido.(Mayor o igual a 0)")
       result = false;
     }
-    if (values.fechaInicio.length) {setErrorStartDate("")}
+    if (values.fechaInicio.length) { setErrorStartDate("") }
     else {
       setErrorStartDate("Seleccióne una fecha inicial válida")
       result = false;
     }
     if (values.fechaFin.length) {
-        if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
-        else {
-          setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
-          result = false;
-        }
+      if (values.fechaInicio <= values.fechaFin) { setErrorEndDate("") }
+      else {
+        setErrorEndDate("La fecha de finalización debe ser después de la fecha de inicio")
+        result = false;
+      }
     }
     return result;
   }
@@ -244,17 +247,17 @@ const ActivityOneView = () => {
 
   const [currentAcadYear, setCurrentAcadYear] = useState(null);
   useEffect(() => {
-    
+
     objService.GetStudents().then(result => setListaEstudiantes(result.data));
 
-    /* Dato quemado desde la tabla User: id_user */
-    if (localStorage.getItem('id')){
+    if (localStorage.getItem('id')) {
       objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
         var CurrentPeriod = result.data.period;
         var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
         setCurrentAcadYear(CurrentAcadYear);
       }).catch(() => {
-        alert("Error, no hay registros para mostrar");
+        setResponse('Error, al intentar sacar el periodo actual en el que estas matriculado!');
+        setPopUpRequestPost(true);
       });
     }
   }, []);
@@ -278,14 +281,14 @@ const ActivityOneView = () => {
     fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
     fd.append("date_record", now);
     fd.append("date_update", now);
-    //fd.append("is_active", true);
+    fd.append("is_active", true);
     if (send_email) {
       fd.append("send_email", send_email);
       fd.append("state", 2);
     }
     else { fd.append("state", 1); }
     if (archivo !== null) { fd.append("receipt", archivo[0]); }
-    
+
     objService.PostActivityOne(fd).then((result) => {
       setResponse("Actividad registrada correctamente");
     }).catch(() => {
@@ -341,7 +344,7 @@ const ActivityOneView = () => {
                 </Grid>
               </Grid>
 
-              <TextField className={classes.field} name="horasAsignadas" value={values.horasAsignadas} label="Nº de horas asignadas" 
+              <TextField className={classes.field} name="horasAsignadas" value={values.horasAsignadas} label="Nº de horas asignadas"
                 type="number" onChange={handleChange} required variant="outlined"
               />
               {/* Validacion del campo */}

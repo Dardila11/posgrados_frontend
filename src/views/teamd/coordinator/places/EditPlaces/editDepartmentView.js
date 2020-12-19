@@ -9,6 +9,8 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AlertView } from '../../../../../components/Alert'
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import {
   Box,
   Button,
@@ -19,8 +21,8 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 //Import component search
 
-import { SearchCountry } from 'src/views/teamd/Search/searchCountry';
-import { SearchDepartment } from 'src/views/teamd/Search/searchDepartment';
+import { SearchFullCountry } from 'src/views/teamd/Search/searchFullCountry';
+import { SearchFullDepartment } from 'src/views/teamd/Search/searchFullDepartment';
 // service
 
 import { EditDeparmentService } from './service';
@@ -50,14 +52,19 @@ const EditDepartmentView = () => {
   const [name, setname] = useState(' ');
   const [idCountry, setidCountry] = useState('');
   const [idDeparment, setidDeparment] = useState('');
+  const [type, setType] = useState(' ');
 
   const handleSubmit = event => {
+    handleClickOpenEditDeparment();
     event.preventDefault()
     //handleEdit();
   };
   const handleClose = () => {
     setOpen(false);
-  };  
+  }; 
+  const handleOnchangetype = e => {
+    setType(e.target.value);
+  }; 
   const handleOnchangeName = e => {
     setname(e.target.value);
   };
@@ -80,7 +87,8 @@ const EditDepartmentView = () => {
     EditDeparmentService({
       id: idDeparment,
       name: name,
-      idcountry: idCountry
+      idcountry: idCountry,
+      status: type
     })
       .then(() => {
         setOpenAlert(true)
@@ -92,6 +100,7 @@ const EditDepartmentView = () => {
         setTypeAlert('error')
         setMessage('Error, Verifica los datos!')
       });
+      setOpen(false)
   };  
 
   const getCountry = id => {
@@ -127,22 +136,23 @@ const EditDepartmentView = () => {
               height="100%"
               justifyContent="center"
             >
-              <form className={clases.root}>
+              <form className={clases.root} onSubmit={e => handleSubmit(e)}>
                 <Typography color="textPrimary" variant="h1" align="center">
                   Editar Departamento
                 </Typography>
                 <Box mb={3} id="box3">
                   
-                  <SearchCountry callback={getCountry} />
-                  <SearchDepartment idCountry={idCountry} callback={getDeparment} />
+                  <SearchFullCountry callback={getCountry} />
+                  <SearchFullDepartment idCountry={idCountry} callback={getDeparment} />
 
                   <Box my={2}>
                     <Button
                       color="primary"
                       fullWidth
-                      size="large"                                            
+                      size="large"   
+                      type="submit"                                         
                       variant="contained"
-                      onClick={handleClickOpenEditDeparment}
+                      
                     >
                       Editar
                     </Button>
@@ -163,7 +173,16 @@ const EditDepartmentView = () => {
                               type="text"                              
                               variant="outlined"
                             />
-                            <SearchCountry callback={getCountry} />
+                            <SearchFullCountry callback={getCountry} />
+                            <Typography color="textPrimary" variant="h5">
+                              Estado 
+                            </Typography>
+                            <Select 
+                              id="Select-cohorte"
+                              onChange={handleOnchangetype}>                                                              
+                                <MenuItem value={0}>Inactivo</MenuItem>
+                                <MenuItem value={1}>Activo</MenuItem>                                        
+                            </Select>
                       
                         </DialogContent>
                             <DialogActions>
