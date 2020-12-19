@@ -18,12 +18,10 @@ const useStyles = makeStyles({
     paddingTop: 5,
     paddingBottom: 5
   },
-  /*favorableStatus:{
-    backgroundColor : '#b9f6ca'
+  lockedCard:{
+    backgroundColor : '#e8eaf6',
+    color: '#546e7a'
   },
-  unfavorableStatus:{
-    backgroundColor: '#f4ff81'
-  }*/
   favorableStatus:{
     color : '#4caf50'
   },
@@ -43,16 +41,6 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   const classes = useStyles();
   let spanClass = ''
   const student = activity.student
- /* switch (activity.state) {
-    case 1:
-      cardClass = classes.favorableStatus
-      break;
-    case 2:
-      cardClass= classes.unfavorableStatus
-      break;
-    default:
-      break;
-  }*/
   switch (activity.state) {
     case 1:
       spanClass = classes.favorableStatus
@@ -65,10 +53,32 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   }
   if(isUndefined(activity.title) || activity.title==null || activity.title=="") option=false;
   return (
-    <RouterLink to={link}>
-      <Box boxShadow={3}>
-        <Card className={clsx(className)} {...rest}>
-          <CardActionArea className={classes.CardAction}>
+    <>
+    {context == '/coordinator/student/list-activities' ? (
+       <Box boxShadow={3}>
+        <Card className={classes.lockedCard} {...rest}>
+            {getContent(activity,student,classes,spanClass, option,context)}
+        </Card>
+      </Box>
+    ):(<>
+      <RouterLink to={link}>
+        <Box boxShadow={3}>
+          <Card className={clsx(className)} {...rest}>
+            <CardActionArea className={classes.CardAction}>
+              {getContent(activity,student,classes,spanClass, option,context)}
+            </CardActionArea>
+          </Card>
+        </Box>
+      </RouterLink>
+    </>)}
+    
+    </>
+  );
+};
+
+function getContent (activity,student,classes,spanClass, option,context){
+  return (
+   
             <Box
               alignItems="center"
               display="flex"
@@ -113,21 +123,23 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
               <Typography color="textSecondary" variant="body1">
                 {activity.start_date}
               </Typography>
-              <Typography color="textSecondary" variant="body1">
-              Estado:
-              <b> <span className={spanClass}>
-                {activity.state == 1? (
-                  <> Nueva</>
-                ):(
-                  <> En revisión</>
-                )}       
-              </span> </b>
+              {context == '/coordinator/student/list-activities' ? (
+                <></>
+              ):(
+                <Typography color="textSecondary" variant="body1">
+                Estado:
+                <b> <span className={spanClass}>
+                  {activity.state == 1? (
+                    <> Nueva</>
+                  ):(
+                    <> En revisión</>
+                  )}       
+                </span> </b>
               </Typography>
+              )}
+              
             </Box>
-          </CardActionArea>
-        </Card>
-      </Box>
-    </RouterLink>
-  );
-};
+          
+  )
+}
 export default ActivityCard;

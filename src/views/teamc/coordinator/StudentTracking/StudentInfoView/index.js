@@ -66,7 +66,7 @@ const CoordinatorStudentView = () => {
             <Typography className={classes.title} variant='h1'>
               Actividades de investigación del estudiante
             </Typography>
-            <List list = {activityList} option='Activity' context='/coordinator/list-activities'/>
+            <List list = {activityList} option='Activity' context='/coordinator/student/list-activities'/>
             </>
           )}
           

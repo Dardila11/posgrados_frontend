@@ -50,7 +50,7 @@ const postStudentTracking = data => {
   return https.post('/api/tracking/', data);
 };
 
-const postDirectorEvaluations =  (directorId, data) => {
+const postDirectorEvaluations =  (data) => {
   return https.post(`/api/test_director/`, data);
 }
 

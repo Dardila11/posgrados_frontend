@@ -51,11 +51,8 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
       }else{
         let coordinatorId = localStorage.getItem("id")
         await api.getCoordinatorActivities(coordinatorId).then(res => {
-          console.log(res.data)
-          console.log(evaluation.activity)
           let activity = res.data.activities.find(activity => activity.id == evaluation.activity)
           setActivityInfo(activity)
-          console.log(activity)
           setStudentInfo(activity.student.user)
           setLoading(false)
         })
@@ -100,7 +97,37 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
         <Box boxShadow={3}>
         <Card className={clsx(classes.root)} {...rest}>
           <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} enable="false">
-            <Box alignItems="center" display="flex" flexDirection="column">
+            {getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass)}
+          </CardActionArea>
+        </Card>
+        {evaluation.is_save? (
+          getContentEvaluation(evaluation, activityInfo, open, handleClose, handleClickOpen, context)
+        ):(<></>)}        
+      </Box>      
+      )}
+      </>
+  );
+};
+
+function getContentEvaluation(evaluation, activityInfo, open, handleClose, handleClickOpen, context){
+  return(
+    <DialogForm
+          title="Modificar evaluación"
+          open={open}
+          handleClose={handleClose}
+          handleOpen={handleClickOpen}
+          component={context == "director"? (
+            <EditEvaluationDirector evaluation={evaluation} activity={activityInfo}/>
+          ):(
+            <EditEvaluationCoordinator evaluation={evaluation} activity={activityInfo}/>
+          )}
+        />
+  )
+}
+
+function getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass){
+  return (
+    <Box alignItems="center" display="flex" flexDirection="column">
               {isUndefined(activityInfo.title) ||
             activityInfo.title == null ||
             activityInfo.title == '' ? (
@@ -151,27 +178,7 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
                 {evaluation.observations}
               </Typography> 
             </Box>
-          </CardActionArea>
-        </Card>
-        {evaluation.is_save? (
-          <DialogForm
-          title="Modificar evaluación"
-          open={open}
-          handleClose={handleClose}
-          handleOpen={handleClickOpen}
-          component={context == "director"? (
-            <EditEvaluationDirector evaluation={evaluation} activity={activityInfo}/>
-          ):(
-            <EditEvaluationCoordinator evaluation={evaluation} activity={activityInfo}/>
-          )}
-        />
-        ):(<></>)}
-        
-      </Box>
-      
-      )}
-      </>
-  );
-};
+  )
+}
 
 export default EvaluationCard;
