@@ -5,6 +5,10 @@ export const registerStudent = registro => {
   const url = `${API_URL}/student/`;
   return axios.post(url, registro);
 };
+export const registerEnrrollment = registro => {
+  const url = `${API_URL}/enrrollment/`;
+  return axios.post(url, registro);
+};
 export const CreateUserService = user => {
   const url = `${API_URL}/api/auth/create_user`;
   return axios.post(url, user);
@@ -36,6 +40,10 @@ export const registerGrant = (registro) =>{
     console.log("axios -",registro)
     const url= `${API_URL}/grant/`;
     return axios.post(url,registro);
+}
+export const getStudents = () =>{
+  const url= `${API_URL}/student/`;
+  return axios.get(url);
 }
 //TODO en back no esta
 
