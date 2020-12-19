@@ -74,7 +74,10 @@ const ActivityFiveView = () => {
       var ext = nameSplit[nameSplit.length - 1];
       
       if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
-      else { alert("Error al cargar el archivo\nSolo es posible subir archivos con extensión .pdf"); }
+      else { 
+        setResponse('Solo es posible subir archivos con extension .pdf!');
+        setPopUpRequestPost(true);
+      }
     }
     else { document.getElementById("text-file").textContent = ""; }
   }
@@ -256,7 +259,8 @@ const ActivityFiveView = () => {
         var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
         setCurrentAcadYear(CurrentAcadYear);
       }).catch(() => {
-        alert("Error, no hay registros para mostrar");
+        setResponse('Error, al intentar sacar el periodo actual en el que estas matriculado!');
+        setPopUpRequestPost(true);
       });
     }
   }, []);
