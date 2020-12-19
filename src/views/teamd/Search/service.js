@@ -14,7 +14,7 @@ export const GetLineResearch = idArea => {
 };
 
 export const GetDeparmentIListService = () => {
-  const URL = `${API_URL}/api/1.0/consultar_departamentoU_id/${1}`;
+  const URL = `${API_URL}/api/1.0/consultar_departamentoU/`;
   return axios.get(URL);
 };
 
@@ -73,5 +73,13 @@ export const ConsultProfesorService = () => {
 export const EditarUser = (info) => {
   const url = `${API_URL}/api/auth/consult_user_id/${info.id}`;
   return axios.put(url,info);
+};
+export const ConsultProfesorAll = () => {
+  const url = `${API_URL}/api/1.0/consultar_profesor/`;
+  return axios.get(url);
+};
+export const CreateUserService = user => {
+  const url = `${API_URL}/api/auth/create_user`;
+  return axios.post(url, user);
 };
 

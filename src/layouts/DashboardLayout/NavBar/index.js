@@ -78,12 +78,6 @@ const CoordinatorItems = [
    icon: SupervisorAccountIcon,
    title: 'Administar Profesores'
  },
-
- {
-   href: '/coordinator/administerUsers',
-   icon: GroupRoundedIcon,
-   title: 'Administrar Usuarios'
- },
  {
    href: '/coordinator/create-others',
    icon: AddIcon,
@@ -301,7 +295,6 @@ const NavBar = ({ onMobileClose, openMobile }) => {
     </>
     
   );
-
   return (
     <>
       <Hidden lgUp>

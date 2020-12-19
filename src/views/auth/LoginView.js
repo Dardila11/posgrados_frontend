@@ -5,6 +5,8 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { AlertView } from '../../components/Alert'
 import {getUserInfoService} from './service'
+import {ConsultUserService} from 'src/views/teamd/Search/service'
+import {ConsultProfesorAll} from "src/views/teamd/Search/service"
 import {
   Box,
   Button,
@@ -69,9 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
             console.log("rol ",data)
             let role = data.data
-            localStorage.setItem("rol",role)
-
-            
+            localStorage.setItem("rol",role)           
             if (role.find(element => element === "coordinador")) {
               navigate('/coordinator', { replace: true });
             }else if (role.find(element => element === "director")){
@@ -83,6 +83,13 @@ const useStyles = makeStyles((theme) => ({
             else if (role.find(element => element === "estudiante")){
               navigate('/student', { replace: true });
             }
+            ConsultUserService().then( response => {
+              localStorage.setItem("usuarios",JSON.stringify(response.data.Users))
+          })
+          ConsultProfesorAll().then(response => {
+            localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
+        })
+            
 
           }
 
