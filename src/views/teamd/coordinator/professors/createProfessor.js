@@ -10,8 +10,8 @@ import {
 } from '@material-ui/core';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
-import { CreateUserService } from 'src/views/teamd/coordinator/users/service';
+import React, { useState } from 'react';
+import { CreateUserService } from 'src/views/teamd/Search/service';
 import { AlertView } from '../../../../components/Alert'
 //ICONS
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -86,7 +86,6 @@ export const CreateProfessorView = () => {
   const [personal_code, setPersonal_code] = useState('1313'); // en el back debe ser automatico
   const [telephone, setTelephone] = useState('312313');
   const [address, setAddress] = useState('12313');
-  const [role, setRole] = useState('1'); //en el back hay dos variable is_professor is_student
   const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
   const [is_proffessor, setIs_proffessor] = useState(0);
   const [is_student, setIs_student] = useState(1);

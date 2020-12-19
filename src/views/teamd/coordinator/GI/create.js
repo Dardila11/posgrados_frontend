@@ -46,11 +46,7 @@ export const CreateView = () => {
   const [departmentI, setDepartmentI] = useState('');
   const [dateFoundation, setDateFoundation] = useState('');
   const [category, setCategory] = useState('A');
-  const [professorsList, setProfessorsList] = useState([])
-  const [listProfessors, setlistProfessors] = useState([])
   const [profesorSelect, setProfesorSelect] = useState("")
-  const [requestCreate, setRequestCreate] = useState("")
-  const [userList, setuserList] = useState([])
   const handleChangeName = event => {
     setName(event.target.value);
   };
@@ -67,30 +63,10 @@ export const CreateView = () => {
     setDateFoundation(e.target.value);
   };
   const getIdProfessor = input =>{
-      setProfesorSelect(input.id)
+      console.log("profesor seleccionado ",input)
+      setProfesorSelect(input)
 
   }
-
-  useEffect(() => {
-    ConsultUserService()
-      .then(request => {
-        console.log("Consultar usuarios ",request.data.Users)
-        let lista = listProfessors
-        request.data.Users.map( (usuario)=>{
-          if (usuario.is_proffessor === true){ // Todo arreglar setListProfessor
-            lista.push(usuario)
-          }
-        })
-        setlistProfessors(lista)
-      })
-      .catch(console.log("nada"));
-      ConsultProfesorService().then( request => {setuserList(request.data.Professors)})
-  }, []);
-  useEffect(() => {
-    console.log("hola")
-  }, [listProfessors])
-
-
   const handleCreate = async () => {
     setOpen(false)
     await CreateGIApi({
@@ -265,7 +241,7 @@ export const CreateView = () => {
                     />
                   </FormGroup>
                   <FormGroup>
-                      <Autocomplete
+                      {/* <Autocomplete
                         id="searchProffesor"
                         options={listProfessors}
                         getOptionLabel={option => option.username}
@@ -281,8 +257,8 @@ export const CreateView = () => {
                         )}
                         onInputChange={(e, input) => getIdProfessor(input)}
                         onChange={(e, input) => getIdProfessor(input)}
-                      />
-                      {/* <SearchProfessor callback= {getIdProfessor}/> */}
+                      /> */}
+                      <SearchProfessor callback= {getIdProfessor}/>
                   </FormGroup>
                   <Box my={2}>
                     <Button

@@ -3,7 +3,6 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import {ConsultUserService} from "./service"
 
-import {ConsultProfesorAll} from "./service"
 import {
     TextField,
   } from '@material-ui/core';
@@ -14,14 +13,8 @@ export const SearchProfessor = ({ callback }) => {
 
     
     const [listUsers, setListUsers] = useState(JSON.parse(localStorage.getItem("usuarios")))
-    const [listProfessors, setListProfesors] = useState(JSON.parse(localStorage.getItem("profesores")))  
-    const [listProfessorsActive, setlistProfessorsActive] = useState([])
+    const [listProfessors] = useState(JSON.parse(localStorage.getItem("profesores")))  
     const [state, setstate] = useState([])
-    const getUsersList =() => {
-        ConsultUserService().then( response => {
-            setListUsers(response.data.Users)
-        })
-    }
     useEffect(() => {
         let list = []
         let profesors = []
@@ -38,7 +31,6 @@ export const SearchProfessor = ({ callback }) => {
                             profesors.push(response)
                         }
                     })
-                console.log("Profesores en usuarios",profesors)
                 setstate(profesors)
             })
             
@@ -68,10 +60,10 @@ export const SearchProfessor = ({ callback }) => {
         <TextField
           id="inputOptionProfessors"
           {...params}
-          label='Profesor'
+          label='Profesores'
           variant='outlined'
           required
-          style={{width: 300,marginLeft:10,marginBottom:20}}
+          style={{width: 300,marginTop:20}}
         />
       )}
       onInputChange={(e, input) => getIdProfesor(input)}

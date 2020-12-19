@@ -58,4 +58,8 @@ export const ConsultProfesorAll = () => {
   const url = `${API_URL}/api/1.0/consultar_profesor/`;
   return axios.get(url);
 };
+export const CreateUserService = user => {
+  const url = `${API_URL}/api/auth/create_user`;
+  return axios.post(url, user);
+};
 
