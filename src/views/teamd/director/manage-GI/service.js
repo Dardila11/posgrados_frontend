@@ -7,7 +7,7 @@ export const AddKnowLedgeService = GI => {
 };
 
 export const AddLineRearchService = GI => {
-  const url = `${API_URL}/api/1.0/crear_linea_investigacion/`;
+  const url = `${API_URL}/api/investigation_line/`;
   return axios.post(url, GI);
 };
 //TODO
@@ -16,7 +16,7 @@ export const ListMembersApi = GI => {
   return axios.get(url);
 };
 export const ConsultProfesor = id => {
-  const url = `${API_URL}/api/1.0/consultar_profesor/${id}`;
+  const url = `${API_URL}/api/professor/${id}`;
   return axios.get(url);
 };
 export const ConsultProfesorAll = () => {
@@ -28,7 +28,7 @@ export const ConsultUser = id => {
   return axios.get(url);
 };
 export const ConsultGi = id => {
-  const url = `${API_URL}/api/1.0/consultar_gi_id/${id}`;
+  const url = `${API_URL}/api/investigation_group/${id}`;
   return axios.get(url);
 };
 

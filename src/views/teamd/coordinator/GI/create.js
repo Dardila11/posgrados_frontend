@@ -233,7 +233,7 @@ export const CreateView = () => {
                       type="date"
                       defaultValue="2020-01-01"
                       required
-                      style={{ marginBottom: 10, marginTop: 10, width: 200 }}
+                      style={{ marginBottom: 20, marginTop: 10, width: 200 }}
                       InputLabelProps={{
                         shrink: true
                       }}
@@ -241,23 +241,7 @@ export const CreateView = () => {
                     />
                   </FormGroup>
                   <FormGroup>
-                      {/* <Autocomplete
-                        id="searchProffesor"
-                        options={listProfessors}
-                        getOptionLabel={option => option.username}
-                        style={{ marginBottom: 10, marginTop: 10 }}
-                        renderInput={params => (
-                          <TextField
-                            id="inputOption"
-                            {...params}
-                            label='Director'
-                            variant='outlined'
-                            required
-                          />
-                        )}
-                        onInputChange={(e, input) => getIdProfessor(input)}
-                        onChange={(e, input) => getIdProfessor(input)}
-                      /> */}
+                      <InputLabel id="label-director">Director</InputLabel>
                       <SearchProfessor callback= {getIdProfessor}/>
                   </FormGroup>
                   <Box my={2}>

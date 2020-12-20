@@ -5,12 +5,12 @@ const API_URL = 'https://mdquilindo.pythonanywhere.com';
 
 
 export const CreateProfessorApi = Professor => {
-  const url = `${API_URL}/api/1.0/crear_profesor/`;
+  const url = `${API_URL}/api/professor/`;
   return axios.post(url, Professor);
 };
 
 export const ConsultarProfesor = professor => {
-  const url = `${API_URL}/api/1.0/consultar_profesor/${professor.id}`;
+  const url = `${API_URL}/api/professor/${professor.id}/`;
   return axios.put(url, professor);
 };
 export const SetLabProfesor = labora => {
@@ -23,10 +23,11 @@ export const SetMember = info => {
 };
 export const CreateFormation = professor => {
   
-  const url = `${API_URL}/api/1.0/crear_formacion_academica/`;
+  const url = `${API_URL}/api/academic_training/`;
   let token = localStorage.getItem('token')
   let sinComillas = token.slice(1,-1)
   console.log(sinComillas)
   
-  return axios.post(url, professor,{ headers: {'X-Requested-With': 'XMLHttpRequest','Authorization' : `token ${token}`}});
+  // return axios.post(url, professor,{ headers: {'X-Requested-With': 'XMLHttpRequest','Authorization' : `token ${token}`}});
+    return axios.post(url, professor);
 }

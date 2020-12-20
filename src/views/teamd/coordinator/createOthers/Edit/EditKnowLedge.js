@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { TextField,Button, makeStyles } from '@material-ui/core';
+import { TextField,Button, makeStyles,Container} from '@material-ui/core';
 import {SearchKnowLedge} from '../../../Search/searchKnowLedge'
 import {ConsultarKnowLedge} from '../service'
 import { Box, Typography } from '@material-ui/core'
@@ -39,7 +39,7 @@ export const EditKnowLedge = () => {
     //funciones
     const getIdKnowLedge = async (id)=>{
         setIdKnowLedge(id)
-        await ConsultarKnowLedge(id).then( (request)=>{setKnowLedge(request.data.Knowledge[0],)})
+        await ConsultarKnowLedge(id).then( (request)=>{setKnowLedge(request.data,)})
     }
     useEffect(() => {
         setName(knowLedge.name)
@@ -72,13 +72,16 @@ export const EditKnowLedge = () => {
     }
     return (
         <>
+        <Container maxWidth="sm" className={clases.root}>
+
+
           <Box
             display="flex"
             flexDirection="column"
             height="100%"
             justifyContent="center"
           >
-            <form className={clases.root}>
+            <form >
             <Typography variant="h4">
                 Selecionar el area para editar               
             </Typography>
@@ -141,6 +144,7 @@ export const EditKnowLedge = () => {
               </Box>
               </form>
               </Box>
+              </Container>
               <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
         </>
     )

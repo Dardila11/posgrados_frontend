@@ -21,13 +21,8 @@ export const ListProfesor = () => {
     const classes = useStyles();
     const [listProfessors, setlistProfessors] = useState([])
     useEffect(() => {
-      const data = async () => {ListProfessorApi().then((request)=> {setlistProfessors(request.data.Professors)})}
+      const data = async () => {ListProfessorApi().then((request)=> {setlistProfessors(request.data)})}
       data();
-    }, [])
-    useEffect(() => {
-      console.log(localStorage.getItem('token'))
-      CreateFormation({
-      }).then(request => console.log('accedio',request)).catch(console.log('no accedio'))
     }, [])
     return (
       <Container className = {classes.root}>

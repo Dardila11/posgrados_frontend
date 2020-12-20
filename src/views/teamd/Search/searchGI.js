@@ -10,15 +10,18 @@ export const SearchGI = ({callback,departmentIID}) => {
         .catch();
     }, [departmentIID])
     const getIdGi = (name) =>{
-        let namee = name.name
-        console.log("NOMBRE ", namee)
-        let find = listGi.find(
-            element => element.name === namee
-        );
-        if (find === undefined){
-        }else{
-            callback(find.id)
+        if(name){
+            let namee = name.name
+            console.log("NOMBRE ", namee)
+            let find = listGi.find(
+                element => element.name === namee
+            );
+            if (find === undefined){
+            }else{
+                callback(find.id)
+            }
         }
+
     }
     return (
             <Autocomplete

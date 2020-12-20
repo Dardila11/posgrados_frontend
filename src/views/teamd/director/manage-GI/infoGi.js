@@ -32,11 +32,11 @@ const useStyles = makeStyles({
 
 export const InfoGi = () => {   
     const classes = useStyles();
-    const [profesores, setProfesores] = useState(JSON.parse(localStorage.getItem("profesores")))
+    const [profesores] = useState(JSON.parse(localStorage.getItem("profesores")))
     const [profesor, setProfesor] = useState(null)
-    const [grupoDeInvestigacion, setGrupoDeInvestigacion] = useState()
+    const [grupoDeInvestigacion, setGrupoDeInvestigacion] = useState([])
     const [RangoEnGi, setRangoEnGi] = useState("")
-
+    const [Manage, setManage] = useState([])
 
     const buscarProfesorPorUsuario =() =>{
       console.log(localStorage.getItem("id"))
@@ -49,68 +49,80 @@ export const InfoGi = () => {
         setProfesor(profesorEncontrado)
       }
     }
-    useEffect(() => {
-      console.log(profesores)
-      buscarProfesorPorUsuario()
-    }, [])
+
     useEffect(() => {
       if(profesor===null){
       }else{
-        if(localStorage.getItem("rol").split(",").find(element => element ===  "director")){
-          ConsultDirige_d(profesor.id).then(result => {ConsultGi(result.data.Manage[0].inv_group).then(result => {
-            setGrupoDeInvestigacion(result.data.Group[0])
-            localStorage.setItem("GiDirector",JSON.stringify(result.data.Group[0]))
-            setRangoEnGi("Director")
-          })})
+        if(localStorage.getItem("rol").split(",").find(element => element ===  "director_gi")){
+          ConsultDirige_d(profesor.id).then(result => {
+            setManage(result.data.Manage)
+          })
         }
-        if(localStorage.getItem("rol").split(",").find(element => element === "profesor")){
-          ConsultMemberForProfesor(JSON.parse(localStorage.getItem("profesorInfo")).id).then(result => {
-            GetGIId(result.data.Members[0].inv_group).then(result => {
-              setGrupoDeInvestigacion(result.data.Group[0])
-              localStorage.setItem("GiMiembro",JSON.stringify(result.data.Group[0]))
-              setRangoEnGi("Miembro")
-            })
-          } )
-
-        }
-
       }
       
     }, [profesor])
 
+
+
+    useEffect(() => {
+      console.log(profesores)
+      buscarProfesorPorUsuario()
+    }, [])
+
+
+    useEffect(() => {
+      Manage.map( element => {
+
+        GetGIId(element.inv_group).then( result => {
+            setGrupoDeInvestigacion( elemento => [...elemento,result.data])
+        })
+      })
+      
+    }, [Manage])
+
+
+    useEffect(() => {
+      console.log("INVESTIGACION GRUPO ",grupoDeInvestigacion )
+      localStorage.setItem("GiGGG",JSON.stringify(grupoDeInvestigacion))
+    }, [grupoDeInvestigacion])
     return (
       <Container>
       <Box className={classes.root}>
-
-
         {grupoDeInvestigacion ? (
           <>
-                  <Typography variant="h3" component="h2" gutterBottom>
-                    Información grupo de investigación
-                  </Typography>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Id: {grupoDeInvestigacion.id}
-                  </Typography>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Nombre: {grupoDeInvestigacion.name}
-                  </Typography>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Email: {grupoDeInvestigacion.email}
-                  </Typography>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Fecha fundacion: {grupoDeInvestigacion.foundation_date}
-                  </Typography>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Categoria: {grupoDeInvestigacion.category}
-                  </Typography>
-                  <Typography variant="body1" component="p" gutterBottom>
-                    Rango: {RangoEnGi}
-                  </Typography>
-                </>
+          {grupoDeInvestigacion.map( element => 
+            <>
+            <Typography variant="h3" component="h2" gutterBottom>
+              Información grupo de investigación
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Id: {element.id}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Nombre: {grupoDeInvestigacion.name}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Email: {grupoDeInvestigacion.email}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Fecha fundacion: {grupoDeInvestigacion.foundation_date}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Categoria: {grupoDeInvestigacion.category}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Rango: {RangoEnGi}
+            </Typography>
+            <Typography variant="h5" component="p" gutterBottom>
+              Areas de conocimiento que trabaja:
+            </Typography>
+            </>
+          )}
+          </>
+
         ) : (
           <>
           </>
-
         )}
         <Box display="flex" justifyContent="flex-end" p={2}>
           {/* <IconButton aria-label="delete" >
