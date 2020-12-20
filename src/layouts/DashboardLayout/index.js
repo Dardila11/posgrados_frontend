@@ -39,6 +39,9 @@ const DashboardLayout = () => {
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const navigate = useNavigate();
 
+  console.log("entro");
+  sessionStorage.removeItem('sAY');
+
   return (
     <>
     {localStorage.getItem("userInfo")?(

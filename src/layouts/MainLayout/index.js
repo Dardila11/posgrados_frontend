@@ -28,8 +28,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-sessionStorage.removeItem('sAY');
-
 const MainLayout = () => {
   const classes = useStyles();
   return (
