@@ -37,7 +37,7 @@ export const registerAgreement = (registro) =>{
     }
 export const registerDirector = (registro) =>{
       console.log("axios -",registro)
-      const url= `${API_URL}/createstudentprofessor/`;
+      const url= `${API_URL}/createstudentprofessor`;
       return axios.post(url,registro);
   }
 export const registerGrant = (registro) =>{

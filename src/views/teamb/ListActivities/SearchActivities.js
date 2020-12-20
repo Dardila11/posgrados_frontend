@@ -36,7 +36,9 @@ const SearchBar = ({ className, context, ...rest }) => {
 
     const [academicYears, setAcademicYears] = useState({
         years: []
-    })
+    });
+
+    const [academicYear, setAcademicYear] = React.useState("");
 
     useEffect(() => {
         objService.GetPeriodsService(localStorage.getItem('id')).then((result) => {
@@ -47,13 +49,15 @@ const SearchBar = ({ className, context, ...rest }) => {
             setMessage('Error al listar los años academicos!');
             setOpen(true);
         });
+        changeList();
     }, []);
 
     const classes = useStyles();
-    const [academicYear, setAcademicYear] = React.useState("");
     const [activities, setActivities] = useState([]);
     const handleChange = (event) => {
         setAcademicYear(event.target.value);
+        sessionStorage.setItem('sAY', event.target.value);
+        changeList();
     };
 
     const handleResponseAccept = () => {
@@ -62,16 +66,16 @@ const SearchBar = ({ className, context, ...rest }) => {
     }
 
     const changeList = () => {
-        if (academicYear == "") {
-            setMessage('Es necesario seleccionar un año academico para realizar la consulta!');
+        if (sessionStorage.getItem('sAY') === null) {
+            setMessage('Es necesario seleccionar un año academico para listar las actividades!');
             setOpen(true);
         }
         else {
             if (localStorage.getItem('id')) {
-                objService.GetActivities(localStorage.getItem('id'), academicYear).then((result) => {
+                objService.GetActivities(localStorage.getItem('id'), sessionStorage.getItem('sAY')).then((result) => {
                     var dataActivities = result.data;
                     if (dataActivities.list_activities.length === 0) {
-                        setMessage('No tienes actividades registradas en el año academico ' + academicYear );
+                        setMessage('No tienes actividades registradas en el año academico ' + sessionStorage.getItem('sAY') );
                         setOpen(true);
                         setActivities([]);
                     }
@@ -88,17 +92,20 @@ const SearchBar = ({ className, context, ...rest }) => {
 
     return (
         <Container>
+            <Container className={classes.buttonContainer}>
+                <ActivityView />
+            </Container>
             <Container className={classes.Container}>
                 <Box mt={2}>
                     <Card className={classes.SearchBar}>
                         <CardContent>
-                            <Grid style={{ display: 'flex', justifyContent: 'center' }} container>
-                                <Grid item xs={4} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Grid container>
+                                <Grid item xs={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', paddingRight: '35px' }}>
                                     <InputLabel>Año academico</InputLabel>
                                 </Grid>
-                                <Grid item xs={4}>
-                                    <Box maxWidth={500}>
-                                        <Select fullWidth label="año academico" id="activity-type" type="select" defaultValue
+                                <Grid item xs={6}>
+                                    <Box maxWidth={150}>
+                                        <Select fullWidth label="año academico" id="activity-type" type="select" value={sessionStorage.getItem('sAY')}
                                             variant="outlined" onChange={handleChange}
                                         >
                                             {academicYears.years.map(element => (
@@ -107,18 +114,11 @@ const SearchBar = ({ className, context, ...rest }) => {
                                         </Select>
                                     </Box>
                                 </Grid>
-                                <Grid item xs={4} style={{ display: 'flex', alignItems: 'center' }}>
-                                    <Button onClick={changeList}>Consultar</Button>
-                                </Grid>
                             </Grid>
                         </CardContent>
                     </Card>
                 </Box>
             </Container>
-            <Container className={classes.buttonContainer}>
-                <ActivityView />
-            </Container>
-            <br></br>
             <List list={activities} option="Activity" context="/student/list-activities" />
             <Response popUpRequestPost={open} handleResponseAccept={handleResponseAccept} response={message} />
         </Container>
