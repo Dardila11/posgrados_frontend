@@ -226,7 +226,7 @@ const RegisterStudent = () => {
         email: email,
         type_id: typeId,
         personal_id: personal_id,
-        personal_code: 106180243,
+        personal_code: personal_code,
         //photo: null,
         telephone: telephone,
         address: address,
@@ -257,14 +257,14 @@ const RegisterStudent = () => {
         })
         
         registerDirector({
-          role: 1,
+          rol: 1,
           is_active: true,
           student: result.data.id,
           professor: director
         })
         if(codirector1 ){
           registerDirector({
-            role: 2,
+            rol: 2,
             is_active: true,
             student: result.data.id,
             professor: codirector1
@@ -273,7 +273,7 @@ const RegisterStudent = () => {
         }
         if(codirector2 ){
           registerDirector({
-            role: 2,
+            rol: 2,
             is_active: true,
             student: result.data.id,
             professor: codirector2
