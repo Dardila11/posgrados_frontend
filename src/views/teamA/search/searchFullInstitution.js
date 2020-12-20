@@ -31,7 +31,7 @@ export const SearchFullInstitution = ({ callback }) => {
       id="searchInstitutions"
       options={listInstitution}
       getOptionLabel={option => option.name_inst}
-      style={{ marginBottom: 10, marginTop: 10, widht: 300 }}
+      
       renderInput={params => (
         <TextField
           id="inputOptionInstitution"
