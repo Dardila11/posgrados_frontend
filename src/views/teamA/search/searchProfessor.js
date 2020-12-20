@@ -61,10 +61,10 @@ export const SearchProfessor = ({ callback }) => {
         <TextField
           id="inputOptionProfessors"
           {...params}
-          label='Profesores'
+          
           variant='outlined'
           
-          style={{width: 300,marginTop:20}}
+          
         />
       )}
       onInputChange={(e, input) => getIdProfesor(input)}

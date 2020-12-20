@@ -12,15 +12,16 @@ export const ConsultStudent = () => {
   return axios.get(url);
 };
 
-export const ConsultUserService = () => {
-  const url = `${API_URL}/api/auth/consult_user`;
-  return axios.get(url);
+export const GetKnowLedgeListService = () => {
+  const URL = `${API_URL}/api/1.0/consultar_area_conocimiento/`;
+  return axios.get(URL);
 };
 
-export const ConsultProfesorService = () => {
-  const url = `${API_URL}/api/1.0/consultar_profesor/`;
-  return axios.get(url);
+export const GetLineResearch = idArea => {
+  const URL = `${API_URL}/api/1.0/consultar_li_area/${idArea}`;
+  return axios.get(URL);
 };
+
 export const GetDeparmentIListService = () => {
   const URL = `${API_URL}/api/1.0/consultar_departamentoU/`;
   return axios.get(URL);
@@ -70,5 +71,38 @@ export const GetlistFullInstitutionService = () => {
   const url = `${API_URL}/api/1.0/full_consultar_institucion/`;
   return axios.get(url);
 };
+export const ConsultUserService = () => {
+  const url = `${API_URL}/api/auth/consult_user`;
+  return axios.get(url);
+};
+export const ConsultProfesorService = () => {
+  const url = `${API_URL}/api/1.0/consultar_profesor/`;
+  return axios.get(url);
+};
+export const EditarUser = (info) => {
+  const url = `${API_URL}/api/auth/consult_user_id/${info.id}`;
+  return axios.put(url,info);
+};
+export const ConsultProfesorAll = () => {
+  const url = `${API_URL}/api/1.0/consultar_profesor/`;
+  return axios.get(url);
+};
+export const CreateUserService = user => {
+  const url = `${API_URL}/api/auth/create_user`;
+  return axios.post(url, user);
+};
+export const ConsultMemberForProfesor = (idProfessor) => {
+  let url = `${API_URL}/api/1.0/consultar_miembro_p/${idProfessor}`;
+  return axios.get(url)
+} 
 
-//TODO en back no esta
+export const IsMemberGI = (info) => {
+  let url = `${API_URL}/api/1.0/consultar_es_miembro/${info.professor}/${info.gi}`;
+  return axios.get(url)
+}
+export const GetGIId = (id) => {
+  let url = `${API_URL}/api/1.0/consultar_gi_id/${id}`;
+  return axios.get(url)
+}
+
+

@@ -43,10 +43,12 @@ import { SearchProgram } from 'src/views/teamA/search/searchProgram';
 
 import {SearchProfessor} from "src/views/teamA/search/searchProfessor" ;
 
-import {SearchFullCity} from "src/views/teamA/search/searchFullCity" ;
-import {SearchFullDepartment} from "src/views/teamA/search/searchFullDepartment" 
-import {SearchFullInstitution} from "src/views/teamA/search/searchFullInstitution" 
-import {SearchFullCountry} from "src/views/teamA/search/searchFullCountry" 
+import {SearchCountry} from "src/views/teamA/search/searchCountry" 
+import {SearchDepartment} from "src/views/teamA/search/searchDepartment" 
+import {SearchCity} from "src/views/teamA/search/searchCity" ;
+import {SearchInstitution} from "src/views/teamA/search/searchInstitution" 
+
+
 
 
 const useStyles = makeStyles(theme => ({
@@ -89,12 +91,15 @@ const RegisterStudent = () => {
   const [state, setstate] = useState('');
   const [period, setperiod] = useState('');
   const [is_active, setis_active] = useState('');
+  
 
    ///////
-   const [department, setdepartment] = useState('');
-  const [city, setCity] = useState('');
-  const [iCountry, setiCountry] = useState('');
-  const [icity, setiCity] = useState('');
+   const [idDepartment, setiddepartment] = useState('');
+  const [idCity, setidCity] = useState('');
+  const [idCountry, setidCountry] = useState('');
+  const [idCityI, setidCityI] = useState('');
+  const [idDepartmentI, setiddepartmentI] = useState('');
+  const [idCountryI, setidCountryI] = useState('');
   const [institution, setInstitution] = useState('1');
   const [username, setUsername] = useState('');
   const [academicTitle, setAcademicTitle] = useState('');
@@ -116,7 +121,15 @@ const RegisterStudent = () => {
   const getProgram = id => {
     setProgram(id);
   };
-
+  const getIdInstitution = id => {
+    setInstitution(id);
+  };
+  const getCity = id => {
+    setidCity(id);
+  };
+  const getCityI = id => {
+    setidCityI(id);
+  };
   const getDirector = id => {
     setDirector(id);
   };
@@ -168,7 +181,18 @@ const RegisterStudent = () => {
   const handleChangePeriod = e => {
     setperiod(e.target.value);
   };
-
+  const getIdCountry = id => {
+    setidCountry(id);
+  };
+  const getIdCountryI = id => {
+    setidCountryI(id);
+  };
+  const getidDepartment = id => {
+    setiddepartment(id);
+  };
+  const getidDepartmentI = id => {
+    setiddepartmentI(id);
+  };
 
   const handleChangeInstitution = e => {
     setInstitution(e.target.value);
@@ -211,14 +235,14 @@ const RegisterStudent = () => {
         is_student: true,
         is_coordinator: false
       },
-      departament_origin : department,
-      city_origin : city,
-      country_intituion: iCountry,
-      city_intituion: icity ,
+      departament_origin : idDepartment,
+      city_origin : idCity,
+      country_intituion: idCountryI,
+      city_intituion: idCityI ,
       instituion_degree: institution,
       dedication: dedicationType,
       program: program,
-      academic_title: 'Ingeniero en Computacion'
+      academic_title: academicTitle
     })
       .then((result) => {
         
@@ -231,24 +255,32 @@ const RegisterStudent = () => {
           student: result.data.id
 
         })
+        
         registerDirector({
           role: 1,
           is_active: true,
           student: result.data.id,
           professor: director
         })
-        registerDirector({
-          role: 2,
-          is_active: false,
-          student: result.data.id,
-          professor: codirector1
-        })
-        registerDirector({
-          role: 2,
-          is_active: false,
-          student: result.data.id,
-          professor: codirector2
-        })
+        if(codirector1 ){
+          registerDirector({
+            role: 2,
+            is_active: true,
+            student: result.data.id,
+            professor: codirector1
+            
+          })
+        }
+        if(codirector2 ){
+          registerDirector({
+            role: 2,
+            is_active: true,
+            student: result.data.id,
+            professor: codirector2
+            
+          })
+        }
+     
         setOpen(true);
         setTypeAlert('success');
         setMessage('Usuario creado correctamente');
@@ -610,11 +642,20 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
-                  <Grid item md={6} xs={12}>
-                  <SearchFullDepartment callback= {department}/>
+                  
+                 
+                  
+                  <Grid item md={12} xs={12}>
+                    <SearchCountry callback= {getIdCountry}/>
                   </Grid>
                   <Grid item md={6} xs={12}>
-                        <SearchFullCity callback= {city}/>
+                  <SearchDepartment
+                    idCountry={idCountry}
+                    callback={getidDepartment}
+                  />
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <SearchCity idDepartment={idDepartment} callback={getCity} />
                   </Grid>
                  
                   
@@ -733,55 +774,40 @@ const RegisterStudent = () => {
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <TextField
-                      id="institution"
-                      label="Institución:"
-                      variant="outlined"
-                      type="text"
-                      margin="normal"
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeInstitution(e);
-                      }}
-                      error={Boolean(touched.institution && errors.institution)}
-                      helperText={touched.institution && errors.institution}
-                      onBlur={handleBlur}
-                      value={values.institution}
-                      required
-                      fullWidth
-                    />
+                    <SearchInstitution callback={getIdInstitution}/>
+                  </Grid>
+                  <Grid item md={12} xs={12}>
+                    <SearchCountry callback= {getIdCountryI}/>
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    //pais institucion
-                    <SearchFullCountry callback= {iCountry}/>
+                  <SearchDepartment
+                    idCountry={idCountryI}
+                    callback={getidDepartmentI}
+                  />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    //Ciudad Institucion
-                    <SearchFullCity callback= {icity}/>
+                    <SearchCity idDepartment={idDepartmentI} callback={getCityI} />
                   </Grid>
+                  <Grid item md={12} xs={12}>
+                    <SearchProfessor callback= {getDirector} label="Director"/>
+                    
+                  </Grid>             
+                  <Grid item md={6} xs={12}>
+                    <SearchProfessor callback= {getCodirector1} label= 'Codirector'/>
+                    
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <SearchProfessor callback= {getCodirector2} label ='Codirector'/>
+                    
+                  </Grid>
+                  
                   
 
                  
                 </Grid>
 
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <SearchProfessor callback= {getDirector}/>
-                    
-                  </Grid>
-                  
-                </Grid>
-
-                <Grid container spacing={2}>
-                  <Grid item md={6} xs={12}>
-                    <SearchProfessor callback= {getCodirector1}/>
-                    
-                  </Grid>
-                  <Grid item md={6} xs={12}>
-                    <SearchProfessor callback= {getCodirector2}/>
-                    
-                  </Grid>
-                </Grid>
+                
+                
 
                 <Divider className={clases.dividerFullWidth} />
 

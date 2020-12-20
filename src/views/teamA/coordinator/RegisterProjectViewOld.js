@@ -15,9 +15,7 @@ import {
 import Page from 'src/components/Page';
 import { SearchStudent } from '../search/searchStudent';
 import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
-import { registerProject } from './service';
-import { registerGeneralObjective } from './service';
-import { registerSpecificObjective } from './service';
+import { registerProject, registerStudent } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
 const useStyles = makeStyles(theme => ({
@@ -39,8 +37,6 @@ const RegisterProjectView = () => {
 
   const [title, settitle] = useState('');
   const [objetive, setobjetive] = useState('');
-  const [specificObjective, setSObjective] = useState('');
-  const [generalObjective, setGObjective] = useState('');
 
   const [line, setline] = useState('');
   const [student, setstudent] = useState('');
@@ -56,16 +52,11 @@ const RegisterProjectView = () => {
   const handleChangeObjective = e => {
     setobjetive(e);
   };
-  const handleChangeGObjective = e => {
-    setGObjective(e);
-  };
-  const handleChangeSObjective = e => {
-    setSObjective(e);
-  };
   const getLine = id => {
     setline(id);
   };
   const getArea = id => {
+    console.log('este es el id del area', id);
     setarea(id);
   };
 
@@ -73,6 +64,8 @@ const RegisterProjectView = () => {
     registerProject({
       provisional_title: title,
       objetive_topic: objetive,
+      objetive_generl : 1,
+      objetive_specific : 1,
       is_active: true,
       investigation_line: line,
       student: student
@@ -81,24 +74,6 @@ const RegisterProjectView = () => {
         setOpen(true);
         setTypeAlert('success');
         setMessage('Proyecto creado correctamente');
-        console.log(result);
-
-        registerSpecificObjective({
-          objetive_specifico: specificObjective,
-          project: result.data.id
-        }).then(result => {
-          setOpen(true);
-          setTypeAlert('success');
-          setMessage('Objetivo creado correctamente');
-        });
-        registerGeneralObjective({
-          objetive_general: generalObjective,
-          project: result.data.id
-        }).then(result => {
-          setOpen(true);
-          setTypeAlert('success');
-          setMessage('Objetivo creado correctamente');
-        });
       })
 
       .catch(() => {
@@ -126,9 +101,9 @@ const RegisterProjectView = () => {
               title: '',
               area: '',
               lineResearch: '',
-              objetive: '',
-              generalObjective: '',
-              specificObjective: ''
+              objetive: ''
+              //generalObjetive: '',
+              //specificObjetive: ''
             }}
             validationSchema={Yup.object().shape({
               title: Yup.string().required('Titulo de la tesis requerido'),
@@ -136,13 +111,9 @@ const RegisterProjectView = () => {
               lineResearch: Yup.string().required(
                 'Linea de investigacion requerida'
               ),
-              objetive: Yup.string().required('Tema de la tesis requerido'),
-              generalObjective: Yup.string().required(
-                'Objetivo general requerido'
-              ),
-              specificObjective: Yup.string().required(
-                'Objetivos especificos requeridos'
-              )
+              objetive: Yup.string().required('Tema de la tesis requerido')
+              // generalObjective: Yup.string().required('Objetivo general requerido'),
+              // specificObjective: Yup.string().required('Objetivos especificos requeridos')
             })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
@@ -188,6 +159,19 @@ const RegisterProjectView = () => {
                       value={values.title}
                       variant="outlined"
                     />
+
+                    {/* <TextField
+                    error={Boolean(touched.lineResearch && errors.lineResearch)}
+                    fullWidth
+                    helperText={touched.lineResearch && errors.lineResearch}
+                    label="Linea de investigacion"
+                    margin="normal"
+                    name="lineResearch"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.lineResearch}
+                    variant="outlined"
+                  /> */}
                     <TextField
                       error={Boolean(touched.objetive && errors.objetive)}
                       fullWidth
@@ -205,48 +189,36 @@ const RegisterProjectView = () => {
                     />
                     <SearchKnowLedge callback={getArea} />
                     <SearchLineLedge callback={getLine} idKnowLedge={area} />
-                    <TextField
-                      error={Boolean(
-                        touched.generalObjective && errors.generalObjective
-                      )}
-                      fullWidth
-                      helperText={
-                        touched.generalObjective && errors.generalObjective
-                      }
-                      label="Objetivo general"
-                      margin="normal"
-                      name="generalObjective"
-                      multiline
-                      rows={4}
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeGObjective(e.target.value);
-                      }}
-                      value={values.generalObjective}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(
-                        touched.specificObjective && errors.specificObjective
-                      )}
-                      fullWidth
-                      helperText={
-                        touched.specificObjective && errors.specificObjective
-                      }
-                      label="Objetivos especificos"
-                      margin="normal"
-                      name="specificObjective"
-                      multiline
-                      rows={4}
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeSObjective(e.target.value);
-                      }}
-                      value={values.specificObjective}
-                      variant="outlined"
-                    />
+
+                    {/* <TextField
+                    error={Boolean(touched.generalObjective && errors.generalObjective)}
+                    fullWidth
+                    helperText={touched.generalObjective && errors.generalObjective}
+                    label="Objetivo general"
+                    margin="normal"
+                    name="generalObjective"
+                    multiline
+                    rows={4}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.generalObjective}
+                    variant="outlined"
+                  />
+                  <TextField
+                    error={Boolean(touched.specificObjetive && errors.specificObjetive)}
+                    fullWidth
+                    helperText={touched.specificObjetive && errors.specificObjetive}
+                    label="Objetivos especificos"
+                    margin="normal"
+                    name="specificObjective"
+                    multiline
+                    rows={4}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.specificObjetive}
+                    variant="outlined"
+                  /> */}
+
                     <Box my={2}>
                       <Button
                         color="primary"

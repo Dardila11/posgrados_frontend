@@ -49,5 +49,13 @@ export const getStudents = () =>{
   const url= `${API_URL}/student/`;
   return axios.get(url);
 }
+export const registerSpecificObjective = registro => {
+  const url = `${API_URL}/specific/`;
+  return axios.post(url, registro);
+};
+export const registerGeneralObjective = registro => {
+  const url = `${API_URL}/general/`;
+  return axios.post(url, registro);
+};
 //TODO en back no esta
 

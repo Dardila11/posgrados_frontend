@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -10,7 +10,8 @@ import {
   Typography,
   Card,
   CardContent,
-  makeStyles
+  makeStyles,
+  MenuItem
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import { SearchStudent } from '../search/searchStudent';
@@ -18,6 +19,7 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerGrant } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
+import {SearchInstitution} from 'src/views/teamA/search/searchInstitution'
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -44,11 +46,23 @@ const RegisterGrantView = () => {
   const [long, setlong] = useState('');
   const [startDate, setstartDate] = useState('');
   const [endDate, setendDate] = useState('');
-
+  const [institution, setinstitution] = useState('');
+  const [typeI, settypeI] = useState('');
+  const [locationI, setlocationI] = useState('');
+  const [comprobante, setcomprobante] = useState('');
   const getStudent = id => {
     setstudent(id);
   };
-
+  
+  const getIdInstitution = id => {
+    setinstitution(id);
+  };
+  const handleChangeTypeI = e => {
+    settypeI(e.target.value);
+  };
+  const handleChangeLocationI = e => {
+    setlocationI(e.target.value);
+  };
   const handleChangeName = e => {
     setname(e);
   };
@@ -83,7 +97,11 @@ const RegisterGrantView = () => {
       student: student,
       start_date: startDate,
       end_date: endDate,
-      long: long
+      long: long,
+      name_institution: institution,
+      name_institution : typeI,
+      location_institution : locationI,
+      voucher: "https://mdquilindo.pythonanywhere.com/media/voucher/2020/12/20/E0701DC04A2DF4184285080773E43A4E_labels_HotPIaf.pdf"
     })
       .then(result => {
         setOpen(true);
@@ -291,6 +309,43 @@ const RegisterGrantView = () => {
                       value={values.endDate}
                       variant="outlined"
                     />
+                    <SearchInstitution callback={getIdInstitution} />
+                    <TextField
+                      id="typeI"
+                      label="Tipo institución"
+                      variant="outlined"
+                      select
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeTypeI(e);
+                      }}
+                      onBlur={handleBlur}
+                      value={typeI}
+                      required
+                      fullWidth
+                    >
+                      <MenuItem value="1">Publica</MenuItem>
+                      <MenuItem value="2">Privada</MenuItem>
+                    </TextField>
+                    <TextField
+                      id="locationI"
+                      label="Locación de la institución"
+                      variant="outlined"
+                      select
+                      margin="normal"
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeLocationI(e);
+                      }}
+                      onBlur={handleBlur}
+                      value={typeI}
+                      required
+                      fullWidth
+                    >
+                      <MenuItem value="1" >Nacional</MenuItem>
+                      <MenuItem value="2" >Extranjera</MenuItem>
+                    </TextField>
 
                     <Box my={2}>
                       <Button

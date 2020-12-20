@@ -642,7 +642,7 @@ const RegisterStudent = () => {
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <SearchProgramOrAdd callback={getProgram} />
+                    <SearchProgram callback={getProgram} value={program}/>
                   </Grid>
                 </Grid>
 
