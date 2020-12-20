@@ -214,7 +214,7 @@ const ActivityTwoView = () => {
 
   const handleResponseAccept = () => {
     if (response === "Actividad registrada correctamente") {
-      window.location.href = window.location.href;
+      window.location.href = './';
     }
     setPopUpRequestPost(false);
     setResponse(null);
@@ -234,6 +234,7 @@ const ActivityTwoView = () => {
       objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
         var CurrentPeriod = result.data.period;
         var CurrentAcadYear = objUtil.GetCurrentYear(CurrentPeriod);
+        sessionStorage.setItem('sAY', CurrentAcadYear);
         setCurrentAcadYear(CurrentAcadYear);
       }).catch(() => {
         setResponse('Error, al intentar sacar el periodo actual en el que estas matriculado!');
