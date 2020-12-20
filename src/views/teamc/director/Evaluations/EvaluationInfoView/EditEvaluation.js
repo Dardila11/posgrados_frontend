@@ -50,8 +50,7 @@ const EditEvaluationDirector = props => {
       is_save: isSaveed
 
     }
-    console.log(jsonValues);
-    console.log(props.evaluation);
+    
     Api.putDirectorEvaluations(props.evaluation.id, jsonValues)
       .then(res => {
         if(res.status == 200) {

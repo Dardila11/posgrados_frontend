@@ -62,7 +62,6 @@ const ActivityInfoView = () => {
       let directorId = localStorage.getItem("id")
       await api.getDirectorActivities(directorId).then(res => {
         let user = res.data.activities.find(activity => activity.id == id).student.user
-        console.log(user)
         setStudentInfo(user)
       })
     }
@@ -82,7 +81,15 @@ const ActivityInfoView = () => {
       {loading ? (
         <LinearProgress className={classes.progress} />
       ) : (
-        <Card className={classes.root}>
+        <>{getContent(classes,activityInfo, activityPk, studentInfo, open, handleClickOpen, handleClose)}</>
+      )}
+    </Container>
+  )
+}
+
+function getContent(classes,activityInfo, activityPk,  studentInfo, open, handleClickOpen, handleClose){
+  return(
+    <Card className={classes.root}>
           <CardContent>
             <Typography variant="h3" component="h2" gutterBottom>
               Información de la actividad
@@ -161,12 +168,10 @@ const ActivityInfoView = () => {
               open={open}
               handleClose={handleClose}
               handleOpen={handleClickOpen}
-              component={<CreateEvaluation activityId={activityPk} directorId={5} />}
+              component={<CreateEvaluation activityId={activityPk} directorId={localStorage.getItem("id")} />}
             />
           </CardActions>
         </Card>
-      )}
-    </Container>
   )
 }
 

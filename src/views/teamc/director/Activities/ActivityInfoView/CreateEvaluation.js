@@ -43,12 +43,12 @@ const CreateEvaluation = props => {
       value: values.value,
       observations: values.observations,
       activity: values.activity,
-      director: values.professor,
+      director: directorId,
       is_save: isSaveed
 
     }
     console.log(jsonValues);
-    Api.postDirectorEvaluations(directorId, jsonValues)
+    Api.postDirectorEvaluations(jsonValues)
       .then(res => {
         if(res.status == 201) {
           console.log(res.status);

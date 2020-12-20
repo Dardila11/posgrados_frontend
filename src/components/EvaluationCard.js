@@ -15,6 +15,12 @@ const useStyles = makeStyles({
     paddingTop : 5,
     paddingBottom : 5,
   },
+  lockedCard:{
+    paddingTop : 5,
+    paddingBottom : 5,
+    backgroundColor : '#e8eaf6',
+    color: '#546e7a'
+  },
   calificacionAcepted: {
     color: '#4caf50'
   },
@@ -94,16 +100,25 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
       {loading? (
         <></>
       ):(
-        <Box boxShadow={3}>
-        <Card className={clsx(classes.root)} {...rest}>
-          <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} enable="false">
-            {getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass)}
-          </CardActionArea>
-        </Card>
+        <>
         {evaluation.is_save? (
-          getContentEvaluation(evaluation, activityInfo, open, handleClose, handleClickOpen, context)
-        ):(<></>)}        
-      </Box>      
+        <Box boxShadow={3}>
+          <Card className={clsx(classes.root)} {...rest}>
+            <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} enable="false">
+              {getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass)}
+            </CardActionArea>
+          </Card>
+          {getContentEvaluation(evaluation, activityInfo, open, handleClose, handleClickOpen, context)}  
+        </Box>     
+        ):
+        (
+          <Box boxShadow={3}>
+          <Card className={classes.lockedCard} {...rest}>
+              {getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass, context)}
+          </Card>  
+        </Box>
+        )}
+        </>  
       )}
       </>
   );
@@ -125,19 +140,19 @@ function getContentEvaluation(evaluation, activityInfo, open, handleClose, handl
   )
 }
 
-function getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass){
+function getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass, context){
   return (
     <Box alignItems="center" display="flex" flexDirection="column">
               {isUndefined(activityInfo.title) ||
             activityInfo.title == null ||
             activityInfo.title == '' ? (
-              isUndefined(activityInfo.name) ||
-                activityInfo.name == null ||
-                activityInfo.name == '' ? (
+              isUndefined(activityInfo.description) ||
+                activityInfo.description == null ||
+                activityInfo.description == '' ? (
                   <></>
                 ) : (
                   <Typography variant="h4" component="p" gutterBottom>
-                    {activityInfo.name}
+                    {activityInfo.description}
                   </Typography>
                 )
             ) : (
@@ -154,7 +169,8 @@ function getContent(activityInfo, studentInfo, evaluation, classes, valueclass, 
                 {studentInfo.first_name} {studentInfo.last_name}
               </Typography>
             )}
-            <Typography color="textSecondary" variant="body1">
+            {context == "director"? (
+              <Typography color="textSecondary" variant="body1">
               Calificación:
               <b> <span className={valueclass}>
                 {evaluation.value == 1? (
@@ -164,6 +180,15 @@ function getContent(activityInfo, studentInfo, evaluation, classes, valueclass, 
                 )}       
               </span> </b>
               </Typography>             
+            ):(
+              <Typography color="textSecondary" variant="body1">
+              Creditos: 
+              <b> 
+                {evaluation.credits}       
+              </b>
+              </Typography>
+            )}
+            
               <Typography color="textSecondary" variant="body1">
               Estado:
               <b> <span className={statusclass}>

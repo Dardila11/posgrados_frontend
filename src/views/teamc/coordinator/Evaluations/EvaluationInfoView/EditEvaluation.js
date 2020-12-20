@@ -49,7 +49,7 @@ const EditEvaluationCoordinator = props => {
       observations: values.observations,
       is_save: isSaveed
     }
-    console.log(jsonValues);
+  
     Api.putCoordinatorEvaluations(props.evaluation.id, jsonValues)
       .then(res => {
         if(res.status == 200) {
@@ -80,7 +80,7 @@ const EditEvaluationCoordinator = props => {
           credits: evaluation.credits,
           observations: evaluation.observations,
           activity: parseInt(activity.id),
-          professor: parseInt(evaluation.coordinator),
+          professor: parseInt(localStorage.getItem("id")),
           submitButton: ''
         }}
         validationSchema={validationSchema}
