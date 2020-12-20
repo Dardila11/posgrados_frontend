@@ -11,7 +11,8 @@ import {
   Card,
   CardContent,
   makeStyles,
-  MenuItem
+  MenuItem,
+  FormLabel
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import { SearchStudent } from '../search/searchStudent';
@@ -19,7 +20,9 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerGrant } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
-import {SearchInstitution} from 'src/views/teamA/search/searchInstitution'
+import {SearchInstitution} from 'src/views/teamA/search/searchInstitution';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import {UploadPDF} from 'src/views/teamA/search/UploadPDF';
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -49,11 +52,32 @@ const RegisterGrantView = () => {
   const [institution, setinstitution] = useState('');
   const [typeI, settypeI] = useState('');
   const [locationI, setlocationI] = useState('');
-  const [comprobante, setcomprobante] = useState('');
+  const [archivo, setArchivo] = useState('');
+  const fd = new FormData();
+  const uploadFile = e => {
+    setArchivo(e);
+    
+    
+    if (e.length > 0) {
+      var name = e[0].name;
+      var nameSplit = name.split(".");
+      var ext = nameSplit[nameSplit.length - 1];
+
+      if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
+      else {
+        
+      }
+    }
+    else { document.getElementById("text-file").textContent = ""; }
+  }
+  
   const getStudent = id => {
     setstudent(id);
   };
   
+  const handleChangeArchivo = e => {
+    setArchivo(e);
+  };
   const getIdInstitution = id => {
     setinstitution(id);
   };
@@ -90,7 +114,6 @@ const RegisterGrantView = () => {
     registerGrant({
       name: name,
       announcement: announcement,
-
       is_active: true,
       description: description,
       num_resolution: resolution,
@@ -101,15 +124,18 @@ const RegisterGrantView = () => {
       name_institution: institution,
       name_institution : typeI,
       location_institution : locationI,
-      voucher: "https://mdquilindo.pythonanywhere.com/media/voucher/2020/12/20/E0701DC04A2DF4184285080773E43A4E_labels_HotPIaf.pdf"
+      voucher: fd.append("receipt", archivo[0])
     })
+    
       .then(result => {
+        console.log(archivo,'ruta' )
         setOpen(true);
         setTypeAlert('success');
         setMessage('Beca creada correctamente');
       })
 
       .catch(() => {
+        console.log(archivo,'ruta' )
         setOpen(true);
         setTypeAlert('error');
         setMessage('No se pudo crear la beca ');
@@ -339,13 +365,27 @@ const RegisterGrantView = () => {
                         handleChangeLocationI(e);
                       }}
                       onBlur={handleBlur}
-                      value={typeI}
+                      value={locationI}
                       required
                       fullWidth
                     >
                       <MenuItem value="1" >Nacional</MenuItem>
                       <MenuItem value="2" >Extranjera</MenuItem>
                     </TextField>
+                    <FormLabel>Sube un justificante </FormLabel>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      id="mg-left"
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Subir justificante
+                      <input 
+                      type="file" 
+                      style={{ display: 'none' }}
+                      uploadFile={uploadFile}
+                       />
+                    </Button>
 
                     <Box my={2}>
                       <Button
