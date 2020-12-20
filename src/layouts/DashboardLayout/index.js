@@ -38,8 +38,8 @@ const DashboardLayout = () => {
   const classes = useStyles();
   const [isMobileNavOpen, setMobileNavOpen] = useState(false);
   const navigate = useNavigate();
-
-  console.log("entro");
+  
+  // Controla el año academico en el que se listaran las actividades
   sessionStorage.removeItem('sAY');
 
   return (
