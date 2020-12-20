@@ -109,6 +109,9 @@ const useStyles = makeStyles((theme) => ({
 
       });
   };
+
+  // Controla el año academico en el que se listaran las actividades
+  sessionStorage.removeItem('sAY');
   
   return (
     
