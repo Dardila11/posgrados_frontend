@@ -31,7 +31,7 @@ const StudentItems = [
   {
     href: '/student/list-activities',
     icon: UsersIcon,
-    title: 'Activities'
+    title: 'Actividades'
   },
   {
     href: '/student/administer-profile',
