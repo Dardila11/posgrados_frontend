@@ -10,7 +10,8 @@ import {
   Typography,
   Card,
   CardContent,
-  makeStyles
+  makeStyles, 
+  FormLabel
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import { SearchStudent } from '../search/searchStudent';
@@ -18,6 +19,7 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerAgreement } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -44,9 +46,13 @@ const RegisterAgreementView = () => {
   const [long, setlong] = useState('');
   const [startDate, setstartDate] = useState('');
   const [endDate, setendDate] = useState('');
-
+  const [archivo, setArchivo] = useState(null);
   const getStudent = id => {
     setstudent(id);
+  };
+  const handleChangeArchivo = e => {
+    setArchivo(e);
+    
   };
 
   const handleChangeObservation = e => {
@@ -72,18 +78,18 @@ const RegisterAgreementView = () => {
   };
 
   const handleSubmitRegister = e => {
-    registerAgreement({
-      observation: observation,
-      percentage_discount: percentage,
-
-      is_active: true,
-      period_academic: period,
-      student: student,
-      agreement_date: agreementDate,
-      start_date: startDate,
-      end_date: endDate,
-      long: long
-    })
+    let fd = new FormData();
+    fd.append("voucher", archivo[0])
+    fd.append("observation",observation )
+    fd.append("percentage_discount", percentage)
+    fd.append("is_active",true )
+    fd.append("period_academic",period )
+    fd.append("student",student )
+    fd.append("agreement_date",agreementDate )
+    fd.append("start_date", startDate)
+    fd.append("end_date",endDate )
+    fd.append("long",long )
+    registerAgreement(fd)
       .then(result => {
         setOpen(true);
         setTypeAlert('success');
@@ -335,6 +341,24 @@ const RegisterAgreementView = () => {
                       value={values.observation}
                       variant="outlined"
                     />
+                    <FormLabel>Sube un justificante </FormLabel>
+                    <Button
+                      variant="contained"
+                      component="label"
+                      id="mg-left"
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Subir justificante
+                      <input 
+                      type="file" 
+                      style={{ display: 'none' }}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeArchivo(e.target.files);
+                      }}
+                      
+                       />
+                    </Button>
 
                     <Box my={2}>
                       <Button

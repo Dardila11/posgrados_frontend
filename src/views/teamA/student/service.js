@@ -48,7 +48,7 @@ export const UpdateStudentService = (registro) =>{
 }
 export const UpdateProjectService = (registro) =>{
     console.log("axios -",registro)
-    const url= `${API_URL}/project/${registro.id}/`;
+    const url= `${API_URL}/updateproject/${registro.id}`;
     return axios.put(url,registro);
 }
 export const GetGrantsService = () =>{
