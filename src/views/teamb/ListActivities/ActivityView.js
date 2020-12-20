@@ -65,7 +65,6 @@ const ActivityView = ({ className, ...rest }) => {
   };
 
   const handleClickOpen = () => {
-    /* Dato quemado desde la tabla User: id_user */
     if (localStorage.getItem('id')) {
       objService.GetPeriodService(localStorage.getItem('id')).then((result) => {
         var CurrentPeriod = result.data.period;
@@ -116,15 +115,15 @@ const ActivityView = ({ className, ...rest }) => {
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}> CREAR ACTIVIDAD </Button>
       <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
-        <br></br>
-        <h1 style={{ display: 'flex', justifyContent: 'center' }}>Crear actividad</h1>
-        <br></br>
-        <InputLabel style={{ display: 'flex', justifyContent: 'center' }} id="CurrentAcadYear" title="periodo"> Año academico actual </InputLabel>
-        <br></br>
+        <h1 style={{ padding: '20px 20px 0px 20px', display: 'flex', justifyContent: 'center', textAlign: 'center'}}>Crear actividad</h1>
+        <Grid>
+        <InputLabel style={{ padding: '0px 20px', display: 'flex', justifyContent: 'center'}} id="CurrentAcadYear" title="periodo"> 
+          La actividad se registrara en el año academico:
+        </InputLabel>
+        </Grid>
         <DialogContent dividers>
           <Grid item xs={12} >
             <InputLabel>Tipo de actividad:</InputLabel>
-            <br></br>
             <Select fullWidth label="Tipo de actividad" id="activity-type" variant="outlined" type="select" defaultValue={""}
               onChange={e => changeActivityType(e.target.value)}>
               <MenuItem value={'activityone'}>Curso, dirección/revisión de proyectos</MenuItem>
@@ -138,7 +137,6 @@ const ActivityView = ({ className, ...rest }) => {
               el usuario desee crear la actividad sin agregar la descripcion */}
             {errorActivity ? <p style={{ display: 'flex', color: 'red' }}>{errorActivity}</p> : null}
           </Grid>
-          <br></br>
           {/* 
           <Grid item xs={12}>
             <TextField fullWidth label="Descripción" name="descripcion" onChange={handleChange} required value={values.descripcion}
