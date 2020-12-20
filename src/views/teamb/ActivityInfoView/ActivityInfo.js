@@ -57,6 +57,7 @@ const ActivityInfoView = () => {
   const [activity, setActivity] = useState('');
   const [popUp, setPopUp] = React.useState(false);
   const [response, setResponse] = useState(null);
+  const [listaEstudiantes, setListaEstudiantes] = useState([]);
 
   const handleResponseAccept = () => {
     setPopUp(false);
@@ -64,6 +65,8 @@ const ActivityInfoView = () => {
   };
 
   useEffect(() => {
+    objService.GetStudents().then(result => setListaEstudiantes(result.data));
+
     objService.GetActivity(id).then((result) => {
       var data = result.data;
       switch (data.type) {
@@ -153,6 +156,7 @@ const ActivityInfoView = () => {
     fd.append("date_record", activity.date_record);
     fd.append("date_update", now);
     fd.append("is_active", false);
+    fd.append("student", objUtil.GetEstudianteConIdUsuario(listaEstudiantes, localStorage.getItem('id'))); // Consultar el id del estudiante actual
 
     objService.DeleteActivity(fd, activity.id).then((result) => {
       window.location.href = '../';
