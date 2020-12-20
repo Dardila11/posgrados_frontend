@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Gi_Card } from './Gi_Card';
 import {ListGiApi} from '../service'
 import { Container,Grid, makeStyles} from '@material-ui/core';
+import {GetGIForIns} from "src/views/teamd/Search/service"
+import {GetAllGi} from "src/views/teamd/Search/service"
 
 const useStyles = makeStyles({
     root: {
@@ -21,7 +23,7 @@ export const ListGi = () => {
     const classes = useStyles();
     const [listGi, setListGi] = useState([])
     useEffect(() => {
-      const data = async () => {ListGiApi().then((request)=> {console.log(request.data);setListGi(request.data.Groups)})}
+      const data = async () => {GetAllGi().then((request)=> {setListGi(request.data)})}
       data();
     }, [])
     return (

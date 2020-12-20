@@ -7,6 +7,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import {ConsultarProfesor} from './service'
 import {AlertView} from 'src/components/Alert'
+import { Autocomplete } from '@material-ui/lab'
+import {ConsultLabP_D} from "src/views/teamd/Search/service"
+import {EditLabP_D} from "src/views/teamd/Search/service"
+
+
 const useStyles = makeStyles((theme) => ({
     formControl: {
       margin: theme.spacing(1),
@@ -25,15 +30,31 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
     const [message, setMessage] = useState('')
     //end
     const clases=useStyles();
-    const { id,user, is_director_student , is_director_gi, is_internal,institution,department} = Professor;
+    const { id,user, is_internal,institution,department} = Professor;
     const [open, setOpen] = useState(true)
     const [idUser, setIdUser] = useState(user)
     const [newInternal, setNewInternal] = useState(is_internal)
     const [newIdDeparmentI, setNewIdDeparmentI] = useState(department)
     const [newIdInstitution, setNewIdInstitution] = useState(institution)
+    const [CategoriaLaboral, setCategoriaLaboral] = useState(0)
+    const [tiempoLaboral, settiempoLaboral] = useState(0)
+    const [laboraState, setLaboraState] = useState()
     useEffect(() => {
          setOpen(state)
     }, [state])
+    useEffect(() => {
+      ConsultLabP_D({
+        professor: id,
+        department: department
+      }).then( result => {
+        console.log("resultado consultar labora ",result.data)
+        setCategoriaLaboral(result.data[0].laboral_category)
+        settiempoLaboral(result.data[0].time_category)
+        setLaboraState(result.data[0].laboral_state)
+      })
+    }, [state])
+
+    
     const handleClose = () =>{
         setOpen(false);
         setState(false);
@@ -42,14 +63,25 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
         e.preventDefault();
         ConsultarProfesor({
             "id": id,
-            "is_director_student": is_director_student,
-            "is_director_gi": is_director_gi,
             "is_internal": newInternal,
             "user": idUser,
             "institution": newIdInstitution,
             "department": newIdDeparmentI
         })
         .then(() => {
+          console.log("estado a enviar ,",laboraState)
+          let estadoLaboral = 0
+          if(laboraState){
+            estadoLaboral = 1
+          }
+          EditLabP_D({
+            "laboral_category": tiempoLaboral,
+            "time_category": CategoriaLaboral,
+            "laboral_state": estadoLaboral,
+            "professor": id,
+            "department": newIdDeparmentI
+          })
+
           setOpenAlert(true)
           setTypeAlert('success')
           setMessage('Profesor editado correctamente')
@@ -74,6 +106,9 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
     const getNewIdInstitution = (id) =>{
         setNewIdInstitution(id)
     }
+    const handleChangeLaboralState = (e) =>{
+      setLaboraState(e.target.value)
+    }
     
     return (
         <>
@@ -82,8 +117,6 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
         <DialogContent>
             <DialogContentText>
                 Para editar profesor debe elegir los campos que quiera editar y pulsar el boton aceptar
-
-                
             </DialogContentText>
             <SearchUser callback={getIdUser}/>
         </DialogContent>
@@ -117,6 +150,72 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
                     <SearchDeparmentI
                         callback={getNewIdDepartmentI}
                     />
+                  <Autocomplete
+                      id = "TiempoTrabajo"
+                      options = {["A tiempo completo","Medio tiempo"]}
+                      getOptionLabel = { option => option}
+                      value = { tiempoLaboral }
+                      renderInput = {
+                          params => (
+                              <TextField
+                              id="inputCategoriaLab"
+                              {...params}
+                              label = "Tiempo laboral"
+                              variant = 'outlined'
+                              inputValue={tiempoLaboral}
+                              required
+                              style={{width:300,marginBottom:20, marginLeft:10 }}
+                              >
+                              </TextField>
+                          )
+                      }
+                      onInputCapture = { (e,input) => {settiempoLaboral(input)}}
+                      onChange = { (e,input) => {settiempoLaboral(input)}}
+                  />
+
+                  <Autocomplete
+                      id = "CategoriaLab"
+                      options = {["catedra","planta","ocasional"]}
+                      getOptionLabel = { option => option}
+                      value = { CategoriaLaboral }
+                      renderInput = {
+                          params => (
+                              <TextField
+                              id="inputCategoriaLab"
+                              {...params}
+                              label = "Categorial laboral"
+                              variant = 'outlined'
+                              inputValue={CategoriaLaboral}
+                              required
+                              style={{ marginBottom: 10, width: 300,marginLeft:10 }}
+                              >
+                              </TextField>
+                          )
+                      }
+                      onInputCapture = { (e,input) => {setCategoriaLaboral(input)}}
+                      onChange = { (e,input) => {setCategoriaLaboral(input)}}
+                  />
+
+                <TextField
+                  id="Estado Laboral"
+                  label="Estado laboral"
+                  variant="outlined"
+                  select
+                  style={{ width: '200px'}}
+                  margin="normal"
+                  defaultValue = {laboraState}
+                  onChange={e => {
+                    handleChangeLaboralState(e);
+                  }}
+                  required
+                >
+                  <MenuItem key="laboralOption1" value="false">
+                    Inactivo
+                  </MenuItem>
+                  <MenuItem key="LaboralOption2" value="true">
+                    Activo
+                  </MenuItem>
+                </TextField>
                 </div>
                 ) : (
                 /* Institution*/
@@ -124,6 +223,8 @@ export const EditProfesorDialog = ({state,setState,Professor}) => {
                 )}
             </span>            
         </DialogContent>
+
+        
 
 
         <DialogActions>

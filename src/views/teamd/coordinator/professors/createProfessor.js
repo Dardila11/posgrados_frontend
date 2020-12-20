@@ -32,7 +32,6 @@ import { Autocomplete } from '@material-ui/lab'
 import {SetLabProfesor} from "./service"
 import {SetMember} from "./service"
 import {ConsultProfesorAll} from "src/views/teamd/Search/service"
-
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -112,9 +111,6 @@ export const CreateProfessorView = () => {
   const getIdGi = (e) =>{
     setGIID(e)
   }
-  const getDepartmentId = (e) =>{
-    setDepartmentIID(e.target.id)
-  }
   const handleChangeUsername = e => {
     setUsername(e.target.value);
   };
@@ -174,6 +170,7 @@ export const CreateProfessorView = () => {
     setFirstName(event.target.value);
   };
   const handleCreateUser = async (e) => {
+    setOpen(false)
     e.preventDefault();
     await CreateUserService(
       {
@@ -200,7 +197,7 @@ export const CreateProfessorView = () => {
             is_director_gi: false,
             is_internal: isInternal,
             user: request.data.id,
-            institution: 12,    /// TODO INSTITUCION
+            institution: 1,    /// TODO INSTITUCION POR DEFECTO
             department: departmentI
           })
             .then((request) => {
@@ -214,20 +211,15 @@ export const CreateProfessorView = () => {
                 SetLabProfesor({
                   "laboral_category": CategoriaLaboral,
                   "time_category": tiempoLaboral,
-                  "laboral_state": false,
                   "professor": id,
                   "department": departmentI
                 }).then( result => {
                   setOpen(true)
                   setTypeAlert('success')
                   setMessage('Profesor creado correctamente')
+
                   ConsultProfesorAll().then(response => {
                     localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
-                    JSON.parse(localStorage.getItem("profesores")).map( element => {
-                      if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
-                        localStorage.setItem("profesorInfo",JSON.stringify(element))
-                      }
-                    })
                 })
                 })
               })
@@ -247,6 +239,16 @@ export const CreateProfessorView = () => {
             department: departmentI
           })
             .then((request) => {
+
+                  ConsultProfesorAll().then(response => {
+                      localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
+                      JSON.parse(localStorage.getItem("profesores")).map( element => {
+                        if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
+                          localStorage.setItem("profesorInfo",JSON.stringify(element))
+                        }
+                      })
+                  })
+
                   setOpen(true)
                   setTypeAlert('success')
                   setMessage('Profesor creado correctamente')
@@ -254,7 +256,7 @@ export const CreateProfessorView = () => {
             .catch((request) => {
               setOpen(true)
               setTypeAlert('error')
-              setMessage('Error, Verifica los datos!')
+              setMessage('Error, Verifica los datos! ',request.data)
             });
         }
 

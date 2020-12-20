@@ -189,7 +189,7 @@ const NavBar = ({ onMobileClose, openMobile }) => {
         <Avatar
           className={classes.avatar}
           component={RouterLink}
-          src={"https://mdquilindo.pythonanywhere.com/" + JSON.parse(localStorage.getItem("userInfo")).photo}
+          src={"https://mdquilindo.pythonanywhere.com" + JSON.parse(localStorage.getItem("userInfo")).photo}
           to="/user/account"
         />
         <Typography

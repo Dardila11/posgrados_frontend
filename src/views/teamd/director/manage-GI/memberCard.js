@@ -34,7 +34,7 @@ export const MemberCard = ({member}) => {
         }).then(result => alert("se eliminó"))
     }
     useEffect(() => {
-        ConsultProfesor(professor).then(request => ConsultUser(request.data.Professor[0].user).then(request => setUsuario(request.data.Users[0]))).catch()
+        ConsultProfesor(professor).then(request => ConsultUser(request.data.user).then(request => {setUsuario(request.data.Users[0])})).catch( console.log("hola"))
     }, [member])
 
 

@@ -1,33 +1,29 @@
 import React, { useEffect, useState } from 'react'
 
-import { TextField,Button, makeStyles } from '@material-ui/core';
+import { TextField,Button, makeStyles,Container } from '@material-ui/core';
 import {SearchKnowLedge} from '../../../Search/searchKnowLedge'
 import {SearchLineLedge} from '../../../Search/searchLineResearch'
-import {ConsultarKnowLedge} from '../service'
-import {GetLineResearch} from '../../../Search/service'
 import { Box, Typography } from '@material-ui/core'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import DescriptionRoundedIcon from '@material-ui/icons/DescriptionRounded';
 import TitleRoundedIcon from '@material-ui/icons/TitleRounded';
-import {EditarKnowLedge} from '../service'
 import {ConsultarLineResearch} from '../service'
 import {AlertView} from 'src/components/Alert'
-import {EditKnowLedge} from './EditKnowLedge'
 import {EditarLineReseach} from '../service'
 const useStyles = makeStyles({
-    root: {
-      background: 'white',
-      border: 1,
-      borderRadius: 3,
-      boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
-      paddingTop: '30px',
-      paddingLeft: '50px',
-      paddingRight: '50px',
-      paddingBottom: '40px'
-    },
-    container: {
-      marginTop: '30px'
-    }
+  root: {
+    background: 'white',
+    border: 1,
+    borderRadius: 3,
+    boxShadow: '-1px 8px 36px 4px rgba(158,158,158,1)',
+    paddingTop: '30px',
+    paddingLeft: '50px',
+    paddingRight: '50px',
+    paddingBottom: '40px'
+  },
+  container: {
+    marginTop: '30px'
+  }
   });
 
 export const EditLineResearch = () => {
@@ -59,7 +55,7 @@ export const EditLineResearch = () => {
             id:IdKnowLedge,
             name: name,
             description: description,
-            knowLedge: IdKnowLedge
+            know_area: IdKnowLedge
         }).then(() => {
           setOpenAlert(true)
           setTypeAlert('success')
@@ -74,7 +70,7 @@ export const EditLineResearch = () => {
     }
     const getIdLineResearch = async (id)=>{
         setIdLineResearch(id)
-        await ConsultarLineResearch(id).then( (request)=>{setLine(request.data.Line[0])})
+        await ConsultarLineResearch(id).then( (request)=>{setLine(request.data)})
     }
     useEffect(() => {
         setName(line.name)
@@ -82,9 +78,15 @@ export const EditLineResearch = () => {
     }, [line])
 
     return (
-        <>
-
-            <form className={clases.root}>
+        <>  
+            <Container maxWidth="sm" className={clases.root}>
+            <Box
+            display="flex"
+            flexDirection="column"
+            height="100%"
+            justifyContent="center"
+            >
+            <form>
             <Typography variant="h4">
                 Selecionar la linea a editar para editar               
             </Typography>
@@ -142,6 +144,8 @@ export const EditLineResearch = () => {
                     Editar
                   </Button>
               </form>
+              </Box>
+              </Container>
               <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
         </>
     )

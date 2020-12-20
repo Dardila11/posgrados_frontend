@@ -7,12 +7,14 @@ const API_URL = 'https://mdquilindo.pythonanywhere.com';
 //   return axios.post(url, GI,{ headers: {'Authorization' : `token ${localStorage.getItem('token')}`}});
 // };
 export const CreateGIApi = GI => {
-  const url = `${API_URL}/api/1.0/crear_grupo_investigacion/`;
+  const url = `${API_URL}/api/investigation_group/`;
   return axios.post(url, GI);
 };
 //TODO en back no esta
+
+// todos
 export const ListProfessorApi = () => {
-  const url = `${API_URL}/api/1.0/consultar_profesor/`;
+  const url = `${API_URL}/api/professor/`;
   return axios.get(url);
 };
 export const AssignDirector = (director) => {
@@ -33,11 +35,11 @@ export const ConsultUser = (idUser) => {
   return axios.get(url);
 }
 export const ConsultInstitution = (id) => {
-  const url = `${API_URL}/api/1.0/consultar_institucion_id/${id}`
+  const url = `${API_URL}/api/institution/${id}`
   return axios.get(url);
 }
 export const ConsultDeparment = (id) => {
-  const url = `${API_URL}/api/1.0/consultar_departamentoU_id/${id}`
+  const url = `${API_URL}/api/department_u/${id}`
   return axios.get(url);
 }
 export const ListGiApi = () =>{
@@ -45,9 +47,10 @@ export const ListGiApi = () =>{
     return axios.get(url);
 }
 export const ConsultGi = (gi)=>{
-  const url = `${API_URL}/api/1.0/consultar_gi_id/${gi.id}`
+  const url = `${API_URL}/api/investigation_group/${gi.id}/`
     return axios.put(url,gi);
 }
+//activos
 export const ConsultProfesorService = () => {
   const url = `${API_URL}/api/1.0/consultar_profesor/`;
   return axios.get(url);
