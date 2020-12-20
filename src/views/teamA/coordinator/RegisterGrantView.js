@@ -23,6 +23,7 @@ import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
 import {SearchInstitution} from 'src/views/teamA/search/searchInstitution';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {UploadPDF} from 'src/views/teamA/search/UploadPDF';
+import { ArchiveTwoTone } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -52,31 +53,16 @@ const RegisterGrantView = () => {
   const [institution, setinstitution] = useState('');
   const [typeI, settypeI] = useState('');
   const [locationI, setlocationI] = useState('');
-  const [archivo, setArchivo] = useState('');
-  const fd = new FormData();
-  const uploadFile = e => {
-    setArchivo(e);
-    
-    
-    if (e.length > 0) {
-      var name = e[0].name;
-      var nameSplit = name.split(".");
-      var ext = nameSplit[nameSplit.length - 1];
-
-      if (ext === "pdf") { document.getElementById("text-file").textContent = e[0].name; }
-      else {
-        
-      }
-    }
-    else { document.getElementById("text-file").textContent = ""; }
-  }
-  
+  const [archivo, setArchivo] = useState(null);
+ 
+ 
   const getStudent = id => {
     setstudent(id);
   };
   
   const handleChangeArchivo = e => {
     setArchivo(e);
+    
   };
   const getIdInstitution = id => {
     setinstitution(id);
@@ -111,21 +97,41 @@ const RegisterGrantView = () => {
   };
 
   const handleSubmitRegister = e => {
-    registerGrant({
-      name: name,
-      announcement: announcement,
-      is_active: true,
-      description: description,
-      num_resolution: resolution,
-      student: student,
-      start_date: startDate,
-      end_date: endDate,
-      long: long,
-      name_institution: institution,
-      name_institution : typeI,
-      location_institution : locationI,
-      voucher: fd.append("receipt", archivo[0])
-    })
+    let fd = new FormData();
+    fd.append("voucher", archivo[0])
+    fd.append('name',name)
+    fd.append('announcement',announcement)
+    fd.append('description',description)
+    fd.append('num_resolution',resolution)
+    fd.append('student',student)
+    fd.append('description',description)
+    fd.append('start_date',startDate)
+    fd.append('end_date',endDate)
+    fd.append('long',long)
+    fd.append('name_institution',institution)
+    fd.append('type_institution',typeI)
+    fd.append('location_institution',locationI)
+    fd.append('is_active',true)
+    
+
+    console.log(archivo[0])
+    registerGrant(fd
+    //{
+    //   name: name,
+    //   announcement: announcement,
+    //   is_active: true,
+    //   description: description,
+    //   num_resolution: resolution,
+    //   student: student,
+    //   start_date: startDate,
+    //   end_date: endDate,
+    //   long: long,
+    //   name_institution: institution,
+    //   type_institution : typeI,
+    //   location_institution : locationI,
+    //   voucher: fd
+    // }
+    )
     
       .then(result => {
         console.log(archivo,'ruta' )
@@ -135,7 +141,7 @@ const RegisterGrantView = () => {
       })
 
       .catch(() => {
-        console.log(archivo,'ruta' )
+        console.log(archivo[0],'ruta' )
         setOpen(true);
         setTypeAlert('error');
         setMessage('No se pudo crear la beca ');
@@ -383,7 +389,11 @@ const RegisterGrantView = () => {
                       <input 
                       type="file" 
                       style={{ display: 'none' }}
-                      uploadFile={uploadFile}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeArchivo(e.target.files);
+                      }}
+                      
                        />
                     </Button>
 

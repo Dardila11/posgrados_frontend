@@ -162,14 +162,14 @@ const UpdateProjectView = () => {
                   <form onSubmit={handleSubmit}>
                     <Box mb={3}>
                       <Typography color="textPrimary" variant="h2">
-                        Actulizar proyecto de investigacion
+                        Actualizar proyecto de investigación
                       </Typography>
                       <Typography
                         color="textSecondary"
                         gutterBottom
                         variant="body2"
                       >
-                        Actualice su proyecto de investigacion
+                        Actualice su proyecto de investigación
                       </Typography>
                     </Box>
                     {/* <SearchStudent callback={getStudent} /> */}
