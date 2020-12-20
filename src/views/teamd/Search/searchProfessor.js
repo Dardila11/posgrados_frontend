@@ -43,7 +43,6 @@ export const SearchProfessor = ({ callback }) => {
         if(input){
             let user =listProfessors.find( element => element.user === input.id)
             if (user){
-                console.log("dasdasdasdasd",user)
                 callback(user.id)
             }
         }
@@ -64,7 +63,7 @@ export const SearchProfessor = ({ callback }) => {
           label='Profesores'
           variant='outlined'
           required
-          style={{width: 300,marginTop:20}}
+          style={{width: 300,marginTop:5}}
         />
       )}
       onInputChange={(e, input) => getIdProfesor(input)}

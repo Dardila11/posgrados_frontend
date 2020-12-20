@@ -1,19 +1,18 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import {ConsultGi} from '../service'
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import {AlertView} from '../../../../../components/Alert'
 import InputAdornment from '@material-ui/core/InputAdornment';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailRoundedIcon from '@material-ui/icons/MailRounded';
-import {ConsultUserService} from 'src/views/teamd/Search/service'
-import {ConsultProfesorService} from '../service'
+
 import {EditDirector} from '../../GI/service'
 import {GetDirige} from '../../GI/service' 
 import {SearchProfessor} from "src/views/teamd/Search/searchProfessor"
+
+import Select from '@material-ui/core/Select';
 export const EditGiDialog = ({state,setState,gi}) => {
 
     //alerta
@@ -22,15 +21,30 @@ export const EditGiDialog = ({state,setState,gi}) => {
     const [message, setMessage] = useState('')
     // end alerta
     const [profesorSelect, setProfesorSelect] = useState("")
-    const { id,name,email,foundation_date,category,deparment} = gi;
+    const { id,name,email,foundation_date,category,department,status} = gi;
     const [nameGi, setNameGi] = useState(name)
     const [emailGi, setEmailGi] = useState(email)
     const [open, setOpen] = useState(true)
     const [categoryGi, setCategoryGi] = useState(category)
     const [foundationDateGi, setFoundationDateGi] = useState(foundation_date)
+    const [ChangeState, setChangeState] = useState(gi.status)
+    const [openState, setOpenState] = useState()
+    const [openSelect, setOpenSelect] = useState(false)
+
     useEffect(() => {
          setOpen(state)
     }, [state])
+    useEffect(() => {
+      if(status){
+        setOpenState(1)
+      }else{
+        setOpenState(0)
+      }    
+    }, [gi])
+
+    const handleCloseSelect =() =>{
+      setOpenSelect(!openSelect)
+    }
     const handleClose = () =>{
         setOpen(false);
         setState(false);
@@ -44,14 +58,14 @@ export const EditGiDialog = ({state,setState,gi}) => {
           email: emailGi,
           foundation_date: foundationDateGi,
           category: categoryGi,
-          department: deparment
+          department: department,
+          status: openState
         }).then( (request) => {
           GetDirige(id).then(result => {
-
             EditDirector({
               id:result.data.Manage[0].professor,
               professor: profesorSelect,
-              inv_group:gi.id
+              inv_group:gi.id,
           })
           }
             ).catch()
@@ -74,6 +88,10 @@ export const EditGiDialog = ({state,setState,gi}) => {
     }
     const handleChangeDateFoundation = e => {
       setFoundationDateGi(e.target.value);
+    };
+
+    const handleChangeState  = e => {
+      setOpenState(e.target.value)
     };
     return (
         <>
@@ -168,6 +186,24 @@ export const EditGiDialog = ({state,setState,gi}) => {
                       }}
                       onInputCapture={handleChangeDateFoundation}
                     />
+        </DialogContent>
+
+        <DialogContent>
+        <InputLabel id="demo-controlled-open-select-label">Estado</InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          name="openState"
+          open={openSelect}
+          onClose={handleCloseSelect}
+          onOpen={handleCloseSelect}
+          value={openState}
+          onChange={handleChangeState}
+          variant= "outlined"
+        >
+          <MenuItem value={0}>Inactivo</MenuItem>
+          <MenuItem value={1}>Activo</MenuItem>
+        </Select>
         </DialogContent>
 
         <DialogContent>

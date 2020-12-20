@@ -80,7 +80,7 @@ export const ManageView = () => {
               >
                 <Tab label="Información Gi" {...options(0)} />
                 <Tab label="Miembros" {...options(1)} />
-                {localStorage.getItem("rol").split(",").find(element => element === "director") ? ( <Tab label="Agregar area de estudio" {...options(2)} />):(<></>)}
+                {localStorage.getItem("rol").split(",").find(element => element === "director_gi") ? ( <Tab label="Agregar area de estudio" {...options(2)} />):(<></>)}
                 {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? ( <Tab label="Agregar linea de conocimiento" {...options(3)} />):(<></>)}
                 {/* <Tab label="Agregar linea de investigacion" {...options(3)} /> */} {/*Todo */}
               </Tabs>
@@ -93,7 +93,7 @@ export const ManageView = () => {
              <ListMembers /> 
             </TabPanel>
 
-            {localStorage.getItem("rol").split(",").find(element => element === "director") ? ( <>
+            {localStorage.getItem("rol").split(",").find(element => element === "director_gi") ? ( <>
               <TabPanel value={value} index={2}>
               <AddKnowLedgeView />
             </TabPanel>
