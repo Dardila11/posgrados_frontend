@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:8000/';
-// const API_URL = 'https://mdquilindo.pythonanywhere.com';
+// const API_URL = 'http://localhost:8000/';
+const API_URL = 'https://mdquilindo.pythonanywhere.com';
 export const EditCountryService = Country => {
     const url =  `${API_URL}api/country/${Country.id}/`;
     const axi= axios.put(url,Country) 
