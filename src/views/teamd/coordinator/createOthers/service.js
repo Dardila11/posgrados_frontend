@@ -39,3 +39,10 @@ export const DeleteLineReseach = line => {
   console.log(url)
   return axios.put(url, line);
 };
+
+export const EliminarLineReseach = line => {
+  console.log(line)
+  const url = `${API_URL}/api/investigation_line/${line.id}/`;
+  console.log(url)
+  return axios.put(url, line);
+};

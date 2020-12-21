@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AlertView } from '../../../../../components/Alert'
-import { SearchFullCountry } from 'src/views/teamd/Search/searchFullCountry'
+import { SearchCountry } from 'src/views/teamd/Search/searchFCountry'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -42,10 +42,11 @@ const EditCountryView = () => {
   const [message, setMessage] = useState('')
   const clases = useStyles();
   const [name, setname] = useState(' ');
-  const [Country, setidCountry] = useState('');
   const [type, setType] = useState(' ');
+  const [Country, setidCountry] = useState('');
+  const [namecountry,setNameCountry] = useState('');
   const handleClickOpenEditCountry = () => {
-    const namecountry = document.getElementById("searchCountries").value;
+    const namecountry = document.getElementById("searchFCountries").value;
     if (namecountry == ""){
         setOpenAlert(true)
         setTypeAlert('error')
@@ -64,7 +65,7 @@ const EditCountryView = () => {
         
         id: Country,
         name: name,
-        status: type
+        status:type
         
     })
       .then(() => {
@@ -90,6 +91,7 @@ const EditCountryView = () => {
     setOpen(false);
 };
   const handleOnchangetype = e => {
+    console.log(type)
     setType(e.target.value);
   };
   const handleOnchangeName = e => {
@@ -133,14 +135,14 @@ const EditCountryView = () => {
                   Editar Pais
                 </Typography>
                 <Box mb={3}>
-                <SearchFullCountry  callback={getCountry} />
+                <SearchCountry  callback={getCountry} />
                 
                   <Box my={2}>
                     <Button
                       color="primary"                      
                       fullWidth
                       size="large"   
-                      type="submit"              
+                      type="submit"                                    
                       variant="contained"                      
                       
                     >
@@ -175,6 +177,7 @@ const EditCountryView = () => {
                                         <MenuItem value={1}>Activo</MenuItem>
                                         
                                     </Select>
+                                   
                                    
                                 </DialogContent>
                                 <DialogActions>
