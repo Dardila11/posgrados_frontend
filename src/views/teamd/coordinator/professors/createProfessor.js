@@ -174,24 +174,42 @@ export const CreateProfessorView = () => {
   const handleCreateUser = async (e) => {
     setOpen(false)
     e.preventDefault();
+
+
+    const fd = new FormData();
+    fd.append("first_name", firstName);
+    fd.append("last_name", lastName);
+    fd.append("username", username);
+    fd.append("password", password);
+    fd.append("email", email);
+    fd.append("type_id", typeId);
+
+    fd.append("personal_id", personal_id);
+    fd.append("personal_code", personal_code);
+    fd.append("telephone", telephone);
+    fd.append("address",  address);
+    fd.append("photo", imagen[0]);
+    // Datos adicionales
+    console.log("FD imagen ",imagen[0])
     await CreateUserService(
-      {
-      first_name: firstName,
-      last_name: lastName,
-      username: username,
-      password: password,
-      email: email,
-      type_id: typeId,
-      personal_id: personal_id,
-      personal_code: personal_code,
-      // photo: null,
-      telephone: telephone,
-      address: address,
-      is_proffessor: is_proffessor,
-      is_student: is_student,
-      is_coordinator: is_coordinator
-      // headers: {'Content-Type':'multipart/form-data'}
-    })
+      
+      // first_name: firstName,
+      // last_name: lastName,
+      // username: username,
+      // password: password,
+      // email: email,
+      // type_id: typeId,
+      // personal_id: personal_id,
+      // personal_code: personal_code,
+      // // photo: null,
+      // telephone: telephone,
+      // address: address,
+      // // is_proffessor: is_proffessor,
+      // // is_student: is_student,
+      // // is_coordinator: is_coordinator
+      // // headers: {'Content-Type':'multipart/form-data'}
+      fd
+    )
       .then( (request) => {
         if (isInternal === true) {
           CreateProfessorApi({
