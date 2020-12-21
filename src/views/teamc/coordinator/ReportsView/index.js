@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 
 const ReportsView = () => {
     const classes = useStyles();
-    console.log(reports)
   return (
     <Page className={classes.root} title="Reportes">
       <BreadCrumbs />

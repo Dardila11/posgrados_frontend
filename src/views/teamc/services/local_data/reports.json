@@ -1,15 +1,18 @@
 [
     {
         "name": "reporte 1",
-        "path": "ruta del reporte"
+        "pathEXCEL": "#",
+        "pathPDF": "#"
     },
     {
         "name": "Relación estudiante - tutor",
-        "path": "https://mdquilindo.pythonanywhere.com/api/report7ac"
+        "pathEXCEL": "https://mdquilindo.pythonanywhere.com/api/report7ac/1/",
+        "pathPDF":  "https://mdquilindo.pythonanywhere.com/api/report7ac/2/"
     },
     {
         "name": "Informe por cada cohorte",
-        "path": "https://mdquilindo.pythonanywhere.com/api/report/cohorte/1"
+        "pathEXCEL": "https://mdquilindo.pythonanywhere.com/api/report/cohorte/1",
+        "pathPDF": "https://mdquilindo.pythonanywhere.com/api/report/cohorte/2"
     }
 
 ]

@@ -6,6 +6,7 @@ import {
   Typography,
   makeStyles
 } from '@material-ui/core'
+import { Button } from 'bootstrap'
 
 
 const useStyles = makeStyles(() => ({
@@ -25,11 +26,9 @@ const ReportCard = ({report}) => {
   
   return (
     <>
-        <a href={report.path}>
           <Box boxShadow={3}>
             <Card className={classes.root} >
-              <CardActionArea className={classes.CardAction}>
-                <Box alignItems="center" display="flex" flexDirection="column">
+            <Box alignItems="center" display="flex" flexDirection="column">
                   <Typography color="textPrimary" gutterBottom variant="h4">
                     {report.name}
                   </Typography>
@@ -37,10 +36,16 @@ const ReportCard = ({report}) => {
                     click para descargar reporte
                   </Typography>
                 </Box>
+              <CardActionArea className={classes.CardAction}>
+              <Button variant="outlined" color="primary" href={report.pathEXCEL}>
+                Descargar EXCEL
+              </Button>
+              <Button variant="outlined" color="primary" href={report.pathPDF}>
+                Descargar PDF
+              </Button>
               </CardActionArea>
             </Card>
           </Box>
-        </a>
     </>
   )
 }

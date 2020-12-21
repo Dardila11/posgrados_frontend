@@ -67,7 +67,7 @@ const DirectorStudentView = () => {
             <Typography className={classes.title} variant='h1'>
               Actividades de investigación del estudiante
             </Typography>
-            <List list = {activityList} option='Activity' context='/director/list-activities'/>
+            <List list = {activityList} option='Activity' context='/director/student/list-activities'/>
             </>
           )}
           
