@@ -73,7 +73,8 @@ const UpdateProjectView = () => {
   useEffect(() => {
       settitle(proyecto.provisional_title)
       setobjetive(proyecto.objetive_topic)
-      console.log(proyecto.provisional_title)
+
+      console.log(title)
   }, [proyecto])
 
   const handleChangeTitle = e => {
@@ -92,7 +93,7 @@ const UpdateProjectView = () => {
 
   const handleSubmitUpdate = e => {
     UpdateProjectService({
-      "id": proyecto.id,
+      id: proyecto.id,
       provisional_title: title,
       objetive_topic: objetive,
       is_active: true,
@@ -102,13 +103,13 @@ const UpdateProjectView = () => {
       .then(result => {
         setOpen(true);
         setTypeAlert('success');
-        setMessage('Proyecto creado correctamente');
+        setMessage('Proyecto actualizado correctamente');
       })
 
       .catch(() => {
         setOpen(true);
         setTypeAlert('error');
-        setMessage('Proyecto creado incorrectamente');
+        setMessage('Proyecto actualizado incorrectamente');
       });
   };
   const handleSubmit = event => {
@@ -127,7 +128,7 @@ const UpdateProjectView = () => {
         <Container maxWidth="sm">
           <Formik
             initialValues={{
-              title: proyecto.provisional_title,
+              title: title,
               area: '',
               lineResearch: '',
               objetive: proyecto.objetive_topic
@@ -174,18 +175,18 @@ const UpdateProjectView = () => {
                     </Box>
                     {/* <SearchStudent callback={getStudent} /> */}
                     <TextField
-                      error={Boolean(touched.title && errors.title)}
+                      
                       fullWidth
-                      helperText={touched.title && errors.title}
+                      
                       label="Titulo tesis"
                       margin="normal"
                       name="title"
-                      onBlur={handleBlur}
+                      
                       onChange={e => {
-                        handleChange(e);
+                        
                         handleChangeTitle(e.target.value);
                       }}
-                      value={values.title}
+                      value={title}
                       variant="outlined"
                     />
 
@@ -202,18 +203,18 @@ const UpdateProjectView = () => {
                     variant="outlined"
                   /> */}
                     <TextField
-                      error={Boolean(touched.objetive && errors.objetive)}
+                     
                       fullWidth
-                      helperText={touched.objetive && errors.objetive}
+                   
                       label="Tema de la tesis"
                       margin="normal"
                       name="objetive"
-                      onBlur={handleBlur}
+                      
                       onChange={e => {
                         handleChange(e);
                         handleChangeObjective(e.target.value);
                       }}
-                      value={values.objetive}
+                      value={objetive}
                       variant="outlined"
                     />
                     <SearchKnowLedge callback={getArea} />

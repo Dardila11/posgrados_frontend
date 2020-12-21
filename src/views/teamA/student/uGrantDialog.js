@@ -2,6 +2,7 @@ import React,{useEffect, useState} from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, makeStyles,} from '@material-ui/core'
 import { AlertView } from 'src/components/Alert';
 import {UpdateGrantService} from './service'
+import { formatDistance } from 'date-fns';
 const useStyles = makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.background.dark,
@@ -33,7 +34,11 @@ export const UGrantDialog = ({grant,state,setState}) => {
     const [long, setlong] = useState(grant.long);
     const [startDate, setstartDate] = useState(grant.start_date);
     const [endDate, setendDate] = useState(grant.end_date);
-  
+    const [institution, setinstitution] = useState('');
+  const [typeI, settypeI] = useState('');
+  const [locationI, setlocationI] = useState('');
+  const [archivo, setArchivo] = useState(null);
+ 
     const handleChangeName = e => {
       setname(e);
     };
@@ -59,10 +64,39 @@ export const UGrantDialog = ({grant,state,setState}) => {
     const handleClose = ()=>{
         setState(false)
     }
+    const handleChangeArchivo = e => {
+      setArchivo(e);
+      
+    };
+    const getIdInstitution = id => {
+      setinstitution(id);
+    };
+    const handleChangeTypeI = e => {
+      settypeI(e.target.value);
+    };
+    const handleChangeLocationI = e => {
+      setlocationI(e.target.value);
+    };
     const handleUpdate = ()=>{
-        UpdateGrantService({
-            id: grant.id,
-            name: name,
+        let fd = new FormData();
+        fd.append("voucher", archivo[0])
+        fd.append('name',name)
+        fd.append('announcement',announcement)
+        fd.append('description',description)
+        fd.append('num_resolution',resolution)
+        fd.append('description',description)
+        fd.append('start_date',startDate)
+        fd.append('end_date',endDate)
+        fd.append('long',long)
+        fd.append('name_institution',institution)
+        fd.append('type_institution',typeI)
+        fd.append('location_institution',locationI)
+        fd.append('is_active',true)
+        fd.append('id',grant.id)
+      
+        UpdateGrantService(fd
+            
+            /* name: name,
             announcement: announcement,
             // is_active: true,
             description: description,
@@ -70,7 +104,7 @@ export const UGrantDialog = ({grant,state,setState}) => {
             // student: 1, // TODO STUDENT ACTUAL
             start_date: startDate,
             end_date: endDate,
-            long: long
+            long: long */
 
 
 
@@ -81,17 +115,17 @@ export const UGrantDialog = ({grant,state,setState}) => {
             // // "announcement": 12312312,
             // // "description": "Si señor",
             // "num_resolution": "3123123"
-        }).then(alert("Ejecutado"))
+        ).then(alert("Ejecutado"))
     }
 
 
     return (
 <>
         <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Actualizar convenio</DialogTitle>
+        <DialogTitle id="form-dialog-title">Actualizar beca</DialogTitle>
         <DialogContent>
             <DialogContentText>
-               Para actualizar el convenio debe elegir los campos que quiera actualizar y pulsar el boton actualizar
+               Para actualizar la beca debe elegir los campos que quiera actualizar y pulsar el boton actualizar
             </DialogContentText>
         <TextField
                       fullWidth
