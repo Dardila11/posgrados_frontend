@@ -7,15 +7,15 @@ import { listFullDeparmentsService } from './service';
 export const SearchFullDepartment = ({ idCountry, callback }) => {
   const [listDepartments, setListDepartments] = useState([]);
   useEffect(() => {
-    console.log('buscando departamentos ');
-    console.log(idCountry);
     listFullDeparmentsService(idCountry).then(result =>
-      setListDepartments(result.data.States)
+      {
+      setListDepartments(result.data)
+        console.log("Departamento ",result)
+    }
     );
   }, [idCountry]);
 
   const getIdDepartment = name => {
-    console.log(name);
     let find = listDepartments.find(department => department.name === name);
     if (find === undefined) {
     } else {

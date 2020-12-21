@@ -17,7 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { SearchCountry } from 'src/views/teamd/Search/searchCountry';
 // service
 
-import { CreateDeparmentService } from '../service';
+import { EditarDeparmentService } from '../service';
 
 const useStyles = makeStyles({
   root: {
@@ -48,9 +48,10 @@ const EditDepartmentView = () => {
   };
   const handleCreate = () => {
     setOpen(false)
-    CreateDeparmentService({
-      name: name,
-      country: idCountry
+    EditarDeparmentService({
+      "status": true,
+      "name": "Cauca",
+      "country": 1
     })
       .then(() => {
         setOpen(true)

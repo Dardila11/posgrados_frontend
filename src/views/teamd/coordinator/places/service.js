@@ -11,6 +11,11 @@ export const CreateDeparmentService = Deparment => {
   const url = `${API_URL}/api/state/`;
   return axios.post(url, Deparment);
 };
+
+export const EditarDeparmentService = Deparment => {
+  const url = `${API_URL}/api/state/${Deparment.country}/`;
+  return axios.put(url, Deparment);
+};
 export const CreateCityService = City => {
   const url = `${API_URL}/api/city/`;
   return axios.post(url, City);

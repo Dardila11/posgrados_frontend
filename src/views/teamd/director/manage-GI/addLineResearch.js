@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { AddLineRearchService } from './service';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Box, Button, Container, TextField } from '@material-ui/core';
-const AddLineResearchView = () => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [knowLedge, setKnowLedge] = useState('');
+import {AddManage} from "../manage-GI/service"
+import {SearchLIGIView} from "src/views/teamd/Search/searchLIGI"
+import {GetLineGIService} from 'src/views/teamd/Search/service';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+export const AddLineResearchView = () => {
+  const [lineList, setLineList] = useState([]);
+  const [line, setLine] = useState('');
+  const [listaGIS, setlistaGIS] = useState(JSON.parse(localStorage.getItem("GiMiembro")))
+  const [GI, setGI] = useState()
+  useEffect(() => {
+    GetLineGIService(GI)
+      .then(request => {
+        console.log("LINESSSSSSSSS",request.data)
+        setLineList(request.data.Lines)
+      })
+      .catch(() => setLineList([]));
+  }, [GI]);
+  const getIdLine = name => {
+    let find = lineList.find(knowl => knowl.name === name);
+    if (find === undefined) {
+    } else {
+      setLine(find.id);
+    }
+  };
+  const getIdGI = (id) => {
+    console.log("ID DE GI ",id)
+    setGI(id)
+  }
   const handleCreate = () => {
-    AddLineRearchService({
-      nombre: title,
-      descripcion: description,
-      area_con: knowLedge
+    AddManage({
+      "analysis_state": true,
+      "inv_line": line,
+      "professor": JSON.parse(localStorage.getItem("profesorInfo")).id
     })
       .then(result => {
         alert('Linea de investigacion agregada!');
@@ -20,40 +44,12 @@ const AddLineResearchView = () => {
         alert('Error');
       });
   };
-  const handleChangeTitle = e => {
-    setTitle(e.target.value);
-  };
-  const handleChangeDescription = e => {
-    setDescription(e.target.value);
-  };
-  const handleChangeKnowLedge = e => {
-    setKnowLedge(e.target.value);
-  };
   const handleSubmit = event => {
     handleCreate();
     event.preventDefault();
   };
   return (
     <Container maxWidth="sm">
-      <Formik
-        initialValues={{
-          title: '',
-          description: ''
-        }}
-        validationSchema={Yup.object().shape({
-          title: Yup.string()
-            .max(255)
-            .required('Title is required'),
-          description: Yup.string()
-            .max(255)
-            .required('Description is required'),
-          KnowLedge: Yup.string()
-            .max(255)
-            .required('KnowLedge is required')
-        })}
-        onSubmit={() => {}}
-      >
-        {({ errors, handleBlur, handleChange, touched, values }) => (
           <Box
             display="flex"
             flexDirection="column"
@@ -61,47 +57,42 @@ const AddLineResearchView = () => {
             justifyContent="center"
           >
             <form onSubmit={handleSubmit}>
+            <Autocomplete
+                    id="gia"
+                    options={listaGIS}
+                    getOptionLabel={option => option.name}
+                    style={{ marginBottom: 10, marginTop: 10 }}
+                    renderInput={params => (
+                      <TextField
+                        id="inputOptionDepartment"
+                        {...params}
+                        label="Grupo de investigacion"
+                        variant="outlined"
+                        required
+                      />
+                    )}
+                    onInputChange={(e, input) => getIdGI(input.id)}
+                    onChange={(e, input) => getIdGI(input.id)}
+                  />
+              
               <Box mb={3}>
-                <TextField
-                  error={Boolean(touched.title && errors.title)}
-                  fullWidth
-                  helperText={touched.title && errors.title}
-                  label="Title"
-                  margin="normal"
-                  name="title"
-                  onBlur={handleBlur}
-                  onChange={(e) => {handleChangeTitle(e); handleChange(e)}}
-                  type="text"
-                  value={values.title}
-                  variant="outlined"
-                />
-                <TextField
-                  error={Boolean(touched.description && errors.description)}
-                  fullWidth
-                  helperText={touched.description && errors.description}
-                  label="Descripcion"
-                  margin="normal"
-                  name="description"
-                  onBlur={handleBlur}
-                  onChange={handleChangeDescription}
-                  type="text"
-                  value={values.description}
-                  variant="outlined"
-                />
-
-                <TextField
-                  error={Boolean(touched.KnowLedge && errors.KnowLedge)}
-                  fullWidth
-                  helperText={touched.KnowLedge && errors.KnowLedge}
-                  label="Area conocimiento" //TODO
-                  margin="normal"
-                  name="KnowLedge"
-                  onBlur={handleBlur}
-                  onChange={handleChangeKnowLedge}
-                  type="text"
-                  value={values.KnowLedge}
-                  variant="outlined"
-                />
+                <Autocomplete
+                    id="lineADD"
+                    options={lineList}
+                    getOptionLabel={option => option.name}
+                    style={{ marginBottom: 10, marginTop: 10 }}
+                    renderInput={params => (
+                      <TextField
+                        id="inputOption"
+                        {...params}
+                        label="Linea de investigacion"
+                        variant="outlined"
+                        required
+                      />
+                    )}
+                    onInputChange={(e, input) => getIdLine(input)}
+                    onChange={(e, input) => getIdLine(input)}
+                  />
                 <Box my={2}>
                   <Button
                     color="primary"
@@ -116,10 +107,6 @@ const AddLineResearchView = () => {
               </Box>
             </form>
           </Box>
-        )}
-      </Formik>
     </Container>
   );
 };
-
-export default AddLineResearchView;

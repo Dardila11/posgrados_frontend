@@ -1,26 +1,17 @@
 import React,{ useState,useEffect } from 'react'
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
-import {ConsultUserService} from "./service"
-
 import {
     TextField,
   } from '@material-ui/core';
-
-
-
 export const SearchProfessor = ({ callback }) => {
-
-    
     const [listUsers, setListUsers] = useState(JSON.parse(localStorage.getItem("usuarios")))
     const [listProfessors] = useState(JSON.parse(localStorage.getItem("profesores")))  
     const [state, setstate] = useState([])
     useEffect(() => {
         let list = []
         let profesors = []
-        if (listUsers && listProfessors){
-            console.log("Buscando profesores activos")
-            listProfessors.map( element => {
+        if (listUsers && JSON.parse(localStorage.getItem("profesores"))){
+            JSON.parse(localStorage.getItem("profesores")).map( element => {
                 if(element.status === true){
                     list.push(element)
                 }
@@ -37,8 +28,6 @@ export const SearchProfessor = ({ callback }) => {
 
         }
     }, [])
-
-
     const getIdProfesor = (input) =>{
         if(input){
             let user =listProfessors.find( element => element.user === input.id)
@@ -48,9 +37,6 @@ export const SearchProfessor = ({ callback }) => {
         }
 
     }
-
-
-
     return (
     <Autocomplete
       id="searchProfesors"

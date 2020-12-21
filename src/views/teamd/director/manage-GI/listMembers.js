@@ -8,17 +8,21 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 export const ListMembers = () => {
     const [openDialog, setOpenDialog] = useState(false)
     const [ListMembers, setListMembers] = useState([])
+    const [ListMembersDirige, setListMembersDirige] = useState([])
     const [listProfessors, setlistProfessors] = useState([])
     useEffect(() => {
+      
       if(localStorage.getItem("rol").split(",").find(element => element === "profesor")){
-        console.log("EFECTO LISTAR MIEMBROS",JSON.parse(localStorage.getItem("GiMiembro")).id)
-        console.log("listar miembros",JSON.parse(localStorage.getItem("GiMiembro")).id)
-        ListMembersApi(JSON.parse(localStorage.getItem("GiMiembro")).id).then((request)=> {setListMembers(request.data.Members)})
+        JSON.parse(localStorage.getItem("GiMiembro")).map( element => {
+          ListMembersApi(element.id).then((request)=> {setListMembers(request.data.Members)})
+        })
+        
       }
-      if (localStorage.getItem("rol").split(",").find(element => element === "director_gi")){
-        console.log("EFECTO LISTAR MIEMBROS",JSON.parse(localStorage.getItem("GiDirector")).id)
-        console.log("listar miembros",JSON.parse(localStorage.getItem("GiDirector")).id)
-        ListMembersApi(JSON.parse(localStorage.getItem("GiDirector")).id).then((request)=> {setListMembers(request.data.Members)})
+      if(localStorage.getItem("rol").split(",").find(element => element === "director")){
+        JSON.parse(localStorage.getItem("GiDirector")).map( element => {
+          ListMembersApi(element.id).then((request)=> {setListMembersDirige(request.data.Members)})
+        })
+        
       }
       
       
@@ -41,19 +45,29 @@ export const ListMembers = () => {
                   </Typography>
                   
             </Button>
+
+            <Grid container spacing={3}>
+                {ListMembersDirige && ListMembersDirige.map(element => (
+                  <Grid item lg={5} md={7} xs={12} key={element.id}>
+                    <MemberCard member={element}/>
+                  </Grid>
+                ))} 
+        
+              </Grid>
             </>):
             (
            <>
-           </>)}
 
-          </Grid>
-        <Grid container spacing={3}>
+          <Grid container spacing={3}>
           {ListMembers && ListMembers.map(element => (
             <Grid item lg={5} md={7} xs={12} key={element.id}>
               <MemberCard member={element}/>
             </Grid>
           ))} 
   
+          </Grid>
+           </>)}
+
         </Grid>
         <DialogAddMember listProfessors={listProfessors} state={openDialog} setState={setOpenDialog}/>
       </Container>

@@ -7,7 +7,7 @@ import {
   makeStyles,
   Container
 } from '@material-ui/core';
-import {ConsultMemberForProfesor} from "src/views/teamd/Search/service"
+import {ConsultLabP_D, ConsultMemberForProfesor} from "src/views/teamd/Search/service"
 import {IsMemberGI} from "src/views/teamd/Search/service"
 import {GetGIId} from "src/views/teamd/Search/service"
 const useStyles = makeStyles({
@@ -37,6 +37,8 @@ export const InfoGi = () => {
     const [grupoDeInvestigacion, setGrupoDeInvestigacion] = useState([])
     const [RangoEnGi, setRangoEnGi] = useState("")
     const [Manage, setManage] = useState([])
+    const [Members, setMembers] = useState([])
+    const [grupoDeInvestigacionMiembro, setGrupoDeInvestigacionMiembro] = useState([])
 
     const buscarProfesorPorUsuario =() =>{
       console.log(localStorage.getItem("id"))
@@ -52,10 +54,17 @@ export const InfoGi = () => {
 
     useEffect(() => {
       if(profesor===null){
+        
       }else{
         if(localStorage.getItem("rol").split(",").find(element => element ===  "director_gi")){
           ConsultDirige_d(profesor.id).then(result => {
             setManage(result.data.Manage)
+          })
+        }
+        if(localStorage.getItem("rol").split(",").find(element => element ===  "profesor")){
+          ConsultMemberForProfesor(profesor.id).then(result => {
+            console.log("MEMBERS   ",result.data)
+            setMembers(result.data.Members)
           })
         }
       }
@@ -79,15 +88,30 @@ export const InfoGi = () => {
       })
       
     }, [Manage])
+    useEffect(() => {
+      Members.map( element => {
+
+        GetGIId(element.inv_group).then( result => {
+            setGrupoDeInvestigacionMiembro( elemento => [...elemento,result.data])
+        })
+      })
+      
+    }, [Members])
 
 
     useEffect(() => {
       console.log("INVESTIGACION GRUPO ",grupoDeInvestigacion )
-      localStorage.setItem("GiGGG",JSON.stringify(grupoDeInvestigacion))
+      localStorage.setItem("GiDirector",JSON.stringify(grupoDeInvestigacion))
     }, [grupoDeInvestigacion])
+
+    useEffect(() => {
+      console.log("INVESTIGACION GRUPO ",grupoDeInvestigacionMiembro )
+      localStorage.setItem("GiMiembro",JSON.stringify(grupoDeInvestigacionMiembro))
+    }, [grupoDeInvestigacionMiembro])
     return (
       <Container>
       <Box className={classes.root}>
+
         {grupoDeInvestigacion ? (
           <>
           {grupoDeInvestigacion.map( element => 
@@ -99,19 +123,19 @@ export const InfoGi = () => {
               Id: {element.id}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Nombre: {grupoDeInvestigacion.name}
+              Nombre: {element.name}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Email: {grupoDeInvestigacion.email}
+              Email: {element.email}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Fecha fundacion: {grupoDeInvestigacion.foundation_date}
+              Fecha fundacion: {element.foundation_date}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Categoria: {grupoDeInvestigacion.category}
+              Categoria: {element.category}
             </Typography>
             <Typography variant="body1" component="p" gutterBottom>
-              Rango: {RangoEnGi}
+              Rango: {"Director"}
             </Typography>
             <Typography variant="h5" component="p" gutterBottom>
               Areas de conocimiento que trabaja:
@@ -124,13 +148,45 @@ export const InfoGi = () => {
           <>
           </>
         )}
-        <Box display="flex" justifyContent="flex-end" p={2}>
-          {/* <IconButton aria-label="delete" >
-          <DeleteIcon />
-          </IconButton>
-          <IconButton color="secondary" aria-label="add an edit">
-          <EditIcon />
-          </IconButton> */}
+
+<Box className={classes.root}>
+        
+        {grupoDeInvestigacionMiembro ? (
+          <>
+          {grupoDeInvestigacionMiembro.map( element => 
+            <>
+            <Typography variant="h3" component="h2" gutterBottom>
+              Información grupo de investigación
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Id: {element.id}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Nombre: {element.name}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Email: {element.email}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Fecha fundacion: {element.foundation_date}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Categoria: {element.category}
+            </Typography>
+            <Typography variant="body1" component="p" gutterBottom>
+              Rango: {"Miembro"}
+            </Typography>
+            <Typography variant="h5" component="p" gutterBottom>
+              Areas de conocimiento que trabaja:
+            </Typography>
+            </>
+          )}
+          </>
+
+        ) : (
+          <>
+          </>
+        )}
         </Box>
       </Box>
       </Container>

@@ -12,7 +12,6 @@ import {
   Button,
   Container,
   Grid,
-  Link,
   TextField,
   Typography,
   makeStyles
@@ -86,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
             ConsultUserService().then( response => {
               localStorage.setItem("usuarios",JSON.stringify(response.data.Users))
           })
+          
           ConsultProfesorAll().then(response => {
             localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
             JSON.parse(localStorage.getItem("profesores")).map( element => {

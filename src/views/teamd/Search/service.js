@@ -1,15 +1,20 @@
-import { Info } from '@material-ui/icons';
 import axios from 'axios';
 
 // const API_URL = 'http://localhost:8000';
 const API_URL = 'https://mdquilindo.pythonanywhere.com';
-
 
 //ACTIVAS
 export const GetKnowLedgeListService = () => {
   const URL = `${API_URL}/api/1.0/consultar_area_conocimiento/`;
   return axios.get(URL);
 };
+
+
+export const GetLineGIService = (id) => {
+  const URL = `${API_URL}/api/1.0/consultar_li_gi/${id}`;
+  return axios.get(URL);
+};
+
 //ACTIVAS
 export const GetLineResearch = idArea => {
   const URL = `${API_URL}/api/1.0/consultar_li_area/${idArea}`;
@@ -47,7 +52,7 @@ export const listDeparmentsService = idPais => {
 };
 
 export const listFullDeparmentsService = idPais => {
-  const url = `${API_URL}/api/1.0/full_consultar_departamento_pais/${idPais}`;
+  const url = `${API_URL}/api/state/${idPais}/`;
   return axios.get(url);
 };
 
@@ -57,7 +62,7 @@ export const listCitiesService = idDepartamento => {
 };
 
 export const listFullCitiesService = idDepartamento => {
-  const url = `${API_URL}/api/1.0/full_consultar_ciudad_departamento/${idDepartamento}`;
+  const url = `${API_URL}/api/city/${idDepartamento}/`;
   return axios.get(url);
 };
 
@@ -68,7 +73,7 @@ export const GetlistInstitutionService = () => {
 };
 // sin importar estado
 export const GetlistFullInstitutionService = () => {
-  const url = `${API_URL}/api/1.0/full_consultar_institucion/`;
+  const url = `${API_URL}/api/institution/`;
   return axios.get(url);
 };
 
@@ -104,7 +109,7 @@ export const IsMemberGI = (info) => {
   return axios.get(url)
 }
 export const GetGIId = (id) => {
-  let url = `${API_URL}/api/investigation_group/${id}`;
+  let url = `${API_URL}/api/investigation_group/${id}/`;
   return axios.get(url)
 }
 
