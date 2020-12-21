@@ -9,7 +9,7 @@ import {
 
 
 
-export const SearchProfessor = ({ callback }) => {
+export const SearchCodirector2 = ({ callback }) => {
 
     
     const [listUsers, setListUsers] = useState(JSON.parse(localStorage.getItem("usuarios")))
@@ -61,7 +61,7 @@ export const SearchProfessor = ({ callback }) => {
         <TextField
           id="inputOptionProfessors"
           {...params}
-          
+          label='Codirector 2'
           variant='outlined'
           
           

@@ -105,32 +105,14 @@ const RegisterStudent = () => {
 
     const [listaEstudiantes, setlistaEstudiantes] = useState([])
     const [estudianteSeleccionado, setestudianteSeleccionado] = useState()
-    const handleClickOpenEditInstitution = () => {
-      setOpenAlert(false)  
-      const namecountry = document.getElementById("searchCountries").value;
-      console.log("papis: "+namecountry)
-      const nameDeparment = document.getElementById("searchDepartments").value;
-      console.log("deprmen: "+nameDeparment)
-      const nameCity = document.getElementById("searchCities").value;
-      const nameInstitution = document.getElementById("searchInstitutions").value;
-      if (namecountry === "" || nameDeparment === "" ){
-          setOpenAlert(true)
-          setTypeAlert('error')
-          setMessage('Error, campos vacios !')   
-                       
-      }else{
-          console.log("pais: "+ namecountry)
-          console.log("departamento: "+nameDeparment)
-          console.log("ciudad: "+nameCity)
-          console.log("institucion: "+nameInstitution)
-          setOpen(true);
-      }
-
-  };
+    
     const editarEstudiante = () =>{
+        console.log(estudianteSeleccionado.id)
         UpdateStudentService({
-          "academic_title": academicTitle,
-            id:estudianteSeleccionado.id
+            id : estudianteSeleccionado.id,
+            academic_title: academicTitle,
+            program : program,
+            user: estudianteSeleccionado.user.id
         }).then(
 
           EditarUser({
@@ -171,7 +153,7 @@ const RegisterStudent = () => {
       setDedicationType(estudianteSeleccionado.dedication)
       setAcademicTitle(estudianteSeleccionado.academic_title)
       setAddress(estudianteSeleccionado.user.address)
-      console.log(estudianteSeleccionado)
+      console.log(academicTitle)
     }
   }, [estudianteSeleccionado])
   const getProgram = id => {
@@ -238,46 +220,7 @@ const RegisterStudent = () => {
     setFirstName(event.target.value);
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleClickOpen1 = () => {
-    setOpen1(true);
-  };
-
-  const handleClose1 = () => {
-    setOpen1(false);
-  };
-
-  const handleClickOpen2 = () => {
-    setOpen2(true);
-  };
-
-  const handleClose2 = () => {
-    setOpen2(false);
-  };
-
-  const handleClickOpen3 = () => {
-    setOpen3(true);
-  };
-
-  const handleClose3 = () => {
-    setOpen3(false);
-  };
-
-  const handleClickOpen4 = () => {
-    setOpen4(true);
-  };
-
-  const handleClose4 = () => {
-    setOpen4(false);
-  };
-
+ 
   const handleCreateUser = e => {
     e.preventDefault();
 
@@ -653,10 +596,9 @@ const RegisterStudent = () => {
                       select
                       margin="normal"
                       onChange={e => {
-                        handleChange(e);
                         handleChangeDedicationType(e);
                       }}
-                      onBlur={handleBlur}
+                      
                       value={dedicationType}
                       required
                       fullWidth
@@ -671,7 +613,7 @@ const RegisterStudent = () => {
                   </Grid>
                 </Grid>
 
-                <Grid container spacing={2}>
+                <Grid item md={12} xs={12}>
                   {/* <Grid item md={6} xs={12}>
                     <SearchTeacher callback={getDirector} />
                   </Grid>
@@ -683,7 +625,6 @@ const RegisterStudent = () => {
                       type="text"
                       margin="normal"
                       onChange={e => {
-                        handleChange(e);
                         handleChangeAcademicTitle(e);
                       }}
                       error={Boolean(

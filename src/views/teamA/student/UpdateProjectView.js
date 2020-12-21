@@ -18,8 +18,9 @@ import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
 import { registerProject, registerStudent } from './service';
 import { AlertView } from 'src/components/Alert';
 import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
-import {UpdateProjectService} from './service'
+import {UpdateProjectService, UpdateGeneral, UpdateSpecific, getGeneral,getSpecific} from './service'
 import {getProject} from './service'
+
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -49,24 +50,39 @@ const UpdateProjectView = () => {
   const [typeAlert, setTypeAlert] = useState('success');
   const [message, setMessage] = useState('');
 
-  const [title, settitle] = useState();
-  const [objetive, setobjetive] = useState();
+  const [title, settitle] = useState('');
+  const [objetive, setobjetive] = useState('');
 
-  const [line, setline] = useState();
-  const [student, setstudent] = useState();
+  const [line, setline] = useState('');
+  const [id, setid] = useState('');
   const [area, setarea] = useState('');
+  const [specificObjective, setSObjective] = useState('');
+  const [generalObjective, setGObjective] = useState('');
+  const [especificos, setespecificos] = useState([]);
+  const [especifico, setespecifico] = useState([]);
+  const [generales, setgenerales] = useState([]);
+  const [general, setgeneral] = useState([]);
 
+  useEffect(() => {
+    getSpecific().then( result =>
+      setespecificos(result.data)
+    )
+  }, [])
+  useEffect(() => {
+    getGeneral().then( result =>
+      setgenerales(result.data)
+    )
+  }, [])
   useEffect(() => {
     getProject().then( result =>
       setProyectos(result.data)
     )
   }, [])
-
   useEffect(() => {
     proyectos.map( element => {
       if (element.student === parseInt(localStorage.getItem("IDestudiante"))){
         setProyecto(element)
-        console.log("encontro")
+        console.log(element,"encontro proyecto")
       }})
     },[proyectos])
 
@@ -76,6 +92,32 @@ const UpdateProjectView = () => {
 
       console.log(title)
   }, [proyecto])
+  useEffect(() => {
+    especificos.map( element => {
+      if (element.project === proyecto.id){
+        setespecifico(element)
+        console.log(element,"encontro objetivos")
+      }})
+    },[especificos])
+  useEffect(() => {
+      setSObjective(especifico.objetive_specifico)
+
+      console.log(specificObjective,'Encontro especifico')
+  }, [especifico])
+  useEffect(() => {
+    generales.map( element => {
+      if (element.project === proyecto.id){
+        setgeneral(element)
+        console.log(element,"encontro objetivos")
+      }})
+    },[generales])
+  useEffect(() => {
+      setGObjective(general.objetive_general)
+
+      
+  }, [general])
+
+
 
   const handleChangeTitle = e => {
     settitle(e);
@@ -86,13 +128,19 @@ const UpdateProjectView = () => {
   const getLine = id => {
     setline(id);
   };
+  const handleChangeGObjective = e => {
+    setGObjective(e);
+  };
+  const handleChangeSObjective = e => {
+    setSObjective(e);
+  };
   const getArea = id => {
     console.log('este es el id del area', id);
     setarea(id);
   };
 
   const handleSubmitUpdate = e => {
-    setOpen(false)
+    
     UpdateProjectService({
       id: proyecto.id,
       provisional_title: title,
@@ -102,6 +150,20 @@ const UpdateProjectView = () => {
       student: localStorage.getItem('IDestudiante')
     })
       .then(result => {
+        UpdateGeneral({
+          id: general.id,
+          project: proyecto.id,
+          objetive_general : generalObjective,
+          
+        });
+        UpdateSpecific({
+          id: especifico.id,
+          project: proyecto.id,
+          objetive_specifico: specificObjective
+
+
+
+        });
         setOpen(true);
         setTypeAlert('success');
         setMessage('Proyecto actualizado correctamente');
@@ -112,6 +174,8 @@ const UpdateProjectView = () => {
         setTypeAlert('error');
         setMessage('Proyecto actualizado incorrectamente');
       });
+      setOpen(false)
+        
   };
   const handleSubmit = event => {
     event.preventDefault();
@@ -176,15 +240,11 @@ const UpdateProjectView = () => {
                     </Box>
                     {/* <SearchStudent callback={getStudent} /> */}
                     <TextField
-                      
                       fullWidth
-                      
                       label="Titulo tesis"
                       margin="normal"
                       name="title"
-                      
                       onChange={e => {
-                        
                         handleChangeTitle(e.target.value);
                       }}
                       value={title}
@@ -220,6 +280,48 @@ const UpdateProjectView = () => {
                     />
                     <SearchKnowLedge callback={getArea} />
                     <SearchLineLedge callback={getLine} idKnowLedge={area} />
+                    <TextField
+                      error={Boolean(
+                        touched.generalObjective && errors.generalObjective
+                      )}
+                      fullWidth
+                      helperText={
+                        touched.generalObjective && errors.generalObjective
+                      }
+                      label="Objetivo general"
+                      margin="normal"
+                      name="generalObjective"
+                      multiline
+                      rows={4}
+                      onBlur={handleBlur}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeGObjective(e.target.value);
+                      }}
+                      value={generalObjective}
+                      variant="outlined"
+                    />
+                    <TextField
+                      error={Boolean(
+                        touched.specificObjective && errors.specificObjective
+                      )}
+                      fullWidth
+                      helperText={
+                        touched.specificObjective && errors.specificObjective
+                      }
+                      label="Objetivos especificos"
+                      margin="normal"
+                      name="specificObjective"
+                      multiline
+                      rows={4}
+                      onBlur={handleBlur}
+                      onChange={e => {
+                        handleChange(e);
+                        handleChangeSObjective(e.target.value);
+                      }}
+                      value={specificObjective}
+                      variant="outlined"
+                    />
 
                     {/* <TextField
                     error={Boolean(touched.generalObjective && errors.generalObjective)}

@@ -101,6 +101,7 @@ const RegisterAgreementView = () => {
         setTypeAlert('error');
         setMessage('Convenio creado incorrectamente');
       });
+      setOpen(false)
   };
   const handleSubmit = event => {
     event.preventDefault();

@@ -71,6 +71,22 @@ export const UpdateUserService = (registro) =>{
     const url= `${API_URL}/api/auth/consult_user_id/${registro.id}`;
     return axios.put(url,registro);
 }
+export const UpdateSpecific = (registro) =>{
+    const url= `${API_URL}/specific/${registro.id}/`;
+    return axios.put(url,registro);
+}
+export const UpdateGeneral = (registro) =>{
+    const url= `${API_URL}/general/${registro.id}/`;
+    return axios.put(url,registro);
+}
 
+export const getSpecific = () =>{
+    const url= `${API_URL}/specific/`;
+    return axios.get(url);
+}
+export const getGeneral = () =>{
+    const url= `${API_URL}/general/`;
+    return axios.get(url);
+}
 
 

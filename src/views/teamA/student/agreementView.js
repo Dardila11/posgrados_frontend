@@ -26,7 +26,7 @@ export const AgreementView = () => {
     return (
       <Container>
         <Grid container spacing={3}>
-          <Grid item lg={12} md={12} xs={12} key={1231233}>
+          <Grid item lg={6} md={6} xs={12} key={1231233}>
           <RouterLink to={link}>
               <Button 
                   size="small"

@@ -41,7 +41,9 @@ import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
 import { SearchProgram } from 'src/views/teamA/search/searchProgram';
 
 
-import {SearchProfessor} from "src/views/teamA/search/searchProfessor" ;
+import {SearchDirector} from "src/views/teamA/search/searchDirector" ;
+import {SearchCodirector} from "src/views/teamA/search/searchCodirector" ;
+import {SearchCodirector2} from "src/views/teamA/search/searchCodirector2" ;
 
 import {SearchCountry} from "src/views/teamA/search/searchCountry" 
 import {SearchDepartment} from "src/views/teamA/search/searchDepartment" 
@@ -106,7 +108,7 @@ const RegisterStudent = () => {
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('a@unicauca.edu.co');
   const [typeId, setTypeId] = useState('');
   const [personal_id, setPersonal_id] = useState(''); // identificacion
   const [personal_code, setPersonal_code] = useState(''); // en el back debe ser automatico
@@ -290,6 +292,7 @@ const RegisterStudent = () => {
         setTypeAlert('error');
         setMessage('Error, Verifica los datos!');
       });
+      setOpen(false)
   };
   
 
@@ -314,37 +317,39 @@ const RegisterStudent = () => {
         validationSchema={Yup.object().shape({
           username: Yup.string()
             .max(255)
-            .required('Nombre de usuario requerido')
-            .min(4, 'El nombre de usuario no puede ser tan corto'),
+            .required('Nombre de usuario requerido'),
           password: Yup.string()
             .max(255)
-            .required('Contraseña requerida')
-            .min(6, 'La contraseña debe tene mínimo 6 caracteres'), //TODO validation password
+            .required('Contraseña requerida'), //TODO validation password
           firstName: Yup.string()
             .max(255)
-            .required('Nombres requeridos'),
+            .required('Nombre requerido'),
           lastName: Yup.string()
             .max(255)
-            .required('Apellidos requeridos'),
+            .required('Apellidos requerido'),
           email: Yup.string()
-            .email('Ingrese un correo válido')
-            .required('Email requerido'),
+            .email()
+            .required('Correo electronico requerido'),
           //typeId = Yup.string.max(255).required('first name is required'), //TODO required combo box
-          personal_id: Yup.string().required(
-            'Indentificacion válida requerida'
-          ),
+          personal_id: Yup.string()
+            .max(255)
+            .required('Identificación requerida'),
           personal_code: Yup.string()
             .max(255)
-            .required('Codigo del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
-          photo: Yup.string().max(255),
-          telephone: Yup.string().min(
-            6,
-            'El teléfono debe tener mínimo 6 caracteres'
+            .required('Código del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
+          photo: Yup.string()
+            .max(255)
+            .required('Foto requerida'), //TODO file image
+          telephone: Yup.string().matches(
+            phoneRegExp,
+            'Telefono no valido'
           ),
           address: Yup.string()
             .max(255)
-            .min(4, 'La dirección debe ser mínimo de 4 caracteres')
-            .required('Direccion es requerida')
+            .required('Direccion requerida'),
+          role: Yup.string()
+            .max(255)
+            .required('Rol requerido') //TODO combo box
           //TODO combo box
         })}
         onSubmit={() => {}}
@@ -789,15 +794,15 @@ const RegisterStudent = () => {
                     <SearchCity idDepartment={idDepartmentI} callback={getCityI} />
                   </Grid>
                   <Grid item md={12} xs={12}>
-                    <SearchProfessor callback= {getDirector} label="Director"/>
+                    <SearchDirector callback= {getDirector} label="Director"/>
                     
                   </Grid>             
                   <Grid item md={6} xs={12}>
-                    <SearchProfessor callback= {getCodirector1} label= 'Codirector'/>
+                    <SearchCodirector callback= {getCodirector1} label= 'Codirector'/>
                     
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchProfessor callback= {getCodirector2} label ='Codirector'/>
+                    <SearchCodirector2 callback= {getCodirector2} label ='Codirector'/>
                     
                   </Grid>
                   

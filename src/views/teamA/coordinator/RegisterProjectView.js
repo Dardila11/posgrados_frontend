@@ -106,6 +106,7 @@ const RegisterProjectView = () => {
         setTypeAlert('error');
         setMessage('Proyecto creado incorrectamente');
       });
+      setOpen(false)
   };
   const handleSubmit = event => {
     event.preventDefault();
