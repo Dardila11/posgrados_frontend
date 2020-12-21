@@ -12,8 +12,8 @@ import { CreateKnowLedgeView } from './CreateKnowLedge';
 import { EditKnowLedge } from './Edit/EditKnowLedge'
 import { EditLineResearch } from './Edit/EditLineResearch'
 
-
 import { DeletKnowLedge } from './Delete/DeleteKnowLedge'
+import { DeletLineResearch } from './Delete/DeleteLineResearch'
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -120,9 +120,9 @@ export const CreateOtherView = () => {
             <TabPanel value={value} index={4}>
               <DeletKnowLedge />
             </TabPanel>
-            {/* <TabPanel value={value} index={5}>
+            <TabPanel value={value} index={5}>
               <DeletLineResearch />
-            </TabPanel> */}
+            </TabPanel>
         </Box>
       </Container>
     </Page>

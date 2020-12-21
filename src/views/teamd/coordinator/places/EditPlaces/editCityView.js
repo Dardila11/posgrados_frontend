@@ -18,12 +18,12 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-//Import component search
-import { SearchFullCountry }   from 'src/views/teamd/Search/searchFullCountry';
-import { SearchFullDepartment } from 'src/views/teamd/Search/searchFullDepartment';
-import { SearchFullCity } from 'src/views/teamd/Search/searchFullCity';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+//Import component search
+import { SearchCountry } from 'src/views/teamd/Search/searchFCountry';
+import { SearchDepartment } from 'src/views/teamd/Search/searchFDepartment';
+import { SearchCity } from 'src/views/teamd/Search/searchFCity';
 
 const useStyles = makeStyles({
   root: {
@@ -52,6 +52,7 @@ const EditCityView = () => {
   const [idCountry, setidCountry] = useState(' ');
   const [idCity, setIdCity] = useState('');
   const [type, setType] = useState(' ');
+
   const setCountry = id => {
     setidCountry(id);
   };
@@ -65,13 +66,15 @@ const EditCityView = () => {
       console.log("la id ciudad es: "+id);
     setIdCity(id);
   };
-
+  const handleOnchangetype = e => {
+    setType(e.target.value);
+  };
   const handleOnchangeName = e => {
     setname(e.target.value);
   };
   const handleClickOpenEditCity = () => {
     setOpen(false);
-    const namecountry = document.getElementById("searchCountries").value;
+    const namecountry = document.getElementById("searchFCountries").value;
     const nameDeparment = document.getElementById("searchDepartments").value;
     const nameCity = document.getElementById("searchCities").value;
     console.log('pais'+namecountry+' depart '+nameDeparment +' city '+nameCity)
@@ -91,7 +94,7 @@ const EditCityView = () => {
       id: idCity,
       name: name,
       state: idDepartment,
-      status: type
+      status:type
     })
       .then(() => {
         setOpenAlert(true)
@@ -112,9 +115,7 @@ const EditCityView = () => {
   //  handleCreate();
     event.preventDefault();
   };
-  const handleOnchangetype = e => {
-    setType(e.target.value);
-  };
+
   return (
     <Container maxWidth="sm" className={clases.container}>
       <Formik
@@ -141,12 +142,12 @@ const EditCityView = () => {
                   Editar Ciudad
                 </Typography>
                 <Box mb={3}>
-                <SearchFullCountry callback={setCountry} />
-                <SearchFullDepartment
+                <SearchCountry callback={setCountry} />
+                <SearchDepartment
                   idCountry={idCountry}
                   callback={setDepartment}
                 />
-                <SearchFullCity 
+                <SearchCity 
                   idDepartment={idDepartment}
                   callback={setCity}
                 />
@@ -183,8 +184,8 @@ const EditCityView = () => {
                                 value={values.name}
                                 variant="outlined"
                               />
-                              <SearchFullCountry callback={setCountry} />
-                              <SearchFullDepartment
+                              <SearchCountry callback={setCountry} />
+                              <SearchDepartment
                                 idCountry={idCountry}
                                 callback={setDepartment}
                               />

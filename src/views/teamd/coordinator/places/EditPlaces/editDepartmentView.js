@@ -9,8 +9,6 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AlertView } from '../../../../../components/Alert'
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 import {
   Box,
   Button,
@@ -19,10 +17,12 @@ import {
   Typography
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 //Import component search
 
-import { SearchFullCountry } from 'src/views/teamd/Search/searchFullCountry';
-import { SearchFullDepartment } from 'src/views/teamd/Search/searchFullDepartment';
+import { SearchCountry } from 'src/views/teamd/Search/searchFCountry';
+import { SearchDepartment } from 'src/views/teamd/Search/searchFDepartment';
 // service
 
 import { EditDeparmentService } from './service';
@@ -61,7 +61,7 @@ const EditDepartmentView = () => {
   };
   const handleClose = () => {
     setOpen(false);
-  }; 
+  };  
   const handleOnchangetype = e => {
     setType(e.target.value);
   }; 
@@ -69,7 +69,7 @@ const EditDepartmentView = () => {
     setname(e.target.value);
   };
   const handleClickOpenEditDeparment = () => {
-    const namecountry = document.getElementById("searchCountries").value;
+    const namecountry = document.getElementById("searchFCountries").value;
     const nameDeparment = document.getElementById("searchDepartments").value;
     if (namecountry == "" && nameDeparment == ""){
         setOpenAlert(true)
@@ -87,7 +87,7 @@ const EditDepartmentView = () => {
     EditDeparmentService({
       id: idDeparment,
       name: name,
-      idcountry: idCountry,
+      country: idCountry,
       status: type
     })
       .then(() => {
@@ -142,15 +142,15 @@ const EditDepartmentView = () => {
                 </Typography>
                 <Box mb={3} id="box3">
                   
-                  <SearchFullCountry callback={getCountry} />
-                  <SearchFullDepartment idCountry={idCountry} callback={getDeparment} />
+                  <SearchCountry callback={getCountry} />
+                  <SearchDepartment idCountry={idCountry} callback={getDeparment} />
 
                   <Box my={2}>
                     <Button
                       color="primary"
                       fullWidth
-                      size="large"   
-                      type="submit"                                         
+                      size="large"                                            
+                      type="submit"
                       variant="contained"
                       
                     >
@@ -173,7 +173,8 @@ const EditDepartmentView = () => {
                               type="text"                              
                               variant="outlined"
                             />
-                            <SearchFullCountry callback={getCountry} />
+                            <SearchCountry callback={getCountry} />
+
                             <Typography color="textPrimary" variant="h5">
                               Estado 
                             </Typography>

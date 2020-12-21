@@ -1,13 +1,15 @@
 import React, { useState,useEffect } from 'react';
-import { AddLineRearchService } from './service';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
 import { Box, Button, Container, TextField } from '@material-ui/core';
 import {AddManage} from "../manage-GI/service"
-import {SearchLIGIView} from "src/views/teamd/Search/searchLIGI"
+import { AlertView } from 'src/components/Alert'
 import {GetLineGIService} from 'src/views/teamd/Search/service';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 export const AddLineResearchView = () => {
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
+
+
   const [lineList, setLineList] = useState([]);
   const [line, setLine] = useState('');
   const [listaGIS, setlistaGIS] = useState(JSON.parse(localStorage.getItem("GiMiembro")))
@@ -15,8 +17,12 @@ export const AddLineResearchView = () => {
   useEffect(() => {
     GetLineGIService(GI)
       .then(request => {
-        console.log("LINESSSSSSSSS",request.data)
-        setLineList(request.data.Lines)
+        if(typeof(request.data)==="string"){
+          setLineList([])
+        }else{
+          setLineList(request.data.Lines)
+        }
+        
       })
       .catch(() => setLineList([]));
   }, [GI]);
@@ -32,16 +38,21 @@ export const AddLineResearchView = () => {
     setGI(id)
   }
   const handleCreate = () => {
+    setOpen(false)
     AddManage({
       "analysis_state": true,
       "inv_line": line,
       "professor": JSON.parse(localStorage.getItem("profesorInfo")).id
     })
       .then(result => {
-        alert('Linea de investigacion agregada!');
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Linea de investigacion agregada correctamente')
       })
-      .catch(() => {
-        alert('Error');
+      .catch((result) => {
+        setOpen(true)
+        setTypeAlert('error')
+        setMessage('Error! ',result)
       });
   };
   const handleSubmit = event => {
@@ -107,6 +118,7 @@ export const AddLineResearchView = () => {
               </Box>
             </form>
           </Box>
+          <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
     </Container>
   );
 };
