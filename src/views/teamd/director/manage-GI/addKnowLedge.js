@@ -3,10 +3,15 @@ import { AddKnowLedgeService } from './service';
 import { Box, Button, Container, TextField } from '@material-ui/core';
 import {SearchKnowLedge} from '../../Search/searchKnowLedge'
 import Autocomplete from '@material-ui/lab/Autocomplete';
+
+import { AlertView } from 'src/components/Alert'
 export const AddKnowLedgeView = ({idGi}) => {
   const [IdKnowLedge, setIdKnowLedge] = useState('')
   const [GI, setGI] = useState()
 
+  const [open, setOpen] = useState(false)
+  const [typeAlert, setTypeAlert] = useState('success')
+  const [message, setMessage] = useState('')
   const getIdKnowLedge = (id) => {
     setIdKnowLedge(id)
   }
@@ -15,6 +20,7 @@ export const AddKnowLedgeView = ({idGi}) => {
     setGI(id)
   }
   const handleCreate = () => {
+    setOpen(false)
     AddKnowLedgeService({
       study_status: true,
       inv_group: GI, //Todo
@@ -22,10 +28,14 @@ export const AddKnowLedgeView = ({idGi}) => {
 
     })
       .then(result => {
-        alert('Area de conocimiento agregada!');
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Area de conocimiento agregada!')
       })
       .catch(() => {
-        alert('Error');
+        setOpen(true)
+        setTypeAlert('success')
+        setMessage('Ocurrío un error!')
       });
   };
   const handleSubmit = event => {
@@ -73,7 +83,7 @@ export const AddKnowLedgeView = ({idGi}) => {
               >
                 Agregar
               </Button>
-              
+              <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
             </form>
           </Box>
     </Container>

@@ -38,7 +38,7 @@ export const SearchInstitution = ({ callback }) => {
           label='Institución'
           variant='outlined'
           required
-          
+          style={{width: 300,marginLeft:10,marginBottom:20}}
         />
       )}
       onInputChange={(e, input) => getIdInstitution(input)}

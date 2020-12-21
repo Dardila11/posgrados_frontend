@@ -8,11 +8,14 @@ export const SearchProfessor = ({ callback }) => {
     const [listProfessors] = useState(JSON.parse(localStorage.getItem("profesores")))  
     const [state, setstate] = useState([])
     useEffect(() => {
+        setListUsers(JSON.parse(localStorage.getItem("usuarios")))
         let list = []
         let profesors = []
         if (listUsers && JSON.parse(localStorage.getItem("profesores"))){
             JSON.parse(localStorage.getItem("profesores")).map( element => {
+                
                 if(element.status === true){
+                    console.log("PROFESORES ",element)
                     list.push(element)
                 }
             })
