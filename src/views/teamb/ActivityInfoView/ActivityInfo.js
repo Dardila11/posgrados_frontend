@@ -438,9 +438,12 @@ const ActivityInfoView = () => {
             </IconButton>
             : null
           }
-          <IconButton color="secondary" aria-label="add an edit" onClick={handleEditar}>
-            <EditIcon />
-          </IconButton>
+          {activity.state < 2 ?
+            <IconButton color="secondary" aria-label="add an edit" onClick={handleEditar}>
+              <EditIcon />
+            </IconButton>
+            : null
+          }
         </Box>
       </Card>
 

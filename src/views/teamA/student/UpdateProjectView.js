@@ -92,6 +92,7 @@ const UpdateProjectView = () => {
   };
 
   const handleSubmitUpdate = e => {
+    setOpen(false)
     UpdateProjectService({
       id: proyecto.id,
       provisional_title: title,
