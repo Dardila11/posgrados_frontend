@@ -89,9 +89,13 @@ const useStyles = makeStyles((theme) => ({
           ConsultProfesorAll().then(response => {
             localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
             JSON.parse(localStorage.getItem("profesores")).map( element => {
-              if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
-                localStorage.setItem("profesorInfo",JSON.stringify(element))
+
+              if(JSON.parse(localStorage.getItem("userInfo"))){
+                if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
+                  localStorage.setItem("profesorInfo",JSON.stringify(element))
+                }
               }
+
             })
         })
             

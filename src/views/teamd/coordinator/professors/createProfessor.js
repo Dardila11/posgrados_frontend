@@ -32,6 +32,8 @@ import { Autocomplete } from '@material-ui/lab'
 import {SetLabProfesor} from "./service"
 import {SetMember} from "./service"
 import {ConsultProfesorAll} from "src/views/teamd/Search/service"
+
+import {ConsultUserService} from "src/views/teamd/Search/service"
 const useStyles = makeStyles({
   root: {
     background: 'white',
@@ -201,6 +203,10 @@ export const CreateProfessorView = () => {
             department: departmentI
           })
             .then((request) => {
+
+
+              ConsultUserService().then( result => { localStorage.setItem("usuarios", JSON.stringify(result.data.Users))}).catch()
+              
               ConsultProfesorAll().then(response => {
                 localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
                 JSON.parse(localStorage.getItem("profesores")).map( element => {
