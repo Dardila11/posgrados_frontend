@@ -25,29 +25,64 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const validationSchema = yup.object().shape({
-  num_folio: yup.string('Ingrese numero de folio').when('status', {
-    is: 3,
-    then: yup.string().required('numero de folio es obligatorio')
+  status: yup.number(),
+  num_folio: yup.string().notRequired()
+    .when("status", {
+      is: (status) => 3,
+      then: yup.string().max(255).required("numero de folio es obligaotrio"),
+      otherwise: yup.string().notRequired()
+    }),
+  num_acta: yup.string().notRequired()
+  .when("status", {
+    is: (status) => 3,
+    then: yup.string().max(255).required("numero de acta es obligaotrio"),
+    otherwise: yup.string().notRequired()
   }),
-
-  num_acta: yup.string("Ingrese numero de acta").when('status', {
-    is: 3,
-    then: yup.string().required("numero de acta es obligatorio")
+  num_diploma: yup.string().notRequired()
+  .when("status", {
+    is: (status) => 3,
+    then: yup.string().max(255).required("numero de diploma es obligaotrio"),
+    otherwise: yup.string().notRequired()
   }),
-
-  num_diploma: yup.string("Ingrese numero de diploma").when('status', {
-    is: 3,
-    then: yup.string().required("numero de diploma es obligatorio")
+  num_resolution: yup.string().notRequired()
+  .when("status", {
+    is: (status) => 3,
+    then: yup.string().max(255).required("numero de resolución es obligaotrio"),
+    otherwise: yup.string().notRequired()
   }),
+  graduation_date: yup.date().notRequired()
+    .when("status", {
+      is: (status) => 3,
+      then: yup.date().required('fecha de graduación es obligatorio')
+            .max(new Date(), 'La fecha debe ser antes del dia de hoy' ),
+      otherwise: yup.date().notRequired()
 
-  num_resolution: yup.string("Ingrese numero de resolución").when('status', {
-    is: 3,
-    then: yup.string().required("numero de resolución es obligatorio")
-  }),
+    }),
+  observations: yup
+    .string('escriba las observaciones')
+    .max(255)
+    .required('Observaciones es obligatoria')
 
+    /**
+     * num_acta: yup
+    .string("Ingrese numero de acta")
+    .max(255)
+    .required("numero de acta es obligatorio"),
+  num_diploma: yup
+    .string("Ingrese numero de diploma")
+    .max(255)
+    .required("numero de diploma es obligatorio"),
+  num_resolution: yup
+    .string("Ingrese numero de resolución")
+    .max(255)
+    .required("numero de resolución es obligatorio"),
+  graduation_date: yup.date()
+    .required('fecha de graduación es obligatorio')
+    .max(new Date(), 'La fecha debe ser antes del dia de hoy' ),
   observations: yup
     .string('escriba las observaciones')
     .required('Observaciones es obligatoria')
+     */
 })
 
 const TrackStudent = props => {
@@ -58,9 +93,20 @@ const TrackStudent = props => {
   
   const postData = async (values) => {
     setOpen(false)
-    console.log(values)
-    
-    Api.postStudentTracking(values)
+    let jsonValues = {
+      status: values.status,
+      enrollment_date: null,
+      graduation_date: values.status == 3 ? values.graduation_date : null,
+      num_folio: values.status == 3 ? values.num_folio : '',
+      num_acta: values.status == 3 ? values.num_acta : '',
+      num_diploma: values.status == 3 ? values.num_diploma : '',
+      num_resolution: values.status == 3 ? values.num_resolution : '',
+      observations: values.observations,
+      student: values.student
+      
+    }
+    console.log(jsonValues);
+     Api.postStudentTracking(jsonValues)
       .then(res => {
         if (res.status == 201) {
           console.log(res.status)
@@ -92,8 +138,7 @@ const TrackStudent = props => {
           observations: '',
           student: parseInt(props.studentId)
         }}
-        onSubmit={(values) => {
-          console.log(values)
+        onSubmit={(values) => {          
           postData(values)
         }}
       >
@@ -104,11 +149,11 @@ const TrackStudent = props => {
             variant="outlined"
             label="Estado"
             type="select"
-            defaultValue={1}
             name="status"
             value={values.status}
             onChange={handleChange}
             onBlur={handleBlur}
+            error={!!errors.status}
             
           >
             <MenuItem value={1}>Activo</MenuItem>
@@ -128,7 +173,7 @@ const TrackStudent = props => {
                 value={values.graduation_date}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.graduation_date && touched.graduation_date) && errors.graduation_date}
+                error={!!errors.graduation_date}
                 helperText={(errors.graduation_date && touched.graduation_date) && errors.graduation_date}
                 
               />
@@ -140,7 +185,7 @@ const TrackStudent = props => {
                 value={values.num_folio}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.num_folio && touched.num_folio) && errors.num_folio}
+                error={!!errors.num_folio}
                 helperText={(errors.num_folio && touched.num_folio) && errors.num_folio}
               />
               <TextField
@@ -151,7 +196,7 @@ const TrackStudent = props => {
                 value={values.num_acta}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.num_acta && touched.num_acta) && errors.num_acta}
+                error={!!errors.num_acta}
                 helperText={(errors.num_acta && touched.num_acta) && errors.num_acta}
               />
               <TextField
@@ -162,7 +207,7 @@ const TrackStudent = props => {
                 value={values.num_resolution}
                 onChange={handleChange}
                 onBlur={handleBlur}
-                error={(errors.num_resolution && touched.num_resolution) && errors.num_resolution}
+                error={!!errors.num_resolution}
                 helperText={(errors.num_resolution && touched.num_resolution) && errors.num_resolution}
               />
               </>
@@ -179,7 +224,7 @@ const TrackStudent = props => {
             value={values.observations}
             onChange={handleChange}
             onBlur={handleBlur}
-            error={(errors.observations && touched.observations) && errors.observations}
+            error={!!errors.observations}
             helperText={(errors.observations && touched.observations) && errors.observations}
           />
             <Button type="submit" variant="contained" color="primary">
