@@ -1,8 +1,8 @@
 [
     {
-        "name": "reporte 1",
-        "pathEXCEL": "#",
-        "pathPDF": "#"
+        "name": "Reporte estudiantes",
+        "pathEXCEL": "http://mdquilindo.pythonanywhere.com/report/1",
+        "pathPDF": "http://mdquilindo.pythonanywhere.com/report/2"
     },
     {
         "name": "Relación estudiante - tutor",

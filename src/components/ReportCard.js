@@ -37,14 +37,15 @@ const ReportCard = ({report}) => {
                     click para descargar reporte
                   </Typography>
                 </Box>
-              <CardActionArea className={classes.CardAction}>
+                <Box alignItems="center" display="flex" flexDirection="row">
               <Button variant="outlined" color="primary" href={report.pathEXCEL}>
                 Descargar EXCEL
               </Button>
               <Button variant="outlined" color="primary" href={report.pathPDF}>
                 Descargar PDF
               </Button>
-              </CardActionArea>
+              </Box>
+              
             </Card>
           </Box>
     </>
