@@ -107,7 +107,7 @@ const CoordinatorListEvaluationsView = ({search, status, page}) => {
   return (
     <Page className={classes.root} title="Listado de evaluaciones">
       <BreadCrumbs />
-      <SearchBar context="evaluations" status={state}/>
+      <SearchBar searchOption="true" context="evaluations" status={state}/>
       {loading ? (
         
         <LinearProgress className={classes.progress}/>

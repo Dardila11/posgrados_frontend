@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import {
   TextField,
@@ -39,6 +39,7 @@ const EditEvaluationDirector = props => {
   const evaluation = props.evaluation
   const activity = props.activity
 
+ 
   const postData = async (values, isSaveed) => {
     setOpen(false)
     let directorId = parseInt(localStorage.getItem("id"))
@@ -160,8 +161,9 @@ const EditEvaluationDirector = props => {
               Guardar
             </Button>
             <Button type="submit" onClick={() => setFieldValue('submitButton', "send") } variant="contained" color="primary">
-            Guardar y Notificar
-          </Button>
+              Guardar y Notificar
+            </Button>
+           
           </form>
         )}
       </Formik>

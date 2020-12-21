@@ -12,6 +12,10 @@ const getCoordinatorActivities = id =>{
 const getCoordinatorEvaluations = id =>{
   return https.get('api/coordinator/' + id + '/test');  
 }
+
+const getCoordinatorStudents = id =>{
+  return https.get('api/coordinator/' + id + '/student')
+}
 /* End Coordinator */
 
 /* Director services */
@@ -74,6 +78,7 @@ export default {
   getDirectorEvaluations,
   getCoordinatorActivities,
   getCoordinatorEvaluations,
+  getCoordinatorStudents,
   getStudentActivities,
   getStudents,
   getStudent,

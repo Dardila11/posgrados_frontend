@@ -22,11 +22,17 @@ const useStyles = makeStyles({
     backgroundColor : '#e8eaf6',
     color: '#546e7a'
   },
-  favorableStatus:{
-    color : '#4caf50'
+  stateRegistrado:{
+    color : '#52b202'
   },
-  unfavorableStatus:{
+  stateRevision:{
     color: '#ffc400'
+  },
+  stateRevisada:{
+    color: '#0d47a1'
+  },
+  stateAceptada:{
+    color: '#009688'
   }
 });
 
@@ -41,13 +47,23 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   const classes = useStyles();
   let spanClass = ''
   const student = activity.student
+  let stateActivity = ''
+  console.log(activity)
   switch (activity.state) {
     case 1:
-      spanClass = classes.favorableStatus
+      spanClass = classes.stateRegistrado
+      stateActivity = 'Registrada'
       break;
     case 2:
-      spanClass= classes.unfavorableStatus
+      spanClass= classes.stateRevision
+      stateActivity = 'En revisión'
       break;
+    case 3:
+      spanClass = classes.stateRevisada
+      stateActivity = 'Revisada'
+    case 4:
+      spanClass = classes.stateAceptada
+      stateActivity = 'Aceptada'
     default:
       break;
   }
@@ -65,7 +81,7 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
         <Box boxShadow={3}>
           <Card className={clsx(className)} {...rest}>
             <CardActionArea className={classes.CardAction}>
-              {getContent(activity,student,classes,spanClass, option,context)}
+              {getContent(activity,student,classes,spanClass, option,context,stateActivity)}
             </CardActionArea>
           </Card>
         </Box>
@@ -76,7 +92,7 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   );
 };
 
-function getContent (activity,student,classes,spanClass, option,context){
+function getContent (activity,student,classes,spanClass, option,context, stateActivity){
   return (
    
             <Box
@@ -117,9 +133,6 @@ function getContent (activity,student,classes,spanClass, option,context){
               <Typography color="textSecondary" variant="body1">
                 {activity.type}
               </Typography>
-              {/* <Typography color="textSecondary" variant="body1">
-                {activity.academic_year}
-              </Typography> */}
               <Typography color="textSecondary" variant="body1">
                 {activity.start_date}
               </Typography>
@@ -129,11 +142,7 @@ function getContent (activity,student,classes,spanClass, option,context){
                 <Typography color="textSecondary" variant="body1">
                 Estado:
                 <b> <span className={spanClass}>
-                  {activity.state == 1? (
-                    <> Nueva</>
-                  ):(
-                    <> En revisión</>
-                  )}       
+                  {stateActivity}       
                 </span> </b>
               </Typography>
               )}

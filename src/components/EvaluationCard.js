@@ -105,7 +105,7 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
         <Box boxShadow={3}>
           <Card className={clsx(classes.root)} {...rest}>
             <CardActionArea className = {classes.CardAction} onClick={handleClickOpen} enable="false">
-              {getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass)}
+              {getContent(activityInfo, studentInfo, evaluation, classes, valueclass, statusclass, context)}
             </CardActionArea>
           </Card>
           {getContentEvaluation(evaluation, activityInfo, open, handleClose, handleClickOpen, context)}  

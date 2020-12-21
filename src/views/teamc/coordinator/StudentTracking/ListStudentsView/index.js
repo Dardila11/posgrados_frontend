@@ -20,7 +20,6 @@ const useStyles = makeStyles(theme => ({
 
 const CoordinatorListStudentsView = ({
   period,
-  program,
   status,
   search,
   page
@@ -32,7 +31,6 @@ const CoordinatorListStudentsView = ({
   const itemsByPage = 8
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
-  const programs = getPrograms(initialStudentsList)
   const pages = getPages(initialStudentsList, itemsByPage)
   const classes = useStyles()
 
@@ -89,24 +87,6 @@ const CoordinatorListStudentsView = ({
     periodFilter(period)
   }, [period])
 
-  /**
-   * Filtra los estudiantes segun el programa
-   * al que pertenecen
-   */
-  useEffect(() => {
-    function programfilter(program) {
-      if (program != '-1') {
-        const studentListFilteredByProgram = initialStudentsList.filter(
-          student => student.student.program.name === program
-        )
-        setStudentsList(studentListFilteredByProgram)
-      } else {
-        if (page == '') setStudentsList(pages[0])
-        else setStudentsList(pages[page - 1])
-      }
-    }
-    programfilter(program)
-  }, [program])
 
   /**
    * Filtra los estudiantes segun el estado
@@ -139,7 +119,8 @@ const CoordinatorListStudentsView = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      await api.getStudents().then(res => {
+      let directorId = localStorage.getItem("id")
+      await api.getCoordinatorStudents(directorId).then(res => {
         setStudentsList(getPages(res.data.students, itemsByPage)[0])
         setInitialStudentsList(res.data.students)
         setLoading(false)
@@ -155,7 +136,6 @@ const CoordinatorListStudentsView = ({
         context="students"
         periods={periods}
         status={statuss}
-        programs={programs}
       />
       {loading ? (
         <LinearProgress />
@@ -227,23 +207,12 @@ const getStatus = studentsList => {
   return statusList
 }
 
-const getPrograms = studentsList => {
-  let programList = []
-  studentsList.map(student => {
-    if (!programList.includes(student.student.program.name)) {
-      programList.push(student.student.program.name)
-    }
-  })
-  return programList
-}
-
 /**
  *
  * @param {*} state from reducers
  */
 const mapStateToProps = state => ({
   period: state.filters.period,
-  program: state.filters.program,
   status: state.filters.status,
   search: state.searches.search,
   page: state.paginations.page

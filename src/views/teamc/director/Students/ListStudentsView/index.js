@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const DirectorListStudentsView = ({ period, program, status, search,page }) => {
+const DirectorListStudentsView = ({ period, status, search,page }) => {
   const [studentsList, setStudentsList] = useState([])
   const [loading, setLoading] = useState(true)
   const [initialStudentsList, setInitialStudentsList] = useState([])
@@ -29,7 +29,6 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
   const itemsByPage = 8
   const periods = getPeriod(initialStudentsList)
   const statuss = getStatus(initialStudentsList)
-  const programs = getPrograms(initialStudentsList)
   const pages = getPages(initialStudentsList,itemsByPage)
   const classes = useStyles()
 
@@ -84,25 +83,6 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
   }, [period])
 
   /**
-   * Filtra los estudiantes segun el programa
-   * al que pertenecen
-   */
-  useEffect(() => {
-    function programfilter(program) {
-      if (program != '-1') {
-        const studentListFilteredByProgram = initialStudentsList.filter(
-          student => student.student.program.name === program
-        )
-        setStudentsList(studentListFilteredByProgram)
-      } else {
-        if(page == '')setStudentsList(pages[0])
-        else setStudentsList(pages[page-1])
-      }
-    }
-    programfilter(program)
-  }, [program])
-
-  /**
    * Filtra los estudiantes segun el estado
    * que tienen. 1. Activo, 2. Inactivo, etc
    */
@@ -155,8 +135,7 @@ const DirectorListStudentsView = ({ period, program, status, search,page }) => {
       <SearchBar
         context="students"
         periods={periods}
-        status={statuss}
-        programs={programs}/>
+        status={statuss}/>
       {loading ? (
         <LinearProgress className={classes.progress} />
       ) : ( initialStudentsList.length > 0 ? (
@@ -229,15 +208,6 @@ const getStatus = studentsList => {
   return statusList
 }
 
-const getPrograms = studentsList => {
-  let programList = []
-  studentsList.map(student => {
-    if (!programList.includes(student.student.program.name)) {
-      programList.push(student.student.program.name)
-    }
-  })
-  return programList
-}
 
 /**
  *
@@ -245,7 +215,6 @@ const getPrograms = studentsList => {
  */
 const mapStateToProps = state => ({
   period: state.filters.period,
-  program: state.filters.program,
   status: state.filters.status,
   search: state.searches.search,
   page: state.paginations.page
