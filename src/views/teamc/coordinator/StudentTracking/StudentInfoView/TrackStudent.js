@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import moment from 'moment'
 import {
   TextField,
   Select,
@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const validationSchema = yup.object().shape({
-  // TODO graduation_date field validation
   num_folio: yup.string('Ingrese numero de folio').when('status', {
     is: 3,
     then: yup.string().required('numero de folio es obligatorio')
@@ -60,6 +59,7 @@ const TrackStudent = props => {
   const postData = async (values) => {
     setOpen(false)
     console.log(values)
+    
     Api.postStudentTracking(values)
       .then(res => {
         if (res.status == 201) {
@@ -67,12 +67,12 @@ const TrackStudent = props => {
           setOpen(true)
           setTypeAlert('success')
           setMessage('El estado del estudiante ha cambiado')
-        } else {
-          console.log(res.status)
         }
       })
       .catch(error => {
-        console.log(error)
+          setOpen(true)
+          setTypeAlert("error")
+          setMessage("Ha ocurrido un error " + error)
       })
   }
 
@@ -80,11 +80,11 @@ const TrackStudent = props => {
     <>
       <h1> {props.title} </h1>
       <Formik
-        validationSchema={validationSchema}
+        //validationSchema={validationSchema}
         initialValues={{
           status: 1,
           enrollment_date: null,
-          graduation_date: null,
+          graduation_date: moment().format('YYYY-MM-DD'),
           num_folio: '',
           num_acta: '',
           num_diploma: '',
@@ -123,7 +123,6 @@ const TrackStudent = props => {
                 id="date"
                 label="Fecha de Grado"
                 type="date"
-                defaultValue="2020-10-19"
                 variant="outlined"
                 name="graduation_date"
                 value={values.graduation_date}
@@ -131,9 +130,7 @@ const TrackStudent = props => {
                 onBlur={handleBlur}
                 error={(errors.graduation_date && touched.graduation_date) && errors.graduation_date}
                 helperText={(errors.graduation_date && touched.graduation_date) && errors.graduation_date}
-                InputLabelProps={{
-                  shrink: true
-                }}
+                
               />
               <TextField
                 id="outlined-basic"
@@ -168,9 +165,7 @@ const TrackStudent = props => {
                 error={(errors.num_resolution && touched.num_resolution) && errors.num_resolution}
                 helperText={(errors.num_resolution && touched.num_resolution) && errors.num_resolution}
               />
-
-              {/*  */}
-            </>
+              </>
           ) : (
             <></>
           )}
@@ -187,11 +182,9 @@ const TrackStudent = props => {
             error={(errors.observations && touched.observations) && errors.observations}
             helperText={(errors.observations && touched.observations) && errors.observations}
           />
-      
-            <Button type="submit" variant="contained" pending="true" color="primary">
+            <Button type="submit" variant="contained" color="primary">
               Guardar
             </Button>
-          
         </form>
         )}
       </Formik>
