@@ -1,9 +1,10 @@
 import React,{useEffect, useState} from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, makeStyles,} from '@material-ui/core'
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, makeStyles,FormLabel} from '@material-ui/core'
 import { AlertView } from 'src/components/Alert';
 import {UpdateAgreementService} from './service'
 import { duration } from 'moment';
 import { AgreementView } from './agreementView';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 const useStyles = makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.background.dark,
@@ -34,7 +35,7 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
     const [percentage_discount, setPercentage_discount] = useState(agreement.percentage_discount)
     const [observation, setObservation] = useState(agreement.observation)
     const [periodicAcademic, setPeriodicAcademic] = useState(agreement.period_academic)
-
+    const [archivo, setArchivo] = useState(null);
     const handleChangeObservation = e => {
       setObservation(e);
     };
@@ -60,10 +61,26 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
     const handleChangeAgreementDate = (valor)=> {
         setAgreement_date(valor)
     }
+    const handleChangeArchivo = e => {
+      setArchivo(e);
+      
+    };
     const handleUpdate = ()=>{
-        console.log('agreement ',agreement.id)
-        UpdateAgreementService({
-            "id": agreement.id,
+        let fd = new FormData();
+        fd.append("voucher", archivo[0])
+        fd.append("observation",observation )
+        fd.append("percentage_discount", percentage_discount)
+        
+        fd.append("period_academic",periodicAcademic )
+        
+        fd.append("agreement_date",agreement_date )
+        fd.append("start_date", startDate)
+        fd.append("end_date",endDate )
+        fd.append("long",long )
+        fd.append("id",agreement.id )
+        UpdateAgreementService(
+          fd
+            /* "id": agreement.id,
             "long": long,
             "start_date": startDate,
             "end_date": endDate,
@@ -73,8 +90,8 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
             "agreement_date": agreement_date,
             "period_academic": periodicAcademic,
             "percentage_discount": percentage_discount,
-            "observation": observation,
-        }).then(alert("Ejecutado"))
+            "observation": observation, */
+        ).then(alert("Ejecutado"))
     }
 
 
@@ -84,7 +101,7 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
         <DialogTitle id="form-dialog-title">Actualizar beca</DialogTitle>
         <DialogContent>
             <DialogContentText>
-               Para actualizar la beca debe elegir los campos que quiera actualizar y pulsar el boton actualizar
+               Para actualizar el convenio debe elegir los campos que quiera actualizar y pulsar el boton actualizar
             </DialogContentText>
         <TextField
                       fullWidth
@@ -190,6 +207,23 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
                       value={endDate}
                       variant="outlined"
                     />
+                    
+                    <Button
+                      variant="contained"
+                      component="label"
+                      id="mg-left"
+                      startIcon={<CloudUploadIcon />}
+                    >
+                      Subir justificante
+                      <input 
+                      type="file" 
+                      required
+                      onChange={e => {
+                        handleChangeArchivo(e.target.files);
+                      }}
+                      
+                       />
+                    </Button>
         </DialogContent>
             <DialogActions>
             <Button onClick={handleClose} color="primary">
