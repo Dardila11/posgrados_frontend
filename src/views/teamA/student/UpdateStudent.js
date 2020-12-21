@@ -29,8 +29,8 @@ import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
 import ListIcon from '@material-ui/icons/List';
 
-import {UpdateStudentService} from './service'
-import {getUserLogin} from './service'
+import { UpdateStudentService } from './service';
+import { getUserLogin } from './service';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -54,41 +54,37 @@ export const UpdateStudent = () => {
   const [typeAlert, setTypeAlert] = useState('success');
   const [message, setMessage] = useState('');
 
-
-
   //Estudiante logeado //TODO
   const [studentLoggedin, setStudentLoggedin] = useState({
-
-    "id": 1,
-    "dedication": 1,
-    "program": 1,
-    "date_record": "2020-11-02T14:42:24-05:00",
-    "date_update": "2020-11-02T14:42:26-05:00",
-    "user": {
-        "id": 5,
-        "password": "pbkdf2_sha256$180000$ulJMQfIxGyTx$o0Gohlw6YUB2C3/DvNaP4jOHPrsNDEp4GrA9qNXoaks=",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "mdquilindo",
-        "first_name": "miller",
-        "last_name": "quilindo",
-        "email": "mdquilindo@unicauca.edu.co",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2020-11-02T14:41:24-05:00",
-        "type_id": 1,
-        "personal_id": "1061793073",
-        "personal_code": "104613020476",
-        "photo": "https://mdquilindo.pythonanywhere.com/media/d_accounts_app/users/raf750x1000075tFFFFFF_97ab1c12de.u2.jpg",
-        "telephone": "0",
-        "address": "0",
-        "is_proffessor": false,
-        "is_student": true
+    id: 1,
+    dedication: 1,
+    program: 1,
+    date_record: '2020-11-02T14:42:24-05:00',
+    date_update: '2020-11-02T14:42:26-05:00',
+    user: {
+      id: 5,
+      password:
+        'pbkdf2_sha256$180000$ulJMQfIxGyTx$o0Gohlw6YUB2C3/DvNaP4jOHPrsNDEp4GrA9qNXoaks=',
+      last_login: null,
+      is_superuser: false,
+      username: 'mdquilindo',
+      first_name: 'miller',
+      last_name: 'quilindo',
+      email: 'mdquilindo@unicauca.edu.co',
+      is_staff: false,
+      is_active: true,
+      date_joined: '2020-11-02T14:41:24-05:00',
+      type_id: 1,
+      personal_id: '1061793073',
+      personal_code: '104613020476',
+      photo:
+        'https://mdquilindo.pythonanywhere.com/media/d_accounts_app/users/raf750x1000075tFFFFFF_97ab1c12de.u2.jpg',
+      telephone: '0',
+      address: '0',
+      is_proffessor: false,
+      is_student: true
     }
-
-
-
-  })
+  });
 
   const clases = useStyles();
   const [program, setProgram] = useState('');
@@ -159,39 +155,40 @@ export const UpdateStudent = () => {
 
   const handleEditStudent = e => {
     e.preventDefault();
-    
+
     // const form_data = new FormData();
     // form_data.append('image_file', fileImage, fileImage.name);
     // form_data.append('title', 'image');
     // form_data.append('content', fileImage.content);
 
     UpdateStudentService({
-        "id": studentLoggedin.id,
-        "dedication": studentLoggedin.dedication,
-        "program": studentLoggedin.program,
-        "date_record": studentLoggedin.date_record,
-        "date_update": studentLoggedin.date_update, //TODO UPDATE TODAY
-        "user": {
-            "id": studentLoggedin.user.id,
-            "password": studentLoggedin.user.password,
-            "last_login": studentLoggedin.user.last_login,
-            "is_superuser": studentLoggedin.user.is_superuser,
-            "username": studentLoggedin.user.username,
-            "first_name": studentLoggedin.user.first_name,
-            "last_name": studentLoggedin.user.last_name,
-            "email":  studentLoggedin.user.email,
-            "is_staff": studentLoggedin.user.is_staff,
-            "is_active": studentLoggedin.user.is_active,
-            "date_joined": studentLoggedin.user.date_joined,
-            "type_id": studentLoggedin.user.type_id,
-            "personal_id": studentLoggedin.user.personal_id,
-            "personal_code": studentLoggedin.user.personal_code,
-            "photo": "https://mdquilindo.pythonanywhere.com/media/d_accounts_app/users/raf750x1000075tFFFFFF_97ab1c12de.u2.jpg", //Todo foto
-            "telephone": telephone,
-            "address": address,
-            "is_proffessor": studentLoggedin.user.is_proffessor,
-            "is_student": studentLoggedin.user.is_student
-        }
+      id: studentLoggedin.id,
+      dedication: studentLoggedin.dedication,
+      program: studentLoggedin.program,
+      date_record: studentLoggedin.date_record,
+      date_update: studentLoggedin.date_update, //TODO UPDATE TODAY
+      user: {
+        id: studentLoggedin.user.id,
+        password: studentLoggedin.user.password,
+        last_login: studentLoggedin.user.last_login,
+        is_superuser: studentLoggedin.user.is_superuser,
+        username: studentLoggedin.user.username,
+        first_name: studentLoggedin.user.first_name,
+        last_name: studentLoggedin.user.last_name,
+        email: studentLoggedin.user.email,
+        is_staff: studentLoggedin.user.is_staff,
+        is_active: studentLoggedin.user.is_active,
+        date_joined: studentLoggedin.user.date_joined,
+        type_id: studentLoggedin.user.type_id,
+        personal_id: studentLoggedin.user.personal_id,
+        personal_code: studentLoggedin.user.personal_code,
+        photo:
+          'https://mdquilindo.pythonanywhere.com/media/d_accounts_app/users/raf750x1000075tFFFFFF_97ab1c12de.u2.jpg', //Todo foto
+        telephone: telephone,
+        address: address,
+        is_proffessor: studentLoggedin.user.is_proffessor,
+        is_student: studentLoggedin.user.is_student
+      }
     })
       .then(() => {
         setOpen(true);
@@ -205,14 +202,11 @@ export const UpdateStudent = () => {
       });
   };
 
-
   //Obtener datos del usuario logeado // TODO DATO QUEMADO PARA UN SOLO USUARIO
 
   // useEffect(() => {
   //   getUserLogin().then(result => {setStudentLoggedin(result.data.student)})
   // }, [])
-
-
 
   return (
     <Container maxWidth="md" className={clases.container}>
@@ -233,40 +227,43 @@ export const UpdateStudent = () => {
         }}
         validationSchema={Yup.object().shape({
           username: Yup.string()
-            .max(255)
-            .required('Nombre de usuario requerido')
-            .min(4, 'El nombre de usuario no puede ser tan corto'),
+            .max(18, 'Nombre de usuario demasiado largo')
+            .min(6, 'Nombre de usuario demasiado corto')
+            .required('Nombre de usuario requerido'),
           password: Yup.string()
             .max(255)
             .required('Contraseña requerida')
             .min(6, 'La contraseña debe tene mínimo 6 caracteres'), //TODO validation password
           firstName: Yup.string()
-            .max(255)
-            .required('Nombres requeridos'),
+            .min(3, 'Demasiado corto')
+            .max(30, 'Demasiado largo')
+            .required('Nombre requerido'),
           lastName: Yup.string()
-            .max(255)
-            .required('Apellidos requeridos'),
+            .min(2, 'Demasiado corto')
+            .max(30, 'Demasiado largo')
+            .required('Apellidos requerido'),
           email: Yup.string()
             .email('Ingrese un correo válido')
             .required('Email requerido'),
           //typeId = Yup.string.max(255).required('first name is required'), //TODO required combo box
-          personal_id: Yup.string().required(
-            'Indentificacion válida requerida'
-          ),
-          personal_code: Yup.string()
-            .max(255)
-            .required('Codigo del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
+          personal_id: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo')
+            .required('Identificación requerida'),
+          personal_code: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo')
+            .required('Código del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
           photo: Yup.string()
             .max(255)
             .required('Foto requerida'), //TODO file image
-          telephone: Yup.string().min(
-            6,
-            'El teléfono debe tener mínimo 6 caracteres'
-          ),
+          telephone: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo'),
           address: Yup.string()
-            .max(255)
-            .min(4, 'La dirección debe ser mínimo de 4 caracteres')
-            .required('Direccion es requerida')
+            .min(3, 'Demasiado corta')
+            .max(60, 'Demasiado larga')
+            .required('Direccion requerida')
           //TODO combo box
         })}
         onSubmit={() => {}}
@@ -595,7 +592,7 @@ export const UpdateStudent = () => {
                 </Typography>
 
                 <Grid container spacing={2}>
-                <Grid item md={6} xs={12}>
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="address"
                       label="Titulo academico"
@@ -654,7 +651,6 @@ export const UpdateStudent = () => {
                       variant="outlined"
                       type="text"
                       margin="normal"
-
                       onChange={e => {
                         handleChange(e);
                         handleChangeAddress(e);
@@ -700,7 +696,7 @@ export const UpdateStudent = () => {
                       }}
                     />
                   </Grid>
-                  
+
                   <Grid item md={6} xs={12}>
                     <TextField
                       id="address"
@@ -753,8 +749,8 @@ export const UpdateStudent = () => {
                       }}
                     />
                   </Grid>
-                  
-                <Grid item md={6} xs={12}>
+
+                  <Grid item md={6} xs={12}>
                     <TextField
                       id="address"
                       label="Programa"

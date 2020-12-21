@@ -22,7 +22,7 @@ import CreateProgramDialog from './CreateProgramDialog';
 
 import RegisterDirectorDialog from './RegisterDirectorDialog';
 import AddCodirectorDialog from './AddCodirectorDialog';
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { registerStudent } from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
 
@@ -39,17 +39,17 @@ import CodeRoundedIcon from '@material-ui/icons/CodeRounded';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import AlternateEmailRoundedIcon from '@material-ui/icons/AlternateEmailRounded';
 import { FormLabel } from '@material-ui/core';
-import {ConsultStudent} from "../search/service"
+import { ConsultStudent } from '../search/service';
 import { SearchTeacherOrAdd } from 'src/views/teamA/search/searchTeacherOrAdd';
 import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
 import { SearchProgramOrAdd } from 'src/views/teamA/search/searchProgramOrAdd';
 import { SearchProgram } from 'src/views/teamA/search/searchProgram';
-import {UpdateStudentService} from "src/views/teamA/student/service"
-import {getStudents} from "src/views/teamA/student/service"
-import {UpdateUserService} from "src/views/teamA/student/service"
+import { UpdateStudentService } from 'src/views/teamA/student/service';
+import { getStudents } from 'src/views/teamA/student/service';
+import { UpdateUserService } from 'src/views/teamA/student/service';
 import RegisterSchoolarshipDialog from './RegisterSchoolarshipDialog';
 import RegisterAgreementDialog from './RegisterAgreementDialog';
-import {EditarUser} from 'src/views/teamd/Search/service'
+import { EditarUser } from 'src/views/teamd/Search/service';
 const useStyles = makeStyles(theme => ({
   root: {
     backgroundColor: theme.palette.background.dark,
@@ -77,7 +77,7 @@ const RegisterStudent = () => {
   const [message, setMessage] = useState('');
   const clases = useStyles();
 
-    const [openAlert, setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
 
   const [program, setProgram] = useState('');
   const [director, setDirector] = useState('');
@@ -103,59 +103,56 @@ const RegisterStudent = () => {
   const [is_student, setIs_student] = useState(1);
   const [fileImage, setFileImage] = useState({});
 
-    const [listaEstudiantes, setlistaEstudiantes] = useState([])
-    const [estudianteSeleccionado, setestudianteSeleccionado] = useState()
-    
-    const editarEstudiante = () =>{
-        console.log(estudianteSeleccionado.id)
-        UpdateStudentService({
-            id : estudianteSeleccionado.id,
-            academic_title: academicTitle,
-            program : program,
-            user: estudianteSeleccionado.user.id
-        }).then(
+  const [listaEstudiantes, setlistaEstudiantes] = useState([]);
+  const [estudianteSeleccionado, setestudianteSeleccionado] = useState();
 
-          EditarUser({
-            "id": estudianteSeleccionado.user.id,
-            "first_name": firstName,
-            "last_name": lastName,
-            "username": username,
-            "email": email,
-            "type_id": typeId,
-            "personal_id": personal_id,
-            "personal_code": personal_code,
-            "username": estudianteSeleccionado.user.username,
-            // "photo": JSON.parse(localStorage.getItem("userInfo")).photo,
-            "telephone":telephone,
-      
-            "address": address,
-      
-          }).then(alert("editado"))
-        )
-    
-    }
-  useEffect(() => {
-    ConsultStudent().then(result => setlistaEstudiantes(result.data))
-  }, [])
+  const editarEstudiante = () => {
+    console.log(estudianteSeleccionado.id);
+    UpdateStudentService({
+      id: estudianteSeleccionado.id,
+      academic_title: academicTitle,
+      program: program,
+      user: estudianteSeleccionado.user.id
+    }).then(
+      EditarUser({
+        id: estudianteSeleccionado.user.id,
+        first_name: firstName,
+        last_name: lastName,
+        username: username,
+        email: email,
+        type_id: typeId,
+        personal_id: personal_id,
+        personal_code: personal_code,
+        username: estudianteSeleccionado.user.username,
+        // "photo": JSON.parse(localStorage.getItem("userInfo")).photo,
+        telephone: telephone,
 
-  const getIdEstudiante = (e) => {
-    setestudianteSeleccionado(e)
-  }
+        address: address
+      }).then(alert('editado'))
+    );
+  };
   useEffect(() => {
-    if(estudianteSeleccionado){
-      setFirstName(estudianteSeleccionado.user.first_name)
-      setLastName(estudianteSeleccionado.user.last_name)
-      setEmail(estudianteSeleccionado.user.email)
-      setTypeId(estudianteSeleccionado.user.type_id)
-      setPersonal_id(estudianteSeleccionado.user.personal_id)
-      setPersonal_code(estudianteSeleccionado.user.personal_code)
-      setTelephone(estudianteSeleccionado.user.telephone)
-      setDedicationType(estudianteSeleccionado.dedication)
-      setAcademicTitle(estudianteSeleccionado.academic_title)
-      setAddress(estudianteSeleccionado.user.address)
-      console.log(academicTitle)
+    ConsultStudent().then(result => setlistaEstudiantes(result.data));
+  }, []);
+
+  const getIdEstudiante = e => {
+    setestudianteSeleccionado(e);
+  };
+  useEffect(() => {
+    if (estudianteSeleccionado) {
+      setFirstName(estudianteSeleccionado.user.first_name);
+      setLastName(estudianteSeleccionado.user.last_name);
+      setEmail(estudianteSeleccionado.user.email);
+      setTypeId(estudianteSeleccionado.user.type_id);
+      setPersonal_id(estudianteSeleccionado.user.personal_id);
+      setPersonal_code(estudianteSeleccionado.user.personal_code);
+      setTelephone(estudianteSeleccionado.user.telephone);
+      setDedicationType(estudianteSeleccionado.dedication);
+      setAcademicTitle(estudianteSeleccionado.academic_title);
+      setAddress(estudianteSeleccionado.user.address);
+      console.log(academicTitle);
     }
-  }, [estudianteSeleccionado])
+  }, [estudianteSeleccionado]);
   const getProgram = id => {
     setProgram(id);
   };
@@ -220,7 +217,6 @@ const RegisterStudent = () => {
     setFirstName(event.target.value);
   };
 
- 
   const handleCreateUser = e => {
     e.preventDefault();
 
@@ -313,17 +309,18 @@ const RegisterStudent = () => {
             .email('Ingrese un correo válido')
             .required('Email requerido'),
           //typeId = Yup.string.max(255).required('first name is required'), //TODO required combo box
-          personal_id: Yup.string().required(
-            'Indentificacion válida requerida'
-          ),
-          personal_code: Yup.string()
-            .max(255)
-            .required('Codigo del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
+          personal_id: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo')
+            .required('Identificación requerida'),
+          personal_code: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo')
+            .required('Código del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
           photo: Yup.string().max(255),
-          telephone: Yup.string().min(
-            6,
-            'El teléfono debe tener mínimo 6 caracteres'
-          ),
+          telephone: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo'),
           address: Yup.string()
             .max(255)
             .min(4, 'La dirección debe ser mínimo de 4 caracteres')
@@ -348,7 +345,6 @@ const RegisterStudent = () => {
                     Los campos con * son obligatorios
                   </Typography>
                 </Box>
-
 
                 <Autocomplete
                   id="estudiantes"
@@ -598,7 +594,6 @@ const RegisterStudent = () => {
                       onChange={e => {
                         handleChangeDedicationType(e);
                       }}
-                      
                       value={dedicationType}
                       required
                       fullWidth
@@ -609,7 +604,7 @@ const RegisterStudent = () => {
                   </Grid>
 
                   <Grid item md={6} xs={12}>
-                    <SearchProgram callback={getProgram} value={program}/>
+                    <SearchProgram callback={getProgram} value={program} />
                   </Grid>
                 </Grid>
 
@@ -618,25 +613,25 @@ const RegisterStudent = () => {
                     <SearchTeacher callback={getDirector} />
                   </Grid>
                   <Grid item md={6} xs={12}> */}
-                    <TextField
-                      id="academicTitle"
-                      label="Título Académico: "
-                      variant="outlined"
-                      type="text"
-                      margin="normal"
-                      onChange={e => {
-                        handleChangeAcademicTitle(e);
-                      }}
-                      error={Boolean(
-                        touched.academicTitle && errors.academicTitle
-                      )}
-                      helperText={touched.academicTitle && errors.academicTitle}
-                      onBlur={handleBlur}
-                      value={academicTitle}
-                      required
-                      fullWidth
-                    />
-                  </Grid>
+                  <TextField
+                    id="academicTitle"
+                    label="Título Académico: "
+                    variant="outlined"
+                    type="text"
+                    margin="normal"
+                    onChange={e => {
+                      handleChangeAcademicTitle(e);
+                    }}
+                    error={Boolean(
+                      touched.academicTitle && errors.academicTitle
+                    )}
+                    helperText={touched.academicTitle && errors.academicTitle}
+                    onBlur={handleBlur}
+                    value={academicTitle}
+                    required
+                    fullWidth
+                  />
+                </Grid>
                 {/* </Grid> */}
 
                 <Divider className={clases.dividerFullWidth} />

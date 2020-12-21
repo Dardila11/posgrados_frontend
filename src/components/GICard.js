@@ -50,51 +50,31 @@ const GICard = ({ className, Gi, context, ...rest }) => {
               flexDirection="column"
               textAlign="center"
             >
-              {isUndefined(Gi.title) || Gi.title==null || Gi.title==""?(console.log('')):(
+              {isUndefined(Gi.name) || Gi.name==null || Gi.name==""?(console.log('')):(
               <Typography variant="body1" component="h1" variant="h4" gutterBottom>
-                {Gi.title}
+                Nombre: {Gi.name}
               </Typography>
             )}
-            {option?(
-                <Typography
-                className={classes.Typography}
-                fontWeight="fontWeightMedium"
-                variant="body1"
-              >
-                {Gi.description}
-              </Typography>
-            ):(
-              <Typography variant="body1" component="h1" variant="h4" gutterBottom>
-                {Gi.description}
-              </Typography>
-            )}
-            {context=="/director/list-activities" || context =="/coordinator/list-activities" ? 
-            (
+            <Typography variant="body1" component="h1" variant="h4" gutterBottom>
+              Email: {Gi.email}
+            </Typography>
               <Typography color="textSecondary" variant="body1">
-                {student.user.first_name} {student.user.last_name}
+                Fecha fundación {Gi.foundation_date}
               </Typography>
-            )
-            :
-            (
-              <></>
-            )
-            }              
+           
               <Typography color="textSecondary" variant="body1">
                 {Gi.type}
               </Typography>
-              {/* <Typography color="textSecondary" variant="body1">
-                {Gi.academic_year}
-              </Typography> */}
               <Typography color="textSecondary" variant="body1">
-                {Gi.start_date}
+                Categoria: {Gi.category}
               </Typography>
               <Typography color="textSecondary" variant="body1">
               Estado:
               <b> <span className={spanClass}>
-                {Gi.state == 1? (
-                  <> Nueva</>
+                {Gi.status === true? (
+                  <> Activo</>
                 ):(
-                  <> En revisión</>
+                  <> Inactivo</>
                 )}       
               </span> </b>
               </Typography>

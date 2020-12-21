@@ -15,6 +15,29 @@ export const GetLineGIService = (id) => {
   return axios.get(URL);
 };
 
+
+export const listFDeparmentsService = idPais => {
+  const url = `${API_URL}/api/1.0/full_consultar_departamento_pais/${idPais}`;
+  return axios.get(url);
+};
+
+export const listFCountriesService = () => {
+  const url = `${API_URL}/api/country/`;
+  return axios.get(url);
+};
+
+export const listFCitiesService = idDepartamento => {
+  const url = `${API_URL}/api/1.0/full_consultar_ciudad_departamento/${idDepartamento}`;
+  return axios.get(url);
+};
+export const listFInstitutionService = idCity => {
+  console.log(idCity)
+  const url = `${API_URL}/api/1.0/full_consultar_institucion_ciudad/${idCity}`;
+  return axios.get(url);
+};
+
+
+
 //ACTIVAS
 export const GetLineResearch = idArea => {
   const URL = `${API_URL}/api/1.0/consultar_li_area/${idArea}`;
