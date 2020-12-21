@@ -52,6 +52,8 @@ const ProfileDetails = ({ className, ...rest }) => {
   const [open, setOpen] = useState(false)
   const [typeAlert, setTypeAlert] = useState('success')
   const [message, setMessage] = useState('')
+  const [openAlert, setOpenAlert] = useState(false);
+
 
 
   const [first_name, setfirst_name] = useState(JSON.parse(localStorage.getItem("userInfo")).first_name)
@@ -90,15 +92,33 @@ const ProfileDetails = ({ className, ...rest }) => {
     if(localStorage.getItem("rol").split(",").find(element => element === "estudiante")){
       UpdateStudentService({
         "academic_title": tituloAcademicoEstudiante,
-        id:estudiante.id
+        id:JSON.parse(localStorage.getItem("estudiante")).id,
+        program : JSON.parse(localStorage.getItem("estudiante")).program,
+            user: JSON.parse(localStorage.getItem("userInfo")).id
       }).then(result => {
         UpdateUserService({
           id:JSON.parse(localStorage.getItem("userInfo")).id,
           "telephone": telephone,
           "address": address,
 
-        }).then(result => alert("se edito correctamente"))
-      })
+        }).then(() => {
+          setOpenAlert(true)
+          setTypeAlert('success')
+          setMessage('Actualizacion satisfactoria')
+        })
+        .catch(() => {
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos')
+        });
+        setOpen(false)
+        
+      }).catch(() => {
+        setOpenAlert(true)
+        setTypeAlert('error')
+        setMessage('Error, Verifica los datos')
+      });
+      setOpen(false)
     }
     EditarUser({
       "id": JSON.parse(localStorage.getItem("userInfo")).id,
@@ -118,7 +138,7 @@ const ProfileDetails = ({ className, ...rest }) => {
       {
       setOpen(true)
       setTypeAlert('success')
-      setMessage('Profesor creado correctamente')
+      setMessage('Actulazacion satisfactoria')
       }
     ).catch((request) => {
       console.log(request)
@@ -573,7 +593,7 @@ const ProfileDetails = ({ className, ...rest }) => {
           </Button>
         </Box>
       </Card>
-      <AlertView open = {open}  typeAlert = {typeAlert} message = {message}/>
+      <AlertView open = {openAlert}  typeAlert = {typeAlert} message = {message}/>
     </form>
     
   );

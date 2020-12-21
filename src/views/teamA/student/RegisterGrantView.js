@@ -147,6 +147,7 @@ const RegisterGrantView = () => {
         setTypeAlert('error');
         setMessage('No se pudo crear la beca ');
       });
+      setOpen(false)
   };
   const handleSubmit = event => {
     event.preventDefault();

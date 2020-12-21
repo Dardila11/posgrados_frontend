@@ -80,7 +80,17 @@ export const UAgreementDialog = ({agreement,state,setState}) => {
             "period_academic": periodicAcademic,
             "percentage_discount": percentage_discount,
             "observation": observation,
-        }).then(alert("Ejecutado"))
+        }).then(() => {
+          setOpenAlert(true)
+          setTypeAlert('success')
+          setMessage('Convenio editado correctamente')
+        })
+        .catch(() => {
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos')
+        });
+        setOpen(false)
     }
 
 

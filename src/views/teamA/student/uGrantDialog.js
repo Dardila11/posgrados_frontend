@@ -95,21 +95,7 @@ export const UGrantDialog = ({grant,state,setState}) => {
       setlocationI(e.target.value);
     };
     const handleUpdate = ()=>{
-        let fd = new FormData();
-        fd.append("voucher", archivo[0])
-        fd.append('name',name)
-        fd.append('announcement',announcement)
-        fd.append('description',description)
-        fd.append('num_resolution',resolution)
-        fd.append('description',description)
-        fd.append('start_date',startDate)
-        fd.append('end_date',endDate)
-        fd.append('long',long)
-        fd.append('name_institution',institution)
-        fd.append('type_institution',typeI)
-        fd.append('location_institution',locationI)
-        fd.append('id',grant.id)
-        console.log(grant.id ,'Entro')
+       
       
         UpdateGrantService(
             {
@@ -136,7 +122,18 @@ export const UGrantDialog = ({grant,state,setState}) => {
             // // "announcement": 12312312,
             // // "description": "Si señor",
             // "num_resolution": "3123123"
-        ).then(alert("Ejecutado"))
+        ).then(() => {
+          setOpenAlert(true)
+          setTypeAlert('success')
+          setMessage('Beca editada correctamente')
+        })
+        .catch(() => {
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, Verifica los datos')
+        });
+        setOpen(false)
+        
     }
 
 
@@ -278,6 +275,7 @@ export const UGrantDialog = ({grant,state,setState}) => {
                             
                               value={typeI}
                               required
+                              
                               fullWidth
                             >
                               <MenuItem value="1">Publica</MenuItem>
