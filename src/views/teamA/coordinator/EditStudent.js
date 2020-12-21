@@ -77,6 +77,8 @@ const RegisterStudent = () => {
   const [message, setMessage] = useState('');
   const clases = useStyles();
 
+    const [openAlert, setOpenAlert] = useState(false);
+
   const [program, setProgram] = useState('');
   const [director, setDirector] = useState('');
   const [codirector1, setCodirector1] = useState('');
@@ -103,6 +105,28 @@ const RegisterStudent = () => {
 
     const [listaEstudiantes, setlistaEstudiantes] = useState([])
     const [estudianteSeleccionado, setestudianteSeleccionado] = useState()
+    const handleClickOpenEditInstitution = () => {
+      setOpenAlert(false)  
+      const namecountry = document.getElementById("searchCountries").value;
+      console.log("papis: "+namecountry)
+      const nameDeparment = document.getElementById("searchDepartments").value;
+      console.log("deprmen: "+nameDeparment)
+      const nameCity = document.getElementById("searchCities").value;
+      const nameInstitution = document.getElementById("searchInstitutions").value;
+      if (namecountry === "" || nameDeparment === "" ){
+          setOpenAlert(true)
+          setTypeAlert('error')
+          setMessage('Error, campos vacios !')   
+                       
+      }else{
+          console.log("pais: "+ namecountry)
+          console.log("departamento: "+nameDeparment)
+          console.log("ciudad: "+nameCity)
+          console.log("institucion: "+nameInstitution)
+          setOpen(true);
+      }
+
+  };
     const editarEstudiante = () =>{
         UpdateStudentService({
           "academic_title": academicTitle,
@@ -324,6 +348,7 @@ const RegisterStudent = () => {
           telephone: telephone,
           address: address,
           academicTitle: academicTitle,
+          program: program.replace,
           role: '1'
         }}
         validationSchema={Yup.object().shape({
