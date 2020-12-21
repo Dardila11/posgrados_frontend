@@ -18,7 +18,7 @@ export const SearchFullCity = ({ idDepartment, callback }) => {
     // eslint-disable-next-line no-lone-blocks
     {
       listFullCitiesService(idDepartment)
-        .then(result => setListCities(result.data.Cities))
+        .then(result => setListCities(result.data))
         .catch(setListCities([]));
     }
   }, [idDepartment]);

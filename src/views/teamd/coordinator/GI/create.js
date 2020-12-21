@@ -7,8 +7,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import { SearchDeparmentI } from 'src/views/teamd/Search/searchDepartmentI';
 import { AlertView } from '../../../../components/Alert'
-import {ConsultUserService} from 'src/views/teamd/Search/service'
-import Autocomplete from '@material-ui/lab/Autocomplete';
 import {AssignDirector} from '../GI/service'
 import {ConsultProfesorService} from './service'
 import {

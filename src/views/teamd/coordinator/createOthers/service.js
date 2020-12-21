@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API_URL = 'http://mdquilindo.pythonanywhere.com';
-// const API_URL = 'http://localhost:8000';
+// const API_URL = 'http://mdquilindo.pythonanywhere.com';
+const API_URL = 'http://localhost:8000';
 export const CreateKnowLedgeService = area => {
   const url = `${API_URL}/api/knowledge_area/`;
   return axios.post(url, area);
@@ -27,4 +27,15 @@ export const ConsultarKnowLedge = area => {
 export const ConsultarLineResearch = id => {
   const URL = `${API_URL}/api/investigation_line/${id}`;
   return axios.get(URL);
+};
+
+export const DeleteKnowLedge = area => {  
+  const url = `${API_URL}/api/knowledge_area/${area.id}/`;  
+  return axios.put(url, area);
+};
+export const DeleteLineReseach = line => {
+  console.log(line)
+  const url = `${API_URL}/api/investigation_line/${line.id}/`;
+  console.log(url)
+  return axios.put(url, line);
 };

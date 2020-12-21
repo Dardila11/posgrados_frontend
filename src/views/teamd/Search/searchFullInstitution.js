@@ -12,7 +12,7 @@ export const SearchFullInstitution = ({ callback }) => {
   useEffect(() => {
     GetlistFullInstitutionService()
       .then(result => {
-        setlistInstitution(result.data.Institutions);
+        setlistInstitution(result.data);
       })
       .catch(setlistInstitution([]));
   }, []);

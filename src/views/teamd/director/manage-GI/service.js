@@ -1,6 +1,6 @@
 import axios from 'axios';
-const API_URL = 'https://mdquilindo.pythonanywhere.com';
-// const API_URL = 'http://localhost:8000'
+// const API_URL = 'https://mdquilindo.pythonanywhere.com';
+const API_URL = 'http://localhost:8000'
 export const AddKnowLedgeService = GI => {
   const url = `${API_URL}/api/1.0/crear_trabaja/`;
   return axios.post(url, GI);
@@ -10,6 +10,11 @@ export const AddLineRearchService = GI => {
   const url = `${API_URL}/api/investigation_line/`;
   return axios.post(url, GI);
 };
+export const AddManage = GI => {
+  const url = `${API_URL}/api/1.0/crear_maneja/`;
+  return axios.post(url, GI);
+};
+
 //TODO
 export const ListMembersApi = GI => {
   const url = `${API_URL}/api/1.0/consultar_miembro_gi/${GI}`;

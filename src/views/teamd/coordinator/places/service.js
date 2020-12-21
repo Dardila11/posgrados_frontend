@@ -1,6 +1,6 @@
 import axios from 'axios';
-//  const API_URL = 'http://localhost:8000';
- const API_URL = 'https://mdquilindo.pythonanywhere.com';
+ const API_URL = 'http://localhost:8000';
+//  const API_URL = 'https://mdquilindo.pythonanywhere.com';
 export const CreateCountryService = Country => { 
   console.log(Country) 
   const url = `${API_URL}/api/country/`;
@@ -10,6 +10,11 @@ export const CreateCountryService = Country => {
 export const CreateDeparmentService = Deparment => {
   const url = `${API_URL}/api/state/`;
   return axios.post(url, Deparment);
+};
+
+export const EditarDeparmentService = Deparment => {
+  const url = `${API_URL}/api/state/${Deparment.country}/`;
+  return axios.put(url, Deparment);
 };
 export const CreateCityService = City => {
   const url = `${API_URL}/api/city/`;

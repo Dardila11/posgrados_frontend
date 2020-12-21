@@ -9,6 +9,7 @@ import Tab from '@material-ui/core/Tab';
 import AddKnowLedgeView from './addKnowLedge';
 import {ListMembers} from "./listMembers"
 import {InfoGi} from './infoGi'
+import {AddLineResearchView} from "./addLineResearch"
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -80,8 +81,8 @@ export const ManageView = () => {
               >
                 <Tab label="Información Gi" {...options(0)} />
                 <Tab label="Miembros" {...options(1)} />
-                {localStorage.getItem("rol").split(",").find(element => element === "director_gi") ? ( <Tab label="Agregar area de estudio" {...options(2)} />):(<></>)}
-                {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? ( <Tab label="Agregar linea de conocimiento" {...options(3)} />):(<></>)}
+                {localStorage.getItem("rol").split(",").find(element => element === "director_gi") ? ( <Tab label="Agregar area de conocimiento" {...options(2)} />):(<></>)}
+                {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? ( <Tab label="Agregar linea de investigación" {...options(3)} />):(<></>)}
                 {/* <Tab label="Agregar linea de investigacion" {...options(3)} /> */} {/*Todo */}
               </Tabs>
             </AppBar>
@@ -100,7 +101,7 @@ export const ManageView = () => {
             </>):(<></>)}
             {localStorage.getItem("rol").split(",").find(element => element === "profesor") ? ( 
               <TabPanel value={value} index={3}>
-                <h1>TODO</h1>
+                <AddLineResearchView />
              </TabPanel>
             ):(<></>)}
             {/* <TabPanel value={value} index={3}>

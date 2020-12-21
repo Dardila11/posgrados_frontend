@@ -201,7 +201,14 @@ export const CreateProfessorView = () => {
             department: departmentI
           })
             .then((request) => {
-
+              ConsultProfesorAll().then(response => {
+                localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
+                JSON.parse(localStorage.getItem("profesores")).map( element => {
+                  if(element.user === JSON.parse(localStorage.getItem("userInfo")).id){
+                    localStorage.setItem("profesorInfo",JSON.stringify(element))
+                  }
+                })
+            })
               let id= request.data.id
               SetMember({
                 "member_status": true,
@@ -217,10 +224,6 @@ export const CreateProfessorView = () => {
                   setOpen(true)
                   setTypeAlert('success')
                   setMessage('Profesor creado correctamente')
-
-                  ConsultProfesorAll().then(response => {
-                    localStorage.setItem("profesores",JSON.stringify(response.data.Professors))
-                })
                 })
               })
             })

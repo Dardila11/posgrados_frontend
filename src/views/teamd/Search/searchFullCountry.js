@@ -7,7 +7,7 @@ export const SearchFullCountry = ({ callback }) => {
   const [listCountries, setListCountries] = useState([]);
   useEffect(() => {
     listFullCountriesService()
-      .then(result => setListCountries(result.data.Countrys))
+      .then(result => setListCountries(result.data))
       .catch(()=> setListCountries([]));
   }, []);
   const getIdContry = async name => {
