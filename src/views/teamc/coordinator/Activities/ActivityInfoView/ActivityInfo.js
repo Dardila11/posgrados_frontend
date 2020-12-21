@@ -46,6 +46,7 @@ const ActivityInfoView = () => {
   const [activityPk, setActivityPk] = useState('')
   const classes = useStyles()
   const [open, setOpen] = useState(false)
+  const [evaluate, setEvaluate] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,6 +64,22 @@ const ActivityInfoView = () => {
         let user = res.data.activities.find(activity => activity.id == id).student.user
         console.log(user)
         setStudentInfo(user)
+      })
+    }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let directorId = localStorage.getItem("id")
+      await api.getCoordinatorEvaluations(directorId).then(res => {        
+          let test = res.data.test_activities.find(test => test.activity == id)
+          if(test){
+            setEvaluate(true)
+          }else{
+            setEvaluate(false)
+          }   
+        
       })
     }
     fetchData()
@@ -147,7 +164,13 @@ const ActivityInfoView = () => {
             )*/}
           </CardContent>
           <CardActions>
-            <Button
+          {evaluate? (
+              <>
+              
+            </>
+            ):(
+              <>
+              <Button
               variant="contained"
               color="primary"
               onClick={handleClickOpen}
@@ -160,8 +183,11 @@ const ActivityInfoView = () => {
               open={open}
               handleClose={handleClose}
               handleOpen={handleClickOpen}
-              component={<CreateEvaluation activityId={activityPk} />}
+              component={<CreateEvaluation activityId={activityPk} directorId={localStorage.getItem("id")} />}
             />
+              </>
+            )}
+            
           </CardActions>
         </Card>
       )}

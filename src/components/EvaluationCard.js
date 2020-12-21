@@ -42,7 +42,6 @@ const EvaluationCard = ({ evaluation,context, ...rest }) => {
   const [open, setOpen] = useState(false)
   let statusclass = null;
   let valueclass = null;
-  console.log(evaluation)
   
   useEffect(() => {
     const fetchData = async () => {

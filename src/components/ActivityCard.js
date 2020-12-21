@@ -48,7 +48,6 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
   let spanClass = ''
   const student = activity.student
   let stateActivity = ''
-  console.log(activity)
   switch (activity.state) {
     case 1:
       spanClass = classes.stateRegistrado

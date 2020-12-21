@@ -46,6 +46,7 @@ const ActivityInfoView = () => {
   const [activityPk, setActivityPk] = useState('')
   const classes = useStyles()
   const [open, setOpen] = useState(false)
+  const [evaluate, setEvaluate] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -62,7 +63,22 @@ const ActivityInfoView = () => {
       let directorId = localStorage.getItem("id")
       await api.getDirectorActivities(directorId).then(res => {
         let user = res.data.activities.find(activity => activity.id == id).student.user
-        setStudentInfo(user)
+        setStudentInfo(user)  
+      })
+    }
+    fetchData()
+  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      let directorId = localStorage.getItem("id")
+      await api.getDirectorEvaluations(directorId).then(res => {        
+          let test = res.data.test_activities.find(test => test.activity == id)
+          if(test){
+            setEvaluate(true)
+          }else{
+            setEvaluate(false)
+          }   
+        
       })
     }
     fetchData()
@@ -81,13 +97,13 @@ const ActivityInfoView = () => {
       {loading ? (
         <LinearProgress className={classes.progress} />
       ) : (
-        <>{getContent(classes,activityInfo, activityPk, studentInfo, open, handleClickOpen, handleClose)}</>
+        <>{getContent(classes,activityInfo, activityPk, studentInfo, open, handleClickOpen, handleClose, evaluate)}</>
       )}
     </Container>
   )
 }
 
-function getContent(classes,activityInfo, activityPk,  studentInfo, open, handleClickOpen, handleClose){
+function getContent(classes,activityInfo, activityPk,  studentInfo, open, handleClickOpen, handleClose, evaluate){
   return(
     <Card className={classes.root}>
           <CardContent>
@@ -155,7 +171,13 @@ function getContent(classes,activityInfo, activityPk,  studentInfo, open, handle
             )*/}
           </CardContent>
           <CardActions>
-            <Button
+            {evaluate? (
+              <>
+              
+            </>
+            ):(
+              <>
+              <Button
               variant="contained"
               color="primary"
               onClick={handleClickOpen}
@@ -170,6 +192,9 @@ function getContent(classes,activityInfo, activityPk,  studentInfo, open, handle
               handleOpen={handleClickOpen}
               component={<CreateEvaluation activityId={activityPk} directorId={localStorage.getItem("id")} />}
             />
+              </>
+            )}
+            
           </CardActions>
         </Card>
   )

@@ -95,7 +95,6 @@ const CoordinatorListActivitiesView = ({search, status, page}) => {
     const fetchData = async () => {
       let coordinatorId = localStorage.getItem("id")
       await api.getCoordinatorActivities(coordinatorId).then(res => {
-        console.log(res.data)
         setActivityList(getPages(res.data.activities,itemsByPage)[0])
         setInitialActivityList(res.data.activities);
         setServiceState(false)

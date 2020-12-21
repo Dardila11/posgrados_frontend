@@ -107,7 +107,6 @@ const DirectorListStudentsView = ({ period, status, search,page }) => {
   useEffect(()=>{
     function pageSelect(page){
       setStudentsList(pages[page-1])
-      console.log("page selected in component: "+page)
     }
     pageSelect(page)
   },[page]);
@@ -193,7 +192,6 @@ const getPages = (studentsList, npages) => {
     pages.push(page)
     if(indexv>=studentsList.length) br=false
   }
-  console.log(pages)
   return pages
 }
 

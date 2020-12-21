@@ -98,7 +98,7 @@ const SearchBar = ({ className, searchOption, context, periods, status, programs
                 <></>
               )}              
               {periods === undefined ? (
-                console.log('No period parameter filther')
+                <></>
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
@@ -120,7 +120,7 @@ const SearchBar = ({ className, searchOption, context, periods, status, programs
                 </Grid>
               )}
               {status === undefined ? (
-                console.log('No status parameter filther')
+                <></>
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
@@ -133,7 +133,6 @@ const SearchBar = ({ className, searchOption, context, periods, status, programs
                       <MenuItem value={"-1"} >---</MenuItem> 
                       {status.map(element => (
                         <MenuItem key={element} value={element}>
-                          {console.log(element)}
                           {' '}
                           {element}
                         </MenuItem>
@@ -143,7 +142,7 @@ const SearchBar = ({ className, searchOption, context, periods, status, programs
                 </Grid>
               )}
               {programs === undefined ? (
-                console.log('No programs parameter filther')
+                <></>
               ) : (
                 <Grid item lg={2} md={2} xs={12}>
                   <Box className={classes.Select}>
