@@ -14,11 +14,13 @@ import {
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 
-
-
 import React, { useState } from 'react';
 
-import { registerEnrrollment, registerStudent, registerDirector } from 'src/views/teamA/coordinator/service';
+import {
+  registerEnrrollment,
+  registerStudent,
+  registerDirector
+} from 'src/views/teamA/coordinator/service';
 import { AlertView } from 'src/components/Alert';
 import './styles.css';
 //ICONS
@@ -40,18 +42,14 @@ import { SearchTeacher } from 'src/views/teamA/search/searchTeacher';
 
 import { SearchProgram } from 'src/views/teamA/search/searchProgram';
 
+import { SearchDirector } from 'src/views/teamA/search/searchDirector';
+import { SearchCodirector } from 'src/views/teamA/search/searchCodirector';
+import { SearchCodirector2 } from 'src/views/teamA/search/searchCodirector2';
 
-import {SearchDirector} from "src/views/teamA/search/searchDirector" ;
-import {SearchCodirector} from "src/views/teamA/search/searchCodirector" ;
-import {SearchCodirector2} from "src/views/teamA/search/searchCodirector2" ;
-
-import {SearchCountry} from "src/views/teamA/search/searchCountry" 
-import {SearchDepartment} from "src/views/teamA/search/searchDepartment" 
-import {SearchCity} from "src/views/teamA/search/searchCity" ;
-import {SearchInstitution} from "src/views/teamA/search/searchInstitution" 
-
-
-
+import { SearchCountry } from 'src/views/teamA/search/searchCountry';
+import { SearchDepartment } from 'src/views/teamA/search/searchDepartment';
+import { SearchCity } from 'src/views/teamA/search/searchCity';
+import { SearchInstitution } from 'src/views/teamA/search/searchInstitution';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -70,7 +68,7 @@ const useStyles = makeStyles(theme => ({
     margin: `20px 0 0 ${theme.spacing(0)}px`
   }
 }));
- 
+
 const RegisterStudent = () => {
   const [open, setOpen] = useState(false);
   const [open1, setOpen1] = useState(false);
@@ -93,10 +91,9 @@ const RegisterStudent = () => {
   const [state, setstate] = useState('');
   const [period, setperiod] = useState('');
   const [is_active, setis_active] = useState('');
-  
 
-   ///////
-   const [idDepartment, setiddepartment] = useState('');
+  ///////
+  const [idDepartment, setiddepartment] = useState('');
   const [idCity, setidCity] = useState('');
   const [idCountry, setidCountry] = useState('');
   const [idCityI, setidCityI] = useState('');
@@ -216,7 +213,6 @@ const RegisterStudent = () => {
   const handleCreateUser = e => {
     e.preventDefault();
 
-   
     console.log(lastName);
 
     registerStudent({
@@ -237,52 +233,48 @@ const RegisterStudent = () => {
         is_student: true,
         is_coordinator: false
       },
-      departament_origin : idDepartment,
-      city_origin : idCity,
+      departament_origin: idDepartment,
+      city_origin: idCity,
       country_intituion: idCountryI,
-      city_intituion: idCityI ,
+      city_intituion: idCityI,
       instituion_degree: institution,
       dedication: dedicationType,
       program: program,
       academic_title: academicTitle
     })
-      .then((result) => {
-        
+      .then(result => {
         registerEnrrollment({
           admission_date: admissionDate,
           enrrollment_date: '2020-12-18',
-          state : 1,
-          period : period,
+          state: 1,
+          period: period,
           is_active: true,
           student: result.data.id
+        });
 
-        })
-        
         registerDirector({
           rol: 1,
           is_active: true,
           student: result.data.id,
           professor: director
-        })
-        if(codirector1 ){
+        });
+        if (codirector1) {
           registerDirector({
             rol: 2,
             is_active: true,
             student: result.data.id,
             professor: codirector1
-            
-          })
+          });
         }
-        if(codirector2 ){
+        if (codirector2) {
           registerDirector({
             rol: 2,
             is_active: true,
             student: result.data.id,
             professor: codirector2
-            
-          })
+          });
         }
-     
+
         setOpen(true);
         setTypeAlert('success');
         setMessage('Usuario creado correctamente');
@@ -292,9 +284,8 @@ const RegisterStudent = () => {
         setTypeAlert('error');
         setMessage('Error, Verifica los datos!');
       });
-      setOpen(false)
+    setOpen(false);
   };
-  
 
   return (
     <Container maxWidth="md" className={clases.container}>
@@ -312,44 +303,69 @@ const RegisterStudent = () => {
           telephone: '',
           address: '',
           academicTitle: '',
-          role: '1'
+          role: '1',
+          director: 'd',
+          codirector1: 'c1',
+          codirector2: 'c2'
         }}
         validationSchema={Yup.object().shape({
           username: Yup.string()
-            .max(255)
+            .max(18, 'Nombre de usuario demasiado largo')
+            .min(6, 'Nombre de usuario demasiado corto')
             .required('Nombre de usuario requerido'),
           password: Yup.string()
-            .max(255)
+            .max(16, 'Contraseña demasiado larga')
+            .min(6, 'Contraseña demasiado corta')
             .required('Contraseña requerida'), //TODO validation password
           firstName: Yup.string()
-            .max(255)
+            .min(3, 'Demasiado corto')
+            .max(30, 'Demasiado largo')
             .required('Nombre requerido'),
           lastName: Yup.string()
-            .max(255)
+            .min(2, 'Demasiado corto')
+            .max(30, 'Demasiado largo')
             .required('Apellidos requerido'),
           email: Yup.string()
             .email()
+            .min(6, 'Demasiado corto')
+            .max(35, 'Demasiado largo')
             .required('Correo electronico requerido'),
           //typeId = Yup.string.max(255).required('first name is required'), //TODO required combo box
-          personal_id: Yup.string()
-            .max(255)
+          personal_id: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo')
             .required('Identificación requerida'),
-          personal_code: Yup.string()
-            .max(255)
+          personal_code: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo')
             .required('Código del estudiante requerido'), //TODO debe ser generado en el backend automaticamente
-          photo: Yup.string()
-            .max(255)
-            .required('Foto requerida'), //TODO file image
-          telephone: Yup.string().matches(
-            phoneRegExp,
-            'Telefono no valido'
-          ),
+          //TODO file image
+          telephone: Yup.number('Debe ser numérico')
+            .min(100000, 'Demasiado corto')
+            .max(9999999999999, 'Demasiado largo'),
           address: Yup.string()
-            .max(255)
+            .min(3, 'Demasiado corta')
+            .max(60, 'Demasiado larga')
             .required('Direccion requerida'),
           role: Yup.string()
             .max(255)
-            .required('Rol requerido') //TODO combo box
+            .required('Rol requerido'),
+          codirector1: Yup.string().matches(
+            [director],
+            'Un profesor no puede ser director y codirector al tiempo'
+          ),
+          director: Yup.string().matches(
+            [Yup.ref('codirector1')],
+            'Un profesor no puede ser director y codirector al tiempo'
+          ),
+          codirector1: Yup.string().matches(
+            [Yup.ref('codirector2')],
+            'Profesor repetido'
+          ),
+          codirector2: Yup.string().matches(
+            [Yup.ref('codirector1')],
+            'Profesor repetido'
+          ) //TODO combo box
           //TODO combo box
         })}
         onSubmit={() => {}}
@@ -514,7 +530,9 @@ const RegisterStudent = () => {
                         handleChange(e);
                         handleChangePersonalCode(e);
                       }}
-                      error={Boolean(touched.personal_code && errors.personal_code)}
+                      error={Boolean(
+                        touched.personal_code && errors.personal_code
+                      )}
                       helperText={touched.personal_code && errors.personal_code}
                       onBlur={handleBlur}
                       value={values.personal_code}
@@ -594,7 +612,7 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
-                  
+
                   <Grid item md={6} xs={12}>
                     <TextField
                       label="Telefono"
@@ -647,23 +665,23 @@ const RegisterStudent = () => {
                       }}
                     />
                   </Grid>
-                  
-                 
-                  
+
                   <Grid item md={12} xs={12}>
-                    <SearchCountry callback= {getIdCountry}/>
+                    <SearchCountry callback={getIdCountry} />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                  <SearchDepartment
-                    idCountry={idCountry}
-                    callback={getidDepartment}
-                  />
+                    <SearchDepartment
+                      idCountry={idCountry}
+                      callback={getidDepartment}
+                    />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchCity idDepartment={idDepartment} callback={getCity} />
+                    <SearchCity
+                      idDepartment={idDepartment}
+                      callback={getCity}
+                    />
                   </Grid>
-                 
-                  
+
                   <Grid item md={12} xs={12}>
                     <FormLabel>Elige una imagen de perfil: </FormLabel>
                     <Button
@@ -729,12 +747,13 @@ const RegisterStudent = () => {
                       value={values.period}
                       required
                       fullWidth
-                     
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                  <TextField
-                      error={Boolean(touched.admissionDate && errors.admissionDate)}
+                    <TextField
+                      error={Boolean(
+                        touched.admissionDate && errors.admissionDate
+                      )}
                       fullWidth
                       helperText={touched.admissionDate && errors.admissionDate}
                       id="admissionDate"
@@ -743,7 +762,6 @@ const RegisterStudent = () => {
                       name="admissionDate"
                       type="date"
                       required
-                      
                       className={clases.textField}
                       InputLabelProps={{
                         shrink: true
@@ -779,40 +797,39 @@ const RegisterStudent = () => {
                     />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchInstitution callback={getIdInstitution}/>
+                    <SearchInstitution callback={getIdInstitution} />
                   </Grid>
                   <Grid item md={12} xs={12}>
-                    <SearchCountry callback= {getIdCountryI}/>
+                    <SearchCountry callback={getIdCountryI} />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                  <SearchDepartment
-                    idCountry={idCountryI}
-                    callback={getidDepartmentI}
-                  />
+                    <SearchDepartment
+                      idCountry={idCountryI}
+                      callback={getidDepartmentI}
+                    />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchCity idDepartment={idDepartmentI} callback={getCityI} />
+                    <SearchCity
+                      idDepartment={idDepartmentI}
+                      callback={getCityI}
+                    />
                   </Grid>
                   <Grid item md={12} xs={12}>
-                    <SearchDirector callback= {getDirector} label="Director"/>
-                    
-                  </Grid>             
-                  <Grid item md={6} xs={12}>
-                    <SearchCodirector callback= {getCodirector1} label= 'Codirector'/>
-                    
+                    <SearchDirector callback={getDirector} label="Director" />
                   </Grid>
                   <Grid item md={6} xs={12}>
-                    <SearchCodirector2 callback= {getCodirector2} label ='Codirector'/>
-                    
+                    <SearchCodirector
+                      callback={getCodirector1}
+                      label="Codirector"
+                    />
                   </Grid>
-                  
-                  
-
-                 
+                  <Grid item md={6} xs={12}>
+                    <SearchCodirector2
+                      callback={getCodirector2}
+                      label="Codirector"
+                    />
+                  </Grid>
                 </Grid>
-
-                
-                
 
                 <Divider className={clases.dividerFullWidth} />
 

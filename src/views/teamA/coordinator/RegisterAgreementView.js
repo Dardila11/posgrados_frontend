@@ -10,7 +10,7 @@ import {
   Typography,
   Card,
   CardContent,
-  makeStyles, 
+  makeStyles,
   FormLabel
 } from '@material-ui/core';
 import Page from 'src/components/Page';
@@ -52,7 +52,6 @@ const RegisterAgreementView = () => {
   };
   const handleChangeArchivo = e => {
     setArchivo(e);
-    
   };
 
   const handleChangeObservation = e => {
@@ -79,16 +78,16 @@ const RegisterAgreementView = () => {
 
   const handleSubmitRegister = e => {
     let fd = new FormData();
-    fd.append("voucher", archivo[0])
-    fd.append("observation",observation )
-    fd.append("percentage_discount", percentage)
-    fd.append("is_active",true )
-    fd.append("period_academic",period )
-    fd.append("student",student )
-    fd.append("agreement_date",agreementDate )
-    fd.append("start_date", startDate)
-    fd.append("end_date",endDate )
-    fd.append("long",long )
+    fd.append('voucher', archivo[0]);
+    fd.append('observation', observation);
+    fd.append('percentage_discount', percentage);
+    fd.append('is_active', true);
+    fd.append('period_academic', period);
+    fd.append('student', student);
+    fd.append('agreement_date', agreementDate);
+    fd.append('start_date', startDate);
+    fd.append('end_date', endDate);
+    fd.append('long', long);
     registerAgreement(fd)
       .then(result => {
         setOpen(true);
@@ -101,7 +100,7 @@ const RegisterAgreementView = () => {
         setTypeAlert('error');
         setMessage('Convenio creado incorrectamente');
       });
-      setOpen(false)
+    setOpen(false);
   };
   const handleSubmit = event => {
     event.preventDefault();
@@ -129,20 +128,23 @@ const RegisterAgreementView = () => {
               //specificObjetive: ''
             }}
             validationSchema={Yup.object().shape({
-              observation: Yup.string().required('Observaciones requerida'),
+              observation: Yup.string()
+                .required('Observaciones requerida')
+                .max(255, 'Demasiado largo')
+                .min(6, 'Demasiado corto'),
               //area: Yup.string().required('Area de conocimiento requerida'),
-              period: Yup.string()
-                .required('Periodo requerido'),
-                
-                agreementDate: Yup.date()
-                .required('Fecha del acuerdo requerida'),
-              percentage: Yup.number()
+              period: Yup.string().required('Periodo requerido'),
+
+              agreementDate: Yup.date().required('Fecha del acuerdo requerida'),
+              percentage: Yup.number('Debe ser numérico')
                 .required('Porcentaje requerido')
                 .positive(),
               startDate: Yup.date().required(
                 'Debe ingresar la fecha de inicio'
               ),
-              long: Yup.string().required('Seleccione la duración'),
+              long: Yup.number('Debe ser numérico').required(
+                'Seleccione la duración'
+              ),
               endDate: Yup.date()
                 .required('Debe ingresar la fecha de finalización')
                 .when(
@@ -188,26 +190,12 @@ const RegisterAgreementView = () => {
                     </Box>
                     <SearchStudent callback={getStudent} />
 
-                    {/* <TextField
-                    error={Boolean(touched.lineResearch && errors.lineResearch)}
-                    fullWidth
-                    helperText={touched.lineResearch && errors.lineResearch}
-                    label="Linea de investigacion"
-                    margin="normal"
-                    name="lineResearch"
-                    onBlur={handleBlur}
-                    onChange={handleChange}
-                    value={values.lineResearch}
-                    variant="outlined"
-                  /> */}
-
                     <TextField
                       error={Boolean(touched.period && errors.period)}
                       fullWidth
                       helperText={touched.period && errors.period}
                       label="Periodo academico (aaaa.semestre)"
                       margin="normal"
-                      
                       name="period"
                       onBlur={handleBlur}
                       InputProps={{ inputProps: { min: 1, max: 2 } }}
@@ -223,7 +211,6 @@ const RegisterAgreementView = () => {
                       id="percentage"
                       label="Porcentaje de descuento"
                       variant="outlined"
-                      type="number"
                       InputProps={{ inputProps: { min: 1, max: 100 } }}
                       margin="normal"
                       onChange={e => {
@@ -241,7 +228,6 @@ const RegisterAgreementView = () => {
                       id="long"
                       label="Tiempo duracion (meses)"
                       variant="outlined"
-                      type="number"
                       margin="normal"
                       InputProps={{ inputProps: { min: 1, max: 100 } }}
                       onChange={e => {
@@ -256,7 +242,9 @@ const RegisterAgreementView = () => {
                       fullWidth
                     />
                     <TextField
-                      error={Boolean(touched.agreementDate && errors.agreementDate)}
+                      error={Boolean(
+                        touched.agreementDate && errors.agreementDate
+                      )}
                       fullWidth
                       helperText={touched.agreementDate && errors.agreementDate}
                       id="agreementDate"
@@ -278,7 +266,6 @@ const RegisterAgreementView = () => {
                       value={values.agreementDate}
                       variant="outlined"
                     />
-                    
 
                     <TextField
                       error={Boolean(touched.startDate && errors.startDate)}
@@ -350,15 +337,14 @@ const RegisterAgreementView = () => {
                       startIcon={<CloudUploadIcon />}
                     >
                       Subir justificante
-                      <input 
-                      type="file" 
-                      style={{ display: 'none' }}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeArchivo(e.target.files);
-                      }}
-                      
-                       />
+                      <input
+                        type="file"
+                        style={{ display: 'none' }}
+                        onChange={e => {
+                          handleChange(e);
+                          handleChangeArchivo(e.target.files);
+                        }}
+                      />
                     </Button>
 
                     <Box my={2}>

@@ -106,7 +106,7 @@ const RegisterProjectView = () => {
         setTypeAlert('error');
         setMessage('Proyecto creado incorrectamente');
       });
-      setOpen(false)
+    setOpen(false);
   };
   const handleSubmit = event => {
     event.preventDefault();
@@ -132,18 +132,28 @@ const RegisterProjectView = () => {
               specificObjective: ''
             }}
             validationSchema={Yup.object().shape({
-              title: Yup.string().required('Titulo de la tesis requerido'),
+              title: Yup.string()
+                .required('Titulo de la tesis requerido')
+
+                .min(12, 'Demasiado corto')
+                .max(255, 'Demasiado largo'),
               //area: Yup.string().required('Area de conocimiento requerida'),
               lineResearch: Yup.string().required(
                 'Linea de investigacion requerida'
               ),
-              objetive: Yup.string().required('Tema de la tesis requerido'),
-              generalObjective: Yup.string().required(
-                'Objetivo general requerido'
-              ),
-              specificObjective: Yup.string().required(
-                'Objetivos especificos requeridos'
-              )
+              objetive: Yup.string()
+                .required('Tema de la tesis requerido')
+
+                .min(12, 'Demasiado corta')
+                .max(255, 'Demasiado larga'),
+              generalObjective: Yup.string()
+                .required('Objetivo general requerido')
+                .min(3, 'Demasiado corto')
+                .max(255, 'Demasiado largo'),
+              specificObjective: Yup.string()
+                .required('Objetivos especificos requeridos')
+                .min(3, 'Demasiado corto')
+                .max(255, 'Demasiado largo')
             })}
             onSubmit={() => {
               navigate('/app/dashboard', { replace: true });
