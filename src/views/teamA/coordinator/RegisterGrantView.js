@@ -12,7 +12,8 @@ import {
   CardContent,
   makeStyles,
   MenuItem,
-  FormLabel
+  FormLabel,
+  Grid
 } from '@material-ui/core';
 import Page from 'src/components/Page';
 import { SearchStudent } from '../search/searchStudent';
@@ -212,190 +213,225 @@ const RegisterGrantView = () => {
                       </Typography>
                     </Box>
                     <SearchStudent callback={getStudent} />
-
+                    <Grid container spacing={2}>
+                        <Grid item md={6} xs={12}> 
+                          <TextField
+                            error={Boolean(touched.name && errors.name)}
+                            fullWidth
+                            helperText={touched.name && errors.name}
+                            label="Nombre"
+                            margin="normal"
+                            name="name"
+                            onBlur={handleBlur}
+                            onChange={e => {
+                              handleChange(e);
+                              handleChangeName(e.target.value);
+                            }}
+                            value={values.name}
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                        <TextField
+                          error={Boolean(
+                            touched.announcement && errors.announcement
+                          )}
+                          fullWidth
+                          helperText={touched.announcement && errors.announcement}
+                          label="Numero convocatoria"
+                          margin="normal"
+                          type='number'
+                          name="announcement"
+                          onBlur={handleBlur}
+                          onChange={e => {
+                            handleChange(e);
+                            handleChangeAnnouncement(e.target.value);
+                          }}
+                          value={values.announcement}
+                          variant="outlined"
+                        />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <TextField
+                            error={Boolean(touched.description && errors.description)}
+                            fullWidth
+                            helperText={touched.description && errors.description}
+                            label="Descripción"
+                            margin="normal"
+                            name="description"
+                            onBlur={handleBlur}
+                            onChange={e => {
+                              handleChange(e);
+                              handleChangeDescription(e.target.value);
+                            }}
+                            value={values.description}
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <TextField
+                            error={Boolean(touched.resolution && errors.resolution)}
+                            fullWidth
+                            helperText={touched.resolution && errors.resolution}
+                            label="Numero de resolución"
+                            margin="normal"
+                            typer="number"
+                            name="resolution"
+                            onBlur={handleBlur}
+                            onChange={e => {
+                              handleChange(e);
+                              handleChangeResolution(e.target.value);
+                            }}
+                            value={values.resolution}
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                            <TextField
+                              id="long"
+                              label="Tiempo duracion (meses)"
+                              variant="outlined"
+                              type="number"
+                              margin="normal"
+                              onChange={e => {
+                                handleChange(e);
+                                handleChangeLong(e.target.value);
+                              }}
+                              error={Boolean(touched.long && errors.long)}
+                              helperText={touched.long && errors.long}
+                              onBlur={handleBlur}
+                              value={values.long}
+                              required
+                              fullWidth
+                            />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                                
+                          <TextField
+                            error={Boolean(touched.startDate && errors.startDate)}
+                            fullWidth
+                            helperText={touched.startDate && errors.startDate}
+                            id="agreementDate"
+                            label="Fecha de inicio"
+                            margin="normal"
+                            name="startDate"
+                            type="date"
+                            required
+                            defaultValue="2017-05-24"
+                            className={classes.textField}
+                            InputLabelProps={{
+                              shrink: true
+                            }}
+                            onBlur={handleBlur}
+                            onChangeCapture={e => {
+                              handleChangeStartDate(e.target.value);
+                              handleChange(e);
+                            }}
+                            value={values.startDate}
+                            variant="outlined"
+                          />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                            <TextField
+                              error={Boolean(touched.endDate && errors.endDate)}
+                              fullWidth
+                              helperText={touched.endDate && errors.endDate}
+                              id="endDate"
+                              label="Fecha de fin"
+                              margin="normal"
+                              name="endDate"
+                              type="date"
+                              required
+                              defaultValue="2017-05-24"
+                              className={classes.textField}
+                              InputLabelProps={{
+                                shrink: true
+                              }}
+                              onBlur={handleBlur}
+                              onChangeCapture={e => {
+                                handleChangeEndDate(e.target.value);
+                                handleChange(e);
+                              }}
+                              value={values.endDate}
+                              variant="outlined"
+                            />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <SearchInstitution callback={getIdInstitution} />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                            <TextField
+                              id="typeI"
+                              label="Tipo institución"
+                              variant="outlined"
+                              select
+                              margin="normal"
+                              onChange={e => {
+                                handleChange(e);
+                                handleChangeTypeI(e);
+                              }}
+                              onBlur={handleBlur}
+                              value={typeI}
+                              required
+                              fullWidth
+                            >
+                              <MenuItem value="1">Publica</MenuItem>
+                              <MenuItem value="2">Privada</MenuItem>
+                            </TextField>
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <TextField
+                            id="locationI"
+                            label="Locación de la institución"
+                            variant="outlined"
+                            select
+                            margin="normal"
+                            onChange={e => {
+                              handleChange(e);
+                              handleChangeLocationI(e);
+                            }}
+                            onBlur={handleBlur}
+                            value={locationI}
+                            required
+                            fullWidth
+                          >
+                            <MenuItem value="1" >Nacional</MenuItem>
+                            <MenuItem value="2" >Extranjera</MenuItem>
+                          </TextField>
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <FormLabel>Sube un justificante </FormLabel>
+                          <Button
+                            variant="contained"
+                            component="label"
+                            id="mg-left"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            Subir justificante
+                            <input 
+                            type="file" 
+                            style={{ display: 'none' }}
+                            onChange={e => {
+                              handleChange(e);
+                              handleChangeArchivo(e.target.files);
+                            }}
+                            
+                            />
+                          </Button>
+                        </Grid>
+                        
+                    </Grid>
                     
-                    <TextField
-                      error={Boolean(touched.name && errors.name)}
-                      fullWidth
-                      helperText={touched.name && errors.name}
-                      label="Nombre"
-                      margin="normal"
-                      name="name"
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeName(e.target.value);
-                      }}
-                      value={values.name}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(
-                        touched.announcement && errors.announcement
-                      )}
-                      fullWidth
-                      helperText={touched.announcement && errors.announcement}
-                      label="Numero convocatoria"
-                      margin="normal"
-                      type='number'
-                      name="announcement"
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeAnnouncement(e.target.value);
-                      }}
-                      value={values.announcement}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.description && errors.description)}
-                      fullWidth
-                      helperText={touched.description && errors.description}
-                      label="Descripción"
-                      margin="normal"
-                      name="description"
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeDescription(e.target.value);
-                      }}
-                      value={values.description}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.resolution && errors.resolution)}
-                      fullWidth
-                      helperText={touched.resolution && errors.resolution}
-                      label="Numero de resolución"
-                      margin="normal"
-                      typer="number"
-                      name="resolution"
-                      onBlur={handleBlur}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeResolution(e.target.value);
-                      }}
-                      value={values.resolution}
-                      variant="outlined"
-                    />
-                    <TextField
-                      id="long"
-                      label="Tiempo duracion (meses)"
-                      variant="outlined"
-                      type="number"
-                      margin="normal"
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeLong(e.target.value);
-                      }}
-                      error={Boolean(touched.long && errors.long)}
-                      helperText={touched.long && errors.long}
-                      onBlur={handleBlur}
-                      value={values.long}
-                      required
-                      fullWidth
-                    />
-                    <TextField
-                      error={Boolean(touched.startDate && errors.startDate)}
-                      fullWidth
-                      helperText={touched.startDate && errors.startDate}
-                      id="agreementDate"
-                      label="Fecha de inicio"
-                      margin="normal"
-                      name="startDate"
-                      type="date"
-                      required
-                      defaultValue="2017-05-24"
-                      className={classes.textField}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-                      onBlur={handleBlur}
-                      onChangeCapture={e => {
-                        handleChangeStartDate(e.target.value);
-                        handleChange(e);
-                      }}
-                      value={values.startDate}
-                      variant="outlined"
-                    />
-                    <TextField
-                      error={Boolean(touched.endDate && errors.endDate)}
-                      fullWidth
-                      helperText={touched.endDate && errors.endDate}
-                      id="endDate"
-                      label="Fecha de fin"
-                      margin="normal"
-                      name="endDate"
-                      type="date"
-                      required
-                      defaultValue="2017-05-24"
-                      className={classes.textField}
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-                      onBlur={handleBlur}
-                      onChangeCapture={e => {
-                        handleChangeEndDate(e.target.value);
-                        handleChange(e);
-                      }}
-                      value={values.endDate}
-                      variant="outlined"
-                    />
-                    <SearchInstitution callback={getIdInstitution} />
-                    <TextField
-                      id="typeI"
-                      label="Tipo institución"
-                      variant="outlined"
-                      select
-                      margin="normal"
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeTypeI(e);
-                      }}
-                      onBlur={handleBlur}
-                      value={typeI}
-                      required
-                      fullWidth
-                    >
-                      <MenuItem value="1">Publica</MenuItem>
-                      <MenuItem value="2">Privada</MenuItem>
-                    </TextField>
-                    <TextField
-                      id="locationI"
-                      label="Locación de la institución"
-                      variant="outlined"
-                      select
-                      margin="normal"
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeLocationI(e);
-                      }}
-                      onBlur={handleBlur}
-                      value={locationI}
-                      required
-                      fullWidth
-                    >
-                      <MenuItem value="1" >Nacional</MenuItem>
-                      <MenuItem value="2" >Extranjera</MenuItem>
-                    </TextField>
-                    <FormLabel>Sube un justificante </FormLabel>
-                    <Button
-                      variant="contained"
-                      component="label"
-                      id="mg-left"
-                      startIcon={<CloudUploadIcon />}
-                    >
-                      Subir justificante
-                      <input 
-                      type="file" 
-                      style={{ display: 'none' }}
-                      onChange={e => {
-                        handleChange(e);
-                        handleChangeArchivo(e.target.files);
-                      }}
-                      
-                       />
-                    </Button>
+                    
+                    
+                    
+                    
+                    
+                   
+                    
+                    
+                    
+                   
 
                     <Box my={2}>
                       <Button
