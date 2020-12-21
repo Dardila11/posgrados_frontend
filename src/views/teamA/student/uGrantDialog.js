@@ -2,7 +2,7 @@ import React,{useEffect, useState} from 'react'
 import {  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, makeStyles,} from '@material-ui/core'
 import { AlertView } from 'src/components/Alert';
 import {UpdateGrantService} from './service'
-import { formatDistance } from 'date-fns';
+
 import {
   Box,
   Button,
@@ -16,16 +16,10 @@ import {
   FormLabel,
   Grid
 } from '@material-ui/core';
-import Page from 'src/components/Page';
-import { SearchStudent } from '../search/searchStudent';
-import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
-import { registerGrant } from './service';
 
-import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
 import {SearchInstitution} from 'src/views/teamA/search/searchInstitution';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import {UploadPDF} from 'src/views/teamA/search/UploadPDF';
-import { ArchiveTwoTone } from '@material-ui/icons';
+
 const useStyles = makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.background.dark,
@@ -114,12 +108,13 @@ export const UGrantDialog = ({grant,state,setState}) => {
         fd.append('name_institution',institution)
         fd.append('type_institution',typeI)
         fd.append('location_institution',locationI)
-        fd.append('is_active',true)
         fd.append('id',grant.id)
+        console.log(grant.id ,'Entro')
       
-        UpdateGrantService(fd
-            
-            /* name: name,
+        UpdateGrantService(
+            {
+              id : grant.id,
+             name: name,
             announcement: announcement,
             // is_active: true,
             description: description,
@@ -127,9 +122,12 @@ export const UGrantDialog = ({grant,state,setState}) => {
             // student: 1, // TODO STUDENT ACTUAL
             start_date: startDate,
             end_date: endDate,
-            long: long */
+            long: long,
+            type_institution: typeI,
+            name_institution : institution,
+            location_institution : locationI,
 
-
+            }
 
             // // "long": 56,
             // // "start_date": "2020-12-08",
@@ -307,7 +305,7 @@ export const UGrantDialog = ({grant,state,setState}) => {
                           </TextField>
                         </Grid>
                         <Grid item md={6} xs={12}> 
-                          <FormLabel>Sube un justificante </FormLabel>
+                          
                           <Button
                             variant="contained"
                             component="label"

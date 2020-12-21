@@ -37,8 +37,10 @@ export const SearchInstitution = ({ callback }) => {
           {...params}
           label='Institución'
           variant='outlined'
+          margin="normal"
+          fullWidth
           required
-          style={{width: 300,marginLeft:10,marginBottom:20}}
+          
         />
       )}
       onInputChange={(e, input) => getIdInstitution(input)}
