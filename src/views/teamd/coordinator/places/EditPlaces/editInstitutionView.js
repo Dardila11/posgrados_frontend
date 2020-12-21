@@ -6,10 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { AlertView } from '../../../../../components/Alert'
 import { makeStyles } from '@material-ui/core/styles';
 //Import component search
-import { SearchFullCountry } from 'src/views/teamd/Search/searchFullCountry';
-import { SearchFullDepartment } from 'src/views/teamd/Search/searchFullDepartment';
-import { SearchFullCity } from 'src/views/teamd/Search/searchFullCity';
-import { SearchFullInstitution} from 'src/views/teamd/Search/searchFullInstitution';
+import { SearchCountry } from 'src/views/teamd/Search/searchFCountry';
+import { SearchDepartment } from 'src/views/teamd/Search/searchFDepartment';
+import { SearchCity } from 'src/views/teamd/Search/searchFCity';
+import { SearchInstitution} from 'src/views/teamd/Search/searchFInstitution';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -54,9 +54,10 @@ const EditInstitutionView = () =>{
     const [idCity, setidCity] = useState(' ');
     const [idInstitution, setInstitution] = useState('');
     const [type, setType] = useState('');
+
     const handleClickOpenEditInstitution = () => {
       setOpenAlert(false)  
-      const namecountry = document.getElementById("searchCountries").value;
+      const namecountry = document.getElementById("searchFCountries").value;
       console.log("papis: "+namecountry)
       const nameDeparment = document.getElementById("searchDepartments").value;
       console.log("deprmen: "+nameDeparment)
@@ -76,12 +77,12 @@ const EditInstitutionView = () =>{
       }
 
   };
-  const handleOnchangetype = e => {
-    setType(e.target.value);
-  };
     const handleOnchangeName = e => {
         setname(e.target.value);
         console.log(e.target.value);
+    };
+    const handleOnchangetype = e => {
+      setType(e.target.value);
     };
 
     const getCountry = id => {
@@ -123,7 +124,7 @@ const EditInstitutionView = () =>{
     };
     const handleSubmit = event => {
       handleClickOpenEditInstitution();
-      event.preventDefault();
+        event.preventDefault();
     };
 
     const handleClose = () => {
@@ -170,13 +171,13 @@ const EditInstitutionView = () =>{
                     </Typography>
                     <Box mb={3}>
                           
-                      <SearchFullCountry callback={getCountry} />
-                      <SearchFullDepartment
+                      <SearchCountry callback={getCountry} />
+                      <SearchDepartment
                         idCountry={idCountry}
                         callback={getDepartment}
                       />
-                      <SearchFullCity idDepartment={idDepartment} callback={getCity} />
-                      <SearchFullInstitution idCity={idCity} callback={getInstitution} />
+                      <SearchCity idDepartment={idDepartment} callback={getCity} />
+                      <SearchInstitution idCity={idCity} callback={getInstitution} />
     
                       <Box my={2}>
                         <Button
@@ -211,12 +212,12 @@ const EditInstitutionView = () =>{
                                       variant="outlined"
                                     />
 
-                                    <SearchFullCountry callback={getCountry} />
-                                    <SearchFullDepartment
+                                    <SearchCountry callback={getCountry} />
+                                    <SearchDepartment
                                       idCountry={idCountry}
                                       callback={getDepartment}
                                     />
-                                    <SearchFullCity idDepartment={idDepartment} callback={getCity} />
+                                    <SearchCity idDepartment={idDepartment} callback={getCity} />
                                     <Typography color="textPrimary" variant="h5">
                                       Estado 
                                     </Typography>
@@ -228,6 +229,7 @@ const EditInstitutionView = () =>{
                                       <MenuItem value={1}>Activo</MenuItem>
                                               
                                     </Select>
+
 
                                 </DialogContent>
                                 <DialogActions>
