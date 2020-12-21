@@ -438,7 +438,7 @@ const ActivityInfoView = () => {
             </IconButton>
             : null
           }
-          {activity.state < 2 ?
+          {activity.state < 4 ?
             <IconButton color="secondary" aria-label="add an edit" onClick={handleEditar}>
               <EditIcon />
             </IconButton>
