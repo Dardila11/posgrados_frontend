@@ -29,7 +29,7 @@ const useStyles = makeStyles({
     color: '#ffc400'
   },
   stateRevisada:{
-    color: '#0d47a1'
+    color: '#42a5f5'
   },
   stateAceptada:{
     color: '#009688'
@@ -60,16 +60,18 @@ const ActivityCard = ({ className, activity, context, ...rest }) => {
     case 3:
       spanClass = classes.stateRevisada
       stateActivity = 'Revisada'
+      break;
     case 4:
       spanClass = classes.stateAceptada
       stateActivity = 'Aceptada'
+      break;
     default:
       break;
   }
   if(isUndefined(activity.title) || activity.title==null || activity.title=="") option=false;
   return (
     <>
-    {context == '/coordinator/student/list-activities' ? (
+    {context == '/coordinator/student/list-activities' || context == '/director/student/list-activities'? (
        <Box boxShadow={3}>
         <Card className={classes.lockedCard} {...rest}>
             {getContent(activity,student,classes,spanClass, option,context)}
@@ -135,7 +137,7 @@ function getContent (activity,student,classes,spanClass, option,context, stateAc
               <Typography color="textSecondary" variant="body1">
                 {activity.start_date}
               </Typography>
-              {context == '/coordinator/student/list-activities' ? (
+              {context == '/coordinator/student/list-activities' ||  context == '/director/student/list-activities'? (
                 <></>
               ):(
                 <Typography color="textSecondary" variant="body1">
