@@ -1,8 +1,31 @@
 import React,{useEffect, useState} from 'react'
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, makeStyles,} from '@material-ui/core'
+import {  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, makeStyles,} from '@material-ui/core'
 import { AlertView } from 'src/components/Alert';
 import {UpdateGrantService} from './service'
 import { formatDistance } from 'date-fns';
+import {
+  Box,
+  Button,
+  Container,
+ 
+  Typography,
+  Card,
+  CardContent,
+
+  MenuItem,
+  FormLabel,
+  Grid
+} from '@material-ui/core';
+import Page from 'src/components/Page';
+import { SearchStudent } from '../search/searchStudent';
+import { SearchLineLedge } from 'src/views/teamd/Search/searchLineResearch';
+import { registerGrant } from './service';
+
+import { SearchKnowLedge } from 'src/views/teamd/Search/searchKnowLedge';
+import {SearchInstitution} from 'src/views/teamA/search/searchInstitution';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import {UploadPDF} from 'src/views/teamA/search/UploadPDF';
+import { ArchiveTwoTone } from '@material-ui/icons';
 const useStyles = makeStyles(theme => ({
     root: {
       backgroundColor: theme.palette.background.dark,
@@ -127,6 +150,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
             <DialogContentText>
                Para actualizar la beca debe elegir los campos que quiera actualizar y pulsar el boton actualizar
             </DialogContentText>
+            <Grid container spacing={2}>
+            <Grid item md={6} xs={12}>  
         <TextField
                       fullWidth
                       label="Nombre"
@@ -138,6 +163,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       value={name}
                       variant="outlined"
         />
+        </Grid>
+        <Grid item md={6} xs={12}> 
         <TextField
                       fullWidth
                       label="Numero convocatoria"
@@ -150,6 +177,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       value={announcement}
                       variant="outlined"
                     />
+          </Grid>
+        <Grid item md={6} xs={12}> 
         <TextField
                       fullWidth
                       label="Descripción"
@@ -161,6 +190,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       value={description}
                       variant="outlined"
                     />
+                    </Grid>
+        <Grid item md={6} xs={12}> 
         <TextField
               
                       fullWidth
@@ -174,7 +205,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       value={resolution}
                       variant="outlined"
                     />
-
+                    </Grid>
+        <Grid item md={6} xs={12}> 
         <TextField
                       id="long"
                       label="Tiempo duracion (meses)"
@@ -188,6 +220,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       required
                       fullWidth
                     />
+                    </Grid>
+        <Grid item md={6} xs={12}> 
         <TextField
                       fullWidth
                       id="agreementDate"
@@ -207,6 +241,8 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       value={startDate}
                       variant="outlined"
                     />
+                    </Grid>
+            <Grid item md={6} xs={12}> 
             <TextField
                       fullWidth
                       id="endDate"
@@ -226,6 +262,72 @@ export const UGrantDialog = ({grant,state,setState}) => {
                       value={endDate}
                       variant="outlined"
                     />
+                    </Grid>
+                     <Grid item md={6} xs={12}> 
+                          <SearchInstitution callback={getIdInstitution} />
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                            <TextField
+                              id="typeI"
+                              label="Tipo institución"
+                              variant="outlined"
+                              select
+                              margin="normal"
+                              onChange={e => {
+                                
+                                handleChangeTypeI(e);
+                              }}
+                            
+                              value={typeI}
+                              required
+                              fullWidth
+                            >
+                              <MenuItem value="1">Publica</MenuItem>
+                              <MenuItem value="2">Privada</MenuItem>
+                            </TextField>
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <TextField
+                            id="locationI"
+                            label="Locación de la institución"
+                            variant="outlined"
+                            select
+                            margin="normal"
+                            onChange={e => {
+                              
+                              handleChangeLocationI(e);
+                            }}
+                            
+                            value={locationI}
+                            required
+                            fullWidth
+                          >
+                            <MenuItem value="1" >Nacional</MenuItem>
+                            <MenuItem value="2" >Extranjera</MenuItem>
+                          </TextField>
+                        </Grid>
+                        <Grid item md={6} xs={12}> 
+                          <FormLabel>Sube un justificante </FormLabel>
+                          <Button
+                            variant="contained"
+                            component="label"
+                            id="mg-left"
+                            startIcon={<CloudUploadIcon />}
+                          >
+                            Subir justificante
+                            <input 
+                            type="file" 
+                            style={{ display: 'none' }}
+                            onChange={e => {
+                              
+                              handleChangeArchivo(e.target.files);
+                            }}
+                            
+                            />
+                          </Button>
+                        </Grid>
+                        
+                    </Grid>
         </DialogContent>
             <DialogActions>
             <Button onClick={handleClose} color="primary">
